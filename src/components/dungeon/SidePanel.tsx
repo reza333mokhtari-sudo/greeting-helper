@@ -292,6 +292,9 @@ export function SidePanel(props: Props) {
             <Row label="Darkness colour">
               <Color value={s.fogColor} onChange={(v) => onChange({ fogColor: v })} />
             </Row>
+            <Row label="Player view">
+              <Switch checked={s.playerView} onCheckedChange={(v) => onChange({ playerView: v })} />
+            </Row>
             <p className="mt-2 rounded-md bg-muted/50 p-2 text-[10px] leading-relaxed text-muted-foreground">
               Place light sources with the light tool (F). Room outlines and pillars block sight; doors block it when
               “Blocks light” is on.
