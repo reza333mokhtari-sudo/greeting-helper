@@ -667,6 +667,20 @@ export function DungeonEditor() {
             </div>
           )}
         </div>
+        <aside className="flex w-72 shrink-0 flex-col gap-4 overflow-y-auto border-l border-border bg-card p-4">
+          <LayersPanel
+            doc={doc}
+            activeLayer={activeLayer}
+            onActiveLayer={setActiveLayer}
+            onUpdateLayer={updateLayer}
+            onMoveLayer={moveLayer}
+            onAddLayer={addLayer}
+            onDeleteLayer={deleteLayer}
+            selected={selected}
+            onSelect={setSelected}
+          />
+          <PropertiesPanel doc={doc} object={selectedObject} onChange={updateObject} onDelete={deleteSelected} />
+        </aside>
         <SidePanel
           settings={doc.settings}
           onChange={setSettings}
@@ -675,6 +689,8 @@ export function DungeonEditor() {
           doorVariant={doorVariant}
           onDoorVariant={(v) => setDoorVariant(v as DoorVariant)}
           onExportPng={exportPng}
+          onExportSvg={exportSvg}
+          onExportPdf={exportPdf}
           onExportJson={exportJson}
           onImportJson={importJson}
           onFit={fit}
@@ -682,6 +698,7 @@ export function DungeonEditor() {
             if (window.confirm("Clear the whole map?")) commit(emptyDoc());
           }}
         />
+
       </div>
     </div>
   );
