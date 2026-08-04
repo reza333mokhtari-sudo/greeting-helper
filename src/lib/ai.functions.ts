@@ -8,6 +8,7 @@ export const AI_ENGINES = {
   balanced: { id: "openai/gpt-5.6-terra", label: "Balanced · GPT-5.6 Terra", hint: "Best all-round cartography" },
   deep: { id: "openai/gpt-5.6-sol", label: "Deep · GPT-5.6 Sol", hint: "Strongest reasoning, slower" },
   lite: { id: "openai/gpt-5.6-luna", label: "Lite · GPT-5.6 Luna", hint: "Cheapest, simple requests" },
+  fable5: { id: "fable-5", label: "Fable 5 · Custom endpoint", hint: "Your own OpenAI-compatible endpoint", custom: true },
 } as const;
 
 export type AiEngine = keyof typeof AI_ENGINES;
@@ -17,7 +18,7 @@ const Input = z.object({
   /** Compact description of the current map so the model can refine it. */
   summary: z.string().max(6000).default(""),
   mode: z.enum(["rooms", "encounter", "hatching", "refine"]).default("rooms"),
-  engine: z.enum(["swift", "balanced", "deep", "lite"]).default("balanced"),
+  engine: z.enum(["swift", "balanced", "deep", "lite", "fable5"]).default("balanced"),
   gridSize: z.number().positive().default(32),
   /** Prior turns so follow-up prompts ("make it bigger") keep context. */
   history: z
@@ -133,16 +134,26 @@ function parseJson(text: string): AiSuggestion {
 export const suggestMap = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => Input.parse(input))
   .handler(async ({ data }): Promise<AiSuggestion> => {
-    const key = process.env["LOVABLE_API_KEY"];
-    if (!key) throw new Error("AI is not configured");
-    const { createLovableAiGatewayProvider } = await import("./ai-gateway.server");
-    const gateway = createLovableAiGatewayProvider(key);
-    const modelId = AI_ENGINES[data.engine].id;
-    const model = gateway(modelId);
-    // GPT-5.6 models must run with reasoning explicitly off on chat completions.
-    const providerOptions = modelId.startsWith("openai/gpt-5.6")
-      ? { lovable: { reasoningEffort: "none" as const } }
-      : undefined;
+    const engine = AI_ENGINES[data.engine];
+    const isCustom = "custom" in engine && engine.custom === true;
+    const { createLovableAiGatewayProvider, createCustomProvider } = await import("./ai-gateway.server");
+
+    let model;
+    let providerOptions: Record<string, Record<string, unknown>> | undefined;
+    if (isCustom) {
+      const customKey = process.env["CONDUIT_API_KEY"];
+      if (!customKey) throw new Error("Custom AI endpoint is not configured — add the CONDUIT_API_KEY secret.");
+      const baseURL = process.env["CONDUIT_BASE_URL"] || "https://conduit.ozdoev.net/v1";
+      const modelId = process.env["CONDUIT_MODEL"] || engine.id;
+      model = createCustomProvider(customKey, baseURL)(modelId);
+    } else {
+      const key = process.env["LOVABLE_API_KEY"];
+      if (!key) throw new Error("AI is not configured");
+      const modelId = engine.id;
+      model = createLovableAiGatewayProvider(key)(modelId);
+      // GPT-5.6 models must run with reasoning explicitly off on chat completions.
+      if (modelId.startsWith("openai/gpt-5.6")) providerOptions = { lovable: { reasoningEffort: "none" } };
+    }
 
     const userTurn = [
       `Mode: ${data.mode}`,
