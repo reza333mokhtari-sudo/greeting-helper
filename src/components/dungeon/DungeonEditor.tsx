@@ -105,13 +105,18 @@ export function DungeonEditor() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
-        const parsed = JSON.parse(raw) as Doc;
-        if (parsed && Array.isArray(parsed.shapes)) setDocState({ ...emptyDoc(), ...parsed });
+        const parsed = JSON.parse(raw) as Partial<Doc>;
+        if (parsed && Array.isArray(parsed.shapes)) {
+          const migrated = migrateDoc(parsed);
+          setDocState(migrated);
+          setActiveLayer(migrated.layers[0]!.id);
+        }
       }
     } catch {
       /* ignore */
     }
   }, []);
+
 
   useEffect(() => {
     const t = setTimeout(() => {
