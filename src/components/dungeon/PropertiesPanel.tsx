@@ -128,6 +128,24 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
         <Input type="number" className={numInput} value={Math.round(o.y)} onChange={(e) => patch({ y: Number(e.target.value) })} />
       </Row>
 
+      {o.kind === "image" && (
+        <>
+          <Row label="Width">
+            <NumSlider value={o.w} min={8} max={2000} onChange={(v) => patch({ w: v } as Partial<MapObject>)} />
+          </Row>
+          <Row label="Height">
+            <NumSlider value={o.h} min={8} max={2000} onChange={(v) => patch({ h: v } as Partial<MapObject>)} />
+          </Row>
+          <Row label="Rotation°">
+            <Input
+              type="number"
+              className={numInput}
+              value={Math.round((o.angle * 180) / Math.PI)}
+              onChange={(e) => patch({ angle: (Number(e.target.value) * Math.PI) / 180 } as Partial<MapObject>)}
+            />
+          </Row>
+        </>
+      )}
       {(o.kind === "door" || o.kind === "stairs") && (
         <Row label="Rotation°">
           <Input
