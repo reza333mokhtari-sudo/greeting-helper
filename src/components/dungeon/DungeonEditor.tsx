@@ -365,7 +365,13 @@ export function DungeonEditor() {
       const prev = preview;
       setPreview(null);
       if (!prev) return;
-      if (prev.kind === "path" ? prev.pts.length > 0 : Math.abs(prev.a.x - prev.b.x) > 1 && Math.abs(prev.a.y - prev.b.y) > 1) {
+      const ok =
+        prev.kind === "path"
+          ? prev.pts.length > 0
+          : prev.kind === "poly"
+            ? prev.pts.length > 2
+            : Math.abs(prev.a.x - prev.b.x) > 1 && Math.abs(prev.a.y - prev.b.y) > 1;
+      if (ok) {
         commit((doc0) => ({ ...doc0, shapes: [...doc0.shapes, { ...prev, id: uid("s") }] }));
       }
     }
