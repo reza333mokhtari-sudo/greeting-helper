@@ -86,6 +86,11 @@ export function DungeonEditor() {
   const [activeLayer, setActiveLayer] = useState<string>(() => emptyDoc().layers[0]!.id);
   const [fogMode, setFogMode] = useState<FogMode>("brush");
   const [fogBrush, setFogBrush] = useState(96);
+  const [leftPanel, setLeftPanel] = useState<PanelId | null>("settings");
+  const [fps, setFps] = useState(60);
+  const [savedAt, setSavedAt] = useState<number | null>(null);
+  const importRef = useRef<HTMLInputElement>(null);
+
 
   const drag = useRef<Drag>({ mode: "none" });
   const stateRef = useRef({ doc, view, tool, polyPts, brushWidth, doorVariant, selected, spaceDown });
