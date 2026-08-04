@@ -140,6 +140,23 @@ export function LayersPanel(p: Props) {
                   </Button>
                 </Hint>
 
+                <Hint label={l.gmOnly ? "Hidden in player view" : "Visible in player view"}>
+                  <button
+                    type="button"
+                    aria-label="Toggle GM only"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      p.onUpdateLayer(l.id, { gmOnly: !l.gmOnly });
+                    }}
+                    className={`rounded px-1 text-[9px] font-semibold uppercase tracking-wider ${
+                      l.gmOnly ? "bg-accent/20 text-accent" : "text-muted-foreground/50"
+                    }`}
+                  >
+                    GM
+                  </button>
+                </Hint>
+
+
                 <Input
                   value={l.name}
                   onChange={(e) => p.onUpdateLayer(l.id, { name: e.target.value })}
