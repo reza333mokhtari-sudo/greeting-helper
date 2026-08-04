@@ -389,8 +389,9 @@ export function DungeonEditor() {
       const angle = Math.atan2(dy, dx);
       setDocState((doc0) => ({
         ...doc0,
-        objects: doc0.objects.map((o) => (o.id === d.id && o.kind !== "pillar" && o.kind !== "text" ? { ...o, angle } : o)),
+        objects: doc0.objects.map((o) => (o.id === d.id && (o.kind === "door" || o.kind === "stairs") ? { ...o, angle } : o)),
       }));
+
     }
   };
 
