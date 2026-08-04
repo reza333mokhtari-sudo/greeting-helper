@@ -1,10 +1,12 @@
+import { useState } from "react";
 import type { Doc, Layer, MapObject } from "@/lib/dungeon/model";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Eye, EyeOff, Lock, LockOpen, ChevronUp, ChevronDown, X, Plus } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Eye, EyeOff, Lock, LockOpen, ChevronUp, ChevronDown, X, Plus, GripVertical } from "lucide-react";
 
 type Props = {
   doc: Doc;
@@ -12,6 +14,7 @@ type Props = {
   onActiveLayer: (id: string) => void;
   onUpdateLayer: (id: string, patch: Partial<Layer>) => void;
   onMoveLayer: (id: string, dir: -1 | 1) => void;
+  onReorderLayer: (id: string, targetId: string, place: "above" | "below") => void;
   onAddLayer: () => void;
   onDeleteLayer: (id: string) => void;
   selected: string[];
@@ -22,33 +25,84 @@ function countOn(objects: MapObject[], id: string) {
   return objects.filter((o) => o.layerId === id).length;
 }
 
+function Hint({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>{children}</TooltipTrigger>
+      <TooltipContent side="left">{label}</TooltipContent>
+    </Tooltip>
+  );
+}
+
 export function LayersPanel(p: Props) {
   const layers = [...p.doc.layers].reverse();
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [overId, setOverId] = useState<string | null>(null);
+  const [overPlace, setOverPlace] = useState<"above" | "below">("above");
 
   return (
+    <TooltipProvider delayDuration={250}>
     <section>
       <div className="mb-3 flex items-center justify-between">
         <h2 className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
           <span className="h-1 w-1 rounded-full bg-primary" />
           Layers
         </h2>
-        <Button variant="ghost" size="icon" className="size-6" onClick={p.onAddLayer} aria-label="Add layer">
-          <Plus className="size-3.5" />
-        </Button>
+        <Hint label="Add layer">
+          <Button variant="ghost" size="icon" className="size-6" onClick={p.onAddLayer} aria-label="Add layer">
+            <Plus className="size-3.5" />
+          </Button>
+        </Hint>
       </div>
 
       <ul className="flex flex-col gap-1.5">
         {layers.map((l) => {
           const objs = p.doc.objects.filter((o) => o.layerId === l.id);
           const active = p.activeLayer === l.id;
+          const isOver = overId === l.id && dragId !== null && dragId !== l.id;
           return (
             <li
               key={l.id}
+              draggable
+              onDragStart={(e) => {
+                setDragId(l.id);
+                e.dataTransfer.effectAllowed = "move";
+                e.dataTransfer.setData("text/plain", l.id);
+              }}
+              onDragEnd={() => {
+                setDragId(null);
+                setOverId(null);
+              }}
+              onDragOver={(e) => {
+                if (!dragId || dragId === l.id) return;
+                e.preventDefault();
+                e.dataTransfer.dropEffect = "move";
+                const r = e.currentTarget.getBoundingClientRect();
+                setOverId(l.id);
+                setOverPlace(e.clientY < r.top + r.height / 2 ? "above" : "below");
+              }}
+              onDragLeave={() => setOverId((cur) => (cur === l.id ? null : cur))}
+              onDrop={(e) => {
+                e.preventDefault();
+                const id = dragId ?? e.dataTransfer.getData("text/plain");
+                if (id && id !== l.id) p.onReorderLayer(id, l.id, overPlace);
+                setDragId(null);
+                setOverId(null);
+              }}
               onClick={() => p.onActiveLayer(l.id)}
               className={`cursor-pointer rounded-lg border px-2 py-1.5 transition-colors ${
+                dragId === l.id ? "opacity-50" : ""
+              } ${
+                isOver
+                  ? overPlace === "above"
+                    ? "border-t-2 border-t-primary"
+                    : "border-b-2 border-b-primary"
+                  : ""
+              } ${
                 active ? "border-primary/60 bg-accent/60 shadow-[var(--shadow-arcane)]" : "border-border bg-card/40 hover:bg-accent/30"
               }`}
             >
+
               <div className="flex items-center gap-1">
                 <Button
                   variant="ghost"
