@@ -137,7 +137,12 @@ export const suggestMap = createServerFn({ method: "POST" })
     if (!key) throw new Error("AI is not configured");
     const { createLovableAiGatewayProvider } = await import("./ai-gateway.server");
     const gateway = createLovableAiGatewayProvider(key);
-    const model = gateway("google/gemini-3.6-flash");
+    const modelId = AI_ENGINES[data.engine].id;
+    const model = gateway(modelId);
+    // GPT-5.6 models must run with reasoning explicitly off on chat completions.
+    const providerOptions = modelId.startsWith("openai/gpt-5.6")
+      ? { lovable: { reasoningEffort: "none" as const } }
+      : undefined;
 
     const userTurn = [
       `Mode: ${data.mode}`,
@@ -156,6 +161,7 @@ export const suggestMap = createServerFn({ method: "POST" })
     const run = async (extra?: string) => {
       const result = streamText({
         model,
+        ...(providerOptions ? { providerOptions } : {}),
         system: extra ? `${SYSTEM}\n\n${extra}` : SYSTEM,
         messages: (extra
           ? [...messages, { role: "user" as const, content: extra }]
@@ -163,6 +169,7 @@ export const suggestMap = createServerFn({ method: "POST" })
       });
       return await result.text;
     };
+
 
     let text = "";
     try {
