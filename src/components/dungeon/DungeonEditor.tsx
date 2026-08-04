@@ -919,6 +919,147 @@ export function DungeonEditor() {
   );
 
 
+
+  // ---- right-click context menu ----
+  const pickAt = useCallback(
+    (world: Pt) => {
+      const pickable = doc.objects.filter((o) => {
+        const l = doc.layers.find((x) => x.id === o.layerId);
+        return !l || (l.visible && !l.locked);
+      });
+      const obj = [...pickable].reverse().find((o) => objectHit(world, o));
+      if (obj) return { id: obj.id, label: ("name" in obj && obj.name) || obj.kind };
+      const shape = [...doc.shapes].reverse().find((sh) => !sh.erase && pointInShape(world, sh));
+      return shape ? { id: shape.id, label: shape.kind } : null;
+    },
+    [doc.layers, doc.objects, doc.shapes],
+  );
+
+  const openMenu = (e: React.MouseEvent) => {
+    const rect = wrapRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const world = screenToWorld({ x: e.clientX - rect.left, y: e.clientY - rect.top }, view);
+    const hit = pickAt(world);
+    setPolyPts([]);
+    if (hit && !selected.includes(hit.id)) setSelected([hit.id]);
+    if (!hit && !e.shiftKey) setSelected((sel) => (sel.length ? sel : []));
+    setMenuTarget({ pt: world, label: hit?.label ?? null, id: hit?.id ?? null });
+  };
+
+  const copySelection = useCallback(() => {
+    if (!selected.length) return;
+    clipboard.current = {
+      shapes: doc.shapes.filter((sh) => selected.includes(sh.id)),
+      objects: doc.objects.filter((o) => selected.includes(o.id)),
+    };
+    setClipCount(clipboard.current.shapes.length + clipboard.current.objects.length);
+  }, [doc.objects, doc.shapes, selected]);
+
+  /** Paste the clipboard, offset so its centre lands on `at`. */
+  const pasteAt = useCallback(
+    (at: Pt) => {
+      const clip = clipboard.current;
+      if (!clip || (!clip.shapes.length && !clip.objects.length)) return;
+      const src = clip.objects[0] ?? null;
+      const originX = src ? src.x : (clip.shapes[0] && "a" in clip.shapes[0] ? clip.shapes[0].a.x : at.x);
+      const originY = src ? src.y : (clip.shapes[0] && "a" in clip.shapes[0] ? clip.shapes[0].a.y : at.y);
+      const dx = at.x - originX;
+      const dy = at.y - originY;
+      const ids: string[] = [];
+      commit((d) => {
+        const shapes = [...d.shapes];
+        const objects = [...d.objects];
+        for (const sh of clip.shapes) {
+          const id = uid("s");
+          ids.push(id);
+          shapes.push({ ...translateShape(sh, dx, dy), id });
+        }
+        for (const o of clip.objects) {
+          const id = uid("o");
+          ids.push(id);
+          objects.push({ ...o, id, x: o.x + dx, y: o.y + dy });
+        }
+        return { ...d, shapes, objects };
+      }, "Paste");
+      setSelected(ids);
+    },
+    [commit],
+  );
+
+  const duplicateSelection = useCallback(() => {
+    copySelection();
+    const g = doc.settings.gridSize;
+    setTimeout(() => {
+      const first = doc.objects.find((o) => selected.includes(o.id));
+      pasteAt({ x: (first?.x ?? menuTarget.pt.x) + g, y: (first?.y ?? menuTarget.pt.y) + g });
+    }, 0);
+  }, [copySelection, doc.objects, doc.settings.gridSize, menuTarget.pt, pasteAt, selected]);
+
+  const reorderSelection = useCallback(
+    (toFront: boolean) => {
+      if (!selected.length) return;
+      commit((d) => {
+        const move = <T extends { id: string }>(arr: T[]) => {
+          const picked = arr.filter((x) => selected.includes(x.id));
+          if (!picked.length) return arr;
+          const rest = arr.filter((x) => !selected.includes(x.id));
+          return toFront ? [...rest, ...picked] : [...picked, ...rest];
+        };
+        return { ...d, shapes: move(d.shapes), objects: move(d.objects) };
+      }, toFront ? "Bring to front" : "Send to back");
+    },
+    [commit, selected],
+  );
+
+  const addObjectAt = useCallback(
+    (kind: "npc" | "item" | "trigger" | "light" | "text", at: Pt) => {
+      const g = doc.settings.gridSize;
+      const p = snapPt(at, g, doc.settings.snap);
+      const layerId = doc.layers.find((l) => l.id === DEFAULT_LAYER_FOR[kind])?.id ?? activeLayer;
+      const id = uid("o");
+      const base = { id, layerId };
+      let obj: MapObject | null = null;
+      if (kind === "npc") obj = { ...base, kind: "npc", x: p.x, y: p.y, r: Math.max(8, g * 0.42), color: "#c0392b", label: "", hostile: true, name: "NPC" };
+      if (kind === "item") obj = { ...base, kind: "item", x: p.x, y: p.y, size: Math.max(10, g * 0.5), color: "#e0a92b", label: "", name: "Item" };
+      if (kind === "trigger") obj = { ...base, kind: "trigger", x: p.x, y: p.y, w: g * 2, h: g * 2, color: "#9b59b6", trigger: "trap", label: "", name: "Trigger" };
+      if (kind === "light") obj = { ...base, kind: "light", x: p.x, y: p.y, radius: g * 6, color: "#ffcf8a", intensity: 0.85, name: "Light" };
+      if (kind === "text") {
+        const text = window.prompt("Label text", "Room");
+        if (!text) return;
+        obj = { ...base, kind: "text", x: at.x, y: at.y, text, size: Math.max(12, g * 0.6) };
+      }
+      if (!obj) return;
+      const created = obj;
+      commit((d) => ({ ...d, objects: [...d.objects, created] }), `Add ${created.kind}`);
+      setSelected([id]);
+    },
+    [activeLayer, commit, doc.layers, doc.settings.gridSize, doc.settings.snap],
+  );
+
+  const fogAt = useCallback(
+    (at: Pt, hide: boolean) => {
+      commit((d) => {
+        const keys = cellsInRadius(at, Math.max(d.settings.gridSize, fogBrush) / 2, d.settings);
+        const set = new Set(d.fog);
+        keys.forEach((k) => (hide ? set.add(k) : set.delete(k)));
+        return { ...d, fog: [...set] };
+      }, hide ? "Hide fog cells" : "Reveal fog cells");
+    },
+    [commit, fogBrush],
+  );
+
+  const zoomTo = useCallback(
+    (at: Pt) => {
+      const el = wrapRef.current;
+      if (!el) return;
+      setView((v) => {
+        const scale = Math.min(MAX_ZOOM, v.scale * 1.6);
+        return { scale, x: el.clientWidth / 2 - at.x * scale, y: el.clientHeight / 2 - at.y * scale };
+      });
+    },
+    [],
+  );
+
   const cursorStyle = useMemo(() => {
     if (spaceDown || tool === "pan") return "grab";
     if (tool === "select") return "default";
@@ -1063,6 +1204,8 @@ export function DungeonEditor() {
           </aside>
         )}
 
+        <ContextMenu>
+        <ContextMenuTrigger asChild>
         <div
           ref={wrapRef}
           className="relative min-w-0 flex-1 touch-none select-none"
@@ -1072,10 +1215,7 @@ export function DungeonEditor() {
           onPointerUp={onPointerUp}
           onPointerLeave={onPointerUp}
           onDoubleClick={finishPoly}
-          onContextMenu={(e) => {
-            e.preventDefault();
-            setPolyPts([]);
-          }}
+          onContextMenu={openMenu}
         >
           <canvas ref={canvasRef} className="block h-full w-full" />
           {!doc.shapes.length && !polyPts.length && (
@@ -1103,6 +1243,30 @@ export function DungeonEditor() {
             />
           </div>
         </div>
+        </ContextMenuTrigger>
+        <CanvasContextMenu
+          target={{ label: menuTarget.label, hasSelection: selected.length > 0, canPaste: clipCount > 0 }}
+          actions={{
+            onCopy: copySelection,
+            onCut: () => {
+              copySelection();
+              deleteSelected();
+            },
+            onPaste: () => pasteAt(menuTarget.pt),
+            onDuplicate: duplicateSelection,
+            onDelete: deleteSelected,
+            onBringToFront: () => reorderSelection(true),
+            onSendToBack: () => reorderSelection(false),
+            onRotate: (deg) => rotateSelected((deg * Math.PI) / 180),
+            onSelectAll: () => setSelected([...doc.shapes.map((sh) => sh.id), ...doc.objects.map((o) => o.id)]),
+            onDeselect: () => setSelected([]),
+            onAdd: (kind) => addObjectAt(kind, menuTarget.pt),
+            onFog: (hide) => fogAt(menuTarget.pt, hide),
+            onFit: fit,
+            onZoomHere: () => zoomTo(menuTarget.pt),
+          }}
+        />
+        </ContextMenu>
 
         <aside className="flex w-72 shrink-0 flex-col border-l border-border bg-sidebar">
           <ScrollArea className="min-h-0 flex-1">
