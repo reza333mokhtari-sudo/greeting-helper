@@ -302,24 +302,42 @@ export function DungeonEditor() {
       case "door":
       case "stairs":
       case "pillar":
-      case "text": {
+      case "text":
+      case "npc":
+      case "item":
+      case "trigger":
+      case "light": {
         const id = uid("o");
-        let obj: MapObject | null = null;
         const g = doc.settings.gridSize;
-        if (tool === "door") obj = { id, kind: "door", x: p.x, y: p.y, angle: 0, size: g, variant: doorVariant };
-        if (tool === "stairs") obj = { id, kind: "stairs", x: p.x, y: p.y, angle: 0, size: g * 2, steps: 6 };
-        if (tool === "pillar") obj = { id, kind: "pillar", x: p.x, y: p.y, r: Math.max(4, g * 0.22) };
+        const layerId = doc.layers.some((l) => l.id === activeLayer) && activeLayer !== ""
+          ? (doc.layers.find((l) => l.id === DEFAULT_LAYER_FOR[tool])?.id ?? activeLayer)
+          : activeLayer;
+        const base = { id, layerId };
+        let obj: MapObject | null = null;
+        if (tool === "door") obj = { ...base, kind: "door", x: p.x, y: p.y, angle: 0, size: g, variant: doorVariant, blocksLight: true };
+        if (tool === "stairs") obj = { ...base, kind: "stairs", x: p.x, y: p.y, angle: 0, size: g * 2, steps: 6 };
+        if (tool === "pillar") obj = { ...base, kind: "pillar", x: p.x, y: p.y, r: Math.max(4, g * 0.22) };
+        if (tool === "npc")
+          obj = { ...base, kind: "npc", x: p.x, y: p.y, r: Math.max(8, g * 0.42), color: "#c0392b", label: "", hostile: true, name: "NPC" };
+        if (tool === "item")
+          obj = { ...base, kind: "item", x: p.x, y: p.y, size: Math.max(10, g * 0.5), color: "#e0a92b", label: "", name: "Item" };
+        if (tool === "trigger")
+          obj = { ...base, kind: "trigger", x: p.x, y: p.y, w: g * 2, h: g * 2, color: "#9b59b6", trigger: "trap", label: "", name: "Trigger" };
+        if (tool === "light")
+          obj = { ...base, kind: "light", x: p.x, y: p.y, radius: g * 6, color: "#ffcf8a", intensity: 0.85, name: "Light" };
         if (tool === "text") {
           const text = window.prompt("Label text", "Room");
           if (!text) return;
-          obj = { id, kind: "text", x: world.x, y: world.y, text, size: Math.max(12, g * 0.6) };
+          obj = { ...base, kind: "text", x: world.x, y: world.y, text, size: Math.max(12, g * 0.6) };
         }
         if (!obj) return;
-        commit((d) => ({ ...d, objects: [...d.objects, obj! ] }));
+        const created = obj;
+        commit((d) => ({ ...d, objects: [...d.objects, created] }));
         setSelected([id]);
         drag.current = { mode: "place", id, origin: world };
         break;
       }
+
       default:
         break;
     }
