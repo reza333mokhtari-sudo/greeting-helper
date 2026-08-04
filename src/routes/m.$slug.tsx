@@ -50,7 +50,12 @@ function SharedMap() {
 function Viewer({ doc }: { doc: Doc }) {
   const ref = useRef<HTMLCanvasElement>(null);
   const [tick, setTick] = useState(0);
-  useEffect(() => onImageLoaded(() => setTick((t) => t + 1)), []);
+  useEffect(() => {
+    const off = onImageLoaded(() => setTick((t) => t + 1));
+    return () => {
+      off();
+    };
+  }, []);
 
   useEffect(() => {
     const cv = ref.current;
