@@ -1,3 +1,4 @@
+import { getImage } from "./assets";
 import { objectsInDrawOrder, objectRadius, type Doc, type MapObject, type Pt, type Shape, type View } from "./model";
 import { lightSources, occluders, visibilityPolygon } from "./los";
 
@@ -151,7 +152,7 @@ export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc
   const { wallColor, floorColor, inkColor } = doc.settings;
   ctx.save();
   ctx.translate(o.x, o.y);
-  if (o.kind === "door" || o.kind === "stairs") ctx.rotate(o.angle);
+  if (o.kind === "door" || o.kind === "stairs" || o.kind === "image") ctx.rotate(o.angle);
   ctx.lineJoin = "round";
   ctx.lineCap = "butt";
 
@@ -262,6 +263,15 @@ export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc
       ctx.lineTo(Math.cos(a) * 15, Math.sin(a) * 15);
     }
     ctx.stroke();
+  } else if (o.kind === "image") {
+    const img = getImage(o.url);
+    if (img) ctx.drawImage(img, -o.w / 2, -o.h / 2, o.w, o.h);
+    else {
+      ctx.strokeStyle = inkColor;
+      ctx.globalAlpha = 0.4;
+      ctx.strokeRect(-o.w / 2, -o.h / 2, o.w, o.h);
+      ctx.globalAlpha = 1;
+    }
   } else {
     ctx.fillStyle = inkColor;
     ctx.font = `600 ${o.size}px ${UI_FONT}`;

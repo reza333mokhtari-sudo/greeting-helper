@@ -74,6 +74,8 @@ function objectSvg(o: MapObject, doc: Doc): string {
       text((o.label || o.name || o.trigger).toUpperCase(), 0, Math.max(10, Math.min(o.w, o.h) * 0.22), o.color);
   } else if (o.kind === "light") {
     body = `<circle r="6" fill="${o.color}"/>`;
+  } else if (o.kind === "image") {
+    body = `<image x="${n(-o.w / 2)}" y="${n(-o.h / 2)}" width="${n(o.w)}" height="${n(o.h)}" href="${o.url}" preserveAspectRatio="none"/>`;
   } else {
     body = text(o.text, 0, o.size, inkColor);
   }
