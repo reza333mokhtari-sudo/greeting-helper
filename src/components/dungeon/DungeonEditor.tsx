@@ -238,7 +238,53 @@ export function DungeonEditor() {
       });
       ctx.restore();
     }
-  }, [doc, view, preview, selected, polyPts, cursor]);
+
+    // Ghost overlay for a staged AI suggestion (not yet part of the document).
+    if (aiPreview) {
+      const g = doc.settings.gridSize;
+      ctx.save();
+      ctx.setTransform(view.scale * dpr, 0, 0, view.scale * dpr, view.x * dpr, view.y * dpr);
+      ctx.lineWidth = 2 / view.scale;
+      ctx.setLineDash([8 / view.scale, 6 / view.scale]);
+      ctx.strokeStyle = "#f5c451";
+      ctx.fillStyle = "rgba(167,139,250,0.16)";
+      for (const r of aiPreview.rooms) {
+        const w = Math.max(1, r.w) * g;
+        const h = Math.max(1, r.h) * g;
+        ctx.fillRect(r.x * g, r.y * g, w, h);
+        ctx.strokeRect(r.x * g, r.y * g, w, h);
+        if (r.name) {
+          ctx.save();
+          ctx.setLineDash([]);
+          ctx.fillStyle = "#f5c451";
+          ctx.font = `${Math.max(10, g * 0.42)}px Inter, system-ui, sans-serif`;
+          ctx.textAlign = "center";
+          ctx.fillText(r.name, r.x * g + w / 2, r.y * g + h / 2);
+          ctx.restore();
+        }
+      }
+      ctx.strokeStyle = "rgba(167,139,250,0.9)";
+      ctx.lineWidth = Math.max(3, g * 0.5) / 1;
+      for (const c of aiPreview.corridors) {
+        ctx.beginPath();
+        ctx.moveTo(c.x1 * g, c.y1 * g);
+        ctx.lineTo(c.x2 * g, c.y2 * g);
+        ctx.stroke();
+      }
+      ctx.setLineDash([]);
+      ctx.lineWidth = 2 / view.scale;
+      for (const o of aiPreview.objects) {
+        ctx.beginPath();
+        ctx.arc(o.x * g, o.y * g, Math.max(4, g * 0.22), 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(245,196,81,0.35)";
+        ctx.fill();
+        ctx.strokeStyle = "#f5c451";
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+  }, [doc, view, preview, selected, polyPts, cursor, aiPreview]);
+
 
   useEffect(() => {
     let raf = requestAnimationFrame(draw);
