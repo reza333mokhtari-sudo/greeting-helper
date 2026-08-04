@@ -28,7 +28,8 @@ export type MapObject =
   | (ObjCommon & { kind: "npc"; x: number; y: number; r: number; color: string; label: string; hostile: boolean })
   | (ObjCommon & { kind: "item"; x: number; y: number; size: number; color: string; label: string })
   | (ObjCommon & { kind: "trigger"; x: number; y: number; w: number; h: number; color: string; trigger: TriggerKind; label: string })
-  | (ObjCommon & { kind: "light"; x: number; y: number; radius: number; color: string; intensity: number });
+  | (ObjCommon & { kind: "light"; x: number; y: number; radius: number; color: string; intensity: number })
+  | (ObjCommon & { kind: "image"; x: number; y: number; w: number; h: number; angle: number; url: string });
 
 export type ObjectKind = MapObject["kind"];
 
