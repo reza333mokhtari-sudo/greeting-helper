@@ -1,5 +1,13 @@
 import type { GridStyle, Settings } from "@/lib/dungeon/model";
 import { THEMES } from "@/lib/dungeon/model";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { Separator } from "@/components/ui/separator";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Maximize2, FileImage, FileType2, FileText, Save, Upload, Trash2 } from "lucide-react";
 
 type Props = {
   settings: Settings;
@@ -17,13 +25,49 @@ type Props = {
   onFit: () => void;
 };
 
+function SectionTitle({ children }: { children: React.ReactNode }) {
+  return (
+    <h2 className="mb-3 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+      <span className="h-1 w-1 rounded-full bg-primary" />
+      {children}
+    </h2>
+  );
+}
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <label className="flex items-center justify-between gap-3 py-1.5 text-xs">
-      <span className="text-muted-foreground">{label}</span>
-      <span className="flex items-center gap-2">{children}</span>
-    </label>
+    <div className="flex items-center justify-between gap-3 py-1.5">
+      <Label className="text-xs font-normal text-muted-foreground">{label}</Label>
+      <div className="flex items-center gap-2">{children}</div>
+    </div>
+  );
+}
+
+function NumSlider({
+  value,
+  min,
+  max,
+  step = 1,
+  onChange,
+}: {
+  value: number;
+  min: number;
+  max: number;
+  step?: number;
+  onChange: (v: number) => void;
+}) {
+  return (
+    <>
+      <Slider
+        value={[value]}
+        min={min}
+        max={max}
+        step={step}
+        onValueChange={([v]) => onChange(v ?? value)}
+        className="w-24"
+      />
+      <span className="w-7 text-right text-xs tabular-nums text-foreground/80">{Math.round(value)}</span>
+    </>
   );
 }
 
@@ -33,7 +77,8 @@ function Color({ value, onChange }: { value: string; onChange: (v: string) => vo
       type="color"
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="h-6 w-10 cursor-pointer rounded border border-border bg-transparent p-0"
+      aria-label="Colour"
+      className="h-7 w-11 cursor-pointer rounded-md border border-border bg-transparent p-0.5"
     />
   );
 }
@@ -41,187 +86,175 @@ function Color({ value, onChange }: { value: string; onChange: (v: string) => vo
 export function SidePanel(props: Props) {
   const { settings: s, onChange } = props;
   return (
-    <aside className="flex w-64 shrink-0 flex-col gap-4 overflow-y-auto border-l border-border bg-card p-4">
-      <section>
-        <h2 className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Grid</h2>
-        <Row label="Size">
-          <input
-            type="range"
-            min={8}
-            max={128}
-            step={2}
-            value={s.gridSize}
-            onChange={(e) => onChange({ gridSize: Number(e.target.value) })}
-            className="w-24 accent-primary"
-          />
-          <span className="w-7 text-right tabular-nums">{s.gridSize}</span>
-        </Row>
-        <Row label="Style">
-          <select
-            value={s.gridStyle}
-            onChange={(e) => onChange({ gridStyle: e.target.value as GridStyle })}
-            className="rounded border border-border bg-background px-2 py-1"
-          >
-            <option value="square">Square</option>
-            <option value="dot">Dots</option>
-            <option value="none">None</option>
-          </select>
-        </Row>
-        <Row label="Snap to grid">
-          <input type="checkbox" checked={s.snap} onChange={(e) => onChange({ snap: e.target.checked })} className="accent-primary" />
-        </Row>
-      </section>
+    <aside className="flex w-72 shrink-0 flex-col border-l border-border bg-sidebar">
+      <ScrollArea className="min-h-0 flex-1 panel-scroll">
+        <div className="flex flex-col gap-5 p-4">
+          <section>
+            <SectionTitle>Grid</SectionTitle>
+            <Row label="Size">
+              <NumSlider value={s.gridSize} min={8} max={128} step={2} onChange={(v) => onChange({ gridSize: v })} />
+            </Row>
+            <Row label="Style">
+              <Select value={s.gridStyle} onValueChange={(v) => onChange({ gridStyle: v as GridStyle })}>
+                <SelectTrigger size="sm" className="w-32 text-xs">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="square">Square</SelectItem>
+                  <SelectItem value="dot">Dots</SelectItem>
+                  <SelectItem value="none">None</SelectItem>
+                </SelectContent>
+              </Select>
+            </Row>
+            <Row label="Snap to grid">
+              <Switch checked={s.snap} onCheckedChange={(v) => onChange({ snap: v })} />
+            </Row>
+          </section>
 
-      <section>
-        <h2 className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Walls</h2>
-        <Row label="Thickness">
-          <input
-            type="range"
-            min={1}
-            max={24}
-            value={s.wallThickness}
-            onChange={(e) => onChange({ wallThickness: Number(e.target.value) })}
-            className="w-24 accent-primary"
-          />
-          <span className="w-7 text-right tabular-nums">{s.wallThickness}</span>
-        </Row>
-        <Row label="Drop shadow">
-          <input type="checkbox" checked={s.shadow} onChange={(e) => onChange({ shadow: e.target.checked })} className="accent-primary" />
-        </Row>
-        <Row label="Brush width">
-          <input
-            type="range"
-            min={8}
-            max={160}
-            value={props.brushWidth}
-            onChange={(e) => props.onBrushWidth(Number(e.target.value))}
-            className="w-24 accent-primary"
-          />
-          <span className="w-7 text-right tabular-nums">{props.brushWidth}</span>
-        </Row>
-        <Row label="Door type">
-          <select
-            value={props.doorVariant}
-            onChange={(e) => props.onDoorVariant(e.target.value)}
-            className="rounded border border-border bg-background px-2 py-1"
-          >
-            <option value="door">Door</option>
-            <option value="double">Double</option>
-            <option value="secret">Secret</option>
-            <option value="archway">Archway</option>
-          </select>
-        </Row>
-      </section>
+          <Separator />
 
-      <section>
-        <h2 className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Theme</h2>
-        <div className="mb-2 grid grid-cols-2 gap-2">
-          {Object.entries(THEMES).map(([key, t]) => (
-            <button
-              key={key}
-              onClick={() => onChange(t as Partial<Settings>)}
-              className="rounded border border-border px-2 py-1 text-[11px] hover:bg-accent"
-            >
-              {t.label}
-            </button>
-          ))}
+          <section>
+            <SectionTitle>Walls</SectionTitle>
+            <Row label="Thickness">
+              <NumSlider value={s.wallThickness} min={1} max={24} onChange={(v) => onChange({ wallThickness: v })} />
+            </Row>
+            <Row label="Drop shadow">
+              <Switch checked={s.shadow} onCheckedChange={(v) => onChange({ shadow: v })} />
+            </Row>
+            <Row label="Brush width">
+              <NumSlider value={props.brushWidth} min={8} max={160} onChange={props.onBrushWidth} />
+            </Row>
+            <Row label="Door type">
+              <Select value={props.doorVariant} onValueChange={props.onDoorVariant}>
+                <SelectTrigger size="sm" className="w-32 text-xs">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="door">Door</SelectItem>
+                  <SelectItem value="double">Double</SelectItem>
+                  <SelectItem value="secret">Secret</SelectItem>
+                  <SelectItem value="archway">Archway</SelectItem>
+                </SelectContent>
+              </Select>
+            </Row>
+          </section>
+
+          <Separator />
+
+          <section>
+            <SectionTitle>Theme</SectionTitle>
+            <div className="mb-2 grid grid-cols-2 gap-2">
+              {Object.entries(THEMES).map(([key, t]) => (
+                <Button
+                  key={key}
+                  variant="secondary"
+                  size="sm"
+                  className="h-8 text-[11px]"
+                  onClick={() => onChange(t as Partial<Settings>)}
+                >
+                  {t.label}
+                </Button>
+              ))}
+            </div>
+            <Row label="Background">
+              <Color value={s.bgColor} onChange={(v) => onChange({ bgColor: v })} />
+            </Row>
+            <Row label="Floor">
+              <Color value={s.floorColor} onChange={(v) => onChange({ floorColor: v })} />
+            </Row>
+            <Row label="Wall">
+              <Color value={s.wallColor} onChange={(v) => onChange({ wallColor: v })} />
+            </Row>
+            <Row label="Grid">
+              <Color value={s.gridColor} onChange={(v) => onChange({ gridColor: v })} />
+            </Row>
+            <Row label="Ink / text">
+              <Color value={s.inkColor} onChange={(v) => onChange({ inkColor: v })} />
+            </Row>
+          </section>
+
+          <Separator />
+
+          <section>
+            <SectionTitle>Lighting &amp; line of sight</SectionTitle>
+            <Row label="Line of sight">
+              <Select value={s.losMode} onValueChange={(v) => onChange({ losMode: v as Settings["losMode"] })}>
+                <SelectTrigger size="sm" className="w-36 text-xs">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="off">Off</SelectItem>
+                  <SelectItem value="lights">Reveal from lights</SelectItem>
+                  <SelectItem value="vision">Vision (fog of war)</SelectItem>
+                </SelectContent>
+              </Select>
+            </Row>
+            <Row label="Light glow">
+              <Switch checked={s.lighting} onCheckedChange={(v) => onChange({ lighting: v })} />
+            </Row>
+            <Row label="Ambient light">
+              <NumSlider
+                value={Math.round(s.ambient * 100)}
+                min={0}
+                max={95}
+                onChange={(v) => onChange({ ambient: v / 100 })}
+              />
+            </Row>
+            <Row label="Darkness colour">
+              <Color value={s.fogColor} onChange={(v) => onChange({ fogColor: v })} />
+            </Row>
+            <p className="mt-2 rounded-md bg-muted/50 p-2 text-[10px] leading-relaxed text-muted-foreground">
+              Place light sources with the light tool (F). Room outlines and pillars block sight; doors block it when
+              “Blocks light” is on.
+            </p>
+          </section>
         </div>
-        <Row label="Background">
-          <Color value={s.bgColor} onChange={(v) => onChange({ bgColor: v })} />
-        </Row>
-        <Row label="Floor">
-          <Color value={s.floorColor} onChange={(v) => onChange({ floorColor: v })} />
-        </Row>
-        <Row label="Wall">
-          <Color value={s.wallColor} onChange={(v) => onChange({ wallColor: v })} />
-        </Row>
-        <Row label="Grid">
-          <Color value={s.gridColor} onChange={(v) => onChange({ gridColor: v })} />
-        </Row>
-        <Row label="Ink / text">
-          <Color value={s.inkColor} onChange={(v) => onChange({ inkColor: v })} />
-        </Row>
-      </section>
+      </ScrollArea>
 
-      <section>
-        <h2 className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-          Lighting &amp; line of sight
-        </h2>
-        <Row label="Line of sight">
-          <select
-            value={s.losMode}
-            onChange={(e) => onChange({ losMode: e.target.value as Settings["losMode"] })}
-            className="rounded border border-border bg-background px-2 py-1"
-          >
-            <option value="off">Off</option>
-            <option value="lights">Reveal from lights</option>
-            <option value="vision">Vision (fog of war)</option>
-          </select>
-        </Row>
-        <Row label="Light glow">
-          <input
-            type="checkbox"
-            checked={s.lighting}
-            onChange={(e) => onChange({ lighting: e.target.checked })}
-            className="accent-primary"
-          />
-        </Row>
-        <Row label="Ambient light">
-          <input
-            type="range"
-            min={0}
-            max={95}
-            value={Math.round(s.ambient * 100)}
-            onChange={(e) => onChange({ ambient: Number(e.target.value) / 100 })}
-            className="w-24 accent-primary"
-          />
-          <span className="w-7 text-right tabular-nums">{Math.round(s.ambient * 100)}</span>
-        </Row>
-        <Row label="Darkness colour">
-          <Color value={s.fogColor} onChange={(v) => onChange({ fogColor: v })} />
-        </Row>
-        <p className="mt-1 text-[10px] leading-relaxed text-muted-foreground">
-          Place light sources with the light tool (F). Room outlines and pillars block sight; doors block it when
-          “Blocks light” is on.
-        </p>
-      </section>
-
-      <section className="mt-auto flex flex-col gap-2">
-        <button onClick={props.onFit} className="rounded border border-border px-3 py-2 text-xs hover:bg-accent">
-          Fit map to screen
-        </button>
-        <button onClick={props.onExportPng} className="rounded bg-primary px-3 py-2 text-xs font-medium text-primary-foreground hover:bg-primary/90">
-          Export PNG
-        </button>
+      <div className="flex flex-col gap-2 border-t border-border bg-card/60 p-4">
+        <Button variant="outline" size="sm" onClick={props.onFit}>
+          <Maximize2 /> Fit map to screen
+        </Button>
+        <Button size="sm" onClick={props.onExportPng} className="shadow-[var(--shadow-arcane)]">
+          <FileImage /> Export PNG
+        </Button>
         <div className="grid grid-cols-2 gap-2">
-          <button onClick={props.onExportSvg} className="rounded border border-border px-3 py-2 text-xs hover:bg-accent">
-            Export SVG
-          </button>
-          <button onClick={props.onExportPdf} className="rounded border border-border px-3 py-2 text-xs hover:bg-accent">
-            Export PDF
-          </button>
+          <Button variant="outline" size="sm" onClick={props.onExportSvg}>
+            <FileType2 /> SVG
+          </Button>
+          <Button variant="outline" size="sm" onClick={props.onExportPdf}>
+            <FileText /> PDF
+          </Button>
         </div>
-        <button onClick={props.onExportJson} className="rounded border border-border px-3 py-2 text-xs hover:bg-accent">
-          Save .json
-        </button>
-
-        <label className="cursor-pointer rounded border border-border px-3 py-2 text-center text-xs hover:bg-accent">
-          Load .json
-          <input
-            type="file"
-            accept="application/json"
-            className="hidden"
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) props.onImportJson(f);
-              e.target.value = "";
-            }}
-          />
-        </label>
-        <button onClick={props.onClear} className="rounded border border-destructive/50 px-3 py-2 text-xs text-destructive hover:bg-destructive/10">
-          Clear map
-        </button>
-      </section>
+        <div className="grid grid-cols-2 gap-2">
+          <Button variant="outline" size="sm" onClick={props.onExportJson}>
+            <Save /> Save
+          </Button>
+          <Button variant="outline" size="sm" asChild>
+            <label className="cursor-pointer">
+              <Upload /> Load
+              <input
+                type="file"
+                accept="application/json"
+                className="hidden"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) props.onImportJson(f);
+                  e.target.value = "";
+                }}
+              />
+            </label>
+          </Button>
+        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={props.onClear}
+          className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+        >
+          <Trash2 /> Clear map
+        </Button>
+      </div>
     </aside>
   );
 }
