@@ -306,6 +306,12 @@ export function DungeonEditor() {
         });
         break;
       }
+      case "ngon": {
+        const c = snappedNgon(world);
+        drag.current = { mode: "draw", start: c };
+        setPreview(ngonShape(c, { x: c.x + doc.settings.gridSize, y: c.y }));
+        break;
+      }
       case "brush":
       case "eraseBrush": {
         drag.current = { mode: "stroke" };
