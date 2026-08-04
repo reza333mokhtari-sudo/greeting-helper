@@ -4,7 +4,14 @@ import { LayersPanel } from "./LayersPanel";
 import { PropertiesPanel } from "./PropertiesPanel";
 import { SidePanel } from "./SidePanel";
 import { Toolbar, TOOLS, type ToolId } from "./Toolbar";
+import { AiPanel } from "./AiPanel";
+import { FogPanel, type FogMode } from "./FogPanel";
+import { HistoryPanel, type HistoryEntry } from "./HistoryPanel";
 import {
+  allMapCells,
+  cellKeyAt,
+  cellsInRadius,
+  cellsInRect,
   DEFAULT_LAYER_FOR,
   DEFAULT_NGON,
   docBounds,
@@ -28,6 +35,7 @@ import {
   type Shape,
   type View,
 } from "@/lib/dungeon/model";
+import type { AiSuggestion } from "@/lib/ai.functions";
 import { exportPdfFile, exportSvgFile } from "@/lib/dungeon/exporters";
 import { renderScene, screenToWorld } from "@/lib/dungeon/render";
 import { Badge } from "@/components/ui/badge";
@@ -38,22 +46,30 @@ import { getImage, onImageLoaded } from "@/lib/dungeon/assets";
 const STORAGE_KEY = "dungeon-scrawl-doc-v1";
 const MIN_ZOOM = 0.08;
 const MAX_ZOOM = 8;
+const HISTORY_LIMIT = 120;
 
 type Drag =
   | { mode: "none" }
   | { mode: "pan"; startX: number; startY: number; ox: number; oy: number }
   | { mode: "draw"; start: Pt }
   | { mode: "stroke" }
+  | { mode: "fog"; hide: boolean; start: Pt }
   | { mode: "move"; last: Pt; moved: boolean }
   | { mode: "place"; id: string; origin: Pt };
+
 
 export function DungeonEditor() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
 
   const [doc, setDocState] = useState<Doc>(() => emptyDoc());
-  const [past, setPast] = useState<Doc[]>([]);
-  const [future, setFuture] = useState<Doc[]>([]);
+  /** Full labelled timeline; index points at the state currently rendered. */
+  const [timeline, setTimeline] = useState<{ doc: Doc; label: string; at: number }[]>(() => [
+    { doc: emptyDoc(), label: "New map", at: Date.now() },
+  ]);
+  const [hIndex, setHIndex] = useState(0);
+  const hIndexRef = useRef(0);
+  hIndexRef.current = hIndex;
   const [view, setView] = useState<View>({ x: 0, y: 0, scale: 1 });
   const [tool, setTool] = useState<ToolId>("rect");
   const [preview, setPreview] = useState<Shape | null>(null);
@@ -65,49 +81,59 @@ export function DungeonEditor() {
   const [cursor, setCursor] = useState<Pt>({ x: 0, y: 0 });
   const [spaceDown, setSpaceDown] = useState(false);
   const [activeLayer, setActiveLayer] = useState<string>(() => emptyDoc().layers[0]!.id);
+  const [fogMode, setFogMode] = useState<FogMode>("brush");
+  const [fogBrush, setFogBrush] = useState(96);
 
   const drag = useRef<Drag>({ mode: "none" });
   const stateRef = useRef({ doc, view, tool, polyPts, brushWidth, doorVariant, selected, spaceDown });
   stateRef.current = { doc, view, tool, polyPts, brushWidth, doorVariant, selected, spaceDown };
 
-
-  const commit = useCallback((next: Doc | ((d: Doc) => Doc)) => {
-    setDocState((prev) => {
-      const value = typeof next === "function" ? (next as (d: Doc) => Doc)(prev) : next;
-      if (value === prev) return prev;
-      setPast((p) => [...p.slice(-80), prev]);
-      setFuture([]);
-      return value;
+  /** Push a labelled snapshot onto the timeline, discarding any redo branch. */
+  const pushHistory = useCallback((value: Doc, label: string) => {
+    setTimeline((h) => {
+      const out = [...h.slice(0, hIndexRef.current + 1), { doc: value, label, at: Date.now() }].slice(-HISTORY_LIMIT);
+      hIndexRef.current = out.length - 1;
+      setHIndex(hIndexRef.current);
+      return out;
     });
   }, []);
+
+  const commit = useCallback(
+    (next: Doc | ((d: Doc) => Doc), label = "Edit") => {
+      setDocState((prev) => {
+        const value = typeof next === "function" ? (next as (d: Doc) => Doc)(prev) : next;
+        if (value === prev) return prev;
+        pushHistory(value, label);
+        return value;
+      });
+    },
+    [pushHistory],
+  );
 
   const setSettings = useCallback((patch: Partial<Settings>) => {
     setDocState((d) => ({ ...d, settings: { ...d.settings, ...patch } }));
   }, []);
 
-  const undo = useCallback(() => {
-    setPast((p) => {
-      if (!p.length) return p;
-      const prev = p[p.length - 1]!;
-      setDocState((cur) => {
-        setFuture((f) => [cur, ...f].slice(0, 80));
-        return prev;
-      });
-      return p.slice(0, -1);
+  const jumpTo = useCallback((index: number) => {
+    setTimeline((h) => {
+      const i = Math.max(0, Math.min(h.length - 1, index));
+      const entry = h[i];
+      if (entry) {
+        hIndexRef.current = i;
+        setHIndex(i);
+        setDocState(entry.doc);
+      }
+      return h;
     });
   }, []);
 
-  const redo = useCallback(() => {
-    setFuture((f) => {
-      if (!f.length) return f;
-      const next = f[0]!;
-      setDocState((cur) => {
-        setPast((p) => [...p, cur]);
-        return next;
-      });
-      return f.slice(1);
-    });
-  }, []);
+  const undo = useCallback(() => jumpTo(hIndexRef.current - 1), [jumpTo]);
+  const redo = useCallback(() => jumpTo(hIndexRef.current + 1), [jumpTo]);
+
+  const historyEntries: HistoryEntry[] = useMemo(
+    () => timeline.map((e) => ({ label: e.label, at: e.at })),
+    [timeline],
+  );
 
   // load / autosave
   useEffect(() => {
@@ -118,10 +144,14 @@ export function DungeonEditor() {
         if (parsed && Array.isArray(parsed.shapes)) {
           const migrated = migrateDoc(parsed);
           setDocState(migrated);
+          setTimeline([{ doc: migrated, label: "Restored map", at: Date.now() }]);
+          hIndexRef.current = 0;
+          setHIndex(0);
           setActiveLayer(migrated.layers[0]!.id);
         }
       }
     } catch {
+
       /* ignore */
     }
   }, []);
@@ -363,9 +393,17 @@ export function DungeonEditor() {
         }
         if (!obj) return;
         const created = obj;
-        commit((d) => ({ ...d, objects: [...d.objects, created] }));
+        commit((d) => ({ ...d, objects: [...d.objects, created] }), `Add ${created.kind}`);
         setSelected([id]);
         drag.current = { mode: "place", id, origin: world };
+        break;
+      }
+
+      case "fogHide":
+      case "fogReveal": {
+        const hide = tool === "fogHide";
+        drag.current = { mode: "fog", hide, start: world };
+        if (fogMode === "brush") paintFog(world, hide);
         break;
       }
 
@@ -373,6 +411,24 @@ export function DungeonEditor() {
         break;
     }
   };
+
+  /** Live fog painting (no history push until the stroke ends). */
+  const paintFog = (world: Pt, hide: boolean) => {
+    setDocState((d) => {
+      const keys = fogBrush <= d.settings.gridSize * 0.6 ? [cellKeyAt(world, d.settings)] : cellsInRadius(world, fogBrush / 2, d.settings);
+      const set = new Set(d.fog);
+      let changed = false;
+      for (const k of keys) {
+        if (hide ? !set.has(k) : set.has(k)) {
+          changed = true;
+          if (hide) set.add(k);
+          else set.delete(k);
+        }
+      }
+      return changed ? { ...d, fog: [...set] } : d;
+    });
+  };
+
 
   const onPointerMove = (e: React.PointerEvent) => {
     const world = getPt(e);
@@ -382,6 +438,12 @@ export function DungeonEditor() {
       setView((v) => ({ ...v, x: d.ox + (e.clientX - d.startX), y: d.oy + (e.clientY - d.startY) }));
       return;
     }
+    if (d.mode === "fog") {
+      if (fogMode === "brush") paintFog(world, d.hide);
+      return;
+    }
+
+
     if (d.mode === "draw") {
       if (tool === "ngon") {
         setPreview(ngonShape(d.start, snappedNgon(world)));
@@ -425,7 +487,7 @@ export function DungeonEditor() {
     }
   };
 
-  const onPointerUp = () => {
+  const onPointerUp = (e?: React.PointerEvent) => {
     const d = drag.current;
     drag.current = { mode: "none" };
     if (d.mode === "draw" || d.mode === "stroke") {
@@ -455,16 +517,32 @@ export function DungeonEditor() {
               : prev.pts;
           shape = { id, kind: "poly", erase: prev.erase, pts: roughenPoly(pts, rough) };
         }
-        commit((doc0) => ({ ...doc0, shapes: [...doc0.shapes, shape] }));
+        commit((doc0) => ({ ...doc0, shapes: [...doc0.shapes, shape] }), shape.erase ? "Erase area" : "Draw shape");
       }
     }
+    if (d.mode === "fog") {
+      const end = e ? getPt(e) : d.start;
+      setDocState((cur) => {
+        let next = cur;
+        if (fogMode === "select") {
+          const keys = cellsInRect(d.start, end, cur.settings);
+          const set = new Set(cur.fog);
+          keys.forEach((k) => (d.hide ? set.add(k) : set.delete(k)));
+          next = { ...cur, fog: [...set] };
+        }
+        pushHistory(next, d.hide ? "Hide fog cells" : "Reveal fog cells");
+        return next;
+      });
+    }
+
     if (d.mode === "move" && d.moved) {
       setDocState((cur) => {
-        setPast((p) => [...p.slice(-80), cur]);
+        pushHistory(cur, "Move selection");
         return cur;
       });
     }
   };
+
 
   const deleteSelected = useCallback(() => {
     if (!selected.length) return;
@@ -472,7 +550,7 @@ export function DungeonEditor() {
       ...d,
       shapes: d.shapes.filter((s) => !selected.includes(s.id)),
       objects: d.objects.filter((o) => !selected.includes(o.id)),
-    }));
+    }), "Delete selection");
     setSelected([]);
   }, [commit, selected]);
 
@@ -614,7 +692,7 @@ export function DungeonEditor() {
         angle: 0,
         url,
       };
-      commit((d) => ({ ...d, objects: [...d.objects, obj] }));
+      commit((d) => ({ ...d, objects: [...d.objects, obj] }), "Place prop");
       setSelected([obj.id]);
     },
     [commit, doc.layers, doc.settings.gridSize, view],
@@ -636,7 +714,7 @@ export function DungeonEditor() {
           const parsed = JSON.parse(txt) as Partial<Doc>;
           if (!parsed || !Array.isArray(parsed.shapes)) throw new Error("bad file");
           const migrated = migrateDoc(parsed);
-          commit(migrated);
+          commit(migrated, "Import map");
           setActiveLayer(migrated.layers[0]!.id);
         } catch {
           window.alert("That file isn't a valid dungeon map.");
@@ -651,10 +729,75 @@ export function DungeonEditor() {
     exportPdfFile(doc).catch(() => window.alert("PDF export failed."));
   }, [doc]);
 
+  // ---- fog of war helpers ----
+  const hideAllFog = useCallback(() => {
+    commit((d) => ({ ...d, fog: allMapCells(d) }), "Hide all fog");
+  }, [commit]);
+  const clearFog = useCallback(() => commit((d) => (d.fog.length ? { ...d, fog: [] } : d), "Clear fog"), [commit]);
+
+  /** Turn an AI suggestion into shapes, notes and style settings. */
+  const applyAi = useCallback(
+    (s: AiSuggestion) => {
+      commit((d) => {
+        const g = d.settings.gridSize;
+        const shapes: Shape[] = [...d.shapes];
+        const objects: MapObject[] = [...d.objects];
+        const noteLayer = d.layers.find((l) => l.id === DEFAULT_LAYER_FOR.text)?.id ?? d.layers[0]!.id;
+        for (const r of s.rooms) {
+          const a = { x: r.x * g, y: r.y * g };
+          const b = { x: (r.x + Math.max(1, r.w)) * g, y: (r.y + Math.max(1, r.h)) * g };
+          shapes.push({ id: uid("s"), kind: "rect", erase: false, a, b });
+          if (r.name) {
+            objects.push({
+              id: uid("o"),
+              layerId: noteLayer,
+              kind: "text",
+              x: (a.x + b.x) / 2,
+              y: (a.y + b.y) / 2,
+              text: r.name,
+              size: Math.max(12, g * 0.5),
+            });
+          }
+        }
+        for (const c of s.corridors) {
+          shapes.push({
+            id: uid("s"),
+            kind: "path",
+            erase: false,
+            pts: [
+              { x: c.x1 * g, y: c.y1 * g },
+              { x: c.x2 * g, y: c.y2 * g },
+            ],
+            width: Math.max(16, g * 0.9),
+          });
+        }
+        const allowed: (keyof Settings)[] = [
+          "hatch",
+          "hatchDensity",
+          "roughness",
+          "wallThickness",
+          "gridStyle",
+          "bgColor",
+          "floorColor",
+          "wallColor",
+          "gridColor",
+          "inkColor",
+        ];
+        const settings = { ...d.settings };
+        for (const [k, v] of Object.entries(s.settings)) {
+          if (allowed.includes(k as keyof Settings)) (settings as Record<string, unknown>)[k] = v;
+        }
+        return { ...d, shapes, objects, settings };
+      }, "AI suggestion");
+    },
+    [commit],
+  );
+
+
   // ---- layer management ----
   const updateLayer = useCallback(
     (id: string, patch: Partial<Layer>) => {
-      commit((d) => ({ ...d, layers: d.layers.map((l) => (l.id === id ? { ...l, ...patch } : l)) }));
+      commit((d) => ({ ...d, layers: d.layers.map((l) => (l.id === id ? { ...l, ...patch } : l)) }), "Layer settings");
     },
     [commit],
   );
@@ -765,8 +908,9 @@ export function DungeonEditor() {
           }}
           onUndo={undo}
           onRedo={redo}
-          canUndo={past.length > 0}
-          canRedo={future.length > 0}
+          canUndo={hIndex > 0}
+          canRedo={hIndex < timeline.length - 1}
+
           zoom={view.scale}
           onZoom={zoomBy}
         />
@@ -808,8 +952,22 @@ export function DungeonEditor() {
             selected={selected}
             onSelect={setSelected}
           />
+          <FogPanel
+            count={doc.fog.length}
+            mode={fogMode}
+            onMode={setFogMode}
+            brush={fogBrush}
+            onBrush={setFogBrush}
+            onHideAll={hideAllFog}
+            onRevealAll={clearFog}
+            activeTool={tool === "fogHide" ? "hide" : tool === "fogReveal" ? "reveal" : null}
+            onTool={(t) => setTool(t === "hide" ? "fogHide" : "fogReveal")}
+          />
+          <AiPanel doc={doc} onApply={applyAi} />
           <PropsPanel onPlace={placeImage} />
+          <HistoryPanel entries={historyEntries} index={hIndex} onJump={jumpTo} />
           <PropertiesPanel doc={doc} object={selectedObject} onChange={updateObject} onDelete={deleteSelected} />
+
         </aside>
         <SidePanel
           settings={doc.settings}
@@ -827,7 +985,7 @@ export function DungeonEditor() {
           onImportJson={importJson}
           onFit={fit}
           onClear={() => {
-            if (window.confirm("Clear the whole map?")) commit(emptyDoc());
+            if (window.confirm("Clear the whole map?")) commit(emptyDoc(), "Clear map");
           }}
         />
 

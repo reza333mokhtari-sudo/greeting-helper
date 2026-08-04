@@ -53,7 +53,13 @@ function AuthPage() {
     setBusy(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setBusy(false);
-    if (error) toast.error(error.message);
+    if (error) {
+      toast.error(
+        error.message.toLowerCase().includes("not confirmed")
+          ? "Your email isn't confirmed yet — check your inbox or resend the link."
+          : error.message,
+      );
+    }
   };
 
   const signUp = async () => {
@@ -70,6 +76,39 @@ function AuthPage() {
     }
     if (!data.session) toast.success("Check your email to confirm your account.");
   };
+
+  /** Send a password-reset email pointing at the /reset-password page. */
+  const forgot = async () => {
+    if (!email) {
+      toast.error("Enter your email address first");
+      return;
+    }
+    setBusy(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    setBusy(false);
+    if (error) toast.error(error.message);
+    else toast.success("Password reset link sent — check your inbox.");
+  };
+
+  /** Re-send the account activation email. */
+  const resendActivation = async () => {
+    if (!email) {
+      toast.error("Enter your email address first");
+      return;
+    }
+    setBusy(true);
+    const { error } = await supabase.auth.resend({
+      type: "signup",
+      email,
+      options: { emailRedirectTo: window.location.origin },
+    });
+    setBusy(false);
+    if (error) toast.error(error.message);
+    else toast.success("Activation email sent again.");
+  };
+
 
   const google = async () => {
     const result = await lovable.auth.signInWithOAuth("google", {
@@ -104,6 +143,14 @@ function AuthPage() {
             <Button className="w-full" disabled={busy} onClick={signIn}>
               Sign in
             </Button>
+            <div className="flex justify-between text-[11px]">
+              <button type="button" className="text-muted-foreground underline hover:text-foreground" onClick={forgot}>
+                Forgot password?
+              </button>
+              <button type="button" className="text-muted-foreground underline hover:text-foreground" onClick={resendActivation}>
+                Resend activation email
+              </button>
+            </div>
           </TabsContent>
 
           <TabsContent value="up" className="space-y-3">
@@ -113,8 +160,18 @@ function AuthPage() {
             <Button className="w-full" disabled={busy} onClick={signUp}>
               Create account
             </Button>
+            <p className="text-[11px] text-muted-foreground">
+              We'll email you an activation link. You can keep drawing maps without an account — sign in only to save to the cloud.
+            </p>
           </TabsContent>
         </Tabs>
+
+        <p className="mt-4 text-center text-[11px] text-muted-foreground">
+          <button type="button" className="underline hover:text-foreground" onClick={() => navigate({ to: "/" })}>
+            Continue as guest
+          </button>
+        </p>
+
       </div>
     </main>
   );

@@ -10,7 +10,7 @@ export type MapRow = {
   updated_at: string;
 };
 
-export type AssetRow = { id: string; name: string; kind: string; url: string };
+export type AssetRow = { id: string; name: string; kind: string; url: string; tags: string[]; favorite: boolean };
 
 const SIGNED_TTL = 60 * 60 * 24 * 365;
 
@@ -55,7 +55,7 @@ export async function deleteMap(id: string) {
 }
 
 export async function listAssets(): Promise<AssetRow[]> {
-  const { data, error } = await supabase.from("map_assets").select("id,name,kind,url").order("created_at", { ascending: false });
+  const { data, error } = await supabase.from("map_assets").select("id,name,kind,url,tags,favorite").order("created_at", { ascending: false });
   if (error) throw error;
   return (data ?? []) as AssetRow[];
 }
@@ -72,10 +72,15 @@ export async function uploadAsset(file: File, kind = "prop"): Promise<AssetRow> 
   const { data, error } = await supabase
     .from("map_assets")
     .insert({ user_id: auth.user.id, name: file.name.replace(/\.[^.]+$/, ""), kind, url: signed.data.signedUrl })
-    .select("id,name,kind,url")
+    .select("id,name,kind,url,tags,favorite")
     .single();
   if (error) throw error;
   return data as AssetRow;
+}
+
+export async function updateAsset(id: string, patch: { name?: string; tags?: string[]; favorite?: boolean }) {
+  const { error } = await supabase.from("map_assets").update(patch as never).eq("id", id);
+  if (error) throw error;
 }
 
 export async function deleteAsset(id: string) {

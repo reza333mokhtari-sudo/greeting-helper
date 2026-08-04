@@ -26,12 +26,26 @@ export function CloudBar({ doc, thumbnail, onLoadDoc }: Props) {
   const [current, setCurrent] = useState<MapRow | null>(null);
   const [name, setName] = useState("Untitled map");
   const [busy, setBusy] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setEmail(data.session?.user.email ?? null));
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setEmail(s?.user.email ?? null));
     return () => sub.subscription.unsubscribe();
   }, []);
+
+  // Show the admin entry point only to accounts that actually hold the role.
+  useEffect(() => {
+    if (!email) {
+      setIsAdmin(false);
+      return;
+    }
+    supabase.auth.getUser().then(({ data }) => {
+      if (!data.user) return;
+      supabase.rpc("has_role", { _user_id: data.user.id, _role: "admin" }).then(({ data: ok }) => setIsAdmin(!!ok));
+    });
+  }, [email]);
+
 
   const refresh = useCallback(() => {
     listMaps()
@@ -156,9 +170,16 @@ export function CloudBar({ doc, thumbnail, onLoadDoc }: Props) {
         </DialogContent>
       </Dialog>
 
+      {isAdmin && (
+        <Button asChild size="sm" variant="outline" className="h-7 px-2 text-[10px]">
+          <Link to="/admin">Admin</Link>
+        </Button>
+      )}
+
       <Button size="icon" variant="ghost" className="h-7 w-7" title={email} onClick={() => supabase.auth.signOut()}>
         <LogOut className="h-3.5 w-3.5" />
       </Button>
+
     </div>
   );
 }
