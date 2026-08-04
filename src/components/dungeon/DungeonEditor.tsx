@@ -227,7 +227,8 @@ export function DungeonEditor() {
       });
       ctx.restore();
     }
-  }, [doc, view, preview, selected, polyPts, cursor]);
+    tickFps();
+  }, [doc, view, preview, selected, polyPts, cursor, tickFps]);
 
   useEffect(() => {
     let raf = requestAnimationFrame(draw);
