@@ -259,17 +259,23 @@ export function DungeonEditor() {
 
     switch (tool) {
       case "select": {
-        const obj = [...doc.objects].reverse().find((o) => objectHit(world, o));
+        const pickable = doc.objects.filter((o) => {
+          const l = doc.layers.find((x) => x.id === o.layerId);
+          return !l || (l.visible && !l.locked);
+        });
+        const obj = [...pickable].reverse().find((o) => objectHit(world, o));
         const shape = obj ? null : [...doc.shapes].reverse().find((s) => !s.erase && pointInShape(world, s));
         const id = obj?.id ?? shape?.id;
         if (id) {
           setSelected(e.shiftKey ? (sel) => (sel.includes(id) ? sel.filter((x) => x !== id) : [...sel, id]) : [id]);
+          if (obj) setActiveLayer(obj.layerId);
           drag.current = { mode: "move", last: world, moved: false };
         } else {
           setSelected([]);
         }
         break;
       }
+
       case "rect":
       case "ellipse":
       case "eraseRect": {
