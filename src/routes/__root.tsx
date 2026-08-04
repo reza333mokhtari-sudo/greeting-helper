@@ -117,7 +117,7 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {children}
+        <TooltipProvider delayDuration={200}>{children}</TooltipProvider>
         <Toaster position="top-center" richColors />
         <OfflineOverlay />
         <Scripts />
