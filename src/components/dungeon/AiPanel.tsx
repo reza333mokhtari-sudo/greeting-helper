@@ -155,6 +155,23 @@ export function AiPanel({ doc, onPreview, onApply, staged }: Props) {
         </SelectContent>
       </Select>
 
+      <Select value={engine} onValueChange={(v) => setEngine(v as AiEngine)}>
+        <SelectTrigger className="h-7 text-[11px]">
+          <Cpu className="mr-1 h-3 w-3 text-accent" />
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {(Object.keys(AI_ENGINES) as AiEngine[]).map((k) => (
+            <SelectItem key={k} value={k} className="text-[11px]">
+              {AI_ENGINES[k].label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <p className="text-[10px] text-muted-foreground">{AI_ENGINES[engine].hint}</p>
+
+
+
       <div className="flex flex-wrap gap-1">
         {active.chips.map((c) => (
           <button
