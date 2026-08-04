@@ -186,15 +186,20 @@ export const suggestMap = createServerFn({ method: "POST" })
           console.error("[ai.suggestMap] stream error", error);
         },
       });
+      const toError = (e: unknown) =>
+        e instanceof Error
+          ? e
+          : new Error(typeof e === "string" ? e : JSON.stringify(e, Object.getOwnPropertyNames(Object(e))).slice(0, 500));
+      let out: string;
       try {
-        return await result.text;
+        out = await result.text;
       } catch (e) {
-        throw asError(streamError ?? e);
+        throw toError(streamError ?? e);
       }
-      finally {
-        if (streamError) throw asError(streamError);
-      }
+      if (streamError) throw toError(streamError);
+      return out;
     };
+
 
 
 
