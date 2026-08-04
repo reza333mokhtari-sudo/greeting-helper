@@ -411,12 +411,13 @@ export function DungeonEditor() {
       commit((d) => ({
         ...d,
         objects: d.objects.map((o) =>
-          selected.includes(o.id) && o.kind !== "pillar" && o.kind !== "text" ? { ...o, angle: o.angle + delta } : o,
+          selected.includes(o.id) && (o.kind === "door" || o.kind === "stairs") ? { ...o, angle: o.angle + delta } : o,
         ),
       }));
     },
     [commit, selected],
   );
+
 
   // keyboard
   useEffect(() => {
