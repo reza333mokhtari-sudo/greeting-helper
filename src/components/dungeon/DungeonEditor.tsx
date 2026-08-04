@@ -1237,7 +1237,7 @@ export function DungeonEditor() {
       case "floors":
         return (
           <FloorsPanel
-            doc={doc}
+            doc={syncActiveFloor(doc)}
             onSelectFloor={selectFloor}
             onAddFloor={(dup) => commit((d) => addFloor(d, undefined, dup), dup ? "Duplicate floor" : "Add floor")}
             onRenameFloor={(id, name) => commit((d) => renameFloor(d, id, name), "Rename floor")}
@@ -1346,7 +1346,7 @@ export function DungeonEditor() {
         onPlayerView={(v) => setSettings({ playerView: v })}
         showGrid={doc.settings.gridStyle !== "none"}
         onShowGrid={(v) => setSettings({ gridStyle: v ? "square" : "none" })}
-        right={<CloudBar doc={doc} thumbnail={thumbnail} onLoadDoc={(d) => commit(migrateDoc(d))} />}
+        right={<CloudBar doc={syncActiveFloor(doc)} thumbnail={thumbnail} onLoadDoc={(d) => commit(migrateDoc(d))} />}
       />
 
       <input
