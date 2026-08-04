@@ -1,4 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Sparkles } from "lucide-react";
+import { toast } from "sonner";
+
+import { Button } from "@/components/ui/button";
+
+
 
 import { LayersPanel } from "./LayersPanel";
 import { PropertiesPanel } from "./PropertiesPanel";
