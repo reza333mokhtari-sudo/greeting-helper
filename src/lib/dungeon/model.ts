@@ -32,7 +32,7 @@ export type MapObject =
 
 export type ObjectKind = MapObject["kind"];
 
-export type GridStyle = "square" | "dot" | "none";
+export type GridStyle = "square" | "dot" | "hex" | "none";
 
 export type Layer = {
   id: string;
@@ -40,6 +40,27 @@ export type Layer = {
   visible: boolean;
   locked: boolean;
   opacity: number;
+  /** Hidden in Player View (GM-only content such as traps and secret notes). */
+  gmOnly?: boolean;
+};
+
+/** Options for the Circle / Regular polygon tool. */
+export type NgonOpts = {
+  mode: "draw" | "erase";
+  snap: boolean;
+  division: 1 | 2;
+  rough: boolean;
+  sides: number;
+  drawTo: "point" | "edge";
+};
+
+export const DEFAULT_NGON: NgonOpts = {
+  mode: "draw",
+  snap: true,
+  division: 1,
+  rough: false,
+  sides: 6,
+  drawTo: "point",
 };
 
 export type Settings = {
@@ -53,11 +74,19 @@ export type Settings = {
   gridColor: string;
   inkColor: string;
   shadow: boolean;
+  /** Classic Scrawl hand-drawn hatching inside the wall band. */
+  hatch: boolean;
+  hatchDensity: number;
+  /** Hand-drawn wobble applied to newly drawn shapes. */
+  roughness: number;
+  /** Hide GM-only layers and force fog of war. */
+  playerView: boolean;
   lighting: boolean;
   losMode: "off" | "lights" | "vision";
   ambient: number; // 0..1 how visible unlit areas are
   fogColor: string;
 };
+
 
 export type Doc = {
   shapes: Shape[];
