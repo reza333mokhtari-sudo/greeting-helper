@@ -78,9 +78,11 @@ type Props = {
   onApply: (s: AiSuggestion) => void;
   /** Suggestion currently staged on the canvas, if any. */
   staged: AiSuggestion | null;
+  /** Name of the floor the AI is allowed to edit. */
+  floorName?: string;
 };
 
-export function AiPanel({ doc, onPreview, onApply, staged }: Props) {
+export function AiPanel({ doc, onPreview, onApply, staged, floorName }: Props) {
   const run = useServerFn(suggestMap);
   const online = useOnlineStatus();
   const [mode, setMode] = useState<Mode>("rooms");
@@ -141,6 +143,12 @@ export function AiPanel({ doc, onPreview, onApply, staged }: Props) {
       <h2 className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
         <Sparkles className="h-3 w-3 text-accent" /> AI cartographer
       </h2>
+      {floorName && (
+        <p className="rounded-md border border-accent/40 bg-accent/10 px-2 py-1 text-[10px] text-muted-foreground">
+          Working on floor <span className="font-semibold text-foreground">{floorName}</span> only.
+        </p>
+      )}
+
       <Select value={mode} onValueChange={(v) => setMode(v as Mode)}>
 
         <SelectTrigger className="h-7 text-[11px]">
