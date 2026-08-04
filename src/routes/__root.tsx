@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { OfflineOverlay } from "@/components/OfflineOverlay";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -117,7 +118,7 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {children}
+        <TooltipProvider delayDuration={200}>{children}</TooltipProvider>
         <Toaster position="top-center" richColors />
         <OfflineOverlay />
         <Scripts />
