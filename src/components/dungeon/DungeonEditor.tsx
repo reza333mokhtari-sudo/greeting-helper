@@ -923,33 +923,126 @@ export function DungeonEditor() {
     snapVal(cursor.y, doc.settings.gridSize, true) / doc.settings.gridSize,
   )}`;
 
-  return (
-    <div className="flex h-screen w-full flex-col bg-background text-foreground">
-      <header className="flex items-center gap-3 border-b border-border bg-sidebar px-4 py-2.5">
-        <h1 className="text-sm font-semibold uppercase tracking-[0.22em] text-arcane">Dungeon Scrawl</h1>
-        <span className="text-xs text-muted-foreground">Map maker for tabletop RPGs</span>
-        <div className="ml-auto flex items-center gap-2">
-          <Badge variant="secondary" className="text-[10px] tabular-nums">{doc.shapes.length} shapes</Badge>
-          <Badge variant="secondary" className="text-[10px] tabular-nums">{doc.objects.length} objects</Badge>
-          <Badge variant="outline" className="text-[10px] tabular-nums">cell {gridCoord}</Badge>
-          <CloudBar doc={doc} thumbnail={thumbnail} onLoadDoc={(d) => commit(migrateDoc(d))} />
-        </div>
-      </header>
-      <div className="flex min-h-0 flex-1">
-        <Toolbar
-          tool={tool}
-          onTool={(t) => {
-            setTool(t);
-            setPolyPts([]);
-          }}
-          onUndo={undo}
-          onRedo={redo}
-          canUndo={hIndex > 0}
-          canRedo={hIndex < timeline.length - 1}
+  const toolLabel = TOOLS.find((t) => t.id === tool)?.label ?? tool;
+  const savedLabel = savedAt ? `saved ${new Date(savedAt).toLocaleTimeString()}` : "not saved yet";
 
-          zoom={view.scale}
-          onZoom={zoomBy}
-        />
+  const leftContent = (() => {
+    switch (leftPanel) {
+      case "settings":
+        return (
+          <SidePanel
+            settings={doc.settings}
+            onChange={setSettings}
+            brushWidth={brushWidth}
+            onBrushWidth={setBrushWidth}
+            doorVariant={doorVariant}
+            onDoorVariant={(v) => setDoorVariant(v as DoorVariant)}
+            ngon={ngon}
+            onNgon={(patch) => setNgon((n) => ({ ...n, ...patch }))}
+            onExportPng={exportPng}
+            onExportSvg={exportSvg}
+            onExportPdf={exportPdf}
+            onExportJson={exportJson}
+            onImportJson={importJson}
+            onFit={fit}
+            onClear={() => {
+              if (window.confirm("Clear the whole map?")) commit(emptyDoc(), "Clear map");
+            }}
+          />
+        );
+      case "layers":
+        return (
+          <LayersPanel
+            doc={doc}
+            activeLayer={activeLayer}
+            onActiveLayer={setActiveLayer}
+            onUpdateLayer={updateLayer}
+            onMoveLayer={moveLayer}
+            onReorderLayer={reorderLayer}
+            onAddLayer={addLayer}
+            onDeleteLayer={deleteLayer}
+            selected={selected}
+            onSelect={setSelected}
+          />
+        );
+      case "props":
+        return <PropsPanel onPlace={placeImage} />;
+      case "ai":
+        return <AiPanel doc={doc} onApply={applyAi} />;
+      case "fog":
+        return (
+          <FogPanel
+            count={doc.fog.length}
+            mode={fogMode}
+            onMode={setFogMode}
+            brush={fogBrush}
+            onBrush={setFogBrush}
+            onHideAll={hideAllFog}
+            onRevealAll={clearFog}
+            activeTool={tool === "fogHide" ? "hide" : tool === "fogReveal" ? "reveal" : null}
+            onTool={(t) => setTool(t === "hide" ? "fogHide" : "fogReveal")}
+          />
+        );
+      case "history":
+        return <HistoryPanel entries={historyEntries} index={hIndex} onJump={jumpTo} />;
+      case "properties":
+        return <PropertiesPanel doc={doc} object={selectedObject} onChange={updateObject} onDelete={deleteSelected} />;
+      default:
+        return null;
+    }
+  })();
+
+  return (
+    <div className="flex h-screen w-full flex-col overflow-hidden bg-background text-foreground">
+      <TopMenuBar
+        title={doc.settings.playerView ? "Map — player view" : "Map"}
+        dirty={hIndex > 0}
+        canUndo={hIndex > 0}
+        canRedo={hIndex < timeline.length - 1}
+        onUndo={undo}
+        onRedo={redo}
+        onDelete={deleteSelected}
+        onNew={() => {
+          if (window.confirm("Start a new map?")) commit(emptyDoc(), "New map");
+        }}
+        onImport={() => importRef.current?.click()}
+        onExportPng={exportPng}
+        onExportSvg={exportSvg}
+        onExportPdf={exportPdf}
+        onExportJson={exportJson}
+        onFit={fit}
+        onZoomIn={() => zoomBy(1)}
+        onZoomOut={() => zoomBy(-1)}
+        playerView={!!doc.settings.playerView}
+        onPlayerView={(v) => setSettings({ playerView: v })}
+        showGrid={doc.settings.gridStyle !== "none"}
+        onShowGrid={(v) => setSettings({ gridStyle: v ? "lines" : "none" })}
+        right={<CloudBar doc={doc} thumbnail={thumbnail} onLoadDoc={(d) => commit(migrateDoc(d))} />}
+      />
+
+      <input
+        ref={importRef}
+        type="file"
+        accept="application/json"
+        className="hidden"
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          if (f) importJson(f);
+          e.target.value = "";
+        }}
+      />
+
+      <div className="flex min-h-0 flex-1">
+        <LeftRail active={leftPanel} onSelect={(id) => setLeftPanel((cur) => (cur === id ? null : id))} />
+
+        {leftContent && (
+          <aside className="flex w-72 shrink-0 flex-col border-r border-border bg-sidebar">
+            <ScrollArea className="min-h-0 flex-1">
+              <div className="flex flex-col gap-4 p-4">{leftContent}</div>
+            </ScrollArea>
+          </aside>
+        )}
+
         <div
           ref={wrapRef}
           className="relative min-w-0 flex-1 touch-none select-none"
@@ -974,58 +1067,56 @@ export function DungeonEditor() {
               </p>
             </div>
           )}
+          <div className="pointer-events-none absolute inset-x-0 bottom-4 flex justify-center px-4">
+            <Toolbar
+              tool={tool}
+              onTool={(t) => {
+                setTool(t);
+                setPolyPts([]);
+              }}
+              onUndo={undo}
+              onRedo={redo}
+              canUndo={hIndex > 0}
+              canRedo={hIndex < timeline.length - 1}
+              zoom={view.scale}
+              onZoom={zoomBy}
+            />
+          </div>
         </div>
-        <aside className="panel-scroll flex w-72 shrink-0 flex-col gap-5 overflow-y-auto border-l border-border bg-sidebar p-4">
-          <LayersPanel
-            doc={doc}
-            activeLayer={activeLayer}
-            onActiveLayer={setActiveLayer}
-            onUpdateLayer={updateLayer}
-            onMoveLayer={moveLayer}
-            onReorderLayer={reorderLayer}
-            onAddLayer={addLayer}
-            onDeleteLayer={deleteLayer}
-            selected={selected}
-            onSelect={setSelected}
-          />
-          <FogPanel
-            count={doc.fog.length}
-            mode={fogMode}
-            onMode={setFogMode}
-            brush={fogBrush}
-            onBrush={setFogBrush}
-            onHideAll={hideAllFog}
-            onRevealAll={clearFog}
-            activeTool={tool === "fogHide" ? "hide" : tool === "fogReveal" ? "reveal" : null}
-            onTool={(t) => setTool(t === "hide" ? "fogHide" : "fogReveal")}
-          />
-          <AiPanel doc={doc} onApply={applyAi} />
-          <PropsPanel onPlace={placeImage} />
-          <HistoryPanel entries={historyEntries} index={hIndex} onJump={jumpTo} />
-          <PropertiesPanel doc={doc} object={selectedObject} onChange={updateObject} onDelete={deleteSelected} />
 
+        <aside className="flex w-72 shrink-0 flex-col border-l border-border bg-sidebar">
+          <ScrollArea className="min-h-0 flex-1">
+            <div className="flex flex-col gap-5 p-4">
+              <LayersPanel
+                doc={doc}
+                activeLayer={activeLayer}
+                onActiveLayer={setActiveLayer}
+                onUpdateLayer={updateLayer}
+                onMoveLayer={moveLayer}
+                onReorderLayer={reorderLayer}
+                onAddLayer={addLayer}
+                onDeleteLayer={deleteLayer}
+                selected={selected}
+                onSelect={setSelected}
+              />
+              <PropertiesPanel doc={doc} object={selectedObject} onChange={updateObject} onDelete={deleteSelected} />
+            </div>
+          </ScrollArea>
         </aside>
-        <SidePanel
-          settings={doc.settings}
-          onChange={setSettings}
-          brushWidth={brushWidth}
-          onBrushWidth={setBrushWidth}
-          doorVariant={doorVariant}
-          onDoorVariant={(v) => setDoorVariant(v as DoorVariant)}
-          ngon={ngon}
-          onNgon={(patch) => setNgon((n) => ({ ...n, ...patch }))}
-          onExportPng={exportPng}
-          onExportSvg={exportSvg}
-          onExportPdf={exportPdf}
-          onExportJson={exportJson}
-          onImportJson={importJson}
-          onFit={fit}
-          onClear={() => {
-            if (window.confirm("Clear the whole map?")) commit(emptyDoc(), "Clear map");
-          }}
-        />
-
       </div>
+
+      <StatusBar
+        toolLabel={toolLabel}
+        cell={gridCoord}
+        zoom={view.scale}
+        shapes={doc.shapes.length}
+        objects={doc.objects.length}
+        fog={doc.fog.length}
+        fps={fps}
+        saved={savedLabel}
+        onZoom={zoomBy}
+        onFit={fit}
+      />
     </div>
   );
 }
