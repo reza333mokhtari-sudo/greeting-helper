@@ -153,6 +153,19 @@ export function DungeonEditor() {
     [pushHistory],
   );
 
+  /** Stash the current floor's content and load another floor. */
+  const selectFloor = useCallback(
+    (id: string) => {
+      setSelected([]);
+      setPreview(null);
+      setPolyPts([]);
+      setAiPreview(null);
+      commit((d) => switchFloor(d, id), "Switch floor");
+    },
+    [commit],
+  );
+
+
   const setSettings = useCallback((patch: Partial<Settings>) => {
     setDocState((d) => ({ ...d, settings: { ...d.settings, ...patch } }));
   }, []);
