@@ -75,7 +75,7 @@ export function CanvasContextMenu({ target, actions }: { target: CanvasMenuTarge
         <Copy className="mr-2 size-3.5" /> Duplicate
         <ContextMenuShortcut>⌘D</ContextMenuShortcut>
       </ContextMenuItem>
-      <ContextMenuItem disabled={!sel} variant="destructive" onSelect={actions.onDelete}>
+      <ContextMenuItem disabled={!sel} className="text-destructive focus:text-destructive" onSelect={actions.onDelete}>
         <Trash2 className="mr-2 size-3.5" /> Delete
         <ContextMenuShortcut>⌫</ContextMenuShortcut>
       </ContextMenuItem>
