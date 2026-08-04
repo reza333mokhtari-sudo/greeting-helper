@@ -1206,6 +1206,12 @@ export function DungeonEditor() {
             onRevealAll={clearFog}
             activeTool={tool === "fogHide" ? "hide" : tool === "fogReveal" ? "reveal" : null}
             onTool={(t) => setTool(t === "hide" ? "fogHide" : "fogReveal")}
+            style={doc.settings.fogStyle}
+            softness={doc.settings.fogSoftness}
+            gmOpacity={doc.settings.fogGmOpacity}
+            scale={doc.settings.fogScale}
+            color={doc.settings.fogColor}
+            onSettings={setSettings}
           />
         );
       case "history":

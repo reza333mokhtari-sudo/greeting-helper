@@ -1,4 +1,5 @@
 import { getImage } from "./assets";
+import { fogTile, type FogStyle } from "./fogAssets";
 import { cellPolygon, objectsInDrawOrder, objectRadius, type Doc, type MapObject, type Pt, type Shape, type View } from "./model";
 import { lightSources, occluders, visibilityPolygon } from "./los";
 
@@ -354,19 +355,66 @@ function drawLighting(ctx: CanvasRenderingContext2D, doc: Doc, view: View, w: nu
 }
 
 /** Fog of war cells. Solid for players, translucent for the GM. */
-function drawFog(ctx: CanvasRenderingContext2D, doc: Doc, view: View, dpr: number, forPlayers: boolean) {
+function drawFog(
+  ctx: CanvasRenderingContext2D,
+  doc: Doc,
+  view: View,
+  w: number,
+  h: number,
+  dpr: number,
+  forPlayers: boolean,
+) {
   if (!doc.fog.length) return;
-  ctx.save();
-  applyView(ctx, view, dpr);
-  ctx.fillStyle = doc.settings.fogColor;
-  ctx.globalAlpha = forPlayers ? 1 : 0.58;
-  ctx.beginPath();
+  const s = doc.settings;
+  const pw = Math.max(1, w * dpr);
+  const ph = Math.max(1, h * dpr);
+  const soft = Math.max(0, Math.min(1, s.fogSoftness ?? 0.45));
+  const blur = soft * Math.max(6, s.gridSize * view.scale * dpr * 0.42);
+
+  // 1. cell mask (blurred for feathered edges)
+  const mask = makeCanvas(pw, ph);
+  const mc = mask.getContext("2d")!;
+  if (blur > 0.5) mc.filter = `blur(${blur.toFixed(2)}px)`;
+  mc.save();
+  applyView(mc, view, dpr);
+  mc.fillStyle = "#000";
+  mc.beginPath();
   for (const key of doc.fog) {
-    const poly = cellPolygon(key, doc.settings);
-    poly.forEach((p, i) => (i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y)));
-    ctx.closePath();
+    const poly = cellPolygon(key, s);
+    poly.forEach((p, i) => (i === 0 ? mc.moveTo(p.x, p.y) : mc.lineTo(p.x, p.y)));
+    mc.closePath();
   }
-  ctx.fill();
+  mc.fill();
+  mc.restore();
+  mc.filter = "none";
+
+  // 2. paint the 2D fog asset through the mask
+  const style = (s.fogStyle ?? "cloud") as FogStyle;
+  const layer = makeCanvas(pw, ph);
+  const lc = layer.getContext("2d")!;
+  if (style === "solid") {
+    lc.fillStyle = s.fogColor;
+    lc.fillRect(0, 0, pw, ph);
+  } else {
+    const tile = fogTile(style, s.fogColor);
+    const pattern = lc.createPattern(tile, "repeat");
+    lc.fillStyle = s.fogColor;
+    lc.fillRect(0, 0, pw, ph);
+    if (pattern) {
+      const scale = Math.max(0.25, (s.fogScale ?? 1) * view.scale * dpr);
+      const drift = style === "smoke" ? 0.35 : 0;
+      pattern.setTransform(new DOMMatrix().translateSelf(view.x * dpr, view.y * dpr).scaleSelf(scale).rotateSelf(drift * 30));
+      lc.fillStyle = pattern;
+      lc.fillRect(0, 0, pw, ph);
+    }
+  }
+  lc.globalCompositeOperation = "destination-in";
+  lc.drawImage(mask, 0, 0);
+
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.globalAlpha = forPlayers ? 1 : Math.max(0.15, Math.min(1, s.fogGmOpacity ?? 0.58));
+  ctx.drawImage(layer, 0, 0);
   ctx.globalAlpha = 1;
   ctx.restore();
 }
@@ -448,7 +496,7 @@ export function renderScene(
     ctx.globalAlpha = 1;
   }
 
-  drawFog(ctx, doc, view, dpr, !!s.playerView || !!opts.hideUi);
+  drawFog(ctx, doc, view, w, h, dpr, !!s.playerView || !!opts.hideUi);
   drawLighting(ctx, doc, view, w, h, dpr);
 
   if (!opts.hideUi && opts.selectedIds?.length) {

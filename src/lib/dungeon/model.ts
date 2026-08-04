@@ -1,3 +1,5 @@
+import type { FogStyle } from "./fogAssets";
+
 export type Pt = { x: number; y: number };
 
 export type ShapeBase = { id: string; erase: boolean };
@@ -86,6 +88,14 @@ export type Settings = {
   losMode: "off" | "lights" | "vision";
   ambient: number; // 0..1 how visible unlit areas are
   fogColor: string;
+  /** 2D fog asset style used to paint hidden cells. */
+  fogStyle: FogStyle;
+  /** Feathered edge amount, 0..1. */
+  fogSoftness: number;
+  /** How opaque fog looks to the GM, 0..1 (players always see it solid). */
+  fogGmOpacity: number;
+  /** Texture scale multiplier for the fog asset. */
+  fogScale: number;
 };
 
 
@@ -154,6 +164,10 @@ export const DEFAULT_SETTINGS: Settings = {
   losMode: "off",
   ambient: 0.18,
   fogColor: "#05070c",
+  fogStyle: "cloud",
+  fogSoftness: 0.45,
+  fogGmOpacity: 0.58,
+  fogScale: 1,
 };
 
 let counter = 0;
