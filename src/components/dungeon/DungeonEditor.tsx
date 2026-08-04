@@ -453,10 +453,22 @@ export function DungeonEditor() {
     });
   };
 
+  /** Cursor readout is coalesced to one state update per animation frame. */
+  const cursorPending = useRef<Pt | null>(null);
+  const cursorRaf = useRef(0);
+  const queueCursor = useCallback((p: Pt) => {
+    cursorPending.current = p;
+    if (cursorRaf.current) return;
+    cursorRaf.current = requestAnimationFrame(() => {
+      cursorRaf.current = 0;
+      if (cursorPending.current) setCursor(cursorPending.current);
+    });
+  }, []);
+  useEffect(() => () => cancelAnimationFrame(cursorRaf.current), []);
 
   const onPointerMove = (e: React.PointerEvent) => {
     const world = getPt(e);
-    setCursor(world);
+    queueCursor(world);
     const d = drag.current;
     if (d.mode === "pan") {
       setView((v) => ({ ...v, x: d.ox + (e.clientX - d.startX), y: d.oy + (e.clientY - d.startY) }));
