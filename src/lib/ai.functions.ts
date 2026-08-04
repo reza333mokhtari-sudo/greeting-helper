@@ -170,7 +170,10 @@ export const suggestMap = createServerFn({ method: "POST" })
     ];
 
     // Streamed so long generations keep bytes flowing; we still consume it as one shot.
+    // streamText never throws — it reports failures through onError and then surfaces
+    // a useless "No output generated", so capture the real cause and rethrow it.
     const run = async (extra?: string) => {
+      let streamError: unknown;
       const result = streamText({
         model,
         ...(providerOptions ? { providerOptions } : {}),
@@ -178,9 +181,21 @@ export const suggestMap = createServerFn({ method: "POST" })
         messages: (extra
           ? [...messages, { role: "user" as const, content: extra }]
           : messages) as { role: "user" | "assistant"; content: string }[],
+        onError: ({ error }) => {
+          streamError = error;
+          console.error("[ai.suggestMap] stream error", error);
+        },
       });
-      return await result.text;
+      try {
+        return await result.text;
+      } catch (e) {
+        throw asError(streamError ?? e);
+      }
+      finally {
+        if (streamError) throw asError(streamError);
+      }
     };
+
 
 
     let text = "";
