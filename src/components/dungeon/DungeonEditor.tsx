@@ -12,6 +12,7 @@ import { SidePanel } from "./SidePanel";
 import { Toolbar, TOOLS, type ToolId } from "./Toolbar";
 import { AiPanel } from "./AiPanel";
 import { FogPanel, type FogMode } from "./FogPanel";
+import { FloorsPanel } from "./FloorsPanel";
 import { HistoryPanel, type HistoryEntry } from "./HistoryPanel";
 import {
   allMapCells,
@@ -27,12 +28,23 @@ import {
   pointInShape,
   regularPolygon,
   roughenPoly,
+  addFloor,
+  addFloorLink,
+  deleteFloor,
+  floorBelow,
+  moveFloor,
+  removeFloorLink,
+  renameFloor,
+  shapePoints,
+  switchFloor,
+  syncActiveFloor,
   snapPt,
   snapVal,
   translateShape,
   uid,
   type Doc,
   type DoorVariant,
+  type FloorLinkKind,
   type Layer,
   type MapObject,
   type NgonOpts,
@@ -242,6 +254,40 @@ export function DungeonEditor() {
         ctx.arc(p.x, p.y, 4 / view.scale, 0, Math.PI * 2);
         ctx.fill();
       });
+      ctx.restore();
+    }
+
+    // Faint ghost of the floor directly below (RE4-style floor stacking).
+    const below = doc.showUnderlay && !doc.settings.playerView ? floorBelow(doc) : undefined;
+    if (below && below.shapes.length) {
+      ctx.save();
+      ctx.setTransform(view.scale * dpr, 0, 0, view.scale * dpr, view.x * dpr, view.y * dpr);
+      ctx.globalAlpha = 0.28;
+      ctx.strokeStyle = doc.settings.inkColor;
+      ctx.lineWidth = 1.5 / view.scale;
+      ctx.setLineDash([6 / view.scale, 5 / view.scale]);
+      for (const sh of below.shapes) {
+        if (sh.erase) continue;
+        const pts = shapePoints(sh);
+        ctx.beginPath();
+        if (sh.kind === "rect") {
+          ctx.rect(Math.min(pts[0]!.x, pts[1]!.x), Math.min(pts[0]!.y, pts[1]!.y), Math.abs(pts[1]!.x - pts[0]!.x), Math.abs(pts[1]!.y - pts[0]!.y));
+        } else if (sh.kind === "ellipse") {
+          ctx.ellipse(
+            (pts[0]!.x + pts[1]!.x) / 2,
+            (pts[0]!.y + pts[1]!.y) / 2,
+            Math.abs(pts[1]!.x - pts[0]!.x) / 2,
+            Math.abs(pts[1]!.y - pts[0]!.y) / 2,
+            0,
+            0,
+            Math.PI * 2,
+          );
+        } else {
+          pts.forEach((p, i) => (i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)));
+          if (sh.kind === "poly") ctx.closePath();
+        }
+        ctx.stroke();
+      }
       ctx.restore();
     }
 
@@ -1175,6 +1221,24 @@ export function DungeonEditor() {
             }}
           />
         );
+      case "floors":
+        return (
+          <FloorsPanel
+            doc={doc}
+            onSelectFloor={selectFloor}
+            onAddFloor={(dup) => commit((d) => addFloor(d, undefined, dup), dup ? "Duplicate floor" : "Add floor")}
+            onRenameFloor={(id, name) => commit((d) => renameFloor(d, id, name), "Rename floor")}
+            onDeleteFloor={(id) => {
+              if (window.confirm("Delete this floor and all of its content?")) commit((d) => deleteFloor(d, id), "Delete floor");
+            }}
+            onMoveFloor={(id, dir) => commit((d) => moveFloor(d, id, dir), "Reorder floors")}
+            onToggleUnderlay={(on) => commit((d) => ({ ...d, showUnderlay: on }), "Floor underlay")}
+            onAddLink={(to, kind, label) =>
+              commit((d) => addFloorLink(d, { from: d.activeFloorId, to, kind, label }), "Connect floors")
+            }
+            onRemoveLink={(id) => commit((d) => removeFloorLink(d, id), "Remove connection")}
+          />
+        );
       case "layers":
         return (
           <LayersPanel
@@ -1193,7 +1257,15 @@ export function DungeonEditor() {
       case "props":
         return <PropsPanel onPlace={placeImage} />;
       case "ai":
-        return <AiPanel doc={doc} onPreview={setAiPreview} onApply={applyAi} staged={aiPreview} />;
+        return (
+          <AiPanel
+            doc={doc}
+            onPreview={setAiPreview}
+            onApply={applyAi}
+            staged={aiPreview}
+            floorName={doc.floors.find((f) => f.id === doc.activeFloorId)?.name ?? "Ground floor"}
+          />
+        );
       case "fog":
         return (
           <FogPanel
