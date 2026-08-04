@@ -94,6 +94,8 @@ export type Doc = {
   objects: MapObject[];
   layers: Layer[];
   settings: Settings;
+  /** Fog of war: keys of grid cells that are hidden from players. */
+  fog: string[];
 };
 
 export type View = { x: number; y: number; scale: number };
@@ -192,7 +194,7 @@ export const DEFAULT_LAYER_FOR: Record<ObjectKind, string> = {
 };
 
 export function emptyDoc(): Doc {
-  return { shapes: [], objects: [], layers: defaultLayers(), settings: { ...DEFAULT_SETTINGS } };
+  return { shapes: [], objects: [], layers: defaultLayers(), settings: { ...DEFAULT_SETTINGS }, fog: [] };
 }
 
 /** Bring older/imported documents up to the current schema. */
@@ -210,6 +212,7 @@ export function migrateDoc(input: Partial<Doc> | null | undefined): Doc {
     objects,
     layers,
     settings: { ...base.settings, ...(input.settings ?? {}) },
+    fog: Array.isArray(input.fog) ? input.fog : [],
   };
 }
 
@@ -375,4 +378,116 @@ export function roughenPoly(pts: Pt[], amount: number, seedKey = 1): Pt[] {
     }
   }
   return out;
+}
+
+
+/* ------------------------------------------------------------------ */
+/* Fog of war cell geometry (square / dot grids and pointy-top hexes)  */
+/* ------------------------------------------------------------------ */
+
+function hexMetrics(g: number) {
+  const R = g / Math.sqrt(3);
+  return { R, colW: g, rowH: R * 1.5 };
+}
+
+/** Centre point of a hex cell in the same lattice the grid renderer uses. */
+function hexCenter(col: number, row: number, g: number): Pt {
+  const { colW, rowH } = hexMetrics(g);
+  return { x: col * colW + (((row % 2) + 2) % 2 ? colW / 2 : 0), y: row * rowH };
+}
+
+/** Key of the grid cell containing a world point. */
+export function cellKeyAt(p: Pt, s: Settings): string {
+  const g = s.gridSize;
+  if (s.gridStyle === "hex") {
+    const { colW, rowH } = hexMetrics(g);
+    const row0 = Math.round(p.y / rowH);
+    let best = "";
+    let bestD = Infinity;
+    for (let row = row0 - 1; row <= row0 + 1; row++) {
+      const col0 = Math.round((p.x - (((row % 2) + 2) % 2 ? colW / 2 : 0)) / colW);
+      for (let col = col0 - 1; col <= col0 + 1; col++) {
+        const c = hexCenter(col, row, g);
+        const d = Math.hypot(c.x - p.x, c.y - p.y);
+        if (d < bestD) {
+          bestD = d;
+          best = `${col}:${row}`;
+        }
+      }
+    }
+    return best;
+  }
+  return `${Math.floor(p.x / g)}:${Math.floor(p.y / g)}`;
+}
+
+/** Outline of a cell so the renderer can fill it. */
+export function cellPolygon(key: string, s: Settings): Pt[] {
+  const [c, r] = key.split(":");
+  const col = Number(c);
+  const row = Number(r);
+  const g = s.gridSize;
+  if (s.gridStyle === "hex") {
+    const { R } = hexMetrics(g);
+    const ctr = hexCenter(col, row, g);
+    return Array.from({ length: 6 }, (_, i) => {
+      const a = (Math.PI / 180) * (60 * i - 30);
+      return { x: ctr.x + Math.cos(a) * R, y: ctr.y + Math.sin(a) * R };
+    });
+  }
+  const x = col * g;
+  const y = row * g;
+  return [
+    { x, y },
+    { x: x + g, y },
+    { x: x + g, y: y + g },
+    { x, y: y + g },
+  ];
+}
+
+export function cellCenter(key: string, s: Settings): Pt {
+  const pts = cellPolygon(key, s);
+  const n = pts.length;
+  return { x: pts.reduce((a, p) => a + p.x, 0) / n, y: pts.reduce((a, p) => a + p.y, 0) / n };
+}
+
+/** Every cell whose centre falls inside the axis-aligned rectangle. */
+export function cellsInRect(a: Pt, b: Pt, s: Settings): string[] {
+  const g = s.gridSize;
+  const x1 = Math.min(a.x, b.x);
+  const x2 = Math.max(a.x, b.x);
+  const y1 = Math.min(a.y, b.y);
+  const y2 = Math.max(a.y, b.y);
+  const step = s.gridStyle === "hex" ? g / 2.4 : g / 2;
+  const out = new Set<string>();
+  for (let x = x1; x <= x2 + step; x += step) {
+    for (let y = y1; y <= y2 + step; y += step) {
+      const k = cellKeyAt({ x: Math.min(x, x2), y: Math.min(y, y2) }, s);
+      const c = cellCenter(k, s);
+      if (c.x >= x1 && c.x <= x2 && c.y >= y1 && c.y <= y2) out.add(k);
+    }
+  }
+  return [...out];
+}
+
+/** Every cell whose centre is within `r` of `p` — the fog brush. */
+export function cellsInRadius(p: Pt, r: number, s: Settings): string[] {
+  const step = s.gridSize / 2.4;
+  const out = new Set<string>();
+  for (let x = p.x - r; x <= p.x + r; x += step) {
+    for (let y = p.y - r; y <= p.y + r; y += step) {
+      if (Math.hypot(x - p.x, y - p.y) > r) continue;
+      const k = cellKeyAt({ x, y }, s);
+      const c = cellCenter(k, s);
+      if (Math.hypot(c.x - p.x, c.y - p.y) <= r + s.gridSize * 0.5) out.add(k);
+    }
+  }
+  return [...out];
+}
+
+/** All cells covering the drawn map — used by "hide everything". */
+export function allMapCells(doc: Doc): string[] {
+  const b = docBounds(doc);
+  if (!b) return [];
+  const pad = doc.settings.gridSize;
+  return cellsInRect({ x: b.x1 - pad, y: b.y1 - pad }, { x: b.x2 + pad, y: b.y2 + pad }, doc.settings);
 }

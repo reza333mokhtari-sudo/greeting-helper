@@ -15,7 +15,9 @@ export type ToolId =
   | "npc"
   | "item"
   | "trigger"
-  | "light";
+  | "light"
+  | "fogHide"
+  | "fogReveal";
 
 export const TOOLS: { id: ToolId; label: string; key: string; icon: string }[] = [
   { id: "select", label: "Select / Move", key: "V", icon: "M4 3l14 8-6 1.6L9.6 19z" },
@@ -34,6 +36,8 @@ export const TOOLS: { id: ToolId; label: string; key: string; icon: string }[] =
   { id: "npc", label: "NPC token", key: "N", icon: "M12 4a3.6 3.6 0 110 7.2A3.6 3.6 0 0112 4zM4.5 20c.6-4 3.7-6 7.5-6s6.9 2 7.5 6" },
   { id: "item", label: "Item / loot", key: "I", icon: "M12 3l9 9-9 9-9-9z" },
   { id: "trigger", label: "Trigger zone", key: "G", icon: "M4 4h16v16H4zM9 9h6v6H9z" },
+  { id: "fogHide", label: "Fog: hide cells", key: "Q", icon: "M4 15a4 4 0 014-4 5 5 0 019.6 1.2A3.4 3.4 0 0117 19H8a4 4 0 01-4-4zM3 3l18 18" },
+  { id: "fogReveal", label: "Fog: reveal cells", key: "W", icon: "M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6zM12 9a3 3 0 110 6 3 3 0 010-6z" },
   { id: "light", label: "Light source", key: "F", icon: "M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4M12 8a4 4 0 110 8 4 4 0 010-8z" },
 ];
 

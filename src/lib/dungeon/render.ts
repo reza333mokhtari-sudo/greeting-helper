@@ -1,5 +1,5 @@
 import { getImage } from "./assets";
-import { objectsInDrawOrder, objectRadius, type Doc, type MapObject, type Pt, type Shape, type View } from "./model";
+import { cellPolygon, objectsInDrawOrder, objectRadius, type Doc, type MapObject, type Pt, type Shape, type View } from "./model";
 import { lightSources, occluders, visibilityPolygon } from "./los";
 
 export const UI_FONT =
@@ -353,6 +353,24 @@ function drawLighting(ctx: CanvasRenderingContext2D, doc: Doc, view: View, w: nu
   ctx.globalCompositeOperation = "source-over";
 }
 
+/** Fog of war cells. Solid for players, translucent for the GM. */
+function drawFog(ctx: CanvasRenderingContext2D, doc: Doc, view: View, dpr: number, forPlayers: boolean) {
+  if (!doc.fog.length) return;
+  ctx.save();
+  applyView(ctx, view, dpr);
+  ctx.fillStyle = doc.settings.fogColor;
+  ctx.globalAlpha = forPlayers ? 1 : 0.58;
+  ctx.beginPath();
+  for (const key of doc.fog) {
+    const poly = cellPolygon(key, doc.settings);
+    poly.forEach((p, i) => (i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y)));
+    ctx.closePath();
+  }
+  ctx.fill();
+  ctx.globalAlpha = 1;
+  ctx.restore();
+}
+
 export type RenderOpts = {
   preview?: Shape | null;
   selectedIds?: string[];
@@ -430,6 +448,7 @@ export function renderScene(
     ctx.globalAlpha = 1;
   }
 
+  drawFog(ctx, doc, view, dpr, !!s.playerView || !!opts.hideUi);
   drawLighting(ctx, doc, view, w, h, dpr);
 
   if (!opts.hideUi && opts.selectedIds?.length) {
