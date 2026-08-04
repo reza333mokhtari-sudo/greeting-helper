@@ -131,6 +131,7 @@ export function SidePanel(props: Props) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="square">Square</SelectItem>
+                  <SelectItem value="hex">Hex</SelectItem>
                   <SelectItem value="dot">Dots</SelectItem>
                   <SelectItem value="none">None</SelectItem>
                 </SelectContent>
@@ -140,6 +141,55 @@ export function SidePanel(props: Props) {
               <Switch checked={s.snap} onCheckedChange={(v) => onChange({ snap: v })} />
             </Row>
           </section>
+
+          <Separator />
+
+          <section>
+            <SectionTitle>Circle / Regular polygon (K)</SectionTitle>
+            <Row label="Mode">
+              <Segmented
+                value={props.ngon.mode}
+                options={[
+                  { value: "draw", label: "Draw" },
+                  { value: "erase", label: "Erase" },
+                ]}
+                onChange={(v) => props.onNgon({ mode: v })}
+              />
+            </Row>
+            <Row label="Snap">
+              <Switch checked={props.ngon.snap} onCheckedChange={(v) => props.onNgon({ snap: v })} />
+            </Row>
+            <Row label="Division">
+              <Segmented
+                value={String(props.ngon.division) as "1" | "2"}
+                options={[
+                  { value: "1", label: "1" },
+                  { value: "2", label: "1/2" },
+                ]}
+                onChange={(v) => props.onNgon({ division: v === "2" ? 2 : 1 })}
+              />
+            </Row>
+            <Row label="Rough">
+              <Switch checked={props.ngon.rough} onCheckedChange={(v) => props.onNgon({ rough: v })} />
+            </Row>
+            <Row label="Sides">
+              <NumSlider value={props.ngon.sides} min={3} max={48} onChange={(v) => props.onNgon({ sides: v })} />
+            </Row>
+            <Row label="Draw to">
+              <Segmented
+                value={props.ngon.drawTo}
+                options={[
+                  { value: "point", label: "Point" },
+                  { value: "edge", label: "Edge" },
+                ]}
+                onChange={(v) => props.onNgon({ drawTo: v })}
+              />
+            </Row>
+            <p className="mt-2 rounded-md bg-muted/50 p-2 text-[10px] leading-relaxed text-muted-foreground">
+              Drag from the centre outwards. Raise sides to 48 for a smooth circle.
+            </p>
+          </section>
+
 
           <Separator />
 
