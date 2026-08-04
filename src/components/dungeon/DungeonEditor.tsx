@@ -38,10 +38,13 @@ import {
 import type { AiSuggestion } from "@/lib/ai.functions";
 import { exportPdfFile, exportSvgFile } from "@/lib/dungeon/exporters";
 import { renderScene, screenToWorld } from "@/lib/dungeon/render";
-import { Badge } from "@/components/ui/badge";
 import { CloudBar } from "./CloudBar";
 import { PropsPanel } from "./PropsPanel";
 import { getImage, onImageLoaded } from "@/lib/dungeon/assets";
+import { TopMenuBar } from "./TopMenuBar";
+import { StatusBar } from "./StatusBar";
+import { LeftRail, type PanelId } from "./LeftRail";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const STORAGE_KEY = "dungeon-scrawl-doc-v1";
 const MIN_ZOOM = 0.08;
