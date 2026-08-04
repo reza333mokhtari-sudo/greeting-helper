@@ -436,7 +436,23 @@ export function DungeonEditor() {
             ? prev.pts.length > 2
             : Math.abs(prev.a.x - prev.b.x) > 1 && Math.abs(prev.a.y - prev.b.y) > 1;
       if (ok) {
-        commit((doc0) => ({ ...doc0, shapes: [...doc0.shapes, { ...prev, id: uid("s") }] }));
+        const id = uid("s");
+        const rough = doc.settings.roughness;
+        let shape: Shape = { ...prev, id };
+        // global hand-drawn wobble turns straight-edged rooms into scrawled outlines
+        if (rough > 0 && (prev.kind === "rect" || prev.kind === "poly")) {
+          const pts =
+            prev.kind === "rect"
+              ? [
+                  { x: prev.a.x, y: prev.a.y },
+                  { x: prev.b.x, y: prev.a.y },
+                  { x: prev.b.x, y: prev.b.y },
+                  { x: prev.a.x, y: prev.b.y },
+                ]
+              : prev.pts;
+          shape = { id, kind: "poly", erase: prev.erase, pts: roughenPoly(pts, rough) };
+        }
+        commit((doc0) => ({ ...doc0, shapes: [...doc0.shapes, shape] }));
       }
     }
     if (d.mode === "move" && d.moved) {
