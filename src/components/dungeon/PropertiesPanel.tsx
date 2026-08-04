@@ -1,4 +1,13 @@
 import type { Doc, MapObject, TriggerKind } from "@/lib/dungeon/model";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Plus, X, Trash2 } from "lucide-react";
 
 type Props = {
   doc: Doc;
@@ -9,24 +18,61 @@ type Props = {
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <label className="flex items-center justify-between gap-2 py-1 text-xs">
-      <span className="shrink-0 text-muted-foreground">{label}</span>
-      <span className="flex min-w-0 items-center gap-2">{children}</span>
-    </label>
+    <div className="flex items-center justify-between gap-2 py-1">
+      <Label className="shrink-0 text-xs font-normal text-muted-foreground">{label}</Label>
+      <div className="flex min-w-0 items-center gap-2">{children}</div>
+    </div>
   );
 }
 
-const input = "w-32 min-w-0 rounded border border-border bg-background px-2 py-1 text-xs";
+function NumSlider({
+  value,
+  min,
+  max,
+  onChange,
+}: {
+  value: number;
+  min: number;
+  max: number;
+  onChange: (v: number) => void;
+}) {
+  return (
+    <>
+      <Slider value={[value]} min={min} max={max} onValueChange={([v]) => onChange(v ?? value)} className="w-24" />
+      <span className="w-8 text-right text-xs tabular-nums text-foreground/80">{Math.round(value)}</span>
+    </>
+  );
+}
+
+function Color({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  return (
+    <input
+      type="color"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      aria-label="Colour"
+      className="h-7 w-11 cursor-pointer rounded-md border border-border bg-transparent p-0.5"
+    />
+  );
+}
+
+const numInput = "h-7 w-32 text-xs";
 
 export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
   if (!o) {
     return (
       <section>
-        <h2 className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Properties</h2>
-        <p className="text-xs text-muted-foreground">Select an object to edit its properties.</p>
+        <h2 className="mb-2 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+          <span className="h-1 w-1 rounded-full bg-primary" />
+          Properties
+        </h2>
+        <p className="rounded-md bg-muted/40 p-2 text-[11px] text-muted-foreground">
+          Select an object to edit its properties.
+        </p>
       </section>
     );
   }
+
   const patch = (v: Partial<MapObject>) => onChange(o.id, v);
   const props = o.props ?? [];
   const setProp = (i: number, key: string, value: string) =>
@@ -35,38 +81,58 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
   return (
     <section>
       <div className="mb-2 flex items-center justify-between">
-        <h2 className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-          Properties · {o.kind}
+        <h2 className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+          <span className="h-1 w-1 rounded-full bg-primary" />
+          Properties
+          <Badge variant="outline" className="h-4 px-1.5 text-[9px] uppercase">
+            {o.kind}
+          </Badge>
         </h2>
-        <button onClick={() => onDelete(o.id)} className="text-xs text-destructive hover:underline">
-          Delete
-        </button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="size-6 text-destructive hover:bg-destructive/10 hover:text-destructive"
+          aria-label="Delete object"
+          onClick={() => onDelete(o.id)}
+        >
+          <Trash2 className="size-3.5" />
+        </Button>
       </div>
 
       <Row label="Name">
-        <input className={input} value={o.name ?? ""} onChange={(e) => patch({ name: e.target.value })} placeholder="Unnamed" />
+        <Input
+          className={numInput}
+          value={o.name ?? ""}
+          onChange={(e) => patch({ name: e.target.value })}
+          placeholder="Unnamed"
+        />
       </Row>
       <Row label="Layer">
-        <select className={input} value={o.layerId} onChange={(e) => patch({ layerId: e.target.value })}>
-          {doc.layers.map((l) => (
-            <option key={l.id} value={l.id}>
-              {l.name}
-            </option>
-          ))}
-        </select>
+        <Select value={o.layerId} onValueChange={(v) => patch({ layerId: v })}>
+          <SelectTrigger className="h-7 w-32 text-xs">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {doc.layers.map((l) => (
+              <SelectItem key={l.id} value={l.id}>
+                {l.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </Row>
       <Row label="X">
-        <input type="number" className={input} value={Math.round(o.x)} onChange={(e) => patch({ x: Number(e.target.value) })} />
+        <Input type="number" className={numInput} value={Math.round(o.x)} onChange={(e) => patch({ x: Number(e.target.value) })} />
       </Row>
       <Row label="Y">
-        <input type="number" className={input} value={Math.round(o.y)} onChange={(e) => patch({ y: Number(e.target.value) })} />
+        <Input type="number" className={numInput} value={Math.round(o.y)} onChange={(e) => patch({ y: Number(e.target.value) })} />
       </Row>
 
       {(o.kind === "door" || o.kind === "stairs") && (
         <Row label="Rotation°">
-          <input
+          <Input
             type="number"
-            className={input}
+            className={numInput}
             value={Math.round((o.angle * 180) / Math.PI)}
             onChange={(e) => patch({ angle: (Number(e.target.value) * Math.PI) / 180 } as Partial<MapObject>)}
           />
@@ -75,19 +141,22 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
       {o.kind === "door" && (
         <>
           <Row label="Variant">
-            <select className={input} value={o.variant} onChange={(e) => patch({ variant: e.target.value } as Partial<MapObject>)}>
-              <option value="door">Door</option>
-              <option value="double">Double</option>
-              <option value="secret">Secret</option>
-              <option value="archway">Archway</option>
-            </select>
+            <Select value={o.variant} onValueChange={(v) => patch({ variant: v } as Partial<MapObject>)}>
+              <SelectTrigger className="h-7 w-32 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="door">Door</SelectItem>
+                <SelectItem value="double">Double</SelectItem>
+                <SelectItem value="secret">Secret</SelectItem>
+                <SelectItem value="archway">Archway</SelectItem>
+              </SelectContent>
+            </Select>
           </Row>
           <Row label="Blocks light">
-            <input
-              type="checkbox"
-              className="accent-primary"
+            <Switch
               checked={!!o.blocksLight}
-              onChange={(e) => patch({ blocksLight: e.target.checked } as Partial<MapObject>)}
+              onCheckedChange={(v) => patch({ blocksLight: v } as Partial<MapObject>)}
             />
           </Row>
         </>
@@ -95,127 +164,143 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
       {o.kind === "npc" && (
         <>
           <Row label="Label">
-            <input className={input} value={o.label} onChange={(e) => patch({ label: e.target.value } as Partial<MapObject>)} />
+            <Input className={numInput} value={o.label} onChange={(e) => patch({ label: e.target.value } as Partial<MapObject>)} />
           </Row>
           <Row label="Token size">
-            <input type="range" min={6} max={64} value={o.r} onChange={(e) => patch({ r: Number(e.target.value) } as Partial<MapObject>)} className="w-28 accent-primary" />
+            <NumSlider value={o.r} min={6} max={64} onChange={(v) => patch({ r: v } as Partial<MapObject>)} />
           </Row>
           <Row label="Colour">
-            <input type="color" value={o.color} onChange={(e) => patch({ color: e.target.value } as Partial<MapObject>)} className="h-6 w-10 rounded border border-border bg-transparent p-0" />
+            <Color value={o.color} onChange={(v) => patch({ color: v } as Partial<MapObject>)} />
           </Row>
           <Row label="Hostile">
-            <input type="checkbox" className="accent-primary" checked={o.hostile} onChange={(e) => patch({ hostile: e.target.checked } as Partial<MapObject>)} />
+            <Switch checked={o.hostile} onCheckedChange={(v) => patch({ hostile: v } as Partial<MapObject>)} />
           </Row>
         </>
       )}
       {o.kind === "item" && (
         <>
           <Row label="Label">
-            <input className={input} value={o.label} onChange={(e) => patch({ label: e.target.value } as Partial<MapObject>)} />
+            <Input className={numInput} value={o.label} onChange={(e) => patch({ label: e.target.value } as Partial<MapObject>)} />
           </Row>
           <Row label="Size">
-            <input type="range" min={8} max={64} value={o.size} onChange={(e) => patch({ size: Number(e.target.value) } as Partial<MapObject>)} className="w-28 accent-primary" />
+            <NumSlider value={o.size} min={8} max={64} onChange={(v) => patch({ size: v } as Partial<MapObject>)} />
           </Row>
           <Row label="Colour">
-            <input type="color" value={o.color} onChange={(e) => patch({ color: e.target.value } as Partial<MapObject>)} className="h-6 w-10 rounded border border-border bg-transparent p-0" />
+            <Color value={o.color} onChange={(v) => patch({ color: v } as Partial<MapObject>)} />
           </Row>
         </>
       )}
       {o.kind === "trigger" && (
         <>
           <Row label="Label">
-            <input className={input} value={o.label} onChange={(e) => patch({ label: e.target.value } as Partial<MapObject>)} />
+            <Input className={numInput} value={o.label} onChange={(e) => patch({ label: e.target.value } as Partial<MapObject>)} />
           </Row>
           <Row label="Type">
-            <select className={input} value={o.trigger} onChange={(e) => patch({ trigger: e.target.value as TriggerKind } as Partial<MapObject>)}>
-              <option value="trap">Trap</option>
-              <option value="encounter">Encounter</option>
-              <option value="script">Script</option>
-              <option value="portal">Portal</option>
-              <option value="note">Note</option>
-            </select>
+            <Select value={o.trigger} onValueChange={(v) => patch({ trigger: v as TriggerKind } as Partial<MapObject>)}>
+              <SelectTrigger className="h-7 w-32 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="trap">Trap</SelectItem>
+                <SelectItem value="encounter">Encounter</SelectItem>
+                <SelectItem value="script">Script</SelectItem>
+                <SelectItem value="portal">Portal</SelectItem>
+                <SelectItem value="note">Note</SelectItem>
+              </SelectContent>
+            </Select>
           </Row>
           <Row label="Width">
-            <input type="number" className={input} value={Math.round(o.w)} onChange={(e) => patch({ w: Number(e.target.value) } as Partial<MapObject>)} />
+            <Input type="number" className={numInput} value={Math.round(o.w)} onChange={(e) => patch({ w: Number(e.target.value) } as Partial<MapObject>)} />
           </Row>
           <Row label="Height">
-            <input type="number" className={input} value={Math.round(o.h)} onChange={(e) => patch({ h: Number(e.target.value) } as Partial<MapObject>)} />
+            <Input type="number" className={numInput} value={Math.round(o.h)} onChange={(e) => patch({ h: Number(e.target.value) } as Partial<MapObject>)} />
           </Row>
           <Row label="Colour">
-            <input type="color" value={o.color} onChange={(e) => patch({ color: e.target.value } as Partial<MapObject>)} className="h-6 w-10 rounded border border-border bg-transparent p-0" />
+            <Color value={o.color} onChange={(v) => patch({ color: v } as Partial<MapObject>)} />
           </Row>
         </>
       )}
       {o.kind === "light" && (
         <>
           <Row label="Radius">
-            <input type="range" min={20} max={800} value={o.radius} onChange={(e) => patch({ radius: Number(e.target.value) } as Partial<MapObject>)} className="w-28 accent-primary" />
+            <NumSlider value={o.radius} min={20} max={800} onChange={(v) => patch({ radius: v } as Partial<MapObject>)} />
           </Row>
           <Row label="Intensity">
-            <input type="range" min={5} max={100} value={Math.round(o.intensity * 100)} onChange={(e) => patch({ intensity: Number(e.target.value) / 100 } as Partial<MapObject>)} className="w-28 accent-primary" />
+            <NumSlider
+              value={Math.round(o.intensity * 100)}
+              min={5}
+              max={100}
+              onChange={(v) => patch({ intensity: v / 100 } as Partial<MapObject>)}
+            />
           </Row>
           <Row label="Colour">
-            <input type="color" value={o.color} onChange={(e) => patch({ color: e.target.value } as Partial<MapObject>)} className="h-6 w-10 rounded border border-border bg-transparent p-0" />
+            <Color value={o.color} onChange={(v) => patch({ color: v } as Partial<MapObject>)} />
           </Row>
         </>
       )}
       {o.kind === "text" && (
         <>
           <Row label="Text">
-            <input className={input} value={o.text} onChange={(e) => patch({ text: e.target.value } as Partial<MapObject>)} />
+            <Input className={numInput} value={o.text} onChange={(e) => patch({ text: e.target.value } as Partial<MapObject>)} />
           </Row>
           <Row label="Font size">
-            <input type="range" min={8} max={96} value={o.size} onChange={(e) => patch({ size: Number(e.target.value) } as Partial<MapObject>)} className="w-28 accent-primary" />
+            <NumSlider value={o.size} min={8} max={96} onChange={(v) => patch({ size: v } as Partial<MapObject>)} />
           </Row>
         </>
       )}
       {o.kind === "pillar" && (
         <Row label="Radius">
-          <input type="range" min={2} max={48} value={o.r} onChange={(e) => patch({ r: Number(e.target.value) } as Partial<MapObject>)} className="w-28 accent-primary" />
+          <NumSlider value={o.r} min={2} max={48} onChange={(v) => patch({ r: v } as Partial<MapObject>)} />
         </Row>
       )}
       {o.kind === "stairs" && (
         <>
           <Row label="Size">
-            <input type="range" min={16} max={200} value={o.size} onChange={(e) => patch({ size: Number(e.target.value) } as Partial<MapObject>)} className="w-28 accent-primary" />
+            <NumSlider value={o.size} min={16} max={200} onChange={(v) => patch({ size: v } as Partial<MapObject>)} />
           </Row>
           <Row label="Steps">
-            <input type="range" min={2} max={20} value={o.steps} onChange={(e) => patch({ steps: Number(e.target.value) } as Partial<MapObject>)} className="w-28 accent-primary" />
+            <NumSlider value={o.steps} min={2} max={20} onChange={(v) => patch({ steps: v } as Partial<MapObject>)} />
           </Row>
         </>
       )}
 
-      <label className="mt-2 block text-xs text-muted-foreground">
-        Notes
-        <textarea
+      <div className="mt-3">
+        <Label className="text-xs font-normal text-muted-foreground">Notes</Label>
+        <Textarea
           value={o.notes ?? ""}
           onChange={(e) => patch({ notes: e.target.value })}
           rows={3}
-          className="mt-1 w-full rounded border border-border bg-background px-2 py-1 text-xs text-foreground"
+          className="mt-1 text-xs"
           placeholder="GM notes, stat block, loot…"
         />
-      </label>
+      </div>
 
-      <div className="mt-2">
+      <div className="mt-3">
         <div className="mb-1 flex items-center justify-between text-[11px] text-muted-foreground">
           <span>Custom fields</span>
-          <button
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-6"
+            aria-label="Add field"
             onClick={() => patch({ props: [...props, { key: "", value: "" }] } as Partial<MapObject>)}
-            className="rounded border border-border px-1.5 hover:bg-accent"
           >
-            +
-          </button>
+            <Plus className="size-3.5" />
+          </Button>
         </div>
         {props.map((pr, i) => (
-          <div key={i} className="mb-1 flex gap-1">
-            <input value={pr.key} placeholder="key" onChange={(e) => setProp(i, e.target.value, pr.value)} className="w-1/2 rounded border border-border bg-background px-1.5 py-1 text-[11px]" />
-            <input value={pr.value} placeholder="value" onChange={(e) => setProp(i, pr.key, e.target.value)} className="w-1/2 rounded border border-border bg-background px-1.5 py-1 text-[11px]" />
-            <button
+          <div key={i} className="mb-1 flex items-center gap-1">
+            <Input value={pr.key} placeholder="key" onChange={(e) => setProp(i, e.target.value, pr.value)} className="h-7 w-1/2 text-[11px]" />
+            <Input value={pr.value} placeholder="value" onChange={(e) => setProp(i, pr.key, e.target.value)} className="h-7 w-1/2 text-[11px]" />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-6 text-destructive hover:bg-destructive/10 hover:text-destructive"
+              aria-label="Remove field"
               onClick={() => patch({ props: props.filter((_, j) => j !== i) } as Partial<MapObject>)}
-              className="px-1 text-destructive"
             >
-              ×
-            </button>
+              <X className="size-3.5" />
+            </Button>
           </div>
         ))}
       </div>
