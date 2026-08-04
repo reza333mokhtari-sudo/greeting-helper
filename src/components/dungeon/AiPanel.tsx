@@ -72,17 +72,26 @@ type Turn = { role: "user" | "assistant"; content: string };
 
 type Props = {
   doc: Doc;
+  /** Stage the suggestion on the canvas as a ghost preview (null clears it). */
+  onPreview: (s: AiSuggestion | null) => void;
+  /** Commit the staged suggestion to the document. */
   onApply: (s: AiSuggestion) => void;
+  /** Suggestion currently staged on the canvas, if any. */
+  staged: AiSuggestion | null;
 };
 
-export function AiPanel({ doc, onApply }: Props) {
+export function AiPanel({ doc, onPreview, onApply, staged }: Props) {
   const run = useServerFn(suggestMap);
   const online = useOnlineStatus();
   const [mode, setMode] = useState<Mode>("rooms");
+  const [engine, setEngine] = useState<AiEngine>("balanced");
   const [prompt, setPrompt] = useState("");
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<AiSuggestion | null>(null);
   const [history, setHistory] = useState<Turn[]>([]);
+
+  const hasGeometry = (s: AiSuggestion) =>
+    s.rooms.length > 0 || s.corridors.length > 0 || s.objects.length > 0 || Object.keys(s.settings).length > 0;
 
   const ask = async (text?: string) => {
     const q = (text ?? prompt).trim();
@@ -93,17 +102,23 @@ export function AiPanel({ doc, onApply }: Props) {
     }
     setBusy(true);
     setResult(null);
+    onPreview(null);
     try {
       const res = await run({
         data: {
           prompt: q,
           summary: summarise(doc),
           mode,
+          engine,
           gridSize: doc.settings.gridSize,
           history: history.slice(-6),
         },
       });
       setResult(res);
+      if (hasGeometry(res)) {
+        onPreview(res);
+        toast.info("Preview staged — accept or reject it on the canvas.");
+      }
       setHistory((h) => [...h.slice(-4), { role: "user", content: q }, { role: "assistant", content: res.notes || "(layout returned)" }]);
       setPrompt("");
     } catch (e) {
@@ -127,6 +142,7 @@ export function AiPanel({ doc, onApply }: Props) {
         <Sparkles className="h-3 w-3 text-accent" /> AI cartographer
       </h2>
       <Select value={mode} onValueChange={(v) => setMode(v as Mode)}>
+
         <SelectTrigger className="h-7 text-[11px]">
           <SelectValue />
         </SelectTrigger>
