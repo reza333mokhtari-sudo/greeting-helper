@@ -96,7 +96,7 @@ export function SidePanel(props: Props) {
             </Row>
             <Row label="Style">
               <Select value={s.gridStyle} onValueChange={(v) => onChange({ gridStyle: v as GridStyle })}>
-                <SelectTrigger size="sm" className="w-32 text-xs">
+                <SelectTrigger className="w-32 text-xs">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -126,7 +126,7 @@ export function SidePanel(props: Props) {
             </Row>
             <Row label="Door type">
               <Select value={props.doorVariant} onValueChange={props.onDoorVariant}>
-                <SelectTrigger size="sm" className="w-32 text-xs">
+                <SelectTrigger className="w-32 text-xs">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -179,7 +179,7 @@ export function SidePanel(props: Props) {
             <SectionTitle>Lighting &amp; line of sight</SectionTitle>
             <Row label="Line of sight">
               <Select value={s.losMode} onValueChange={(v) => onChange({ losMode: v as Settings["losMode"] })}>
-                <SelectTrigger size="sm" className="w-36 text-xs">
+                <SelectTrigger className="w-36 text-xs">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
