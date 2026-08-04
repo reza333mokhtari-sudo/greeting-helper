@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Sliders, Layers, Image, Sparkles, CloudFog, History, Info } from "lucide-react";
+import { Sliders, Layers, Image, Sparkles, CloudFog, History, Info, Activity } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-export type PanelId = "settings" | "layers" | "props" | "ai" | "fog" | "history" | "properties";
+export type PanelId = "settings" | "layers" | "props" | "ai" | "fog" | "history" | "properties" | "diagnostics";
 
 const PANELS: { id: PanelId; label: string; icon: LucideIcon }[] = [
   { id: "settings", label: "Tool & map settings", icon: Sliders },
@@ -13,6 +13,7 @@ const PANELS: { id: PanelId; label: string; icon: LucideIcon }[] = [
   { id: "fog", label: "Fog of war", icon: CloudFog },
   { id: "history", label: "History", icon: History },
   { id: "properties", label: "Properties", icon: Info },
+  { id: "diagnostics", label: "Performance diagnostics", icon: Activity },
 ];
 
 type Props = {
