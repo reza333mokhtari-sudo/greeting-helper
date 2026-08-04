@@ -329,3 +329,42 @@ export function docBounds(doc: Doc): { x1: number; y1: number; x2: number; y2: n
   if (!isFinite(x1)) return null;
   return { x1, y1, x2, y2 };
 }
+
+/** Vertices of a regular polygon (or circle when `sides` is large). */
+export function regularPolygon(center: Pt, edge: Pt, sides: number, drawTo: "point" | "edge"): Pt[] {
+  const n = Math.max(3, Math.round(sides));
+  const r = Math.max(1, Math.hypot(edge.x - center.x, edge.y - center.y));
+  const step = (Math.PI * 2) / n;
+  // "edge" means the drag point sits on the middle of a face, not on a corner
+  const radius = drawTo === "edge" ? r / Math.cos(step / 2) : r;
+  const base = Math.atan2(edge.y - center.y, edge.x - center.x) + (drawTo === "edge" ? step / 2 : 0);
+  return Array.from({ length: n }, (_, i) => ({
+    x: center.x + Math.cos(base + i * step) * radius,
+    y: center.y + Math.sin(base + i * step) * radius,
+  }));
+}
+
+/** Hand-drawn wobble: subdivide each edge and jitter the points. */
+export function roughenPoly(pts: Pt[], amount: number, seedKey = 1): Pt[] {
+  if (amount <= 0 || pts.length < 2) return pts;
+  const rnd = (i: number) => {
+    const x = Math.sin((i + 1) * 12.9898 + seedKey * 78.233) * 43758.5453;
+    return (x - Math.floor(x)) * 2 - 1;
+  };
+  const out: Pt[] = [];
+  let k = 0;
+  for (let i = 0; i < pts.length; i++) {
+    const a = pts[i]!;
+    const b = pts[(i + 1) % pts.length]!;
+    const len = Math.hypot(b.x - a.x, b.y - a.y);
+    const steps = Math.max(1, Math.round(len / 22));
+    for (let s = 0; s < steps; s++) {
+      const t = s / steps;
+      out.push({
+        x: a.x + (b.x - a.x) * t + rnd(k++) * amount,
+        y: a.y + (b.y - a.y) * t + rnd(k++) * amount,
+      });
+    }
+  }
+  return out;
+}
