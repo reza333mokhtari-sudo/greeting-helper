@@ -1,4 +1,5 @@
 import { getImage } from "./assets";
+import { fogTile, type FogStyle } from "./fogAssets";
 import { cellPolygon, objectsInDrawOrder, objectRadius, type Doc, type MapObject, type Pt, type Shape, type View } from "./model";
 import { lightSources, occluders, visibilityPolygon } from "./los";
 
@@ -495,7 +496,7 @@ export function renderScene(
     ctx.globalAlpha = 1;
   }
 
-  drawFog(ctx, doc, view, dpr, !!s.playerView || !!opts.hideUi);
+  drawFog(ctx, doc, view, w, h, dpr, !!s.playerView || !!opts.hideUi);
   drawLighting(ctx, doc, view, w, h, dpr);
 
   if (!opts.hideUi && opts.selectedIds?.length) {
