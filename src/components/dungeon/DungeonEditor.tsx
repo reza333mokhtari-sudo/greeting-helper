@@ -31,6 +31,9 @@ import {
 import { exportPdfFile, exportSvgFile } from "@/lib/dungeon/exporters";
 import { renderScene, screenToWorld } from "@/lib/dungeon/render";
 import { Badge } from "@/components/ui/badge";
+import { CloudBar } from "./CloudBar";
+import { PropsPanel } from "./PropsPanel";
+import { getImage, onImageLoaded } from "@/lib/dungeon/assets";
 
 const STORAGE_KEY = "dungeon-scrawl-doc-v1";
 const MIN_ZOOM = 0.08;
@@ -540,6 +543,15 @@ export function DungeonEditor() {
     };
   }, [undo, redo, deleteSelected, finishPoly, rotateSelected]);
 
+  // Re-draw once uploaded prop images finish downloading.
+  const [, setImgTick] = useState(0);
+  useEffect(() => {
+    const off = onImageLoaded(() => setImgTick((t) => t + 1));
+    return () => {
+      off();
+    };
+  }, []);
+
   const exportPng = useCallback(() => {
     const b = docBounds(doc);
     if (!b) return;
@@ -557,6 +569,56 @@ export function DungeonEditor() {
     a.href = canvas.toDataURL("image/png");
     a.click();
   }, [doc]);
+
+  /** Small PNG data URL used as the cloud map thumbnail. */
+  const thumbnail = useCallback((): string | null => {
+    const b = docBounds(doc);
+    if (!b) return null;
+    const pad = 40;
+    const w = Math.max(64, b.x2 - b.x1 + pad * 2);
+    const h = Math.max(64, b.y2 - b.y1 + pad * 2);
+    const scale = Math.min(1, 420 / w);
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(32, Math.round(w * scale));
+    canvas.height = Math.max(32, Math.round(h * scale));
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return null;
+    renderScene(ctx, doc, { x: -b.x1 + pad, y: -b.y1 + pad, scale: 1 }, w, h, { hideUi: true, dpr: scale });
+    try {
+      return canvas.toDataURL("image/jpeg", 0.6);
+    } catch {
+      return null;
+    }
+  }, [doc]);
+
+  /** Drop an uploaded prop image at the centre of the viewport. */
+  const placeImage = useCallback(
+    (url: string, name: string) => {
+      const wrap = wrapRef.current;
+      const cw = wrap?.clientWidth ?? 800;
+      const ch = wrap?.clientHeight ?? 600;
+      const center = screenToWorld({ x: cw / 2, y: ch / 2 }, view);
+      const img = getImage(url);
+      const base = doc.settings.gridSize * 2;
+      const ratio = img && img.naturalHeight ? img.naturalWidth / img.naturalHeight : 1;
+      const layerId = doc.layers.find((l) => l.id === DEFAULT_LAYER_FOR.image)?.id ?? doc.layers[0]!.id;
+      const obj: MapObject = {
+        id: uid("img"),
+        layerId,
+        name,
+        kind: "image",
+        x: center.x,
+        y: center.y,
+        w: ratio >= 1 ? base * ratio : base,
+        h: ratio >= 1 ? base : base / ratio,
+        angle: 0,
+        url,
+      };
+      commit((d) => ({ ...d, objects: [...d.objects, obj] }));
+      setSelected([obj.id]);
+    },
+    [commit, doc.layers, doc.settings.gridSize, view],
+  );
 
   const exportJson = useCallback(() => {
     const blob = new Blob([JSON.stringify(doc, null, 2)], { type: "application/json" });
@@ -691,6 +753,7 @@ export function DungeonEditor() {
           <Badge variant="secondary" className="text-[10px] tabular-nums">{doc.shapes.length} shapes</Badge>
           <Badge variant="secondary" className="text-[10px] tabular-nums">{doc.objects.length} objects</Badge>
           <Badge variant="outline" className="text-[10px] tabular-nums">cell {gridCoord}</Badge>
+          <CloudBar doc={doc} thumbnail={thumbnail} onLoadDoc={(d) => commit(migrateDoc(d))} />
         </div>
       </header>
       <div className="flex min-h-0 flex-1">
@@ -745,6 +808,7 @@ export function DungeonEditor() {
             selected={selected}
             onSelect={setSelected}
           />
+          <PropsPanel onPlace={placeImage} />
           <PropertiesPanel doc={doc} object={selectedObject} onChange={updateObject} onDelete={deleteSelected} />
         </aside>
         <SidePanel

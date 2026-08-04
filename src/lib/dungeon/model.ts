@@ -28,7 +28,8 @@ export type MapObject =
   | (ObjCommon & { kind: "npc"; x: number; y: number; r: number; color: string; label: string; hostile: boolean })
   | (ObjCommon & { kind: "item"; x: number; y: number; size: number; color: string; label: string })
   | (ObjCommon & { kind: "trigger"; x: number; y: number; w: number; h: number; color: string; trigger: TriggerKind; label: string })
-  | (ObjCommon & { kind: "light"; x: number; y: number; radius: number; color: string; intensity: number });
+  | (ObjCommon & { kind: "light"; x: number; y: number; radius: number; color: string; intensity: number })
+  | (ObjCommon & { kind: "image"; x: number; y: number; w: number; h: number; angle: number; url: string });
 
 export type ObjectKind = MapObject["kind"];
 
@@ -164,11 +165,13 @@ export const LAYER_NPC = "layer_npc";
 export const LAYER_ITEM = "layer_item";
 export const LAYER_TRIGGER = "layer_trigger";
 export const LAYER_LIGHT = "layer_light";
+export const LAYER_PROP = "layer_prop";
 
 export function defaultLayers(): Layer[] {
   const mk = (id: string, name: string, gmOnly = false): Layer => ({ id, name, visible: true, locked: false, opacity: 1, gmOnly });
   return [
     mk(LAYER_STRUCTURE, "Structure"),
+    mk(LAYER_PROP, "Props"),
     mk(LAYER_TRIGGER, "Triggers", true),
     mk(LAYER_ITEM, "Items"),
     mk(LAYER_NPC, "NPCs"),
@@ -185,6 +188,7 @@ export const DEFAULT_LAYER_FOR: Record<ObjectKind, string> = {
   item: LAYER_ITEM,
   trigger: LAYER_TRIGGER,
   light: LAYER_LIGHT,
+  image: LAYER_PROP,
 };
 
 export function emptyDoc(): Doc {
@@ -288,6 +292,9 @@ export function objectHit(p: Pt, o: MapObject): boolean {
   if (o.kind === "npc") return Math.hypot(p.x - o.x, p.y - o.y) <= o.r + 4;
   if (o.kind === "item") return Math.hypot(p.x - o.x, p.y - o.y) <= o.size * 0.7;
   if (o.kind === "light") return Math.hypot(p.x - o.x, p.y - o.y) <= 14;
+  if (o.kind === "image") {
+    return p.x >= o.x - o.w / 2 && p.x <= o.x + o.w / 2 && p.y >= o.y - o.h / 2 && p.y <= o.y + o.h / 2;
+  }
   if (o.kind === "trigger") {
     return p.x >= o.x - o.w / 2 && p.x <= o.x + o.w / 2 && p.y >= o.y - o.h / 2 && p.y <= o.y + o.h / 2;
   }
@@ -307,6 +314,7 @@ export function objectRadius(o: MapObject): number {
     case "light":
       return 14;
     case "trigger":
+    case "image":
       return Math.max(o.w, o.h) / 2;
     default:
       return o.size * 0.7;
