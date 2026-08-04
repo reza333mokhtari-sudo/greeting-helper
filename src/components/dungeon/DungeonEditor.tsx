@@ -569,6 +569,26 @@ export function DungeonEditor() {
     [commit],
   );
 
+  /** Drag & drop reorder: place `id` directly above/below `targetId`. */
+  const reorderLayer = useCallback(
+    (id: string, targetId: string, place: "above" | "below") => {
+      if (id === targetId) return;
+      commit((d) => {
+        const from = d.layers.findIndex((l) => l.id === id);
+        if (from < 0) return d;
+        const layers = [...d.layers];
+        const [moved] = layers.splice(from, 1);
+        if (!moved) return d;
+        const t = layers.findIndex((l) => l.id === targetId);
+        if (t < 0) return d;
+        // array order is bottom -> top, so "above" means after the target
+        layers.splice(place === "above" ? t + 1 : t, 0, moved);
+        return { ...d, layers };
+      });
+    },
+    [commit],
+  );
+
   const addLayer = useCallback(() => {
     const id = uid("layer");
     commit((d) => ({
