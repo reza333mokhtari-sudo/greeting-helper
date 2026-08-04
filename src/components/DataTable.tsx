@@ -254,7 +254,7 @@ export function DataTable<T>({
                 <DropdownMenuCheckboxItem
                   key={c.key}
                   checked={!hidden.includes(c.key)}
-                  disabled={c.locked}
+                  disabled={c.locked === true}
                   onSelect={(e) => e.preventDefault()}
                   onCheckedChange={(v) => setHidden((h) => (v ? h.filter((k) => k !== c.key) : [...h, c.key]))}
                 >
