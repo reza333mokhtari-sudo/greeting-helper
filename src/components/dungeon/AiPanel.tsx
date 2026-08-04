@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Sparkles, Loader2, WifiOff } from "lucide-react";
+import { Sparkles, Loader2, WifiOff, Cpu } from "lucide-react";
 import { toast } from "sonner";
 
-import { suggestMap, type AiSuggestion } from "@/lib/ai.functions";
+import { suggestMap, AI_ENGINES, type AiSuggestion, type AiEngine } from "@/lib/ai.functions";
 import type { Doc } from "@/lib/dungeon/model";
 import { useOnlineStatus } from "@/hooks/use-online-status";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 
 type Mode = "rooms" | "encounter" | "hatching" | "refine";
+
 
 const MODES: { id: Mode; label: string; placeholder: string; chips: string[] }[] = [
   {
@@ -71,17 +72,26 @@ type Turn = { role: "user" | "assistant"; content: string };
 
 type Props = {
   doc: Doc;
+  /** Stage the suggestion on the canvas as a ghost preview (null clears it). */
+  onPreview: (s: AiSuggestion | null) => void;
+  /** Commit the staged suggestion to the document. */
   onApply: (s: AiSuggestion) => void;
+  /** Suggestion currently staged on the canvas, if any. */
+  staged: AiSuggestion | null;
 };
 
-export function AiPanel({ doc, onApply }: Props) {
+export function AiPanel({ doc, onPreview, onApply, staged }: Props) {
   const run = useServerFn(suggestMap);
   const online = useOnlineStatus();
   const [mode, setMode] = useState<Mode>("rooms");
+  const [engine, setEngine] = useState<AiEngine>("balanced");
   const [prompt, setPrompt] = useState("");
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<AiSuggestion | null>(null);
   const [history, setHistory] = useState<Turn[]>([]);
+
+  const hasGeometry = (s: AiSuggestion) =>
+    s.rooms.length > 0 || s.corridors.length > 0 || s.objects.length > 0 || Object.keys(s.settings).length > 0;
 
   const ask = async (text?: string) => {
     const q = (text ?? prompt).trim();
@@ -92,17 +102,23 @@ export function AiPanel({ doc, onApply }: Props) {
     }
     setBusy(true);
     setResult(null);
+    onPreview(null);
     try {
       const res = await run({
         data: {
           prompt: q,
           summary: summarise(doc),
           mode,
+          engine,
           gridSize: doc.settings.gridSize,
           history: history.slice(-6),
         },
       });
       setResult(res);
+      if (hasGeometry(res)) {
+        onPreview(res);
+        toast.info("Preview staged — accept or reject it on the canvas.");
+      }
       setHistory((h) => [...h.slice(-4), { role: "user", content: q }, { role: "assistant", content: res.notes || "(layout returned)" }]);
       setPrompt("");
     } catch (e) {
@@ -126,6 +142,7 @@ export function AiPanel({ doc, onApply }: Props) {
         <Sparkles className="h-3 w-3 text-accent" /> AI cartographer
       </h2>
       <Select value={mode} onValueChange={(v) => setMode(v as Mode)}>
+
         <SelectTrigger className="h-7 text-[11px]">
           <SelectValue />
         </SelectTrigger>
@@ -137,6 +154,23 @@ export function AiPanel({ doc, onApply }: Props) {
           ))}
         </SelectContent>
       </Select>
+
+      <Select value={engine} onValueChange={(v) => setEngine(v as AiEngine)}>
+        <SelectTrigger className="h-7 text-[11px]">
+          <Cpu className="mr-1 h-3 w-3 text-accent" />
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {(Object.keys(AI_ENGINES) as AiEngine[]).map((k) => (
+            <SelectItem key={k} value={k} className="text-[11px]">
+              {AI_ENGINES[k].label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <p className="text-[10px] text-muted-foreground">{AI_ENGINES[engine].hint}</p>
+
+
 
       <div className="flex flex-wrap gap-1">
         {active.chips.map((c) => (
@@ -197,22 +231,44 @@ export function AiPanel({ doc, onApply }: Props) {
               ))}
             </ul>
           )}
-          {(result.rooms.length > 0 ||
-            result.corridors.length > 0 ||
-            result.objects.length > 0 ||
-            Object.keys(result.settings).length > 0) && (
-            <Button
-              size="sm"
-              variant="secondary"
-              className="h-6 w-full text-[10px]"
-              onClick={() => {
-                onApply(result);
-                toast.success("Applied to the map");
-              }}
-            >
-              Apply to map
-            </Button>
-          )}
+          {hasGeometry(result) &&
+            (staged ? (
+              <div className="space-y-1.5 rounded-md border border-accent/50 bg-accent/10 p-2">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-accent">Preview on canvas</p>
+                <p className="text-[10px] text-muted-foreground">
+                  The dashed ghost shows what will be added. Nothing has changed on your map yet.
+                </p>
+                <div className="flex gap-1.5">
+                  <Button
+                    size="sm"
+                    className="h-6 flex-1 text-[10px]"
+                    onClick={() => {
+                      onApply(result);
+                      onPreview(null);
+                      toast.success("Suggestion accepted");
+                    }}
+                  >
+                    Accept
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="h-6 flex-1 text-[10px]"
+                    onClick={() => {
+                      onPreview(null);
+                      toast("Suggestion rejected");
+                    }}
+                  >
+                    Reject
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <Button size="sm" variant="secondary" className="h-6 w-full text-[10px]" onClick={() => onPreview(result)}>
+                Preview again
+              </Button>
+            ))}
+
         </div>
       )}
     </section>
