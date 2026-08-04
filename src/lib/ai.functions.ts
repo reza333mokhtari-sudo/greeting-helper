@@ -199,6 +199,12 @@ export const suggestMap = createServerFn({ method: "POST" })
       const msg = (err as Error)?.message ?? "AI request failed";
       if (msg.includes("429")) throw new Error("429 Too many AI requests — wait a moment and try again.");
       if (msg.includes("402")) throw new Error("402 AI credits exhausted — add credits to keep generating.");
+      if (msg.includes("free_premium_limit"))
+        throw new Error("Fable 5 quota reached on your endpoint — switch engine or upgrade that account.");
+      if (msg.includes("Unknown model"))
+        throw new Error("Your endpoint does not know this model id — update the CONDUIT_MODEL secret.");
+      if (msg.includes("Temporary service interruption"))
+        throw new Error("Your custom endpoint is temporarily unavailable — retry or pick another engine.");
       throw new Error(msg);
     }
   });
