@@ -236,7 +236,18 @@ export const DEFAULT_LAYER_FOR: Record<ObjectKind, string> = {
 };
 
 export function emptyDoc(): Doc {
-  return { shapes: [], objects: [], layers: defaultLayers(), settings: { ...DEFAULT_SETTINGS }, fog: [] };
+  const floorId = uid("floor");
+  return {
+    shapes: [],
+    objects: [],
+    layers: defaultLayers(),
+    settings: { ...DEFAULT_SETTINGS },
+    fog: [],
+    floors: [{ id: floorId, name: "Ground floor", shapes: [], objects: [], fog: [] }],
+    activeFloorId: floorId,
+    links: [],
+    showUnderlay: true,
+  };
 }
 
 /** Bring older/imported documents up to the current schema. */
@@ -249,14 +260,119 @@ export function migrateDoc(input: Partial<Doc> | null | undefined): Doc {
     ...o,
     layerId: o.layerId && ids.has(o.layerId) ? o.layerId : DEFAULT_LAYER_FOR[o.kind] ?? layers[0]!.id,
   })) as MapObject[];
-  return {
-    shapes: input.shapes ?? [],
+  const shapes = input.shapes ?? [];
+  const fog = Array.isArray(input.fog) ? input.fog : [];
+
+  const floors: Floor[] =
+    Array.isArray(input.floors) && input.floors.length
+      ? input.floors.map((f) => ({
+          id: f.id ?? uid("floor"),
+          name: f.name ?? "Floor",
+          shapes: Array.isArray(f.shapes) ? f.shapes : [],
+          objects: Array.isArray(f.objects) ? f.objects : [],
+          fog: Array.isArray(f.fog) ? f.fog : [],
+        }))
+      : [{ id: uid("floor"), name: "Ground floor", shapes, objects, fog }];
+  const activeFloorId = floors.some((f) => f.id === input.activeFloorId) ? input.activeFloorId! : floors[0]!.id;
+
+  const doc: Doc = {
+    shapes,
     objects,
     layers,
     settings: { ...base.settings, ...(input.settings ?? {}) },
-    fog: Array.isArray(input.fog) ? input.fog : [],
+    fog,
+    floors,
+    activeFloorId,
+    links: (Array.isArray(input.links) ? input.links : []).filter(
+      (l) => floors.some((f) => f.id === l.from) && floors.some((f) => f.id === l.to),
+    ),
+    showUnderlay: input.showUnderlay ?? true,
+  };
+  // The top-level fields are the source of truth for the active floor.
+  return syncActiveFloor(doc);
+}
+
+/* ------------------------------------------------------------------ */
+/* Floor stack helpers                                                 */
+/* ------------------------------------------------------------------ */
+
+/** Copy the live (top-level) content back into the active floor entry. */
+export function syncActiveFloor(d: Doc): Doc {
+  return {
+    ...d,
+    floors: d.floors.map((f) => (f.id === d.activeFloorId ? { ...f, shapes: d.shapes, objects: d.objects, fog: d.fog } : f)),
   };
 }
+
+export function activeFloor(d: Doc): Floor | undefined {
+  return d.floors.find((f) => f.id === d.activeFloorId);
+}
+
+/** Stash the current floor and load another one into the live document. */
+export function switchFloor(d: Doc, id: string): Doc {
+  if (id === d.activeFloorId) return d;
+  const synced = syncActiveFloor(d);
+  const target = synced.floors.find((f) => f.id === id);
+  if (!target) return d;
+  return { ...synced, activeFloorId: id, shapes: target.shapes, objects: target.objects, fog: target.fog };
+}
+
+/** Insert a new floor above the active one, optionally duplicating its content. */
+export function addFloor(d: Doc, name?: string, duplicate = false): Doc {
+  const synced = syncActiveFloor(d);
+  const src = synced.floors.find((f) => f.id === synced.activeFloorId);
+  const floor: Floor = {
+    id: uid("floor"),
+    name: name?.trim() || `Floor ${synced.floors.length + 1}`,
+    shapes: duplicate && src ? src.shapes.map((s) => ({ ...s, id: uid("s") })) : [],
+    objects: duplicate && src ? src.objects.map((o) => ({ ...o, id: uid("o") })) : [],
+    fog: duplicate && src ? [...src.fog] : [],
+  };
+  const at = Math.max(0, synced.floors.findIndex((f) => f.id === synced.activeFloorId));
+  const floors = [...synced.floors];
+  floors.splice(at, 0, floor);
+  return { ...synced, floors, activeFloorId: floor.id, shapes: floor.shapes, objects: floor.objects, fog: floor.fog };
+}
+
+export function renameFloor(d: Doc, id: string, name: string): Doc {
+  return { ...d, floors: d.floors.map((f) => (f.id === id ? { ...f, name } : f)) };
+}
+
+export function deleteFloor(d: Doc, id: string): Doc {
+  if (d.floors.length <= 1) return d;
+  const synced = syncActiveFloor(d);
+  const floors = synced.floors.filter((f) => f.id !== id);
+  const links = synced.links.filter((l) => l.from !== id && l.to !== id);
+  if (id !== synced.activeFloorId) return { ...synced, floors, links };
+  const next = floors[0]!;
+  return { ...synced, floors, links, activeFloorId: next.id, shapes: next.shapes, objects: next.objects, fog: next.fog };
+}
+
+/** Move a floor up (-1) or down (+1) in the stack. */
+export function moveFloor(d: Doc, id: string, dir: -1 | 1): Doc {
+  const i = d.floors.findIndex((f) => f.id === id);
+  const j = i + dir;
+  if (i < 0 || j < 0 || j >= d.floors.length) return d;
+  const floors = [...d.floors];
+  [floors[i], floors[j]] = [floors[j]!, floors[i]!];
+  return { ...d, floors };
+}
+
+export function addFloorLink(d: Doc, link: Omit<FloorLink, "id">): Doc {
+  if (link.from === link.to) return d;
+  return { ...d, links: [...d.links, { ...link, id: uid("link") }] };
+}
+
+export function removeFloorLink(d: Doc, id: string): Doc {
+  return { ...d, links: d.links.filter((l) => l.id !== id) };
+}
+
+/** The floor rendered as a ghost underlay (the one directly below the active floor). */
+export function floorBelow(d: Doc): Floor | undefined {
+  const i = d.floors.findIndex((f) => f.id === d.activeFloorId);
+  return i >= 0 ? d.floors[i + 1] : undefined;
+}
+
 
 export function layerOf(doc: Doc, o: MapObject): Layer | undefined {
   return doc.layers.find((l) => l.id === o.layerId);
