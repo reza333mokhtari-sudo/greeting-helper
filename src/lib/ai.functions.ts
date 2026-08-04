@@ -2,11 +2,22 @@ import { createServerFn } from "@tanstack/react-start";
 import { streamText } from "ai";
 import { z } from "zod";
 
+/** Selectable AI engines. Keys are stable ids the UI sends; values are gateway model ids. */
+export const AI_ENGINES = {
+  swift: { id: "google/gemini-3.6-flash", label: "Swift · Gemini 3.6 Flash", hint: "Fastest, great for quick layouts" },
+  balanced: { id: "openai/gpt-5.6-terra", label: "Balanced · GPT-5.6 Terra", hint: "Best all-round cartography" },
+  deep: { id: "openai/gpt-5.6-sol", label: "Deep · GPT-5.6 Sol", hint: "Strongest reasoning, slower" },
+  lite: { id: "openai/gpt-5.6-luna", label: "Lite · GPT-5.6 Luna", hint: "Cheapest, simple requests" },
+} as const;
+
+export type AiEngine = keyof typeof AI_ENGINES;
+
 const Input = z.object({
   prompt: z.string().min(1).max(4000),
   /** Compact description of the current map so the model can refine it. */
   summary: z.string().max(6000).default(""),
   mode: z.enum(["rooms", "encounter", "hatching", "refine"]).default("rooms"),
+  engine: z.enum(["swift", "balanced", "deep", "lite"]).default("balanced"),
   gridSize: z.number().positive().default(32),
   /** Prior turns so follow-up prompts ("make it bigger") keep context. */
   history: z
@@ -14,6 +25,7 @@ const Input = z.object({
     .max(8)
     .default([]),
 });
+
 
 export type AiRoom = { x: number; y: number; w: number; h: number; name?: string };
 export type AiObject = {
