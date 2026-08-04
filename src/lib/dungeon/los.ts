@@ -79,12 +79,16 @@ function rayHit(origin: Pt, dx: number, dy: number, segs: Seg[], maxDist: number
  */
 export function visibilityPolygon(origin: Pt, radius: number, segs: Seg[]): Pt[] {
   const near = segs.filter((s) => {
-    const d = Math.min(
-      Math.hypot(s.a.x - origin.x, s.a.y - origin.y),
-      Math.hypot(s.b.x - origin.x, s.b.y - origin.y),
-    );
-    return d < radius * 2.2;
+    // distance from the light to the segment itself, so long walls are kept
+    const vx = s.b.x - s.a.x;
+    const vy = s.b.y - s.a.y;
+    const len2 = vx * vx + vy * vy || 1;
+    let t = ((origin.x - s.a.x) * vx + (origin.y - s.a.y) * vy) / len2;
+    t = Math.max(0, Math.min(1, t));
+    const d = Math.hypot(s.a.x + vx * t - origin.x, s.a.y + vy * t - origin.y);
+    return d < radius * 1.6;
   });
+
   const angles: number[] = [];
   for (const s of near) {
     for (const p of [s.a, s.b]) {
