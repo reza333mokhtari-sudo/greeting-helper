@@ -1,4 +1,10 @@
 import type { Doc, Layer, MapObject } from "@/lib/dungeon/model";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Slider } from "@/components/ui/slider";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Eye, EyeOff, Lock, LockOpen, ChevronUp, ChevronDown, X, Plus } from "lucide-react";
 
 type Props = {
   doc: Doc;
@@ -17,89 +23,138 @@ function countOn(objects: MapObject[], id: string) {
 }
 
 export function LayersPanel(p: Props) {
-  const layers = [...p.doc.layers].reverse(); // top layer first in UI
+  const layers = [...p.doc.layers].reverse();
 
   return (
     <section>
-      <div className="mb-2 flex items-center justify-between">
-        <h2 className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Layers</h2>
-        <button onClick={p.onAddLayer} className="rounded border border-border px-1.5 text-xs hover:bg-accent" title="Add layer">
-          +
-        </button>
+      <div className="mb-3 flex items-center justify-between">
+        <h2 className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+          <span className="h-1 w-1 rounded-full bg-primary" />
+          Layers
+        </h2>
+        <Button variant="ghost" size="icon" className="size-6" onClick={p.onAddLayer} aria-label="Add layer">
+          <Plus className="size-3.5" />
+        </Button>
       </div>
-      <ul className="flex flex-col gap-1">
+
+      <ul className="flex flex-col gap-1.5">
         {layers.map((l) => {
           const objs = p.doc.objects.filter((o) => o.layerId === l.id);
           const active = p.activeLayer === l.id;
           return (
             <li
               key={l.id}
-              className={`rounded border px-2 py-1.5 text-xs ${active ? "border-primary/60 bg-accent" : "border-border"}`}
+              onClick={() => p.onActiveLayer(l.id)}
+              className={`cursor-pointer rounded-lg border px-2 py-1.5 transition-colors ${
+                active ? "border-primary/60 bg-accent/60 shadow-[var(--shadow-arcane)]" : "border-border bg-card/40 hover:bg-accent/30"
+              }`}
             >
-              <div className="flex items-center gap-1.5">
-                <button
-                  title={l.visible ? "Hide layer" : "Show layer"}
-                  onClick={() => p.onUpdateLayer(l.id, { visible: !l.visible })}
-                  className="text-sm leading-none opacity-80 hover:opacity-100"
+              <div className="flex items-center gap-1">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="size-6 text-muted-foreground"
+                  aria-label={l.visible ? "Hide layer" : "Show layer"}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    p.onUpdateLayer(l.id, { visible: !l.visible });
+                  }}
                 >
-                  {l.visible ? "◉" : "○"}
-                </button>
-                <button
-                  title={l.locked ? "Unlock layer" : "Lock layer"}
-                  onClick={() => p.onUpdateLayer(l.id, { locked: !l.locked })}
-                  className="text-[11px] leading-none opacity-80 hover:opacity-100"
+                  {l.visible ? <Eye className="size-3.5" /> : <EyeOff className="size-3.5" />}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="size-6 text-muted-foreground"
+                  aria-label={l.locked ? "Unlock layer" : "Lock layer"}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    p.onUpdateLayer(l.id, { locked: !l.locked });
+                  }}
                 >
-                  {l.locked ? "🔒" : "🔓"}
-                </button>
-                <input
+                  {l.locked ? <Lock className="size-3.5" /> : <LockOpen className="size-3.5" />}
+                </Button>
+                <Input
                   value={l.name}
                   onChange={(e) => p.onUpdateLayer(l.id, { name: e.target.value })}
                   onFocus={() => p.onActiveLayer(l.id)}
-                  className="min-w-0 flex-1 bg-transparent outline-none"
+                  className="h-6 min-w-0 flex-1 border-0 bg-transparent px-1 text-xs shadow-none focus-visible:ring-1"
                 />
-                <span className="tabular-nums text-[10px] text-muted-foreground">{countOn(p.doc.objects, l.id)}</span>
-                <button onClick={() => p.onMoveLayer(l.id, 1)} title="Move up" className="px-1 hover:bg-accent">
-                  ↑
-                </button>
-                <button onClick={() => p.onMoveLayer(l.id, -1)} title="Move down" className="px-1 hover:bg-accent">
-                  ↓
-                </button>
-                <button onClick={() => p.onDeleteLayer(l.id)} title="Delete layer" className="px-1 text-destructive hover:bg-destructive/10">
-                  ×
-                </button>
+                <Badge variant="secondary" className="h-5 px-1.5 text-[10px] tabular-nums">
+                  {countOn(p.doc.objects, l.id)}
+                </Badge>
               </div>
-              <div className="mt-1 flex items-center gap-2">
-                <button
-                  onClick={() => p.onActiveLayer(l.id)}
-                  className={`rounded px-1.5 py-0.5 text-[10px] ${active ? "bg-primary text-primary-foreground" : "border border-border"}`}
-                >
-                  {active ? "Active" : "Set active"}
-                </button>
-                <input
-                  type="range"
+
+              <div className="mt-1 flex items-center gap-1">
+                <Slider
+                  value={[Math.round(l.opacity * 100)]}
                   min={10}
                   max={100}
-                  value={Math.round(l.opacity * 100)}
-                  onChange={(e) => p.onUpdateLayer(l.id, { opacity: Number(e.target.value) / 100 })}
-                  className="h-1 flex-1 accent-primary"
-                  title="Layer opacity"
+                  onValueChange={([v]) => p.onUpdateLayer(l.id, { opacity: (v ?? 100) / 100 })}
+                  onClick={(e) => e.stopPropagation()}
+                  className="mx-1 flex-1"
+                  aria-label="Layer opacity"
                 />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="size-6"
+                  aria-label="Move layer up"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    p.onMoveLayer(l.id, 1);
+                  }}
+                >
+                  <ChevronUp className="size-3.5" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="size-6"
+                  aria-label="Move layer down"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    p.onMoveLayer(l.id, -1);
+                  }}
+                >
+                  <ChevronDown className="size-3.5" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="size-6 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                  aria-label="Delete layer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    p.onDeleteLayer(l.id);
+                  }}
+                >
+                  <X className="size-3.5" />
+                </Button>
               </div>
+
               {active && objs.length > 0 && (
-                <ul className="mt-1 max-h-28 overflow-y-auto">
-                  {objs.map((o) => (
-                    <li key={o.id}>
-                      <button
-                        onClick={() => p.onSelect([o.id])}
-                        className={`w-full truncate rounded px-1 py-0.5 text-left text-[11px] ${
-                          p.selected.includes(o.id) ? "bg-primary/20 text-foreground" : "text-muted-foreground hover:bg-accent"
-                        }`}
-                      >
-                        {o.kind} · {o.name || ("label" in o && o.label) || ("text" in o && o.text) || o.id.slice(-4)}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
+                <ScrollArea className="mt-1 max-h-28">
+                  <ul className="pr-2">
+                    {objs.map((o) => (
+                      <li key={o.id}>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            p.onSelect([o.id]);
+                          }}
+                          className={`w-full truncate rounded px-1 py-0.5 text-left text-[11px] ${
+                            p.selected.includes(o.id)
+                              ? "bg-primary/25 text-foreground"
+                              : "text-muted-foreground hover:bg-accent"
+                          }`}
+                        >
+                          {o.kind} · {o.name || ("label" in o && o.label) || ("text" in o && o.text) || o.id.slice(-4)}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </ScrollArea>
               )}
             </li>
           );
