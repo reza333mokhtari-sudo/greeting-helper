@@ -386,6 +386,7 @@ export function renderScene(
   wc.globalCompositeOperation = "source-in";
   wc.fillStyle = s.wallColor;
   wc.fillRect(0, 0, pw, ph);
+  if (s.hatch) hatchWalls(wc, doc, pw, ph, dpr, view.scale);
 
   if (s.shadow) {
     ctx.save();
