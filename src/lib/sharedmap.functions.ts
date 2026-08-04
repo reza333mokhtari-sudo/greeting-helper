@@ -27,5 +27,5 @@ export const getSharedMap = createServerFn({ method: "GET" })
       .eq("is_public", true)
       .maybeSingle();
     if (error) throw new Error(error.message);
-    return row ? { name: row.name as string, doc: row.doc as unknown } : null;
+    return row ? { name: row.name as string, docJson: JSON.stringify(row.doc) } : null;
   });
