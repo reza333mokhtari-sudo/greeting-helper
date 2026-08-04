@@ -101,6 +101,10 @@
   --sidebar-accent-foreground: oklch(0.26 0.06 295);
   --sidebar-border: oklch(0.89 0.02 300);
   --sidebar-ring: oklch(0.6 0.19 295);
+  --gold: oklch(0.78 0.14 88);
+  --gold-foreground: oklch(0.22 0.05 295);
+  --gradient-arcane: linear-gradient(135deg, var(--primary), var(--gold));
+  --shadow-arcane: 0 12px 40px -18px color-mix(in oklab, var(--primary) 60%, transparent);
 }
 
 
@@ -138,6 +142,10 @@
   --sidebar-accent-foreground: oklch(0.95 0.02 300);
   --sidebar-border: oklch(0.72 0.16 295 / 22%);
   --sidebar-ring: oklch(0.72 0.16 295);
+  --gold: oklch(0.84 0.14 88);
+  --gold-foreground: oklch(0.18 0.04 295);
+  --gradient-arcane: linear-gradient(135deg, var(--primary), var(--gold));
+  --shadow-arcane: 0 12px 40px -18px color-mix(in oklab, var(--primary) 55%, transparent);
 }
 
 
@@ -154,3 +162,14 @@
   }
 }
 
+@utility text-arcane {
+  background-image: var(--gradient-arcane);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility panel-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--primary) 45%, transparent) transparent;
+}
