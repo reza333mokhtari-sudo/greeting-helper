@@ -10,7 +10,6 @@ type Props = {
   shapes: number;
   objects: number;
   fog: number;
-  fps: number;
   saved: string;
   onZoom: (dir: 1 | -1) => void;
   onFit: () => void;
@@ -28,7 +27,6 @@ export function StatusBar(props: Props) {
       <span className="tabular-nums">{props.objects} objects</span>
       <span className="tabular-nums">{props.fog} fogged</span>
       <Separator orientation="vertical" className="h-4" />
-      <span className="tabular-nums">{props.fps} fps</span>
       <span className="truncate">{props.saved}</span>
       <div className="ml-auto flex items-center gap-1">
         <Button variant="ghost" size="icon" className="size-6" aria-label="Zoom out" onClick={() => props.onZoom(-1)}>

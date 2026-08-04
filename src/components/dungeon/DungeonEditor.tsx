@@ -87,7 +87,6 @@ export function DungeonEditor() {
   const [fogMode, setFogMode] = useState<FogMode>("brush");
   const [fogBrush, setFogBrush] = useState(96);
   const [leftPanel, setLeftPanel] = useState<PanelId | null>("settings");
-  const [fps, setFps] = useState(60);
   const [savedAt, setSavedAt] = useState<number | null>(null);
   const importRef = useRef<HTMLInputElement>(null);
 
@@ -177,18 +176,6 @@ export function DungeonEditor() {
     return () => clearTimeout(t);
   }, [doc]);
 
-  // lightweight fps meter for the status bar
-  const fpsRef = useRef({ frames: 0, last: performance.now() });
-  const tickFps = useCallback(() => {
-    const s = fpsRef.current;
-    s.frames++;
-    const now = performance.now();
-    if (now - s.last >= 1000) {
-      setFps(Math.round((s.frames * 1000) / (now - s.last)));
-      s.frames = 0;
-      s.last = now;
-    }
-  }, []);
 
 
   // canvas sizing + draw
@@ -227,8 +214,7 @@ export function DungeonEditor() {
       });
       ctx.restore();
     }
-    tickFps();
-  }, [doc, view, preview, selected, polyPts, cursor, tickFps]);
+  }, [doc, view, preview, selected, polyPts, cursor]);
 
   useEffect(() => {
     let raf = requestAnimationFrame(draw);
@@ -1112,7 +1098,6 @@ export function DungeonEditor() {
         shapes={doc.shapes.length}
         objects={doc.objects.length}
         fog={doc.fog.length}
-        fps={fps}
         saved={savedLabel}
         onZoom={zoomBy}
         onFit={fit}
