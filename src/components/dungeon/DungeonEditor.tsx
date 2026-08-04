@@ -697,6 +697,7 @@ export function DungeonEditor() {
             onActiveLayer={setActiveLayer}
             onUpdateLayer={updateLayer}
             onMoveLayer={moveLayer}
+            onReorderLayer={reorderLayer}
             onAddLayer={addLayer}
             onDeleteLayer={deleteLayer}
             selected={selected}
