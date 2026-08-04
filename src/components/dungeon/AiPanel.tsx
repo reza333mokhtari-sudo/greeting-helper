@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Sparkles, Loader2, WifiOff } from "lucide-react";
+import { Sparkles, Loader2, WifiOff, Cpu } from "lucide-react";
 import { toast } from "sonner";
 
-import { suggestMap, type AiSuggestion } from "@/lib/ai.functions";
+import { suggestMap, AI_ENGINES, type AiSuggestion, type AiEngine } from "@/lib/ai.functions";
 import type { Doc } from "@/lib/dungeon/model";
 import { useOnlineStatus } from "@/hooks/use-online-status";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 
 type Mode = "rooms" | "encounter" | "hatching" | "refine";
+
 
 const MODES: { id: Mode; label: string; placeholder: string; chips: string[] }[] = [
   {
