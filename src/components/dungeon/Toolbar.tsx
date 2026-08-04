@@ -4,6 +4,7 @@ export type ToolId =
   | "rect"
   | "ellipse"
   | "poly"
+  | "ngon"
   | "brush"
   | "eraseRect"
   | "eraseBrush"
