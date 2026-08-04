@@ -37,7 +37,7 @@ export const TOOLS: { id: ToolId; label: string; key: string; icon: string }[] =
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { Undo2, Redo2, ZoomIn, ZoomOut } from "lucide-react";
 
 type Props = {
@@ -53,6 +53,7 @@ type Props = {
 
 export function Toolbar(props: Props) {
   return (
+    <TooltipProvider delayDuration={200}>
     <div className="flex w-14 shrink-0 flex-col items-center gap-1 border-r border-border bg-sidebar py-3">
       {TOOLS.map((t) => {
         const active = props.tool === t.id;
@@ -116,6 +117,7 @@ export function Toolbar(props: Props) {
         <ZoomOut />
       </Button>
     </div>
+    </TooltipProvider>
   );
 }
 
