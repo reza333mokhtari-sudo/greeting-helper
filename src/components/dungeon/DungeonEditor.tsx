@@ -1016,7 +1016,7 @@ export function DungeonEditor() {
         playerView={!!doc.settings.playerView}
         onPlayerView={(v) => setSettings({ playerView: v })}
         showGrid={doc.settings.gridStyle !== "none"}
-        onShowGrid={(v) => setSettings({ gridStyle: v ? "lines" : "none" })}
+        onShowGrid={(v) => setSettings({ gridStyle: v ? "square" : "none" })}
         right={<CloudBar doc={doc} thumbnail={thumbnail} onLoadDoc={(d) => commit(migrateDoc(d))} />}
       />
 
