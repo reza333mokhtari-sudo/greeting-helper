@@ -4,7 +4,7 @@ import { Eye, EyeOff, Brush, SquareDashed, Trash2, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { FOG_STYLES, fogThumbnail, type FogStyle } from "@/lib/dungeon/fogAssets";
 
@@ -90,6 +90,7 @@ export function FogPanel(p: Props) {
       {/* 2D fog asset library */}
       <div className="space-y-1.5 rounded-lg border border-border/60 bg-card/40 p-2">
         <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">Fog asset</span>
+        <TooltipProvider delayDuration={200}>
         <div className="grid grid-cols-3 gap-1.5">
           {FOG_STYLES.map((s) => (
             <Tooltip key={s.id}>
@@ -113,6 +114,7 @@ export function FogPanel(p: Props) {
             </Tooltip>
           ))}
         </div>
+        </TooltipProvider>
 
         <label className="block space-y-1">
           <span className="flex justify-between text-[10px] text-muted-foreground">
