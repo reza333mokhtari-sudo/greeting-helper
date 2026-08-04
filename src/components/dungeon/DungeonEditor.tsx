@@ -1,10 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import { LayersPanel } from "./LayersPanel";
+import { PropertiesPanel } from "./PropertiesPanel";
 import { SidePanel } from "./SidePanel";
 import { Toolbar, TOOLS, type ToolId } from "./Toolbar";
 import {
+  DEFAULT_LAYER_FOR,
   docBounds,
   emptyDoc,
+  migrateDoc,
   objectHit,
   pointInShape,
   snapPt,
@@ -13,12 +17,14 @@ import {
   uid,
   type Doc,
   type DoorVariant,
+  type Layer,
   type MapObject,
   type Pt,
   type Settings,
   type Shape,
   type View,
 } from "@/lib/dungeon/model";
+import { exportPdfFile, exportSvgFile } from "@/lib/dungeon/exporters";
 import { renderScene, screenToWorld } from "@/lib/dungeon/render";
 
 const STORAGE_KEY = "dungeon-scrawl-doc-v1";
@@ -49,10 +55,12 @@ export function DungeonEditor() {
   const [doorVariant, setDoorVariant] = useState<DoorVariant>("door");
   const [cursor, setCursor] = useState<Pt>({ x: 0, y: 0 });
   const [spaceDown, setSpaceDown] = useState(false);
+  const [activeLayer, setActiveLayer] = useState<string>(() => emptyDoc().layers[0]!.id);
 
   const drag = useRef<Drag>({ mode: "none" });
   const stateRef = useRef({ doc, view, tool, polyPts, brushWidth, doorVariant, selected, spaceDown });
   stateRef.current = { doc, view, tool, polyPts, brushWidth, doorVariant, selected, spaceDown };
+
 
   const commit = useCallback((next: Doc | ((d: Doc) => Doc)) => {
     setDocState((prev) => {

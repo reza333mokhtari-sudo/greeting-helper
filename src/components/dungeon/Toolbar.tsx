@@ -10,7 +10,11 @@ export type ToolId =
   | "door"
   | "stairs"
   | "pillar"
-  | "text";
+  | "text"
+  | "npc"
+  | "item"
+  | "trigger"
+  | "light";
 
 export const TOOLS: { id: ToolId; label: string; key: string; icon: string }[] = [
   { id: "select", label: "Select / Move", key: "V", icon: "M4 3l14 8-6 1.6L9.6 19z" },
@@ -25,7 +29,12 @@ export const TOOLS: { id: ToolId; label: string; key: string; icon: string }[] =
   { id: "stairs", label: "Stairs", key: "S", icon: "M3 21h5v-5h5v-5h5V6h3" },
   { id: "pillar", label: "Pillar", key: "L", icon: "M12 6a6 6 0 110 12 6 6 0 010-12z" },
   { id: "text", label: "Label", key: "T", icon: "M5 5h14v3M12 5v14M9 19h6" },
+  { id: "npc", label: "NPC token", key: "N", icon: "M12 4a3.6 3.6 0 110 7.2A3.6 3.6 0 0112 4zM4.5 20c.6-4 3.7-6 7.5-6s6.9 2 7.5 6" },
+  { id: "item", label: "Item / loot", key: "I", icon: "M12 3l9 9-9 9-9-9z" },
+  { id: "trigger", label: "Trigger zone", key: "G", icon: "M4 4h16v16H4zM9 9h6v6H9z" },
+  { id: "light", label: "Light source", key: "F", icon: "M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4M12 8a4 4 0 110 8 4 4 0 010-8z" },
 ];
+
 
 type Props = {
   tool: ToolId;
