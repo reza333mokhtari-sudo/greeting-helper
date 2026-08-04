@@ -166,10 +166,10 @@ export const LAYER_TRIGGER = "layer_trigger";
 export const LAYER_LIGHT = "layer_light";
 
 export function defaultLayers(): Layer[] {
-  const mk = (id: string, name: string): Layer => ({ id, name, visible: true, locked: false, opacity: 1 });
+  const mk = (id: string, name: string, gmOnly = false): Layer => ({ id, name, visible: true, locked: false, opacity: 1, gmOnly });
   return [
     mk(LAYER_STRUCTURE, "Structure"),
-    mk(LAYER_TRIGGER, "Triggers"),
+    mk(LAYER_TRIGGER, "Triggers", true),
     mk(LAYER_ITEM, "Items"),
     mk(LAYER_NPC, "NPCs"),
     mk(LAYER_LIGHT, "Lighting"),
