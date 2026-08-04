@@ -60,70 +60,73 @@ type Props = {
 export function Toolbar(props: Props) {
   return (
     <TooltipProvider delayDuration={200}>
-    <div className="flex w-14 shrink-0 flex-col items-center gap-1 border-r border-border bg-sidebar py-3">
-      {TOOLS.map((t) => {
-        const active = props.tool === t.id;
-        return (
-          <Tooltip key={t.id}>
-            <TooltipTrigger asChild>
-              <Button
-                variant={active ? "default" : "ghost"}
-                size="icon"
-                aria-label={t.label}
-                aria-pressed={active}
-                onClick={() => props.onTool(t.id)}
-                className={active ? "size-10 shadow-[var(--shadow-arcane)]" : "size-10 text-foreground/70"}
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  className="size-5"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={1.7}
-                  strokeLinejoin="round"
-                  strokeLinecap="round"
+      <div className="pointer-events-auto flex items-center gap-1 rounded-2xl border border-border bg-card/90 px-2 py-1.5 shadow-[var(--shadow-arcane)] backdrop-blur">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="icon" className="size-9" aria-label="Undo" disabled={!props.canUndo} onClick={props.onUndo}>
+              <Undo2 className="size-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="top">Undo (Ctrl+Z)</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="icon" className="size-9" aria-label="Redo" disabled={!props.canRedo} onClick={props.onRedo}>
+              <Redo2 className="size-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="top">Redo (Ctrl+Shift+Z)</TooltipContent>
+        </Tooltip>
+
+        <Separator orientation="vertical" className="mx-1 h-7" />
+
+        {TOOLS.map((t) => {
+          const active = props.tool === t.id;
+          return (
+            <Tooltip key={t.id}>
+              <TooltipTrigger asChild>
+                <Button
+                  variant={active ? "default" : "ghost"}
+                  size="icon"
+                  aria-label={t.label}
+                  aria-pressed={active}
+                  onClick={() => props.onTool(t.id)}
+                  className={active ? "size-9 shadow-[var(--shadow-arcane)]" : "size-9 text-foreground/70"}
                 >
-                  <path d={t.icon} />
-                </svg>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right">
-              {t.label} <span className="opacity-60">({t.key})</span>
-            </TooltipContent>
-          </Tooltip>
-        );
-      })}
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="size-[18px]"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.7}
+                    strokeLinejoin="round"
+                    strokeLinecap="round"
+                  >
+                    <path d={t.icon} />
+                  </svg>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="top">
+                {t.label} <span className="opacity-60">({t.key})</span>
+              </TooltipContent>
+            </Tooltip>
+          );
+        })}
 
-      <Separator className="my-2 w-8" />
+        <Separator orientation="vertical" className="mx-1 h-7" />
 
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button variant="ghost" size="icon" aria-label="Undo" disabled={!props.canUndo} onClick={props.onUndo}>
-            <Undo2 />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="right">Undo (Ctrl+Z)</TooltipContent>
-      </Tooltip>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button variant="ghost" size="icon" aria-label="Redo" disabled={!props.canRedo} onClick={props.onRedo}>
-            <Redo2 />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="right">Redo (Ctrl+Shift+Z)</TooltipContent>
-      </Tooltip>
-
-      <Separator className="my-2 w-8" />
-
-      <Button variant="ghost" size="icon" aria-label="Zoom in" onClick={() => props.onZoom(1)}>
-        <ZoomIn />
-      </Button>
-      <span className="text-[10px] tabular-nums text-muted-foreground">{Math.round(props.zoom * 100)}%</span>
-      <Button variant="ghost" size="icon" aria-label="Zoom out" onClick={() => props.onZoom(-1)}>
-        <ZoomOut />
-      </Button>
-    </div>
+        <Button variant="ghost" size="icon" className="size-9" aria-label="Zoom out" onClick={() => props.onZoom(-1)}>
+          <ZoomOut className="size-4" />
+        </Button>
+        <span className="w-10 text-center text-[11px] tabular-nums text-muted-foreground">
+          {Math.round(props.zoom * 100)}%
+        </span>
+        <Button variant="ghost" size="icon" className="size-9" aria-label="Zoom in" onClick={() => props.onZoom(1)}>
+          <ZoomIn className="size-4" />
+        </Button>
+      </div>
     </TooltipProvider>
   );
 }
+
 
