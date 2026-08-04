@@ -99,6 +99,26 @@ export type Settings = {
 };
 
 
+/** A single level of a multi-floor map (RE4-style floor stack). */
+export type Floor = {
+  id: string;
+  name: string;
+  shapes: Shape[];
+  objects: MapObject[];
+  fog: string[];
+};
+
+export type FloorLinkKind = "stairs" | "elevator" | "ladder" | "hatch" | "door";
+
+/** A connection between two floors (e.g. stairs from Ground to 1F). */
+export type FloorLink = {
+  id: string;
+  from: string;
+  to: string;
+  kind: FloorLinkKind;
+  label: string;
+};
+
 export type Doc = {
   shapes: Shape[];
   objects: MapObject[];
@@ -106,9 +126,17 @@ export type Doc = {
   settings: Settings;
   /** Fog of war: keys of grid cells that are hidden from players. */
   fog: string[];
+  /** Ordered top-to-bottom stack of floors; the active one mirrors the fields above. */
+  floors: Floor[];
+  activeFloorId: string;
+  /** Connections between floors. */
+  links: FloorLink[];
+  /** Show the floor directly below as a faint ghost underlay. */
+  showUnderlay?: boolean;
 };
 
 export type View = { x: number; y: number; scale: number };
+
 
 export const THEMES: Record<string, Partial<Settings> & { label: string }> = {
   classic: {
