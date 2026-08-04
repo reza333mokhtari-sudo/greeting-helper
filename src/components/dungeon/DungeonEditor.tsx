@@ -528,9 +528,11 @@ export function DungeonEditor() {
     (file: File) => {
       file.text().then((txt) => {
         try {
-          const parsed = JSON.parse(txt) as Doc;
+          const parsed = JSON.parse(txt) as Partial<Doc>;
           if (!parsed || !Array.isArray(parsed.shapes)) throw new Error("bad file");
-          commit({ ...emptyDoc(), ...parsed, settings: { ...emptyDoc().settings, ...parsed.settings } });
+          const migrated = migrateDoc(parsed);
+          commit(migrated);
+          setActiveLayer(migrated.layers[0]!.id);
         } catch {
           window.alert("That file isn't a valid dungeon map.");
         }
@@ -538,6 +540,73 @@ export function DungeonEditor() {
     },
     [commit],
   );
+
+  const exportSvg = useCallback(() => exportSvgFile(doc), [doc]);
+  const exportPdf = useCallback(() => {
+    exportPdfFile(doc).catch(() => window.alert("PDF export failed."));
+  }, [doc]);
+
+  // ---- layer management ----
+  const updateLayer = useCallback(
+    (id: string, patch: Partial<Layer>) => {
+      commit((d) => ({ ...d, layers: d.layers.map((l) => (l.id === id ? { ...l, ...patch } : l)) }));
+    },
+    [commit],
+  );
+
+  const moveLayer = useCallback(
+    (id: string, dir: -1 | 1) => {
+      commit((d) => {
+        const i = d.layers.findIndex((l) => l.id === id);
+        const j = i + dir;
+        if (i < 0 || j < 0 || j >= d.layers.length) return d;
+        const layers = [...d.layers];
+        [layers[i], layers[j]] = [layers[j]!, layers[i]!];
+        return { ...d, layers };
+      });
+    },
+    [commit],
+  );
+
+  const addLayer = useCallback(() => {
+    const id = uid("layer");
+    commit((d) => ({
+      ...d,
+      layers: [...d.layers, { id, name: `Layer ${d.layers.length + 1}`, visible: true, locked: false, opacity: 1 }],
+    }));
+    setActiveLayer(id);
+  }, [commit]);
+
+  const deleteLayer = useCallback(
+    (id: string) => {
+      const count = doc.objects.filter((o) => o.layerId === id).length;
+      if (doc.layers.length <= 1) return;
+      if (count && !window.confirm(`Delete this layer and its ${count} object(s)?`)) return;
+      commit((d) => ({
+        ...d,
+        layers: d.layers.filter((l) => l.id !== id),
+        objects: d.objects.filter((o) => o.layerId !== id),
+      }));
+      setActiveLayer((cur) => (cur === id ? (doc.layers.find((l) => l.id !== id)?.id ?? cur) : cur));
+    },
+    [commit, doc],
+  );
+
+  const updateObject = useCallback(
+    (id: string, patch: Partial<MapObject>) => {
+      commit((d) => ({
+        ...d,
+        objects: d.objects.map((o) => (o.id === id ? ({ ...o, ...patch } as MapObject) : o)),
+      }));
+    },
+    [commit],
+  );
+
+  const selectedObject = useMemo(
+    () => doc.objects.find((o) => selected.includes(o.id)) ?? null,
+    [doc.objects, selected],
+  );
+
 
   const cursorStyle = useMemo(() => {
     if (spaceDown || tool === "pan") return "grab";
