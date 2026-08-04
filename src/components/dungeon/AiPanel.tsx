@@ -231,22 +231,44 @@ export function AiPanel({ doc, onPreview, onApply, staged }: Props) {
               ))}
             </ul>
           )}
-          {(result.rooms.length > 0 ||
-            result.corridors.length > 0 ||
-            result.objects.length > 0 ||
-            Object.keys(result.settings).length > 0) && (
-            <Button
-              size="sm"
-              variant="secondary"
-              className="h-6 w-full text-[10px]"
-              onClick={() => {
-                onApply(result);
-                toast.success("Applied to the map");
-              }}
-            >
-              Apply to map
-            </Button>
-          )}
+          {hasGeometry(result) &&
+            (staged ? (
+              <div className="space-y-1.5 rounded-md border border-accent/50 bg-accent/10 p-2">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-accent">Preview on canvas</p>
+                <p className="text-[10px] text-muted-foreground">
+                  The dashed ghost shows what will be added. Nothing has changed on your map yet.
+                </p>
+                <div className="flex gap-1.5">
+                  <Button
+                    size="sm"
+                    className="h-6 flex-1 text-[10px]"
+                    onClick={() => {
+                      onApply(result);
+                      onPreview(null);
+                      toast.success("Suggestion accepted");
+                    }}
+                  >
+                    Accept
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="h-6 flex-1 text-[10px]"
+                    onClick={() => {
+                      onPreview(null);
+                      toast("Suggestion rejected");
+                    }}
+                  >
+                    Reject
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <Button size="sm" variant="secondary" className="h-6 w-full text-[10px]" onClick={() => onPreview(result)}>
+                Preview again
+              </Button>
+            ))}
+
         </div>
       )}
     </section>
