@@ -81,6 +81,9 @@ export function DungeonEditor() {
   const [view, setView] = useState<View>({ x: 0, y: 0, scale: 1 });
   const [tool, setTool] = useState<ToolId>("rect");
   const [preview, setPreview] = useState<Shape | null>(null);
+  /** AI suggestion staged as a ghost overlay, awaiting accept/reject. */
+  const [aiPreview, setAiPreview] = useState<AiSuggestion | null>(null);
+
   const [selected, setSelected] = useState<string[]>([]);
   const [polyPts, setPolyPts] = useState<Pt[]>([]);
   const [brushWidth, setBrushWidth] = useState(48);
