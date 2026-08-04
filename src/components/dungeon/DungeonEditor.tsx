@@ -1187,7 +1187,7 @@ export function DungeonEditor() {
       case "props":
         return <PropsPanel onPlace={placeImage} />;
       case "ai":
-        return <AiPanel doc={doc} onApply={applyAi} />;
+        return <AiPanel doc={doc} onPreview={setAiPreview} onApply={applyAi} staged={aiPreview} />;
       case "fog":
         return (
           <FogPanel
