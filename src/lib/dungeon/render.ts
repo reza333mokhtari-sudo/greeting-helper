@@ -413,7 +413,8 @@ export function renderScene(
   for (const o of objectsInDrawOrder(doc)) {
     const layer = layerById.get(o.layerId);
     if (layer && !layer.visible) continue;
-    if (o.kind === "light" && opts.hideUi) continue;
+    if (s.playerView && layer?.gmOnly) continue;
+    if (o.kind === "light" && (opts.hideUi || s.playerView)) continue;
     ctx.globalAlpha = layer?.opacity ?? 1;
     drawObject(ctx, o, doc);
     ctx.globalAlpha = 1;
