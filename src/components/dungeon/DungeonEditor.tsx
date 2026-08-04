@@ -1298,6 +1298,36 @@ export function DungeonEditor() {
               </p>
             </div>
           )}
+          {aiPreview && (
+            <div className="absolute inset-x-0 top-4 flex justify-center px-4">
+              <div className="pointer-events-auto flex max-w-xl items-center gap-3 rounded-xl border border-accent/50 bg-card/95 px-4 py-2.5 shadow-lg backdrop-blur">
+                <Sparkles className="h-4 w-4 shrink-0 text-accent" />
+                <div className="min-w-0">
+                  <p className="text-[11px] font-semibold text-foreground">AI suggestion preview</p>
+                  <p className="truncate text-[10px] text-muted-foreground">
+                    {aiPreview.rooms.length} rooms · {aiPreview.corridors.length} corridors · {aiPreview.objects.length} objects
+                    {Object.keys(aiPreview.settings).length ? " · style tweaks" : ""}
+                  </p>
+                </div>
+                <div className="ml-auto flex gap-1.5">
+                  <Button
+                    size="sm"
+                    className="h-7 text-[11px]"
+                    onClick={() => {
+                      applyAi(aiPreview);
+                      setAiPreview(null);
+                      toast.success("Suggestion accepted");
+                    }}
+                  >
+                    Accept
+                  </Button>
+                  <Button size="sm" variant="outline" className="h-7 text-[11px]" onClick={() => setAiPreview(null)}>
+                    Reject
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
           <div className="pointer-events-none absolute inset-x-0 bottom-4 flex justify-center px-4">
             <Toolbar
               tool={tool}
