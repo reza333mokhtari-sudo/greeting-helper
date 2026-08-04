@@ -169,12 +169,27 @@ export function DungeonEditor() {
     const t = setTimeout(() => {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(doc));
+        setSavedAt(Date.now());
       } catch {
         /* ignore */
       }
     }, 400);
     return () => clearTimeout(t);
   }, [doc]);
+
+  // lightweight fps meter for the status bar
+  const fpsRef = useRef({ frames: 0, last: performance.now() });
+  const tickFps = useCallback(() => {
+    const s = fpsRef.current;
+    s.frames++;
+    const now = performance.now();
+    if (now - s.last >= 1000) {
+      setFps(Math.round((s.frames * 1000) / (now - s.last)));
+      s.frames = 0;
+      s.last = now;
+    }
+  }, []);
+
 
   // canvas sizing + draw
   const draw = useCallback(() => {
