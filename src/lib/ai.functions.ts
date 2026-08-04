@@ -144,7 +144,8 @@ export const suggestMap = createServerFn({ method: "POST" })
       const customKey = process.env["CONDUIT_API_KEY"];
       if (!customKey) throw new Error("Custom AI endpoint is not configured — add the CONDUIT_API_KEY secret.");
       const baseURL = process.env["CONDUIT_BASE_URL"] || "https://conduit.ozdoev.net/v1";
-      const modelId = process.env["CONDUIT_MODEL"] || engine.id;
+      // Tolerate the common "fabel" spelling of the model id.
+      const modelId = (process.env["CONDUIT_MODEL"] || engine.id).trim().replace(/fabel/gi, "fable");
       model = createCustomProvider(customKey, baseURL)(modelId);
     } else {
       const key = process.env["LOVABLE_API_KEY"];
