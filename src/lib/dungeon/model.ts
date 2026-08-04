@@ -32,7 +32,7 @@ export type MapObject =
 
 export type ObjectKind = MapObject["kind"];
 
-export type GridStyle = "square" | "dot" | "none";
+export type GridStyle = "square" | "dot" | "hex" | "none";
 
 export type Layer = {
   id: string;
@@ -40,6 +40,27 @@ export type Layer = {
   visible: boolean;
   locked: boolean;
   opacity: number;
+  /** Hidden in Player View (GM-only content such as traps and secret notes). */
+  gmOnly?: boolean;
+};
+
+/** Options for the Circle / Regular polygon tool. */
+export type NgonOpts = {
+  mode: "draw" | "erase";
+  snap: boolean;
+  division: 1 | 2;
+  rough: boolean;
+  sides: number;
+  drawTo: "point" | "edge";
+};
+
+export const DEFAULT_NGON: NgonOpts = {
+  mode: "draw",
+  snap: true,
+  division: 1,
+  rough: false,
+  sides: 6,
+  drawTo: "point",
 };
 
 export type Settings = {
@@ -53,11 +74,19 @@ export type Settings = {
   gridColor: string;
   inkColor: string;
   shadow: boolean;
+  /** Classic Scrawl hand-drawn hatching inside the wall band. */
+  hatch: boolean;
+  hatchDensity: number;
+  /** Hand-drawn wobble applied to newly drawn shapes. */
+  roughness: number;
+  /** Hide GM-only layers and force fog of war. */
+  playerView: boolean;
   lighting: boolean;
   losMode: "off" | "lights" | "vision";
   ambient: number; // 0..1 how visible unlit areas are
   fogColor: string;
 };
+
 
 export type Doc = {
   shapes: Shape[];
@@ -109,6 +138,10 @@ export const DEFAULT_SETTINGS: Settings = {
   snap: true,
   wallThickness: 6,
   shadow: true,
+  hatch: true,
+  hatchDensity: 7,
+  roughness: 0,
+  playerView: false,
   bgColor: "#1b1d21",
   floorColor: "#f4efe3",
   wallColor: "#16181b",
@@ -133,10 +166,10 @@ export const LAYER_TRIGGER = "layer_trigger";
 export const LAYER_LIGHT = "layer_light";
 
 export function defaultLayers(): Layer[] {
-  const mk = (id: string, name: string): Layer => ({ id, name, visible: true, locked: false, opacity: 1 });
+  const mk = (id: string, name: string, gmOnly = false): Layer => ({ id, name, visible: true, locked: false, opacity: 1, gmOnly });
   return [
     mk(LAYER_STRUCTURE, "Structure"),
-    mk(LAYER_TRIGGER, "Triggers"),
+    mk(LAYER_TRIGGER, "Triggers", true),
     mk(LAYER_ITEM, "Items"),
     mk(LAYER_NPC, "NPCs"),
     mk(LAYER_LIGHT, "Lighting"),
@@ -295,4 +328,43 @@ export function docBounds(doc: Doc): { x1: number; y1: number; x2: number; y2: n
   doc.objects.forEach((o) => add({ x: o.x, y: o.y }, Math.max(30, objectRadius(o))));
   if (!isFinite(x1)) return null;
   return { x1, y1, x2, y2 };
+}
+
+/** Vertices of a regular polygon (or circle when `sides` is large). */
+export function regularPolygon(center: Pt, edge: Pt, sides: number, drawTo: "point" | "edge"): Pt[] {
+  const n = Math.max(3, Math.round(sides));
+  const r = Math.max(1, Math.hypot(edge.x - center.x, edge.y - center.y));
+  const step = (Math.PI * 2) / n;
+  // "edge" means the drag point sits on the middle of a face, not on a corner
+  const radius = drawTo === "edge" ? r / Math.cos(step / 2) : r;
+  const base = Math.atan2(edge.y - center.y, edge.x - center.x) + (drawTo === "edge" ? step / 2 : 0);
+  return Array.from({ length: n }, (_, i) => ({
+    x: center.x + Math.cos(base + i * step) * radius,
+    y: center.y + Math.sin(base + i * step) * radius,
+  }));
+}
+
+/** Hand-drawn wobble: subdivide each edge and jitter the points. */
+export function roughenPoly(pts: Pt[], amount: number, seedKey = 1): Pt[] {
+  if (amount <= 0 || pts.length < 2) return pts;
+  const rnd = (i: number) => {
+    const x = Math.sin((i + 1) * 12.9898 + seedKey * 78.233) * 43758.5453;
+    return (x - Math.floor(x)) * 2 - 1;
+  };
+  const out: Pt[] = [];
+  let k = 0;
+  for (let i = 0; i < pts.length; i++) {
+    const a = pts[i]!;
+    const b = pts[(i + 1) % pts.length]!;
+    const len = Math.hypot(b.x - a.x, b.y - a.y);
+    const steps = Math.max(1, Math.round(len / 22));
+    for (let s = 0; s < steps; s++) {
+      const t = s / steps;
+      out.push({
+        x: a.x + (b.x - a.x) * t + rnd(k++) * amount,
+        y: a.y + (b.y - a.y) * t + rnd(k++) * amount,
+      });
+    }
+  }
+  return out;
 }

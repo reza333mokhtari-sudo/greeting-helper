@@ -4,6 +4,7 @@ export type ToolId =
   | "rect"
   | "ellipse"
   | "poly"
+  | "ngon"
   | "brush"
   | "eraseRect"
   | "eraseBrush"
@@ -22,6 +23,7 @@ export const TOOLS: { id: ToolId; label: string; key: string; icon: string }[] =
   { id: "rect", label: "Rectangle room", key: "R", icon: "M3 5h18v14H3z" },
   { id: "ellipse", label: "Oval room", key: "O", icon: "M12 5c5 0 9 3.1 9 7s-4 7-9 7-9-3.1-9-7 4-7 9-7z" },
   { id: "poly", label: "Polygon room", key: "P", icon: "M12 3l9 6.5-3.4 10.5H6.4L3 9.5z" },
+  { id: "ngon", label: "Circle / Regular polygon", key: "K", icon: "M12 3l7.8 4.5v9L12 21l-7.8-4.5v-9z" },
   { id: "brush", label: "Corridor brush", key: "B", icon: "M4 19c4-1 4-6 8-8s6-6 8-7c-1 4-4 7-6 9s-6 3-8 7z" },
   { id: "eraseRect", label: "Erase rectangle", key: "X", icon: "M3 15l8-8 8 8-4 4H7z" },
   { id: "eraseBrush", label: "Erase brush", key: "C", icon: "M5 19h14M6 15l7-8 5 5-6 6H8z" },

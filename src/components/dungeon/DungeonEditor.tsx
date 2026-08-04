@@ -6,11 +6,14 @@ import { SidePanel } from "./SidePanel";
 import { Toolbar, TOOLS, type ToolId } from "./Toolbar";
 import {
   DEFAULT_LAYER_FOR,
+  DEFAULT_NGON,
   docBounds,
   emptyDoc,
   migrateDoc,
   objectHit,
   pointInShape,
+  regularPolygon,
+  roughenPoly,
   snapPt,
   snapVal,
   translateShape,
@@ -19,6 +22,7 @@ import {
   type DoorVariant,
   type Layer,
   type MapObject,
+  type NgonOpts,
   type Pt,
   type Settings,
   type Shape,
@@ -54,6 +58,7 @@ export function DungeonEditor() {
   const [polyPts, setPolyPts] = useState<Pt[]>([]);
   const [brushWidth, setBrushWidth] = useState(48);
   const [doorVariant, setDoorVariant] = useState<DoorVariant>("door");
+  const [ngon, setNgon] = useState<NgonOpts>(DEFAULT_NGON);
   const [cursor, setCursor] = useState<Pt>({ x: 0, y: 0 });
   const [spaceDown, setSpaceDown] = useState(false);
   const [activeLayer, setActiveLayer] = useState<string>(() => emptyDoc().layers[0]!.id);
@@ -236,6 +241,17 @@ export function DungeonEditor() {
   };
 
   const snapped = (p: Pt) => snapPt(p, doc.settings.gridSize, doc.settings.snap);
+  /** Ngon tool has its own snap + grid division. */
+  const snappedNgon = (p: Pt) => snapPt(p, doc.settings.gridSize / ngon.division, ngon.snap);
+  const ngonShape = (center: Pt, edge: Pt): Shape => {
+    const pts = regularPolygon(center, edge, ngon.sides, ngon.drawTo);
+    return {
+      id: "preview",
+      kind: "poly",
+      erase: ngon.mode === "erase",
+      pts: ngon.rough ? roughenPoly(pts, Math.max(2, doc.settings.gridSize * 0.12)) : pts,
+    };
+  };
 
   const finishPoly = useCallback(() => {
     setPolyPts((pts) => {
@@ -288,6 +304,12 @@ export function DungeonEditor() {
           a: p,
           b: p,
         });
+        break;
+      }
+      case "ngon": {
+        const c = snappedNgon(world);
+        drag.current = { mode: "draw", start: c };
+        setPreview(ngonShape(c, { x: c.x + doc.settings.gridSize, y: c.y }));
         break;
       }
       case "brush":
@@ -358,6 +380,10 @@ export function DungeonEditor() {
       return;
     }
     if (d.mode === "draw") {
+      if (tool === "ngon") {
+        setPreview(ngonShape(d.start, snappedNgon(world)));
+        return;
+      }
       const p = snapped(world);
       setPreview((prev) => (prev && prev.kind !== "path" && prev.kind !== "poly" ? { ...prev, a: d.start, b: p } : prev));
       return;
@@ -410,7 +436,23 @@ export function DungeonEditor() {
             ? prev.pts.length > 2
             : Math.abs(prev.a.x - prev.b.x) > 1 && Math.abs(prev.a.y - prev.b.y) > 1;
       if (ok) {
-        commit((doc0) => ({ ...doc0, shapes: [...doc0.shapes, { ...prev, id: uid("s") }] }));
+        const id = uid("s");
+        const rough = doc.settings.roughness;
+        let shape: Shape = { ...prev, id };
+        // global hand-drawn wobble turns straight-edged rooms into scrawled outlines
+        if (rough > 0 && (prev.kind === "rect" || prev.kind === "poly")) {
+          const pts =
+            prev.kind === "rect"
+              ? [
+                  { x: prev.a.x, y: prev.a.y },
+                  { x: prev.b.x, y: prev.a.y },
+                  { x: prev.b.x, y: prev.b.y },
+                  { x: prev.a.x, y: prev.b.y },
+                ]
+              : prev.pts;
+          shape = { id, kind: "poly", erase: prev.erase, pts: roughenPoly(pts, rough) };
+        }
+        commit((doc0) => ({ ...doc0, shapes: [...doc0.shapes, shape] }));
       }
     }
     if (d.mode === "move" && d.moved) {
@@ -712,6 +754,8 @@ export function DungeonEditor() {
           onBrushWidth={setBrushWidth}
           doorVariant={doorVariant}
           onDoorVariant={(v) => setDoorVariant(v as DoorVariant)}
+          ngon={ngon}
+          onNgon={(patch) => setNgon((n) => ({ ...n, ...patch }))}
           onExportPng={exportPng}
           onExportSvg={exportSvg}
           onExportPdf={exportPdf}
