@@ -241,6 +241,17 @@ export function DungeonEditor() {
   };
 
   const snapped = (p: Pt) => snapPt(p, doc.settings.gridSize, doc.settings.snap);
+  /** Ngon tool has its own snap + grid division. */
+  const snappedNgon = (p: Pt) => snapPt(p, doc.settings.gridSize / ngon.division, ngon.snap);
+  const ngonShape = (center: Pt, edge: Pt): Shape => {
+    const pts = regularPolygon(center, edge, ngon.sides, ngon.drawTo);
+    return {
+      id: "preview",
+      kind: "poly",
+      erase: ngon.mode === "erase",
+      pts: ngon.rough ? roughenPoly(pts, Math.max(2, doc.settings.gridSize * 0.12)) : pts,
+    };
+  };
 
   const finishPoly = useCallback(() => {
     setPolyPts((pts) => {
