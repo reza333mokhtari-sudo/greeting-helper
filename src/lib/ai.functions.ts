@@ -176,7 +176,10 @@ export const suggestMap = createServerFn({ method: "POST" })
       let streamError: unknown;
       const result = streamText({
         model,
+        // Quota/auth errors are terminal — retrying just multiplies the same failure.
+        maxRetries: isCustom ? 0 : 1,
         ...(providerOptions ? { providerOptions } : {}),
+
         system: extra ? `${SYSTEM}\n\n${extra}` : SYSTEM,
         messages: (extra
           ? [...messages, { role: "user" as const, content: extra }]
