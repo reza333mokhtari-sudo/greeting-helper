@@ -1,3 +1,5 @@
+import type { FogStyle } from "./fogAssets";
+
 export type Pt = { x: number; y: number };
 
 export type ShapeBase = { id: string; erase: boolean };
@@ -162,6 +164,10 @@ export const DEFAULT_SETTINGS: Settings = {
   losMode: "off",
   ambient: 0.18,
   fogColor: "#05070c",
+  fogStyle: "cloud",
+  fogSoftness: 0.45,
+  fogGmOpacity: 0.58,
+  fogScale: 1,
 };
 
 let counter = 0;
