@@ -45,6 +45,11 @@ import { TopMenuBar } from "./TopMenuBar";
 import { StatusBar } from "./StatusBar";
 import { LeftRail, type PanelId } from "./LeftRail";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ContextMenu, ContextMenuTrigger } from "@/components/ui/context-menu";
+import { CanvasContextMenu } from "./CanvasContextMenu";
+import { DiagnosticsPanel } from "./DiagnosticsPanel";
+import { recordDraw } from "@/lib/dungeon/perf";
+import { useOnlineStatus } from "@/hooks/use-online-status";
 
 const STORAGE_KEY = "dungeon-scrawl-doc-v1";
 const MIN_ZOOM = 0.08;
@@ -88,6 +93,16 @@ export function DungeonEditor() {
   const [fogBrush, setFogBrush] = useState(96);
   const [leftPanel, setLeftPanel] = useState<PanelId | null>("settings");
   const [savedAt, setSavedAt] = useState<number | null>(null);
+  const [saveMs, setSaveMs] = useState<number | null>(null);
+  const [docBytes, setDocBytes] = useState(0);
+  const [menuTarget, setMenuTarget] = useState<{ pt: Pt; label: string | null; id: string | null }>({
+    pt: { x: 0, y: 0 },
+    label: null,
+    id: null,
+  });
+  const clipboard = useRef<{ shapes: Shape[]; objects: MapObject[] } | null>(null);
+  const [clipCount, setClipCount] = useState(0);
+  const online = useOnlineStatus();
   const importRef = useRef<HTMLInputElement>(null);
 
 
@@ -167,7 +182,11 @@ export function DungeonEditor() {
   useEffect(() => {
     const t = setTimeout(() => {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(doc));
+        const t0 = performance.now();
+        const payload = JSON.stringify(doc);
+        localStorage.setItem(STORAGE_KEY, payload);
+        setDocBytes(payload.length);
+        setSaveMs(performance.now() - t0);
         setSavedAt(Date.now());
       } catch {
         /* ignore */
@@ -199,7 +218,9 @@ export function DungeonEditor() {
       (polyPts.length
         ? { id: "poly-preview", kind: "poly", erase: false, pts: [...polyPts, cursor] }
         : null);
+    const t0 = performance.now();
     renderScene(ctx, doc, view, w, h, { preview: livePreview, selectedIds: selected, dpr });
+    recordDraw(performance.now() - t0);
 
     if (polyPts.length) {
       ctx.save();
@@ -971,6 +992,19 @@ export function DungeonEditor() {
         );
       case "history":
         return <HistoryPanel entries={historyEntries} index={hIndex} onJump={jumpTo} />;
+      case "diagnostics":
+        return (
+          <DiagnosticsPanel
+            shapes={doc.shapes.length}
+            objects={doc.objects.length}
+            layers={doc.layers.length}
+            fog={doc.fog.length}
+            docBytes={docBytes}
+            savedAt={savedAt}
+            saveMs={saveMs}
+            online={online}
+          />
+        );
       case "properties":
         return <PropertiesPanel doc={doc} object={selectedObject} onChange={updateObject} onDelete={deleteSelected} />;
       default:
