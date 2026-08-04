@@ -1,4 +1,4 @@
-import type { GridStyle, Settings } from "@/lib/dungeon/model";
+import type { GridStyle, NgonOpts, Settings } from "@/lib/dungeon/model";
 import { THEMES } from "@/lib/dungeon/model";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -16,6 +16,8 @@ type Props = {
   onBrushWidth: (v: number) => void;
   doorVariant: string;
   onDoorVariant: (v: string) => void;
+  ngon: NgonOpts;
+  onNgon: (patch: Partial<NgonOpts>) => void;
   onExportPng: () => void;
   onExportSvg: () => void;
   onExportPdf: () => void;
@@ -24,6 +26,34 @@ type Props = {
   onClear: () => void;
   onFit: () => void;
 };
+
+function Segmented<T extends string>({
+  value,
+  options,
+  onChange,
+}: {
+  value: T;
+  options: { value: T; label: string }[];
+  onChange: (v: T) => void;
+}) {
+  return (
+    <div className="flex overflow-hidden rounded-md border border-border">
+      {options.map((o) => (
+        <button
+          key={o.value}
+          type="button"
+          onClick={() => onChange(o.value)}
+          className={`px-2.5 py-1 text-[11px] transition-colors ${
+            value === o.value ? "bg-primary text-primary-foreground" : "bg-card/40 text-muted-foreground hover:bg-accent"
+          }`}
+        >
+          {o.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
