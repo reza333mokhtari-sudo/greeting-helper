@@ -6,11 +6,14 @@ import { SidePanel } from "./SidePanel";
 import { Toolbar, TOOLS, type ToolId } from "./Toolbar";
 import {
   DEFAULT_LAYER_FOR,
+  DEFAULT_NGON,
   docBounds,
   emptyDoc,
   migrateDoc,
   objectHit,
   pointInShape,
+  regularPolygon,
+  roughenPoly,
   snapPt,
   snapVal,
   translateShape,
@@ -19,6 +22,7 @@ import {
   type DoorVariant,
   type Layer,
   type MapObject,
+  type NgonOpts,
   type Pt,
   type Settings,
   type Shape,
