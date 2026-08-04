@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate, useSearch } from "@tanstack/react-router";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -12,7 +12,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 type Search = { next?: string | undefined };
 
 export const Route = createFileRoute("/auth")({
+  // Session lives in localStorage, so the check must run on the client only.
+  ssr: false,
   validateSearch: (s: Record<string, unknown>): Search => ({ next: typeof s["next"] === "string" ? (s["next"] as string) : undefined }),
+  // Guard: already signed in → never show the login screen, go straight to the destination.
+  beforeLoad: async ({ search }) => {
+    const { data } = await supabase.auth.getSession();
+    if (data.session) {
+      const next = search.next;
+      throw redirect({ to: next && next.startsWith("/") && !next.startsWith("//") ? next : "/", replace: true });
+    }
+  },
   head: () => ({
     meta: [
       { title: "Sign in — Dungeon Scrawl Map Maker" },
@@ -25,6 +35,7 @@ export const Route = createFileRoute("/auth")({
   }),
   component: AuthPage,
 });
+
 
 function safeNext(next?: string) {
   return next && next.startsWith("/") && !next.startsWith("//") ? next : "/";
