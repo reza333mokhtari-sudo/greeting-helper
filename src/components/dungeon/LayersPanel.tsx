@@ -104,30 +104,42 @@ export function LayersPanel(p: Props) {
             >
 
               <div className="flex items-center gap-1">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="size-6 text-muted-foreground"
-                  aria-label={l.visible ? "Hide layer" : "Show layer"}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    p.onUpdateLayer(l.id, { visible: !l.visible });
-                  }}
+                <span
+                  className="cursor-grab text-muted-foreground/60 active:cursor-grabbing"
+                  aria-hidden
+                  onClick={(e) => e.stopPropagation()}
                 >
-                  {l.visible ? <Eye className="size-3.5" /> : <EyeOff className="size-3.5" />}
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="size-6 text-muted-foreground"
-                  aria-label={l.locked ? "Unlock layer" : "Lock layer"}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    p.onUpdateLayer(l.id, { locked: !l.locked });
-                  }}
-                >
-                  {l.locked ? <Lock className="size-3.5" /> : <LockOpen className="size-3.5" />}
-                </Button>
+                  <GripVertical className="size-3.5" />
+                </span>
+                <Hint label={l.visible ? "Hide layer" : "Show layer"}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-6 text-muted-foreground"
+                    aria-label={l.visible ? "Hide layer" : "Show layer"}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      p.onUpdateLayer(l.id, { visible: !l.visible });
+                    }}
+                  >
+                    {l.visible ? <Eye className="size-3.5" /> : <EyeOff className="size-3.5" />}
+                  </Button>
+                </Hint>
+                <Hint label={l.locked ? "Unlock layer" : "Lock layer"}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-6 text-muted-foreground"
+                    aria-label={l.locked ? "Unlock layer" : "Lock layer"}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      p.onUpdateLayer(l.id, { locked: !l.locked });
+                    }}
+                  >
+                    {l.locked ? <Lock className="size-3.5" /> : <LockOpen className="size-3.5" />}
+                  </Button>
+                </Hint>
+
                 <Input
                   value={l.name}
                   onChange={(e) => p.onUpdateLayer(l.id, { name: e.target.value })}
