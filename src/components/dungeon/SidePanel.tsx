@@ -201,6 +201,15 @@ export function SidePanel(props: Props) {
             <Row label="Drop shadow">
               <Switch checked={s.shadow} onCheckedChange={(v) => onChange({ shadow: v })} />
             </Row>
+            <Row label="Hatching">
+              <Switch checked={s.hatch} onCheckedChange={(v) => onChange({ hatch: v })} />
+            </Row>
+            <Row label="Hatch spacing">
+              <NumSlider value={s.hatchDensity} min={3} max={20} onChange={(v) => onChange({ hatchDensity: v })} />
+            </Row>
+            <Row label="Hand-drawn">
+              <NumSlider value={s.roughness} min={0} max={16} onChange={(v) => onChange({ roughness: v })} />
+            </Row>
             <Row label="Brush width">
               <NumSlider value={props.brushWidth} min={8} max={160} onChange={props.onBrushWidth} />
             </Row>
