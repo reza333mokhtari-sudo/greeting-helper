@@ -1324,7 +1324,7 @@ export function DungeonEditor() {
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden bg-background text-foreground">
       <TopMenuBar
-        title={doc.settings.playerView ? "Map — player view" : "Map"}
+        title={`${doc.floors.find((f) => f.id === doc.activeFloorId)?.name ?? "Map"}${doc.settings.playerView ? " — player view" : ""}`}
         dirty={hIndex > 0}
         canUndo={hIndex > 0}
         canRedo={hIndex < timeline.length - 1}
