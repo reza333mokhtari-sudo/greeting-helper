@@ -58,6 +58,7 @@ export function DungeonEditor() {
   const [polyPts, setPolyPts] = useState<Pt[]>([]);
   const [brushWidth, setBrushWidth] = useState(48);
   const [doorVariant, setDoorVariant] = useState<DoorVariant>("door");
+  const [ngon, setNgon] = useState<NgonOpts>(DEFAULT_NGON);
   const [cursor, setCursor] = useState<Pt>({ x: 0, y: 0 });
   const [spaceDown, setSpaceDown] = useState(false);
   const [activeLayer, setActiveLayer] = useState<string>(() => emptyDoc().layers[0]!.id);
