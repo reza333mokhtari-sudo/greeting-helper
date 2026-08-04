@@ -26,6 +26,7 @@ import {
 } from "@/lib/dungeon/model";
 import { exportPdfFile, exportSvgFile } from "@/lib/dungeon/exporters";
 import { renderScene, screenToWorld } from "@/lib/dungeon/render";
+import { Badge } from "@/components/ui/badge";
 
 const STORAGE_KEY = "dungeon-scrawl-doc-v1";
 const MIN_ZOOM = 0.08;
@@ -621,12 +622,14 @@ export function DungeonEditor() {
 
   return (
     <div className="flex h-screen w-full flex-col bg-background text-foreground">
-      <header className="flex items-center gap-3 border-b border-border bg-card px-4 py-2">
-        <h1 className="text-sm font-semibold tracking-[0.2em] uppercase">Dungeon Scrawl</h1>
+      <header className="flex items-center gap-3 border-b border-border bg-sidebar px-4 py-2.5">
+        <h1 className="text-sm font-semibold uppercase tracking-[0.22em] text-arcane">Dungeon Scrawl</h1>
         <span className="text-xs text-muted-foreground">Map maker for tabletop RPGs</span>
-        <span className="ml-auto text-[11px] text-muted-foreground">
-          {doc.shapes.length} shapes · {doc.objects.length} objects · cell {gridCoord}
-        </span>
+        <div className="ml-auto flex items-center gap-2">
+          <Badge variant="secondary" className="text-[10px] tabular-nums">{doc.shapes.length} shapes</Badge>
+          <Badge variant="secondary" className="text-[10px] tabular-nums">{doc.objects.length} objects</Badge>
+          <Badge variant="outline" className="text-[10px] tabular-nums">cell {gridCoord}</Badge>
+        </div>
       </header>
       <div className="flex min-h-0 flex-1">
         <Toolbar
@@ -659,7 +662,7 @@ export function DungeonEditor() {
           <canvas ref={canvasRef} className="block h-full w-full" />
           {!doc.shapes.length && !polyPts.length && (
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <p className="rounded-lg bg-card/80 px-5 py-3 text-center text-xs leading-relaxed text-muted-foreground">
+              <p className="rounded-xl border border-border bg-card/80 px-5 py-3 backdrop-blur text-center text-xs leading-relaxed text-muted-foreground">
                 Drag with the rectangle tool to carve your first room.
                 <br />
                 Scroll to zoom · Space or middle-drag to pan · Ctrl+Z to undo
@@ -667,7 +670,7 @@ export function DungeonEditor() {
             </div>
           )}
         </div>
-        <aside className="flex w-72 shrink-0 flex-col gap-4 overflow-y-auto border-l border-border bg-card p-4">
+        <aside className="panel-scroll flex w-72 shrink-0 flex-col gap-5 overflow-y-auto border-l border-border bg-sidebar p-4">
           <LayersPanel
             doc={doc}
             activeLayer={activeLayer}
