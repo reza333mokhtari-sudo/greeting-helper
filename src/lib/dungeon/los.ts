@@ -63,9 +63,10 @@ function rayHit(origin: Pt, dx: number, dy: number, segs: Seg[], maxDist: number
     if (Math.abs(denom) < 1e-9) continue;
     const t2 = ((s.a.x - origin.x) * dy - (s.a.y - origin.y) * dx) / denom;
     if (t2 < 0 || t2 > 1) continue;
-    const t1 = Math.abs(sx) > Math.abs(sy)
+    const t1 = Math.abs(dx) > Math.abs(dy)
       ? (s.a.x + sx * t2 - origin.x) / dx
       : (s.a.y + sy * t2 - origin.y) / dy;
+
     if (t1 > 0.0001 && t1 < best) best = t1;
   }
   return { x: origin.x + dx * best, y: origin.y + dy * best };
