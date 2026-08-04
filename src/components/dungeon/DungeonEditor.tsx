@@ -309,9 +309,8 @@ export function DungeonEditor() {
       case "light": {
         const id = uid("o");
         const g = doc.settings.gridSize;
-        const layerId = doc.layers.some((l) => l.id === activeLayer) && activeLayer !== ""
-          ? (doc.layers.find((l) => l.id === DEFAULT_LAYER_FOR[tool])?.id ?? activeLayer)
-          : activeLayer;
+        const layerId = doc.layers.find((l) => l.id === DEFAULT_LAYER_FOR[tool])?.id ?? activeLayer;
+
         const base = { id, layerId };
         let obj: MapObject | null = null;
         if (tool === "door") obj = { ...base, kind: "door", x: p.x, y: p.y, angle: 0, size: g, variant: doorVariant, blocksLight: true };
