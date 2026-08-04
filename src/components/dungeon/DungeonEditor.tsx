@@ -754,6 +754,8 @@ export function DungeonEditor() {
           onBrushWidth={setBrushWidth}
           doorVariant={doorVariant}
           onDoorVariant={(v) => setDoorVariant(v as DoorVariant)}
+          ngon={ngon}
+          onNgon={(patch) => setNgon((n) => ({ ...n, ...patch }))}
           onExportPng={exportPng}
           onExportSvg={exportSvg}
           onExportPdf={exportPdf}
