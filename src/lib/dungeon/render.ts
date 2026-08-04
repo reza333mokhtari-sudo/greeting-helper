@@ -281,7 +281,7 @@ function hexToRgb(hex: string) {
 /** Darkness + light pools + line-of-sight polygons. */
 function drawLighting(ctx: CanvasRenderingContext2D, doc: Doc, view: View, w: number, h: number, dpr: number) {
   const s = doc.settings;
-  if (!s.lighting && s.losMode === "off") return;
+  if (!s.lighting && s.losMode === "off" && !s.playerView) return;
   const lights = lightSources(doc);
   if (!lights.length) return;
   const segs = occluders(doc);
