@@ -82,6 +82,31 @@ function drawGrid(ctx: CanvasRenderingContext2D, doc: Doc, view: View, w: number
       ctx.lineTo(x2, y);
     }
     ctx.stroke();
+  } else if (gridStyle === "hex") {
+    // pointy-top hex lattice
+    const R = gridSize / Math.sqrt(3);
+    const colW = gridSize;
+    const rowH = R * 1.5;
+    ctx.beginPath();
+    const c0 = Math.floor(x1 / colW) - 1;
+    const c1 = Math.ceil(x2 / colW) + 1;
+    const r0 = Math.floor(y1 / rowH) - 1;
+    const r1 = Math.ceil(y2 / rowH) + 1;
+    for (let row = r0; row <= r1; row++) {
+      for (let col = c0; col <= c1; col++) {
+        const cx = col * colW + (row % 2 ? colW / 2 : 0);
+        const cy = row * rowH;
+        for (let i = 0; i < 6; i++) {
+          const a = (Math.PI / 180) * (60 * i - 30);
+          const px = cx + Math.cos(a) * R;
+          const py = cy + Math.sin(a) * R;
+          if (i === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+      }
+    }
+    ctx.stroke();
   } else {
     const r = Math.max(1, 1.6 / view.scale);
     for (let x = sx; x <= x2; x += gridSize) {
@@ -94,6 +119,24 @@ function drawGrid(ctx: CanvasRenderingContext2D, doc: Doc, view: View, w: number
   }
   ctx.restore();
 }
+
+/** Diagonal hand-drawn hatching, clipped to the wall band. */
+function hatchWalls(wc: CanvasRenderingContext2D, doc: Doc, pw: number, ph: number, dpr: number, scale: number) {
+  const gap = Math.max(3, doc.settings.hatchDensity) * scale * dpr;
+  wc.save();
+  wc.globalCompositeOperation = "source-atop";
+  wc.strokeStyle = doc.settings.inkColor;
+  wc.globalAlpha = 0.35;
+  wc.lineWidth = Math.max(0.6, 0.9 * scale * dpr);
+  wc.beginPath();
+  for (let i = -ph; i < pw + ph; i += gap) {
+    wc.moveTo(i, 0);
+    wc.lineTo(i + ph, ph);
+  }
+  wc.stroke();
+  wc.restore();
+}
+
 
 function label(ctx: CanvasRenderingContext2D, text: string, y: number, size: number, color: string) {
   if (!text) return;
