@@ -86,6 +86,14 @@ export type Settings = {
   losMode: "off" | "lights" | "vision";
   ambient: number; // 0..1 how visible unlit areas are
   fogColor: string;
+  /** 2D fog asset style used to paint hidden cells. */
+  fogStyle: FogStyle;
+  /** Feathered edge amount, 0..1. */
+  fogSoftness: number;
+  /** How opaque fog looks to the GM, 0..1 (players always see it solid). */
+  fogGmOpacity: number;
+  /** Texture scale multiplier for the fog asset. */
+  fogScale: number;
 };
 
 
