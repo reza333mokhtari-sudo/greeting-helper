@@ -139,7 +139,7 @@ export const suggestMap = createServerFn({ method: "POST" })
     const { createLovableAiGatewayProvider, createCustomProvider } = await import("./ai-gateway.server");
 
     let model;
-    let providerOptions: Record<string, Record<string, unknown>> | undefined;
+    let providerOptions: { lovable: { reasoningEffort: string } } | undefined;
     if (isCustom) {
       const customKey = process.env["CONDUIT_API_KEY"];
       if (!customKey) throw new Error("Custom AI endpoint is not configured — add the CONDUIT_API_KEY secret.");
