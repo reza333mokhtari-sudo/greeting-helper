@@ -9,11 +9,14 @@ type Props = {
   doorVariant: string;
   onDoorVariant: (v: string) => void;
   onExportPng: () => void;
+  onExportSvg: () => void;
+  onExportPdf: () => void;
   onExportJson: () => void;
   onImportJson: (file: File) => void;
   onClear: () => void;
   onFit: () => void;
 };
+
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
