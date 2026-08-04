@@ -380,6 +380,10 @@ export function DungeonEditor() {
       return;
     }
     if (d.mode === "draw") {
+      if (tool === "ngon") {
+        setPreview(ngonShape(d.start, snappedNgon(world)));
+        return;
+      }
       const p = snapped(world);
       setPreview((prev) => (prev && prev.kind !== "path" && prev.kind !== "poly" ? { ...prev, a: d.start, b: p } : prev));
       return;
