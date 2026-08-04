@@ -1,4 +1,8 @@
-import type { Doc, MapObject, Pt, Shape, View } from "./model";
+import { objectsInDrawOrder, objectRadius, type Doc, type MapObject, type Pt, type Shape, type View } from "./model";
+import { lightSources, occluders, visibilityPolygon } from "./los";
+
+export const UI_FONT =
+  '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Segoe UI", sans-serif';
 
 function makeCanvas(w: number, h: number) {
   const c = document.createElement("canvas");
@@ -91,11 +95,20 @@ function drawGrid(ctx: CanvasRenderingContext2D, doc: Doc, view: View, w: number
   ctx.restore();
 }
 
-function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc, scale: number) {
+function label(ctx: CanvasRenderingContext2D, text: string, y: number, size: number, color: string) {
+  if (!text) return;
+  ctx.font = `600 ${size}px ${UI_FONT}`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillStyle = color;
+  ctx.fillText(text, 0, y);
+}
+
+export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc) {
   const { wallColor, floorColor, inkColor } = doc.settings;
   ctx.save();
   ctx.translate(o.x, o.y);
-  if (o.kind !== "pillar" && o.kind !== "text") ctx.rotate(o.angle);
+  if (o.kind === "door" || o.kind === "stairs") ctx.rotate(o.angle);
   ctx.lineJoin = "round";
   ctx.lineCap = "butt";
 
@@ -117,7 +130,7 @@ function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc, scale
       ctx.fillRect(-s / 2, -t / 2, s, t);
       ctx.strokeRect(-s / 2, -t / 2, s, t);
       ctx.fillStyle = wallColor;
-      ctx.font = `bold ${s * 0.55}px Georgia, serif`;
+      ctx.font = `bold ${s * 0.55}px ${UI_FONT}`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText("S", 0, 1);
@@ -152,15 +165,139 @@ function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc, scale
     ctx.beginPath();
     ctx.arc(0, 0, o.r, 0, Math.PI * 2);
     ctx.fill();
+  } else if (o.kind === "npc") {
+    ctx.fillStyle = o.color;
+    ctx.strokeStyle = o.hostile ? "#2b0b0b" : "#0b1b2b";
+    ctx.lineWidth = Math.max(1.5, o.r * 0.14);
+    ctx.beginPath();
+    ctx.arc(0, 0, o.r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    if (o.hostile) {
+      ctx.beginPath();
+      ctx.arc(0, 0, o.r * 1.28, 0, Math.PI * 2);
+      ctx.setLineDash([o.r * 0.4, o.r * 0.3]);
+      ctx.strokeStyle = o.color;
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    label(ctx, o.label || o.name || "", 0, o.r * 0.9, "#ffffff");
+  } else if (o.kind === "item") {
+    const s = o.size;
+    ctx.fillStyle = o.color;
+    ctx.strokeStyle = inkColor;
+    ctx.lineWidth = Math.max(1.2, s * 0.08);
+    ctx.beginPath();
+    ctx.moveTo(0, -s / 2);
+    ctx.lineTo(s / 2, 0);
+    ctx.lineTo(0, s / 2);
+    ctx.lineTo(-s / 2, 0);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    label(ctx, o.label || o.name || "", s * 0.95, s * 0.45, inkColor);
+  } else if (o.kind === "trigger") {
+    ctx.fillStyle = `${o.color}33`;
+    ctx.strokeStyle = o.color;
+    ctx.lineWidth = 2;
+    ctx.setLineDash([8, 6]);
+    ctx.fillRect(-o.w / 2, -o.h / 2, o.w, o.h);
+    ctx.strokeRect(-o.w / 2, -o.h / 2, o.w, o.h);
+    ctx.setLineDash([]);
+    label(ctx, (o.label || o.name || o.trigger).toUpperCase(), 0, Math.max(10, Math.min(o.w, o.h) * 0.22), o.color);
+  } else if (o.kind === "light") {
+    ctx.strokeStyle = o.color;
+    ctx.fillStyle = o.color;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(0, 0, 7, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    for (let i = 0; i < 8; i++) {
+      const a = (i / 8) * Math.PI * 2;
+      ctx.moveTo(Math.cos(a) * 10, Math.sin(a) * 10);
+      ctx.lineTo(Math.cos(a) * 15, Math.sin(a) * 15);
+    }
+    ctx.stroke();
   } else {
     ctx.fillStyle = inkColor;
-    ctx.font = `600 ${o.size}px Georgia, "Times New Roman", serif`;
+    ctx.font = `600 ${o.size}px ${UI_FONT}`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(o.text, 0, 0);
   }
   ctx.restore();
-  void scale;
+}
+
+function hexToRgb(hex: string) {
+  const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex.trim());
+  if (!m) return { r: 255, g: 220, b: 150 };
+  return { r: parseInt(m[1]!, 16), g: parseInt(m[2]!, 16), b: parseInt(m[3]!, 16) };
+}
+
+/** Darkness + light pools + line-of-sight polygons. */
+function drawLighting(ctx: CanvasRenderingContext2D, doc: Doc, view: View, w: number, h: number, dpr: number) {
+  const s = doc.settings;
+  if (!s.lighting && s.losMode === "off") return;
+  const lights = lightSources(doc);
+  if (!lights.length) return;
+  const segs = occluders(doc);
+  const pw = w * dpr;
+  const ph = h * dpr;
+
+  const fog = makeCanvas(pw, ph);
+  const fc = fog.getContext("2d")!;
+  fc.fillStyle = s.fogColor;
+  fc.globalAlpha = 1 - Math.min(0.95, Math.max(0, s.ambient));
+  fc.fillRect(0, 0, pw, ph);
+  fc.globalAlpha = 1;
+
+  // carve visible areas out of the fog
+  fc.save();
+  applyView(fc, view, dpr);
+  fc.globalCompositeOperation = "destination-out";
+  for (const l of lights) {
+    if (l.kind !== "light") continue;
+    const poly = visibilityPolygon({ x: l.x, y: l.y }, l.radius, segs);
+    if (poly.length < 3) continue;
+    const grad = fc.createRadialGradient(l.x, l.y, 0, l.x, l.y, l.radius);
+    const a = Math.min(1, Math.max(0.05, l.intensity));
+    grad.addColorStop(0, `rgba(0,0,0,${a})`);
+    grad.addColorStop(0.65, `rgba(0,0,0,${a * 0.8})`);
+    grad.addColorStop(1, "rgba(0,0,0,0)");
+    fc.fillStyle = grad;
+    fc.beginPath();
+    poly.forEach((p, i) => (i === 0 ? fc.moveTo(p.x, p.y) : fc.lineTo(p.x, p.y)));
+    fc.closePath();
+    fc.fill();
+  }
+  fc.restore();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.drawImage(fog, 0, 0);
+
+  if (!s.lighting) return;
+  // warm colour wash for each light
+  const glow = makeCanvas(pw, ph);
+  const gc = glow.getContext("2d")!;
+  applyView(gc, view, dpr);
+  for (const l of lights) {
+    if (l.kind !== "light") continue;
+    const poly = visibilityPolygon({ x: l.x, y: l.y }, l.radius, segs);
+    if (poly.length < 3) continue;
+    const { r, g, b } = hexToRgb(l.color);
+    const grad = gc.createRadialGradient(l.x, l.y, 0, l.x, l.y, l.radius);
+    grad.addColorStop(0, `rgba(${r},${g},${b},${Math.min(0.7, l.intensity * 0.55)})`);
+    grad.addColorStop(1, `rgba(${r},${g},${b},0)`);
+    gc.fillStyle = grad;
+    gc.beginPath();
+    poly.forEach((p, i) => (i === 0 ? gc.moveTo(p.x, p.y) : gc.lineTo(p.x, p.y)));
+    gc.closePath();
+    gc.fill();
+  }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.globalCompositeOperation = "screen";
+  ctx.drawImage(glow, 0, 0);
+  ctx.globalCompositeOperation = "source-over";
 }
 
 export type RenderOpts = {
@@ -224,13 +361,24 @@ export function renderScene(
   fc.fillStyle = s.floorColor;
   fc.fillRect(0, 0, pw, ph);
   fc.globalCompositeOperation = "source-over";
-  drawGrid(fc, doc, { ...view, x: view.x, y: view.y }, pw / dpr, ph / dpr, dpr);
+  drawGrid(fc, doc, view, pw / dpr, ph / dpr, dpr);
   ctx.drawImage(floorC, 0, 0);
 
   applyView(ctx, view, dpr);
-  for (const o of doc.objects) drawObject(ctx, o, doc, view.scale);
+  const layerById = new Map(doc.layers.map((l) => [l.id, l]));
+  for (const o of objectsInDrawOrder(doc)) {
+    const layer = layerById.get(o.layerId);
+    if (layer && !layer.visible) continue;
+    if (o.kind === "light" && opts.hideUi) continue;
+    ctx.globalAlpha = layer?.opacity ?? 1;
+    drawObject(ctx, o, doc);
+    ctx.globalAlpha = 1;
+  }
+
+  drawLighting(ctx, doc, view, w, h, dpr);
 
   if (!opts.hideUi && opts.selectedIds?.length) {
+    applyView(ctx, view, dpr);
     ctx.strokeStyle = "#4da3ff";
     ctx.lineWidth = 2 / view.scale;
     ctx.setLineDash([6 / view.scale, 4 / view.scale]);
@@ -242,10 +390,18 @@ export function renderScene(
       }
       const obj = doc.objects.find((x) => x.id === id);
       if (obj) {
-        const r = obj.kind === "pillar" ? obj.r + 4 : obj.kind === "text" ? obj.size : obj.size * 0.7;
-        ctx.beginPath();
-        ctx.arc(obj.x, obj.y, r, 0, Math.PI * 2);
-        ctx.stroke();
+        if (obj.kind === "trigger") {
+          ctx.strokeRect(obj.x - obj.w / 2 - 3, obj.y - obj.h / 2 - 3, obj.w + 6, obj.h + 6);
+        } else {
+          ctx.beginPath();
+          ctx.arc(obj.x, obj.y, objectRadius(obj) + 5, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        if (obj.kind === "light") {
+          ctx.beginPath();
+          ctx.arc(obj.x, obj.y, obj.radius, 0, Math.PI * 2);
+          ctx.stroke();
+        }
       }
     }
     ctx.setLineDash([]);

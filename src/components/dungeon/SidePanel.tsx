@@ -9,11 +9,14 @@ type Props = {
   doorVariant: string;
   onDoorVariant: (v: string) => void;
   onExportPng: () => void;
+  onExportSvg: () => void;
+  onExportPdf: () => void;
   onExportJson: () => void;
   onImportJson: (file: File) => void;
   onClear: () => void;
   onFit: () => void;
 };
+
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -140,6 +143,49 @@ export function SidePanel(props: Props) {
         </Row>
       </section>
 
+      <section>
+        <h2 className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+          Lighting &amp; line of sight
+        </h2>
+        <Row label="Line of sight">
+          <select
+            value={s.losMode}
+            onChange={(e) => onChange({ losMode: e.target.value as Settings["losMode"] })}
+            className="rounded border border-border bg-background px-2 py-1"
+          >
+            <option value="off">Off</option>
+            <option value="lights">Reveal from lights</option>
+            <option value="vision">Vision (fog of war)</option>
+          </select>
+        </Row>
+        <Row label="Light glow">
+          <input
+            type="checkbox"
+            checked={s.lighting}
+            onChange={(e) => onChange({ lighting: e.target.checked })}
+            className="accent-primary"
+          />
+        </Row>
+        <Row label="Ambient light">
+          <input
+            type="range"
+            min={0}
+            max={95}
+            value={Math.round(s.ambient * 100)}
+            onChange={(e) => onChange({ ambient: Number(e.target.value) / 100 })}
+            className="w-24 accent-primary"
+          />
+          <span className="w-7 text-right tabular-nums">{Math.round(s.ambient * 100)}</span>
+        </Row>
+        <Row label="Darkness colour">
+          <Color value={s.fogColor} onChange={(v) => onChange({ fogColor: v })} />
+        </Row>
+        <p className="mt-1 text-[10px] leading-relaxed text-muted-foreground">
+          Place light sources with the light tool (F). Room outlines and pillars block sight; doors block it when
+          “Blocks light” is on.
+        </p>
+      </section>
+
       <section className="mt-auto flex flex-col gap-2">
         <button onClick={props.onFit} className="rounded border border-border px-3 py-2 text-xs hover:bg-accent">
           Fit map to screen
@@ -147,9 +193,18 @@ export function SidePanel(props: Props) {
         <button onClick={props.onExportPng} className="rounded bg-primary px-3 py-2 text-xs font-medium text-primary-foreground hover:bg-primary/90">
           Export PNG
         </button>
+        <div className="grid grid-cols-2 gap-2">
+          <button onClick={props.onExportSvg} className="rounded border border-border px-3 py-2 text-xs hover:bg-accent">
+            Export SVG
+          </button>
+          <button onClick={props.onExportPdf} className="rounded border border-border px-3 py-2 text-xs hover:bg-accent">
+            Export PDF
+          </button>
+        </div>
         <button onClick={props.onExportJson} className="rounded border border-border px-3 py-2 text-xs hover:bg-accent">
           Save .json
         </button>
+
         <label className="cursor-pointer rounded border border-border px-3 py-2 text-center text-xs hover:bg-accent">
           Load .json
           <input

@@ -8,14 +8,39 @@ export type Shape =
   | (ShapeBase & { kind: "path"; pts: Pt[]; width: number });
 
 export type DoorVariant = "door" | "double" | "secret" | "archway";
+export type TriggerKind = "trap" | "encounter" | "script" | "portal" | "note";
+
+export type CustomProp = { key: string; value: string };
+
+export type ObjCommon = {
+  id: string;
+  layerId: string;
+  name?: string;
+  notes?: string;
+  props?: CustomProp[];
+};
 
 export type MapObject =
-  | { id: string; kind: "door"; x: number; y: number; angle: number; size: number; variant: DoorVariant }
-  | { id: string; kind: "stairs"; x: number; y: number; angle: number; size: number; steps: number }
-  | { id: string; kind: "pillar"; x: number; y: number; r: number }
-  | { id: string; kind: "text"; x: number; y: number; text: string; size: number };
+  | (ObjCommon & { kind: "door"; x: number; y: number; angle: number; size: number; variant: DoorVariant; blocksLight?: boolean })
+  | (ObjCommon & { kind: "stairs"; x: number; y: number; angle: number; size: number; steps: number })
+  | (ObjCommon & { kind: "pillar"; x: number; y: number; r: number })
+  | (ObjCommon & { kind: "text"; x: number; y: number; text: string; size: number })
+  | (ObjCommon & { kind: "npc"; x: number; y: number; r: number; color: string; label: string; hostile: boolean })
+  | (ObjCommon & { kind: "item"; x: number; y: number; size: number; color: string; label: string })
+  | (ObjCommon & { kind: "trigger"; x: number; y: number; w: number; h: number; color: string; trigger: TriggerKind; label: string })
+  | (ObjCommon & { kind: "light"; x: number; y: number; radius: number; color: string; intensity: number });
+
+export type ObjectKind = MapObject["kind"];
 
 export type GridStyle = "square" | "dot" | "none";
+
+export type Layer = {
+  id: string;
+  name: string;
+  visible: boolean;
+  locked: boolean;
+  opacity: number;
+};
 
 export type Settings = {
   gridSize: number;
@@ -28,11 +53,16 @@ export type Settings = {
   gridColor: string;
   inkColor: string;
   shadow: boolean;
+  lighting: boolean;
+  losMode: "off" | "lights" | "vision";
+  ambient: number; // 0..1 how visible unlit areas are
+  fogColor: string;
 };
 
 export type Doc = {
   shapes: Shape[];
   objects: MapObject[];
+  layers: Layer[];
   settings: Settings;
 };
 
@@ -84,6 +114,10 @@ export const DEFAULT_SETTINGS: Settings = {
   wallColor: "#16181b",
   gridColor: "#c9c0ac",
   inkColor: "#16181b",
+  lighting: false,
+  losMode: "off",
+  ambient: 0.18,
+  fogColor: "#05070c",
 };
 
 let counter = 0;
@@ -92,8 +126,66 @@ export function uid(prefix = "id") {
   return `${prefix}_${Date.now().toString(36)}_${counter}`;
 }
 
+export const LAYER_STRUCTURE = "layer_structure";
+export const LAYER_NPC = "layer_npc";
+export const LAYER_ITEM = "layer_item";
+export const LAYER_TRIGGER = "layer_trigger";
+export const LAYER_LIGHT = "layer_light";
+
+export function defaultLayers(): Layer[] {
+  const mk = (id: string, name: string): Layer => ({ id, name, visible: true, locked: false, opacity: 1 });
+  return [
+    mk(LAYER_STRUCTURE, "Structure"),
+    mk(LAYER_TRIGGER, "Triggers"),
+    mk(LAYER_ITEM, "Items"),
+    mk(LAYER_NPC, "NPCs"),
+    mk(LAYER_LIGHT, "Lighting"),
+  ];
+}
+
+export const DEFAULT_LAYER_FOR: Record<ObjectKind, string> = {
+  door: LAYER_STRUCTURE,
+  stairs: LAYER_STRUCTURE,
+  pillar: LAYER_STRUCTURE,
+  text: LAYER_STRUCTURE,
+  npc: LAYER_NPC,
+  item: LAYER_ITEM,
+  trigger: LAYER_TRIGGER,
+  light: LAYER_LIGHT,
+};
+
 export function emptyDoc(): Doc {
-  return { shapes: [], objects: [], settings: { ...DEFAULT_SETTINGS } };
+  return { shapes: [], objects: [], layers: defaultLayers(), settings: { ...DEFAULT_SETTINGS } };
+}
+
+/** Bring older/imported documents up to the current schema. */
+export function migrateDoc(input: Partial<Doc> | null | undefined): Doc {
+  const base = emptyDoc();
+  if (!input) return base;
+  const layers = Array.isArray(input.layers) && input.layers.length ? input.layers : base.layers;
+  const ids = new Set(layers.map((l) => l.id));
+  const objects = (input.objects ?? []).map((o) => ({
+    ...o,
+    layerId: o.layerId && ids.has(o.layerId) ? o.layerId : DEFAULT_LAYER_FOR[o.kind] ?? layers[0]!.id,
+  })) as MapObject[];
+  return {
+    shapes: input.shapes ?? [],
+    objects,
+    layers,
+    settings: { ...base.settings, ...(input.settings ?? {}) },
+  };
+}
+
+export function layerOf(doc: Doc, o: MapObject): Layer | undefined {
+  return doc.layers.find((l) => l.id === o.layerId);
+}
+
+export function objectsInDrawOrder(doc: Doc): MapObject[] {
+  const order = new Map(doc.layers.map((l, i) => [l.id, i]));
+  return [...doc.objects]
+    .map((o, i) => ({ o, i }))
+    .sort((a, b) => (order.get(a.o.layerId) ?? 0) - (order.get(b.o.layerId) ?? 0) || a.i - b.i)
+    .map((x) => x.o);
 }
 
 export function snapVal(v: number, grid: number, on: boolean) {
@@ -160,7 +252,32 @@ export function pointInShape(p: Pt, s: Shape): boolean {
 export function objectHit(p: Pt, o: MapObject): boolean {
   if (o.kind === "text") return Math.hypot(p.x - o.x, p.y - o.y) <= Math.max(20, o.size);
   if (o.kind === "pillar") return Math.hypot(p.x - o.x, p.y - o.y) <= o.r + 4;
+  if (o.kind === "npc") return Math.hypot(p.x - o.x, p.y - o.y) <= o.r + 4;
+  if (o.kind === "item") return Math.hypot(p.x - o.x, p.y - o.y) <= o.size * 0.7;
+  if (o.kind === "light") return Math.hypot(p.x - o.x, p.y - o.y) <= 14;
+  if (o.kind === "trigger") {
+    return p.x >= o.x - o.w / 2 && p.x <= o.x + o.w / 2 && p.y >= o.y - o.h / 2 && p.y <= o.y + o.h / 2;
+  }
   return Math.hypot(p.x - o.x, p.y - o.y) <= o.size * 0.7;
+}
+
+export function objectRadius(o: MapObject): number {
+  switch (o.kind) {
+    case "pillar":
+      return o.r;
+    case "npc":
+      return o.r;
+    case "text":
+      return o.size;
+    case "item":
+      return o.size * 0.7;
+    case "light":
+      return 14;
+    case "trigger":
+      return Math.max(o.w, o.h) / 2;
+    default:
+      return o.size * 0.7;
+  }
 }
 
 export function docBounds(doc: Doc): { x1: number; y1: number; x2: number; y2: number } | null {
@@ -175,7 +292,7 @@ export function docBounds(doc: Doc): { x1: number; y1: number; x2: number; y2: n
     y2 = Math.max(y2, p.y + pad);
   };
   doc.shapes.forEach((s) => shapePoints(s).forEach((p) => add(p, s.kind === "path" ? s.width / 2 : 0)));
-  doc.objects.forEach((o) => add({ x: o.x, y: o.y }, o.kind === "pillar" ? o.r : 30));
+  doc.objects.forEach((o) => add({ x: o.x, y: o.y }, Math.max(30, objectRadius(o))));
   if (!isFinite(x1)) return null;
   return { x1, y1, x2, y2 };
 }

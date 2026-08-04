@@ -1,10 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import { LayersPanel } from "./LayersPanel";
+import { PropertiesPanel } from "./PropertiesPanel";
 import { SidePanel } from "./SidePanel";
 import { Toolbar, TOOLS, type ToolId } from "./Toolbar";
 import {
+  DEFAULT_LAYER_FOR,
   docBounds,
   emptyDoc,
+  migrateDoc,
   objectHit,
   pointInShape,
   snapPt,
@@ -13,12 +17,14 @@ import {
   uid,
   type Doc,
   type DoorVariant,
+  type Layer,
   type MapObject,
   type Pt,
   type Settings,
   type Shape,
   type View,
 } from "@/lib/dungeon/model";
+import { exportPdfFile, exportSvgFile } from "@/lib/dungeon/exporters";
 import { renderScene, screenToWorld } from "@/lib/dungeon/render";
 
 const STORAGE_KEY = "dungeon-scrawl-doc-v1";
@@ -49,10 +55,12 @@ export function DungeonEditor() {
   const [doorVariant, setDoorVariant] = useState<DoorVariant>("door");
   const [cursor, setCursor] = useState<Pt>({ x: 0, y: 0 });
   const [spaceDown, setSpaceDown] = useState(false);
+  const [activeLayer, setActiveLayer] = useState<string>(() => emptyDoc().layers[0]!.id);
 
   const drag = useRef<Drag>({ mode: "none" });
   const stateRef = useRef({ doc, view, tool, polyPts, brushWidth, doorVariant, selected, spaceDown });
   stateRef.current = { doc, view, tool, polyPts, brushWidth, doorVariant, selected, spaceDown };
+
 
   const commit = useCallback((next: Doc | ((d: Doc) => Doc)) => {
     setDocState((prev) => {
@@ -97,13 +105,18 @@ export function DungeonEditor() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
-        const parsed = JSON.parse(raw) as Doc;
-        if (parsed && Array.isArray(parsed.shapes)) setDocState({ ...emptyDoc(), ...parsed });
+        const parsed = JSON.parse(raw) as Partial<Doc>;
+        if (parsed && Array.isArray(parsed.shapes)) {
+          const migrated = migrateDoc(parsed);
+          setDocState(migrated);
+          setActiveLayer(migrated.layers[0]!.id);
+        }
       }
     } catch {
       /* ignore */
     }
   }, []);
+
 
   useEffect(() => {
     const t = setTimeout(() => {
@@ -246,17 +259,23 @@ export function DungeonEditor() {
 
     switch (tool) {
       case "select": {
-        const obj = [...doc.objects].reverse().find((o) => objectHit(world, o));
+        const pickable = doc.objects.filter((o) => {
+          const l = doc.layers.find((x) => x.id === o.layerId);
+          return !l || (l.visible && !l.locked);
+        });
+        const obj = [...pickable].reverse().find((o) => objectHit(world, o));
         const shape = obj ? null : [...doc.shapes].reverse().find((s) => !s.erase && pointInShape(world, s));
         const id = obj?.id ?? shape?.id;
         if (id) {
           setSelected(e.shiftKey ? (sel) => (sel.includes(id) ? sel.filter((x) => x !== id) : [...sel, id]) : [id]);
+          if (obj) setActiveLayer(obj.layerId);
           drag.current = { mode: "move", last: world, moved: false };
         } else {
           setSelected([]);
         }
         break;
       }
+
       case "rect":
       case "ellipse":
       case "eraseRect": {
@@ -289,24 +308,41 @@ export function DungeonEditor() {
       case "door":
       case "stairs":
       case "pillar":
-      case "text": {
+      case "text":
+      case "npc":
+      case "item":
+      case "trigger":
+      case "light": {
         const id = uid("o");
-        let obj: MapObject | null = null;
         const g = doc.settings.gridSize;
-        if (tool === "door") obj = { id, kind: "door", x: p.x, y: p.y, angle: 0, size: g, variant: doorVariant };
-        if (tool === "stairs") obj = { id, kind: "stairs", x: p.x, y: p.y, angle: 0, size: g * 2, steps: 6 };
-        if (tool === "pillar") obj = { id, kind: "pillar", x: p.x, y: p.y, r: Math.max(4, g * 0.22) };
+        const layerId = doc.layers.find((l) => l.id === DEFAULT_LAYER_FOR[tool])?.id ?? activeLayer;
+
+        const base = { id, layerId };
+        let obj: MapObject | null = null;
+        if (tool === "door") obj = { ...base, kind: "door", x: p.x, y: p.y, angle: 0, size: g, variant: doorVariant, blocksLight: true };
+        if (tool === "stairs") obj = { ...base, kind: "stairs", x: p.x, y: p.y, angle: 0, size: g * 2, steps: 6 };
+        if (tool === "pillar") obj = { ...base, kind: "pillar", x: p.x, y: p.y, r: Math.max(4, g * 0.22) };
+        if (tool === "npc")
+          obj = { ...base, kind: "npc", x: p.x, y: p.y, r: Math.max(8, g * 0.42), color: "#c0392b", label: "", hostile: true, name: "NPC" };
+        if (tool === "item")
+          obj = { ...base, kind: "item", x: p.x, y: p.y, size: Math.max(10, g * 0.5), color: "#e0a92b", label: "", name: "Item" };
+        if (tool === "trigger")
+          obj = { ...base, kind: "trigger", x: p.x, y: p.y, w: g * 2, h: g * 2, color: "#9b59b6", trigger: "trap", label: "", name: "Trigger" };
+        if (tool === "light")
+          obj = { ...base, kind: "light", x: p.x, y: p.y, radius: g * 6, color: "#ffcf8a", intensity: 0.85, name: "Light" };
         if (tool === "text") {
           const text = window.prompt("Label text", "Room");
           if (!text) return;
-          obj = { id, kind: "text", x: world.x, y: world.y, text, size: Math.max(12, g * 0.6) };
+          obj = { ...base, kind: "text", x: world.x, y: world.y, text, size: Math.max(12, g * 0.6) };
         }
         if (!obj) return;
-        commit((d) => ({ ...d, objects: [...d.objects, obj! ] }));
+        const created = obj;
+        commit((d) => ({ ...d, objects: [...d.objects, created] }));
         setSelected([id]);
         drag.current = { mode: "place", id, origin: world };
         break;
       }
+
       default:
         break;
     }
@@ -353,8 +389,9 @@ export function DungeonEditor() {
       const angle = Math.atan2(dy, dx);
       setDocState((doc0) => ({
         ...doc0,
-        objects: doc0.objects.map((o) => (o.id === d.id && o.kind !== "pillar" && o.kind !== "text" ? { ...o, angle } : o)),
+        objects: doc0.objects.map((o) => (o.id === d.id && (o.kind === "door" || o.kind === "stairs") ? { ...o, angle } : o)),
       }));
+
     }
   };
 
@@ -398,12 +435,13 @@ export function DungeonEditor() {
       commit((d) => ({
         ...d,
         objects: d.objects.map((o) =>
-          selected.includes(o.id) && o.kind !== "pillar" && o.kind !== "text" ? { ...o, angle: o.angle + delta } : o,
+          selected.includes(o.id) && (o.kind === "door" || o.kind === "stairs") ? { ...o, angle: o.angle + delta } : o,
         ),
       }));
     },
     [commit, selected],
   );
+
 
   // keyboard
   useEffect(() => {
@@ -490,9 +528,11 @@ export function DungeonEditor() {
     (file: File) => {
       file.text().then((txt) => {
         try {
-          const parsed = JSON.parse(txt) as Doc;
+          const parsed = JSON.parse(txt) as Partial<Doc>;
           if (!parsed || !Array.isArray(parsed.shapes)) throw new Error("bad file");
-          commit({ ...emptyDoc(), ...parsed, settings: { ...emptyDoc().settings, ...parsed.settings } });
+          const migrated = migrateDoc(parsed);
+          commit(migrated);
+          setActiveLayer(migrated.layers[0]!.id);
         } catch {
           window.alert("That file isn't a valid dungeon map.");
         }
@@ -500,6 +540,73 @@ export function DungeonEditor() {
     },
     [commit],
   );
+
+  const exportSvg = useCallback(() => exportSvgFile(doc), [doc]);
+  const exportPdf = useCallback(() => {
+    exportPdfFile(doc).catch(() => window.alert("PDF export failed."));
+  }, [doc]);
+
+  // ---- layer management ----
+  const updateLayer = useCallback(
+    (id: string, patch: Partial<Layer>) => {
+      commit((d) => ({ ...d, layers: d.layers.map((l) => (l.id === id ? { ...l, ...patch } : l)) }));
+    },
+    [commit],
+  );
+
+  const moveLayer = useCallback(
+    (id: string, dir: -1 | 1) => {
+      commit((d) => {
+        const i = d.layers.findIndex((l) => l.id === id);
+        const j = i + dir;
+        if (i < 0 || j < 0 || j >= d.layers.length) return d;
+        const layers = [...d.layers];
+        [layers[i], layers[j]] = [layers[j]!, layers[i]!];
+        return { ...d, layers };
+      });
+    },
+    [commit],
+  );
+
+  const addLayer = useCallback(() => {
+    const id = uid("layer");
+    commit((d) => ({
+      ...d,
+      layers: [...d.layers, { id, name: `Layer ${d.layers.length + 1}`, visible: true, locked: false, opacity: 1 }],
+    }));
+    setActiveLayer(id);
+  }, [commit]);
+
+  const deleteLayer = useCallback(
+    (id: string) => {
+      const count = doc.objects.filter((o) => o.layerId === id).length;
+      if (doc.layers.length <= 1) return;
+      if (count && !window.confirm(`Delete this layer and its ${count} object(s)?`)) return;
+      commit((d) => ({
+        ...d,
+        layers: d.layers.filter((l) => l.id !== id),
+        objects: d.objects.filter((o) => o.layerId !== id),
+      }));
+      setActiveLayer((cur) => (cur === id ? (doc.layers.find((l) => l.id !== id)?.id ?? cur) : cur));
+    },
+    [commit, doc],
+  );
+
+  const updateObject = useCallback(
+    (id: string, patch: Partial<MapObject>) => {
+      commit((d) => ({
+        ...d,
+        objects: d.objects.map((o) => (o.id === id ? ({ ...o, ...patch } as MapObject) : o)),
+      }));
+    },
+    [commit],
+  );
+
+  const selectedObject = useMemo(
+    () => doc.objects.find((o) => selected.includes(o.id)) ?? null,
+    [doc.objects, selected],
+  );
+
 
   const cursorStyle = useMemo(() => {
     if (spaceDown || tool === "pan") return "grab";
@@ -560,6 +667,20 @@ export function DungeonEditor() {
             </div>
           )}
         </div>
+        <aside className="flex w-72 shrink-0 flex-col gap-4 overflow-y-auto border-l border-border bg-card p-4">
+          <LayersPanel
+            doc={doc}
+            activeLayer={activeLayer}
+            onActiveLayer={setActiveLayer}
+            onUpdateLayer={updateLayer}
+            onMoveLayer={moveLayer}
+            onAddLayer={addLayer}
+            onDeleteLayer={deleteLayer}
+            selected={selected}
+            onSelect={setSelected}
+          />
+          <PropertiesPanel doc={doc} object={selectedObject} onChange={updateObject} onDelete={deleteSelected} />
+        </aside>
         <SidePanel
           settings={doc.settings}
           onChange={setSettings}
@@ -568,6 +689,8 @@ export function DungeonEditor() {
           doorVariant={doorVariant}
           onDoorVariant={(v) => setDoorVariant(v as DoorVariant)}
           onExportPng={exportPng}
+          onExportSvg={exportSvg}
+          onExportPdf={exportPdf}
           onExportJson={exportJson}
           onImportJson={importJson}
           onFit={fit}
@@ -575,6 +698,7 @@ export function DungeonEditor() {
             if (window.confirm("Clear the whole map?")) commit(emptyDoc());
           }}
         />
+
       </div>
     </div>
   );
