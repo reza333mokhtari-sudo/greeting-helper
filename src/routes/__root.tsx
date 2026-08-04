@@ -119,6 +119,7 @@ function RootShell({ children }: { children: ReactNode }) {
       <body>
         {children}
         <Toaster position="top-center" richColors />
+        <OfflineOverlay />
         <Scripts />
 
       </body>
