@@ -227,5 +227,6 @@ export function LayersPanel(p: Props) {
         })}
       </ul>
     </section>
+    </TooltipProvider>
   );
 }
