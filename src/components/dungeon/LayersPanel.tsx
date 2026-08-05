@@ -143,19 +143,21 @@ export function LayersPanel(p: Props) {
                   </Button>
                 </Hint>
 
-                <Hint label={l.gmOnly ? "Hidden in player view" : "Visible in player view"}>
+                <Hint label={l.gmOnly ? "Invisible in Player View" : "Visible in Player View"}>
                   <button
                     type="button"
-                    aria-label="Toggle GM only"
+                    aria-label="Toggle visibility scope"
                     onClick={(e) => {
                       e.stopPropagation();
                       p.onUpdateLayer(l.id, { gmOnly: !l.gmOnly });
                     }}
-                    className={`rounded px-1 text-[9px] font-semibold uppercase tracking-wider ${
-                      l.gmOnly ? "bg-accent/20 text-accent" : "text-muted-foreground/50"
+                    className={`flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider transition-colors ${
+                      l.gmOnly 
+                        ? "bg-primary/20 text-primary border border-primary/20" 
+                        : "bg-muted/50 text-muted-foreground/60 border border-transparent hover:border-border"
                     }`}
                   >
-                    GM
+                    {l.gmOnly ? "GM" : "ALL"}
                   </button>
                 </Hint>
 
@@ -166,7 +168,7 @@ export function LayersPanel(p: Props) {
                   onFocus={() => p.onActiveLayer(l.id)}
                   className="h-6 min-w-0 flex-1 border-0 bg-transparent px-1 text-xs shadow-none focus-visible:ring-1"
                 />
-                <Badge variant="secondary" className="h-5 px-1.5 text-[10px] tabular-nums">
+                <Badge variant="outline" className="h-5 border-border/50 bg-background/50 px-1.5 font-mono text-[9px] tabular-nums text-muted-foreground">
                   {countOn(p.doc.objects, l.id)}
                 </Badge>
               </div>
