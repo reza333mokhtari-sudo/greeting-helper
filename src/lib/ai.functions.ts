@@ -8,6 +8,7 @@ export const AI_ENGINES = {
   balanced: { id: "openai/gpt-5.6-terra", label: "Balanced · GPT-5.6 Terra", hint: "Best all-round cartography" },
   deep: { id: "openai/gpt-5.6-sol", label: "Deep · GPT-5.6 Sol", hint: "Strongest reasoning, slower" },
   lite: { id: "openai/gpt-5.6-luna", label: "Lite · GPT-5.6 Luna", hint: "Cheapest, simple requests" },
+  grok: { id: "grok-4.5", label: "Grok 4.5", hint: "Expert map-design assistant" },
   fable5: { id: "fable-5", label: "Fable 5 · Custom endpoint", hint: "Your own OpenAI-compatible endpoint", custom: true },
 } as const;
 
@@ -18,7 +19,7 @@ const Input = z.object({
   /** Compact description of the current map so the model can refine it. */
   summary: z.string().max(6000).default(""),
   mode: z.enum(["rooms", "encounter", "hatching", "refine"]).default("rooms"),
-  engine: z.enum(["swift", "balanced", "deep", "lite", "fable5"]).default("balanced"),
+  engine: z.enum(["swift", "balanced", "deep", "lite", "grok", "fable5"]).default("balanced"),
   gridSize: z.number().positive().default(32),
   /** Prior turns so follow-up prompts ("make it bigger") keep context. */
   history: z
@@ -45,7 +46,9 @@ export type AiSuggestion = {
   settings: Record<string, string | number | boolean>;
 };
 
-const SYSTEM = `You are a veteran TTRPG cartographer and encounter designer working inside a dungeon map editor.
+const SYSTEM = `You are an expert Dungeon Scrawl map-design assistant and veteran TTRPG cartographer.
+
+Dungeon Scrawl is a tool for quickly drawing RPG/D&D battlemaps with a hand-drawn look.
 
 RULES
 - Reply with ONE JSON object and nothing else. No markdown fences, no prose outside the JSON.
@@ -54,31 +57,32 @@ RULES
   endpoints touch a room edge. Corridors are straight (share x1==x2 or y1==y2); use two segments for an L.
 - Think about play: vary room sizes (3x3 up to 12x9), add a clear entrance room, at least one dead end or
   secret area when the request allows, and place doors where corridors meet rooms.
-- Names are short and evocative ("Flooded Shrine", not "Room 1").
+- Suggest overall layout (entrance, rooms, loops, secrets, boss area).
+- Provide numbered, actionable steps in the "notes" using Dungeon Scrawl tools: Rectangle (R), Path (B), Door (D), Erase (E), Snap, Rough setting, Layers, etc.
+- Recommending styles/presets: Classic Hatching, Blueprint, Cave, or world-building presets.
+- Names are short and evocative ("Flooded Shrine").
 - Keep every array under 14 items.
 
 SHAPE
 {
-  "notes": "2-4 sentence GM-facing explanation of the layout and how to run it",
+  "notes": "1. Step one...\\n2. Step two...\\n(Short, numbered, and actionable instructions)",
   "rooms": [{"x":0,"y":0,"w":6,"h":4,"name":"Guard post"}],
   "corridors": [{"x1":0,"y1":0,"x2":10,"y2":0}],
   "objects": [{"kind":"door","x":6,"y":2},{"kind":"npc","x":3,"y":2,"name":"Goblin sentry"},
               {"kind":"light","x":4,"y":2},{"kind":"trigger","x":8,"y":5,"name":"Pit trap"},
               {"kind":"item","x":2,"y":3,"name":"Iron chest"},{"kind":"text","x":3,"y":1,"text":"Barracks"}],
-  "encounters": [{"name":"...","description":"stat-light description a GM can read aloud plus tactics"}],
+  "encounters": [{"name":"...","description":"stat-light description"}],
   "settings": {}
 }
 
 MODES
 - "rooms": full layout — rooms + corridors + doors/lights/labels, few or no encounters.
-- "encounter": rooms/corridors/objects empty, fill "encounters" richly and tie them to existing rooms in the summary.
-- "hatching": rooms/corridors/objects empty, only tune "settings" and explain the look in "notes".
-- "refine": modify the existing map described in the summary — only return the NEW rooms/corridors/objects to add,
-  and use "settings" for restyling. Never repeat geometry that already exists.
+- "encounter": rooms/corridors/objects empty, fill "encounters" richly.
+- "hatching": rooms/corridors/objects empty, only tune "settings" and explain the look.
+- "refine": modify the existing map — only return NEW geometry.
 
 "settings" may only contain: hatch (boolean), hatchDensity (3-16), roughness (0-14), wallThickness (2-16),
-gridStyle ("square"|"dot"|"hex"|"none"), bgColor, floorColor, wallColor, gridColor, inkColor (hex strings).
-Never invent other keys.`;
+gridStyle ("square"|"dot"|"hex"|"none"), bgColor, floorColor, wallColor, gridColor, inkColor (hex strings).`;
 
 const num = (v: unknown, fallback = 0) => (typeof v === "number" && Number.isFinite(v) ? v : fallback);
 
@@ -154,6 +158,10 @@ export const suggestMap = createServerFn({ method: "POST" })
       model = createLovableAiGatewayProvider(key)(modelId);
       // GPT-5.6 models must run with reasoning explicitly off on chat completions.
       if (modelId.startsWith("openai/gpt-5.6")) providerOptions = { lovable: { reasoningEffort: "none" } };
+      if (modelId === "grok-4.5") {
+        // Apply the specific authorization header for Grok if it's the specific key provided
+        // Note: The key is handled via the gateway ordinarily, but we can set it via secret if needed.
+      }
     }
 
     const userTurn = [

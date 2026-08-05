@@ -135,7 +135,28 @@ export function PropsPanel({ onPlace }: { onPlace: (url: string, name: string) =
       />
 
       {!signedIn ? (
-        <p className="text-[11px] text-muted-foreground">Sign in to upload your own props and textures.</p>
+        <div className="space-y-4">
+          <p className="text-[11px] text-muted-foreground">Sign in to upload your own props and textures.</p>
+          <div className="rounded-md border border-border/50 bg-muted/20 p-2 text-[10px] space-y-2">
+            <p className="font-semibold text-foreground flex items-center gap-1">
+              <Star className="h-3 w-3 text-accent fill-current" /> Recommended Icon Libraries
+            </p>
+            <ul className="space-y-1.5 text-muted-foreground">
+              <li>
+                <span className="text-foreground font-medium">OpenGameArt</span> — Free/OSS. Massive assets (pixel, vector, hand-drawn). Best for RPGs.
+              </li>
+              <li>
+                <span className="text-foreground font-medium">Icons8</span> — 150k+ icons. Flat, lineal, filled. Great for movie/media/games. (Attribution required).
+              </li>
+              <li>
+                <span className="text-foreground font-medium">Flaticon</span> — Largest vector collection. Excellent Entertainment/Genre categories.
+              </li>
+              <li>
+                <span className="text-foreground font-medium">Noun Project</span> — High-quality vectors for any subject (film reels, consoles).
+              </li>
+            </ul>
+          </div>
+        </div>
       ) : (
         <>
           {progress && (
