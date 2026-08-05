@@ -143,15 +143,35 @@ export function PropsPanel({ onPlace }: { onPlace: (url: string, name: string) =
               ))}
             </SelectContent>
           </Select>
-          <Button
-            size="sm"
-            variant="outline"
-            className="h-6 px-2 text-[10px]"
-            disabled={!signedIn || !!progress}
-            onClick={() => fileRef.current?.click()}
-          >
-            <ImagePlus className="mr-1 h-3 w-3" /> Upload
-          </Button>
+          <div className="flex items-center gap-1">
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-6 px-2 text-[10px]"
+              disabled={!signedIn || !!progress}
+              onClick={() => fileRef.current?.click()}
+              title="Upload from device"
+            >
+              <ImagePlus className="mr-1 h-3 w-3" /> Upload
+            </Button>
+            {selectedLibrary !== "custom" && (
+              <Button
+                size="sm"
+                variant="outline"
+                className="h-6 px-2 text-[10px] border-primary/30 hover:border-primary/60"
+                onClick={() => {
+                  const lib = LIBRARIES.find(l => l.id === selectedLibrary);
+                  if (lib?.searchUrl) {
+                    const q = query.trim() || "dungeon props";
+                    window.open(`${lib.searchUrl}${encodeURIComponent(q)}`, "_blank");
+                    setSearchOpen(true);
+                  }
+                }}
+              >
+                <Search className="mr-1 h-3 w-3" /> Browse Icons
+              </Button>
+            )}
+          </div>
         </div>
       </div>
       <input
