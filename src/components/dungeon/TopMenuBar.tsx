@@ -84,10 +84,16 @@ export function TopMenuBar(props: Props) {
         <MenubarMenu>
           <MenubarTrigger className="h-8 px-3 text-xs">Help</MenubarTrigger>
           <MenubarContent>
-            <MenubarItem disabled>Scroll — zoom</MenubarItem>
-            <MenubarItem disabled>Space / middle drag — pan</MenubarItem>
-            <MenubarItem disabled>Ctrl+Z / Ctrl+Shift+Z — undo / redo</MenubarItem>
-            <MenubarItem disabled>[ and ] — rotate selection</MenubarItem>
+            <MenubarItem disabled className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/60">Shortcuts</MenubarItem>
+            <MenubarItem disabled>R / B — Draw Room / Brush</MenubarItem>
+            <MenubarItem disabled>D / S — Door / Stairs</MenubarItem>
+            <MenubarItem disabled>E — Toggle Erase Mode</MenubarItem>
+            <MenubarItem disabled>Space — Pan View</MenubarItem>
+            <MenubarItem disabled>Scroll — Zoom</MenubarItem>
+            <MenubarSeparator />
+            <MenubarItem onSelect={() => window.open('https://dungeonscrawl.com/docs', '_blank')}>
+              Documentation
+            </MenubarItem>
           </MenubarContent>
         </MenubarMenu>
       </Menubar>
