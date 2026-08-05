@@ -14,12 +14,12 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Info } from "lucide-react";
 
 const LIBRARIES = [
-  { id: "custom", label: "My Custom Assets", license: "Proprietary / Unknown" },
-  { id: "opengameart", label: "OpenGameArt", license: "Free / OSS (Check specific asset)" },
-  { id: "icons8", label: "Icons8", license: "Free with Attribution / Commercial" },
-  { id: "flaticon", label: "Flaticon", license: "Free with Attribution / Premium" },
-  { id: "noun", label: "Noun Project", license: "CC BY / Public Domain" },
-  { id: "kenney", label: "Kenney", license: "CC0 (Public Domain)" },
+  { id: "custom", label: "My Custom Assets", license: "Proprietary / Unknown", searchUrl: "" },
+  { id: "opengameart", label: "OpenGameArt", license: "Free / OSS (Check specific asset)", searchUrl: "https://opengameart.org/art-search-advanced?keys=" },
+  { id: "icons8", label: "Icons8", license: "Free with Attribution / Commercial", searchUrl: "https://icons8.com/icons/set/" },
+  { id: "flaticon", label: "Flaticon", license: "Free with Attribution / Premium", searchUrl: "https://www.flaticon.com/search?word=" },
+  { id: "noun", label: "Noun Project", license: "CC BY / Public Domain", searchUrl: "https://thenounproject.com/search/icons/?q=" },
+  { id: "kenney", label: "Kenney", license: "CC0 (Public Domain)", searchUrl: "https://www.kenney.nl/assets?q=" },
 ];
 
 export function PropsPanel({ onPlace }: { onPlace: (url: string, name: string) => void }) {
@@ -31,6 +31,7 @@ export function PropsPanel({ onPlace }: { onPlace: (url: string, name: string) =
   const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const [selectedLibrary, setSelectedLibrary] = useState("custom");
+  const [searchOpen, setSearchOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const refresh = useCallback(() => {
@@ -142,15 +143,35 @@ export function PropsPanel({ onPlace }: { onPlace: (url: string, name: string) =
               ))}
             </SelectContent>
           </Select>
-          <Button
-            size="sm"
-            variant="outline"
-            className="h-6 px-2 text-[10px]"
-            disabled={!signedIn || !!progress}
-            onClick={() => fileRef.current?.click()}
-          >
-            <ImagePlus className="mr-1 h-3 w-3" /> Upload
-          </Button>
+          <div className="flex items-center gap-1">
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-6 px-2 text-[10px]"
+              disabled={!signedIn || !!progress}
+              onClick={() => fileRef.current?.click()}
+              title="Upload from device"
+            >
+              <ImagePlus className="mr-1 h-3 w-3" /> Upload
+            </Button>
+            {selectedLibrary !== "custom" && (
+              <Button
+                size="sm"
+                variant="outline"
+                className="h-6 px-2 text-[10px] border-primary/30 hover:border-primary/60"
+                onClick={() => {
+                  const lib = LIBRARIES.find(l => l.id === selectedLibrary);
+                  if (lib?.searchUrl) {
+                    const q = query.trim() || "dungeon props";
+                    window.open(`${lib.searchUrl}${encodeURIComponent(q)}`, "_blank");
+                    setSearchOpen(true);
+                  }
+                }}
+              >
+                <Search className="mr-1 h-3 w-3" /> Browse Icons
+              </Button>
+            )}
+          </div>
         </div>
       </div>
       <input
@@ -300,6 +321,67 @@ export function PropsPanel({ onPlace }: { onPlace: (url: string, name: string) =
             </div>
           )}
         </>
+      )}
+
+      {searchOpen && (
+        <div className="mt-4 rounded-md border border-primary/20 bg-primary/5 p-3 text-[11px] space-y-3">
+          <div className="flex items-center justify-between">
+            <p className="font-semibold text-primary flex items-center gap-1.5">
+              <Search className="h-3.5 w-3.5" /> Icon Import Workflow
+            </p>
+            <Button variant="ghost" size="icon" className="size-5 -mr-1" onClick={() => setSearchOpen(false)}>
+              <span className="sr-only">Close</span>
+              <Trash2 className="size-3" />
+            </Button>
+          </div>
+          <p className="text-muted-foreground leading-relaxed">
+            I've opened the <strong>{LIBRARIES.find(l => l.id === selectedLibrary)?.label}</strong> search for you. 
+            Found an icon? 
+          </p>
+          <ol className="list-decimal list-inside space-y-1 text-muted-foreground pl-1">
+            <li>Right-click the icon and <span className="text-foreground font-medium underline decoration-primary/30">Copy Image Link</span></li>
+            <li>Paste the URL below to import it into your map layer</li>
+          </ol>
+          <div className="flex gap-2 pt-1">
+            <Input 
+              placeholder="Paste image URL (png/svg/webp)..." 
+              className="h-8 text-[10px]"
+              onKeyDown={async (e) => {
+                if (e.key === "Enter") {
+                  const url = e.currentTarget.value.trim();
+                  if (url) {
+                    try {
+                      new URL(url); // basic validation
+                      onPlace(url, "Imported Icon");
+                      toast.success("Icon imported to active layer");
+                      e.currentTarget.value = "";
+                    } catch {
+                      toast.error("Please enter a valid image URL");
+                    }
+                  }
+                }
+              }}
+            />
+            <Button 
+              size="sm" 
+              className="h-8 text-[10px]" 
+              onClick={(e) => {
+                const input = e.currentTarget.previousElementSibling as HTMLInputElement;
+                const url = input.value.trim();
+                if (url) {
+                  onPlace(url, "Imported Icon");
+                  toast.success("Icon imported to active layer");
+                  input.value = "";
+                }
+              }}
+            >
+              Import
+            </Button>
+          </div>
+          <p className="text-[9px] text-muted-foreground italic">
+            Note: License tracker will automatically apply the <strong>{LIBRARIES.find(l => l.id === selectedLibrary)?.license}</strong> license to this import.
+          </p>
+        </div>
       )}
     </section>
   );
