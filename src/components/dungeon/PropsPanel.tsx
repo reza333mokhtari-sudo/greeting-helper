@@ -14,12 +14,12 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Info } from "lucide-react";
 
 const LIBRARIES = [
-  { id: "custom", label: "My Custom Assets", license: "Proprietary / Unknown" },
-  { id: "opengameart", label: "OpenGameArt", license: "Free / OSS (Check specific asset)" },
-  { id: "icons8", label: "Icons8", license: "Free with Attribution / Commercial" },
-  { id: "flaticon", label: "Flaticon", license: "Free with Attribution / Premium" },
-  { id: "noun", label: "Noun Project", license: "CC BY / Public Domain" },
-  { id: "kenney", label: "Kenney", license: "CC0 (Public Domain)" },
+  { id: "custom", label: "My Custom Assets", license: "Proprietary / Unknown", searchUrl: "" },
+  { id: "opengameart", label: "OpenGameArt", license: "Free / OSS (Check specific asset)", searchUrl: "https://opengameart.org/art-search-advanced?keys=" },
+  { id: "icons8", label: "Icons8", license: "Free with Attribution / Commercial", searchUrl: "https://icons8.com/icons/set/" },
+  { id: "flaticon", label: "Flaticon", license: "Free with Attribution / Premium", searchUrl: "https://www.flaticon.com/search?word=" },
+  { id: "noun", label: "Noun Project", license: "CC BY / Public Domain", searchUrl: "https://thenounproject.com/search/icons/?q=" },
+  { id: "kenney", label: "Kenney", license: "CC0 (Public Domain)", searchUrl: "https://www.kenney.nl/assets?q=" },
 ];
 
 export function PropsPanel({ onPlace }: { onPlace: (url: string, name: string) => void }) {
