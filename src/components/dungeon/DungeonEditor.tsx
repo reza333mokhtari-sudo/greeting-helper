@@ -70,6 +70,7 @@ import { recordDraw } from "@/lib/dungeon/perf";
 import { useOnlineStatus } from "@/hooks/use-online-status";
 import { OnboardingOverlay } from "./OnboardingOverlay";
 import { QuickStartPanel } from "./QuickStartPanel";
+import { Minimap } from "./Minimap";
 
 const STORAGE_KEY = "dungeon-scrawl-doc-v1";
 const MIN_ZOOM = 0.08;
@@ -117,7 +118,10 @@ export function DungeonEditor() {
   const [leftPanel, setLeftPanel] = useState<PanelId | null>("help");
   const [savedAt, setSavedAt] = useState<number | null>(null);
   const [saveMs, setSaveMs] = useState<number | null>(null);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [engineReady, setEngineReady] = useState(false);
   const [docBytes, setDocBytes] = useState(0);
+
   const [menuTarget, setMenuTarget] = useState<{ pt: Pt; label: string | null; id: string | null }>({
     pt: { x: 0, y: 0 },
     label: null,
@@ -128,20 +132,44 @@ export function DungeonEditor() {
   const online = useOnlineStatus();
   const importRef = useRef<HTMLInputElement>(null);
 
+  // Debounce rapid history pushes with the same label into a single snapshot.
+  const pendingHistory = useRef<{ value: Doc; label: string } | null>(null);
+  const historyTimer = useRef<number | null>(null);
+  const HISTORY_DEBOUNCE_MS = 250;
+
+
 
   const drag = useRef<Drag>({ mode: "none" });
   const stateRef = useRef({ doc, view, tool, polyPts, brushWidth, doorVariant, selected, spaceDown });
   stateRef.current = { doc, view, tool, polyPts, brushWidth, doorVariant, selected, spaceDown };
 
-  /** Push a labelled snapshot onto the timeline, discarding any redo branch. */
-  const pushHistory = useCallback((value: Doc, label: string) => {
+  /** Flush the debounced history snapshot immediately. */
+  const flushHistory = useCallback(() => {
+    if (historyTimer.current) {
+      window.clearTimeout(historyTimer.current);
+      historyTimer.current = null;
+    }
+    const p = pendingHistory.current;
+    pendingHistory.current = null;
+    if (!p) return;
     setTimeline((h) => {
-      const out = [...h.slice(0, hIndexRef.current + 1), { doc: value, label, at: Date.now() }].slice(-HISTORY_LIMIT);
+      const out = [...h.slice(0, hIndexRef.current + 1), { doc: p.value, label: p.label, at: Date.now() }].slice(-HISTORY_LIMIT);
       hIndexRef.current = out.length - 1;
       setHIndex(hIndexRef.current);
       return out;
     });
   }, []);
+
+  /** Push a labelled snapshot onto the timeline, discarding any redo branch. */
+  const pushHistory = useCallback((value: Doc, label: string) => {
+    pendingHistory.current = { value, label };
+    if (historyTimer.current) window.clearTimeout(historyTimer.current);
+    historyTimer.current = window.setTimeout(() => {
+      historyTimer.current = null;
+      flushHistory();
+    }, HISTORY_DEBOUNCE_MS);
+  }, [flushHistory]);
+
 
   const commit = useCallback(
     (next: Doc | ((d: Doc) => Doc), label = "Edit") => {
@@ -173,6 +201,7 @@ export function DungeonEditor() {
   }, []);
 
   const jumpTo = useCallback((index: number) => {
+    flushHistory();
     setTimeline((h) => {
       const i = Math.max(0, Math.min(h.length - 1, index));
       const entry = h[i];
@@ -183,7 +212,8 @@ export function DungeonEditor() {
       }
       return h;
     });
-  }, []);
+  }, [flushHistory]);
+
 
   const undo = useCallback(() => jumpTo(hIndexRef.current - 1), [jumpTo]);
   const redo = useCallback(() => jumpTo(hIndexRef.current + 1), [jumpTo]);
@@ -216,6 +246,7 @@ export function DungeonEditor() {
 
 
   useEffect(() => {
+    setSaveStatus("saving");
     const t = setTimeout(() => {
       try {
         const t0 = performance.now();
@@ -224,12 +255,22 @@ export function DungeonEditor() {
         setDocBytes(payload.length);
         setSaveMs(performance.now() - t0);
         setSavedAt(Date.now());
+        setSaveStatus("saved");
       } catch {
-        /* ignore */
+        setSaveStatus("error");
       }
     }, 400);
     return () => clearTimeout(t);
   }, [doc]);
+
+  // Engine readiness spinner: dismissed after first paint or on timeout.
+  useEffect(() => {
+    const t = setTimeout(() => setEngineReady(true), 600);
+    return () => clearTimeout(t);
+  }, []);
+
+
+
 
 
 
@@ -604,7 +645,11 @@ export function DungeonEditor() {
       if (cursorPending.current) setCursor(cursorPending.current);
     });
   }, []);
-  useEffect(() => () => cancelAnimationFrame(cursorRaf.current), []);
+  useEffect(() => () => {
+    cancelAnimationFrame(cursorRaf.current);
+    flushHistory();
+  }, [flushHistory]);
+
 
   const onPointerMove = (e: React.PointerEvent) => {
     const world = getPt(e);
@@ -1384,7 +1429,7 @@ export function DungeonEditor() {
 
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden bg-background text-foreground">
-      {doc.shapes.length === 0 && !polyPts.length && !timeline.some(e => e.doc.shapes.length > 0) && (
+      {!engineReady && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
           <div className="flex flex-col items-center gap-4 animate-in fade-in zoom-in duration-300">
             <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" />
@@ -1392,6 +1437,7 @@ export function DungeonEditor() {
           </div>
         </div>
       )}
+
       <TopMenuBar
         title={`${doc.floors.find((f) => f.id === doc.activeFloorId)?.name ?? "Map"}${doc.settings.playerView ? " — player view" : ""}`}
         dirty={hIndex > 0}
@@ -1455,6 +1501,7 @@ export function DungeonEditor() {
           onContextMenu={openMenu}
         >
           <canvas ref={canvasRef} className="block h-full w-full" />
+          {doc.shapes.length > 0 && <Minimap doc={syncActiveFloor(doc)} view={view} onNavigate={zoomTo} />}
           {!doc.shapes.length && !polyPts.length && (
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
               <div className="animate-in fade-in slide-in-from-bottom-4 duration-1000 flex flex-col items-center gap-1.5 rounded-2xl border border-primary/20 bg-card/60 px-6 py-4 backdrop-blur shadow-2xl text-center">
@@ -1470,6 +1517,7 @@ export function DungeonEditor() {
               </div>
             </div>
           )}
+
           {aiPreview && (
             <div className="absolute inset-x-0 top-4 flex justify-center px-4">
               <div className="pointer-events-auto flex max-w-xl items-center gap-3 rounded-xl border border-accent/50 bg-card/95 px-4 py-2.5 shadow-lg backdrop-blur">
@@ -1571,9 +1619,11 @@ export function DungeonEditor() {
         objects={doc.objects.length}
         fog={doc.fog.length}
         saved={savedLabel}
+        saveStatus={saveStatus}
         onZoom={zoomBy}
         onFit={fit}
       />
+
     </div>
   );
 }
