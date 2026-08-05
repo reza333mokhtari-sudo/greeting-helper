@@ -46,6 +46,7 @@ export const TOOLS: { id: ToolId; label: string; key: string; icon: string }[] =
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
+import { Badge } from "@/components/ui/badge";
 import { Undo2, Redo2, ZoomIn, ZoomOut } from "lucide-react";
 
 type Props = {
@@ -115,7 +116,7 @@ export function Toolbar(props: Props) {
                 </div>
                 {TOOL_DESCRIPTIONS[t.id]?.desc && (
                   <p className="text-[11px] leading-relaxed text-muted-foreground">
-                    {TOOL_DESCRIPTIONS[t.id].desc}
+                    {TOOL_DESCRIPTIONS[t.id]!.desc}
                   </p>
                 )}
                 {TOOL_DESCRIPTIONS[t.id]?.pro && (
