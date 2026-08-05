@@ -26,7 +26,9 @@ export function PropsPanel({ onPlace }: { onPlace: (url: string, name: string) =
         setAssets(rows);
         preloadImages(rows.map((r) => r.url));
       })
-      .catch(() => undefined);
+      .catch((err) => {
+        console.error("Failed to load assets", err);
+      });
   }, []);
 
   useEffect(() => {

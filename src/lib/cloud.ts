@@ -10,7 +10,7 @@ export type MapRow = {
   updated_at: string;
 };
 
-export type AssetRow = { id: string; name: string; kind: string; url: string; tags: string[]; favorite: boolean };
+export type AssetRow = { id: string; name: string; kind: string; url: string; tags: string[]; favorite: boolean; license?: string };
 
 const SIGNED_TTL = 60 * 60 * 24 * 365;
 
@@ -55,12 +55,12 @@ export async function deleteMap(id: string) {
 }
 
 export async function listAssets(): Promise<AssetRow[]> {
-  const { data, error } = await supabase.from("map_assets").select("id,name,kind,url,tags,favorite").order("created_at", { ascending: false });
+  const { data, error } = await supabase.from("map_assets").select("id,name,kind,url,tags,favorite,license").order("created_at", { ascending: false });
   if (error) throw error;
   return (data ?? []) as AssetRow[];
 }
 
-export async function uploadAsset(file: File, kind = "prop"): Promise<AssetRow> {
+export async function uploadAsset(file: File, kind = "prop", license?: string): Promise<AssetRow> {
   const { data: auth } = await supabase.auth.getUser();
   if (!auth.user) throw new Error("Not signed in");
   const ext = file.name.split(".").pop() || "png";
@@ -71,14 +71,14 @@ export async function uploadAsset(file: File, kind = "prop"): Promise<AssetRow> 
   if (signed.error) throw signed.error;
   const { data, error } = await supabase
     .from("map_assets")
-    .insert({ user_id: auth.user.id, name: file.name.replace(/\.[^.]+$/, ""), kind, url: signed.data.signedUrl })
-    .select("id,name,kind,url,tags,favorite")
+    .insert({ user_id: auth.user.id, name: file.name.replace(/\.[^.]+$/, ""), kind, url: signed.data.signedUrl, license })
+    .select("id,name,kind,url,tags,favorite,license")
     .single();
   if (error) throw error;
   return data as AssetRow;
 }
 
-export async function updateAsset(id: string, patch: { name?: string; tags?: string[]; favorite?: boolean }) {
+export async function updateAsset(id: string, patch: { name?: string; tags?: string[]; favorite?: boolean; license?: string }) {
   const { error } = await supabase.from("map_assets").update(patch as never).eq("id", id);
   if (error) throw error;
 }
