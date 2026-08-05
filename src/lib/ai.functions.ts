@@ -26,6 +26,7 @@ const Input = z.object({
     .array(z.object({ role: z.enum(["user", "assistant"]), content: z.string().max(4000) }))
     .max(8)
     .default([]),
+  customSystem: z.string().optional(),
 });
 
 
