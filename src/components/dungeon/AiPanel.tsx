@@ -18,7 +18,7 @@ const MODES: { id: Mode; label: string; placeholder: string; chips: string[] }[]
   {
     id: "rooms",
     label: "Suggest rooms",
-    placeholder: "A goblin warren with a flooded shrine and 3 side chambers",
+    placeholder: "Implement automatic license tracking so when I add an icon I get the right attribution or commercial-use warning based on the selected library.",
     chips: ["Small 6-room crypt", "Dungeon for level 3 party", "Wizard tower ground floor"],
   },
   {
