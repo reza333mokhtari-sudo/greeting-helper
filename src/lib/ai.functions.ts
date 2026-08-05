@@ -137,12 +137,12 @@ function parseJson(text: string): AiSuggestion {
       .slice(0, 12)
       .filter((s) => typeof s?.url === "string")
       .map((s) => ({
-        url: s.url,
+        url: String(s.url),
         x: Math.round(num(s.x)),
         y: Math.round(num(s.y)),
-        w: num(s.w, 0) || undefined,
-        h: num(s.h, 0) || undefined,
-        name: typeof s.name === "string" ? s.name.slice(0, 60) : undefined,
+        w: num(s.w, 0) || null,
+        h: num(s.h, 0) || null,
+        name: typeof s.name === "string" ? s.name.slice(0, 60) : null,
       })),
     encounters: (Array.isArray(raw.encounters) ? raw.encounters : []).slice(0, 20).map((e) => ({
       name: String(e?.name ?? "Encounter").slice(0, 80),
