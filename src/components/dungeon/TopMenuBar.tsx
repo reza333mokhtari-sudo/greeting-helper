@@ -88,6 +88,8 @@ export function TopMenuBar(props: Props) {
             <MenubarItem disabled>R / B — Draw Room / Brush</MenubarItem>
             <MenubarItem disabled>D / S — Door / Stairs</MenubarItem>
             <MenubarItem disabled>E — Toggle Erase Mode</MenubarItem>
+            <MenubarItem disabled>Ctrl+A — Select All</MenubarItem>
+            <MenubarItem disabled>Ctrl+D — Deselect All</MenubarItem>
             <MenubarItem disabled>Space — Pan View</MenubarItem>
             <MenubarItem disabled>Scroll — Zoom</MenubarItem>
             <MenubarSeparator />
