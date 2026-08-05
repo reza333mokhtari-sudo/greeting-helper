@@ -744,7 +744,14 @@ export function DungeonEditor() {
 
 
   /** Filled in below once the clipboard actions exist (avoids TDZ in the key handler). */
-  const kbRef = useRef({ copy: () => {}, cut: () => {}, paste: () => {}, dup: () => {} });
+  const kbRef = useRef({
+    copy: () => {},
+    cut: () => {},
+    paste: () => {},
+    dup: () => {},
+    selectAll: () => {},
+    deselectAll: () => {},
+  });
 
   // keyboard
   useEffect(() => {
@@ -769,13 +776,19 @@ export function DungeonEditor() {
         redo();
         return;
       }
-      if (mod && ["c", "x", "v", "d"].includes(e.key.toLowerCase())) {
+      if (mod && ["c", "x", "v", "d", "a"].includes(e.key.toLowerCase())) {
         e.preventDefault();
         const k = e.key.toLowerCase();
         if (k === "c") kbRef.current.copy();
         if (k === "x") kbRef.current.cut();
         if (k === "v") kbRef.current.paste();
-        if (k === "d") kbRef.current.dup();
+        if (k === "d") {
+          if (e.ctrlKey && e.metaKey) {
+             // Just in case both are used, but we want Ctrl+D specifically
+          }
+          kbRef.current.deselectAll();
+        }
+        if (k === "a") kbRef.current.selectAll();
         return;
       }
       if (e.key === "Delete" || e.key === "Backspace") {
@@ -1230,6 +1243,16 @@ export function DungeonEditor() {
     },
     paste: () => pasteAt(menuTarget.pt),
     dup: duplicateSelection,
+    selectAll: () => {
+      const allIds = [
+        ...doc.shapes.map((s) => s.id),
+        ...doc.objects.map((o) => o.id),
+      ];
+      setSelected(allIds);
+    },
+    deselectAll: () => {
+      setSelected([]);
+    },
   };
 
   const cursorStyle = useMemo(() => {
@@ -1442,7 +1465,7 @@ export function DungeonEditor() {
                 <p className="max-w-xs text-[10px] leading-relaxed text-muted-foreground">
                   Scroll to zoom · Space or middle-drag to pan · Ctrl+Z to undo.
                   <br />
-                  Press (E) to erase or (D) for doors.
+                  Ctrl+A to select all · Ctrl+D to deselect all.
                 </p>
               </div>
             </div>
