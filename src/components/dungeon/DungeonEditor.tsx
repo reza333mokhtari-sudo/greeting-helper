@@ -1465,7 +1465,7 @@ export function DungeonEditor() {
                 <p className="max-w-xs text-[10px] leading-relaxed text-muted-foreground">
                   Scroll to zoom · Space or middle-drag to pan · Ctrl+Z to undo.
                   <br />
-                  Press (E) to erase or (D) for doors.
+                  Ctrl+A to select all · Ctrl+D to deselect all.
                 </p>
               </div>
             </div>
