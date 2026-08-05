@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -41,6 +42,7 @@ export function ProfileMenu() {
       user_id: user.id,
       subject: ticketSubject,
       message: ticketMessage,
+      priority: (window as any)._ticketPriority || "medium",
     });
     setBusy(false);
     if (error) {
@@ -140,23 +142,40 @@ export function ProfileMenu() {
       content: (
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label>Subject</Label>
+            <Label htmlFor="priority" className="text-[11px] uppercase tracking-wider text-muted-foreground">Priority</Label>
+            <Select onValueChange={(v) => (window as any)._ticketPriority = v} defaultValue="medium">
+              <SelectTrigger id="priority" className="h-9">
+                <SelectValue placeholder="Select priority" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="low">Low (Feedback/Idea)</SelectItem>
+                <SelectItem value="medium">Medium (Issue)</SelectItem>
+                <SelectItem value="high">High (Bug/Blocker)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="subject" className="text-[11px] uppercase tracking-wider text-muted-foreground">Subject</Label>
             <Input 
+              id="subject"
               placeholder="What do you need help with?" 
               value={ticketSubject}
               onChange={(e) => setTicketSubject(e.target.value)}
+              className="h-9"
             />
           </div>
           <div className="space-y-2">
-            <Label>Message</Label>
+            <Label htmlFor="message" className="text-[11px] uppercase tracking-wider text-muted-foreground">Message</Label>
             <Textarea 
+              id="message"
               placeholder="Describe your issue or suggestion in detail..." 
               rows={4}
               value={ticketMessage}
               onChange={(e) => setTicketMessage(e.target.value)}
+              className="resize-none"
             />
           </div>
-          <Button className="w-full" onClick={sendTicket} disabled={busy}>
+          <Button className="w-full shadow-lg shadow-primary/10" onClick={sendTicket} disabled={busy}>
             {busy ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
             Send Ticket
           </Button>
