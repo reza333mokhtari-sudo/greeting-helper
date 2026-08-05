@@ -776,13 +776,14 @@ export function DungeonEditor() {
         redo();
         return;
       }
-      if (mod && ["c", "x", "v", "d"].includes(e.key.toLowerCase())) {
+      if (mod && ["c", "x", "v", "d", "a"].includes(e.key.toLowerCase())) {
         e.preventDefault();
         const k = e.key.toLowerCase();
         if (k === "c") kbRef.current.copy();
         if (k === "x") kbRef.current.cut();
         if (k === "v") kbRef.current.paste();
         if (k === "d") kbRef.current.dup();
+        if (k === "a") kbRef.current.selectAll();
         return;
       }
       if (e.key === "Delete" || e.key === "Backspace") {
