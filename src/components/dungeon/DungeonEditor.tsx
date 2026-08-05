@@ -68,6 +68,8 @@ import { CanvasContextMenu } from "./CanvasContextMenu";
 import { DiagnosticsPanel } from "./DiagnosticsPanel";
 import { recordDraw } from "@/lib/dungeon/perf";
 import { useOnlineStatus } from "@/hooks/use-online-status";
+import { OnboardingOverlay } from "./OnboardingOverlay";
+import { QuickStartPanel } from "./QuickStartPanel";
 
 const STORAGE_KEY = "dungeon-scrawl-doc-v1";
 const MIN_ZOOM = 0.08;
@@ -112,7 +114,7 @@ export function DungeonEditor() {
   const [activeLayer, setActiveLayer] = useState<string>(() => emptyDoc().layers[0]!.id);
   const [fogMode, setFogMode] = useState<FogMode>("brush");
   const [fogBrush, setFogBrush] = useState(96);
-  const [leftPanel, setLeftPanel] = useState<PanelId | null>("settings");
+  const [leftPanel, setLeftPanel] = useState<PanelId | null>("help");
   const [savedAt, setSavedAt] = useState<number | null>(null);
   const [saveMs, setSaveMs] = useState<number | null>(null);
   const [docBytes, setDocBytes] = useState(0);
