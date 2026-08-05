@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Cloud, CloudUpload, FolderOpen, Link2, LogOut, Trash2 } from "lucide-react";
+import { Cloud, CloudUpload, FolderOpen, LogOut, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -12,6 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ShareDialog } from "./ShareDialog";
 
 type Props = {
   doc: Doc;
@@ -93,13 +94,9 @@ export function CloudBar({ doc, thumbnail, onLoadDoc }: Props) {
   const togglePublic = async (row: MapRow, value: boolean) => {
     await updateMap(row.id, { is_public: value });
     setMaps((m) => m.map((x) => (x.id === row.id ? { ...x, is_public: value } : x)));
+    if (current?.id === row.id) setCurrent((c) => (c ? { ...c, is_public: value } : c));
   };
 
-  const copyShare = (row: MapRow) => {
-    const url = `${window.location.origin}/m/${encodeURIComponent(row.share_slug)}`;
-    navigator.clipboard.writeText(url);
-    toast.success(row.is_public ? "Share link copied" : "Link copied — make the map public to share it");
-  };
 
   if (!email) {
     return (
@@ -147,9 +144,7 @@ export function CloudBar({ doc, thumbnail, onLoadDoc }: Props) {
                       {m.is_public ? "Public" : "Private"}
                     </Badge>
                     <Switch checked={m.is_public} onCheckedChange={(v) => togglePublic(m, v)} />
-                    <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => copyShare(m)}>
-                      <Link2 className="h-3.5 w-3.5" />
-                    </Button>
+                    <ShareDialog row={m} onTogglePublic={(v) => togglePublic(m, v)} />
                     <Button
                       size="icon"
                       variant="ghost"
@@ -162,6 +157,7 @@ export function CloudBar({ doc, thumbnail, onLoadDoc }: Props) {
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </Button>
+
                   </div>
                 </div>
               ))}
