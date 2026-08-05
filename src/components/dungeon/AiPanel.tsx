@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Sparkles, Loader2, WifiOff, Cpu } from "lucide-react";
+import { Sparkles, Loader2, WifiOff, Cpu, Settings2, RotateCcw, Save } from "lucide-react";
 import { toast } from "sonner";
 
-import { suggestMap, AI_ENGINES, type AiSuggestion, type AiEngine } from "@/lib/ai.functions";
+import { suggestMap, AI_ENGINES, SYSTEM_PROMPT, type AiSuggestion, type AiEngine } from "@/lib/ai.functions";
 import type { Doc } from "@/lib/dungeon/model";
 import { useOnlineStatus } from "@/hooks/use-online-status";
 import { Button } from "@/components/ui/button";
