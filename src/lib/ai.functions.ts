@@ -105,6 +105,7 @@ function parseJson(text: string): AiSuggestion {
   const raw = JSON.parse(extractJson(text)) as Partial<AiSuggestion>;
   const rooms = Array.isArray(raw.rooms) ? raw.rooms : [];
   const objects = Array.isArray(raw.objects) ? raw.objects : [];
+  const stamps = Array.isArray(raw.stamps) ? raw.stamps : [];
   return {
     notes: typeof raw.notes === "string" ? raw.notes.slice(0, 1200) : "",
     rooms: rooms
@@ -131,6 +132,17 @@ function parseJson(text: string): AiSuggestion {
         y: Math.round(num(o.y)),
         ...(typeof o.name === "string" ? { name: o.name.slice(0, 60) } : {}),
         ...(typeof o.text === "string" ? { text: o.text.slice(0, 60) } : {}),
+      })),
+    stamps: stamps
+      .slice(0, 12)
+      .filter((s) => typeof s?.url === "string")
+      .map((s) => ({
+        url: s.url,
+        x: Math.round(num(s.x)),
+        y: Math.round(num(s.y)),
+        w: num(s.w, 0) || undefined,
+        h: num(s.h, 0) || undefined,
+        name: typeof s.name === "string" ? s.name.slice(0, 60) : undefined,
       })),
     encounters: (Array.isArray(raw.encounters) ? raw.encounters : []).slice(0, 20).map((e) => ({
       name: String(e?.name ?? "Encounter").slice(0, 80),
