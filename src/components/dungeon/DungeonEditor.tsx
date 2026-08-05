@@ -1322,7 +1322,15 @@ export function DungeonEditor() {
   })();
 
   return (
-    <div className="flex h-screen w-full flex-col overflow-hidden bg-background text-foreground">
+    <div className="relative flex h-screen w-full flex-col overflow-hidden bg-background text-foreground">
+      {doc.shapes.length === 0 && !polyPts.length && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+          <div className="flex flex-col items-center gap-4 animate-in fade-in zoom-in duration-300">
+            <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+            <p className="text-sm font-medium text-muted-foreground">Initializing engine...</p>
+          </div>
+        </div>
+      )}
       <TopMenuBar
         title={`${doc.floors.find((f) => f.id === doc.activeFloorId)?.name ?? "Map"}${doc.settings.playerView ? " — player view" : ""}`}
         dirty={hIndex > 0}
