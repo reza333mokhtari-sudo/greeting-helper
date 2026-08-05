@@ -71,7 +71,7 @@ export async function uploadAsset(file: File, kind = "prop", license?: string): 
   if (signed.error) throw signed.error;
   const { data, error } = await supabase
     .from("map_assets")
-    .insert({ user_id: auth.user.id, name: file.name.replace(/\.[^.]+$/, ""), kind, url: signed.data.signedUrl, license })
+    .insert({ user_id: auth.user.id, name: file.name.replace(/\.[^.]+$/, ""), kind, url: signed.data.signedUrl, license: license ?? null })
     .select("id,name,kind,url,tags,favorite,license")
     .single();
   if (error) throw error;
