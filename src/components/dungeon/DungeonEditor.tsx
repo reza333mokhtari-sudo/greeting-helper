@@ -958,6 +958,23 @@ export function DungeonEditor() {
         for (const [k, v] of Object.entries(s.settings)) {
           if (allowed.includes(k as keyof Settings)) (settings as Record<string, unknown>)[k] = v;
         }
+        if (s.stamps && Array.isArray(s.stamps)) {
+          const layerId = d.layers.find((l) => l.id === DEFAULT_LAYER_FOR.image)?.id ?? d.layers[0]!.id;
+          for (const st of s.stamps) {
+            objects.push({
+              id: uid("img"),
+              layerId,
+              kind: "image",
+              x: st.x * g,
+              y: st.y * g,
+              w: st.w ? st.w * g : g * 2,
+              h: st.h ? st.h * g : g * 2,
+              angle: 0,
+              url: st.url,
+              name: st.name || "Stamp",
+            });
+          }
+        }
         return { ...d, shapes, objects, settings };
       }, "AI suggestion");
     },
