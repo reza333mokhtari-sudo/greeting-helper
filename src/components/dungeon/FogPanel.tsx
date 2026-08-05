@@ -72,7 +72,7 @@ export function FogPanel(p: Props) {
           <Brush className="mr-1 h-3 w-3" /> Brush
         </Button>
         <Button size="sm" variant={p.mode === "select" ? "secondary" : "ghost"} className="h-6 text-[10px]" onClick={() => p.onMode("select")}>
-          <SquareDashed className="mr-1 h-3 w-3" /> change color plate to better look
+          <SquareDashed className="mr-1 h-3 w-3" /> Selector
         </Button>
       </div>
 

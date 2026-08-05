@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { ProfileMenu } from "./ProfileMenu";
 import {
   Menubar,
   MenubarContent,
@@ -36,7 +37,7 @@ type Props = {
 export function TopMenuBar(props: Props) {
   return (
     <header className="relative flex h-11 shrink-0 items-center gap-2 border-b border-border bg-sidebar px-2">
-      <span className="px-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-arcane">Scrawl</span>
+      <span className="px-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-arcane">change color plate to better look</span>
       <Menubar className="h-8 border-0 bg-transparent p-0 shadow-none">
         <MenubarMenu>
           <MenubarTrigger className="h-8 px-3 text-xs">File</MenubarTrigger>
@@ -96,7 +97,10 @@ export function TopMenuBar(props: Props) {
         {props.dirty ? <span className="ml-2 text-[10px] text-muted-foreground">Unsaved changes</span> : null}
       </div>
 
-      <div className="ml-auto flex items-center gap-2">{props.right}</div>
+      <div className="ml-auto flex items-center gap-2">
+        <ProfileMenu />
+        {props.right}
+      </div>
     </header>
   );
 }
