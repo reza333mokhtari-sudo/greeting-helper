@@ -348,6 +348,23 @@ export function DungeonEditor() {
         ctx.strokeStyle = "#f5c451";
         ctx.stroke();
       }
+      if (aiPreview.stamps) {
+        for (const st of aiPreview.stamps) {
+          const img = getImage(st.url);
+          const w = (st.w ? st.w : 2) * g;
+          const h = (st.h ? st.h : 2) * g;
+          ctx.save();
+          ctx.translate(st.x * g, st.y * g);
+          ctx.globalAlpha = 0.5;
+          if (img) {
+            ctx.drawImage(img, -w / 2, -h / 2, w, h);
+          } else {
+            ctx.strokeStyle = "#f5c451";
+            ctx.strokeRect(-w / 2, -h / 2, w, h);
+          }
+          ctx.restore();
+        }
+      }
       ctx.restore();
     }
   }, [doc, view, preview, selected, polyPts, cursor, aiPreview]);
@@ -957,6 +974,23 @@ export function DungeonEditor() {
         const settings = { ...d.settings };
         for (const [k, v] of Object.entries(s.settings)) {
           if (allowed.includes(k as keyof Settings)) (settings as Record<string, unknown>)[k] = v;
+        }
+        if (s.stamps && Array.isArray(s.stamps)) {
+          const layerId = d.layers.find((l) => l.id === DEFAULT_LAYER_FOR.image)?.id ?? d.layers[0]!.id;
+          for (const st of s.stamps) {
+            objects.push({
+              id: uid("img"),
+              layerId,
+              kind: "image",
+              x: st.x * g,
+              y: st.y * g,
+              w: st.w ? st.w * g : g * 2,
+              h: st.h ? st.h * g : g * 2,
+              angle: 0,
+              url: st.url,
+              name: st.name || "Stamp",
+            });
+          }
         }
         return { ...d, shapes, objects, settings };
       }, "AI suggestion");
