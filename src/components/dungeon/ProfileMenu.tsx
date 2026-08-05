@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -41,6 +42,7 @@ export function ProfileMenu() {
       user_id: user.id,
       subject: ticketSubject,
       message: ticketMessage,
+      priority: (window as any)._ticketPriority || "medium",
     });
     setBusy(false);
     if (error) {
@@ -56,18 +58,46 @@ export function ProfileMenu() {
   const dialogs = {
     settings: { 
       title: "Settings", 
-      desc: "Manage your account preferences.",
+      desc: "Manage your account preferences and view shortcuts.",
       content: (
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Label>Display Name</Label>
-            <Input placeholder="Your name" defaultValue={user?.user_metadata?.display_name} />
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="display-name" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Profile Information</Label>
+              <div className="space-y-3 rounded-lg border border-border/50 bg-muted/20 p-3">
+                <div className="space-y-1.5">
+                  <Label htmlFor="display-name" className="text-[11px]">Display Name</Label>
+                  <Input id="display-name" placeholder="Your name" defaultValue={user?.user_metadata?.display_name} className="h-9 bg-background" />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="email" className="text-[11px]">Email Address</Label>
+                  <Input id="email" disabled value={user?.email || ""} className="h-9 opacity-70" />
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Keyboard Shortcuts</Label>
+              <div className="grid grid-cols-2 gap-2 rounded-lg border border-border/50 bg-muted/20 p-3">
+                {[
+                  { key: "V", label: "Select Tool" },
+                  { key: "R", label: "Rectangle Tool" },
+                  { key: "P", label: "Path Tool" },
+                  { key: "G", label: "Grid Toggle" },
+                  { key: "Z", label: "Undo", mod: "Ctrl" },
+                  { key: "Y", label: "Redo", mod: "Ctrl" },
+                ].map(s => (
+                  <div key={s.label} className="flex items-center justify-between text-[11px]">
+                    <span className="text-muted-foreground">{s.label}</span>
+                    <kbd className="inline-flex h-5 items-center rounded border border-border bg-background px-1.5 font-mono text-[10px] font-medium text-foreground shadow-sm">
+                      {s.mod ? <span className="mr-0.5 opacity-60">{s.mod}+</span> : null}{s.key}
+                    </kbd>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-          <div className="space-y-2">
-            <Label>Email</Label>
-            <Input disabled value={user?.email || ""} />
-          </div>
-          <Button className="w-full">Save Changes</Button>
+          <Button className="w-full shadow-lg shadow-primary/10">Save Changes</Button>
         </div>
       )
     },
@@ -112,23 +142,40 @@ export function ProfileMenu() {
       content: (
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label>Subject</Label>
+            <Label htmlFor="priority" className="text-[11px] uppercase tracking-wider text-muted-foreground">Priority</Label>
+            <Select onValueChange={(v) => (window as any)._ticketPriority = v} defaultValue="medium">
+              <SelectTrigger id="priority" className="h-9">
+                <SelectValue placeholder="Select priority" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="low">Low (Feedback/Idea)</SelectItem>
+                <SelectItem value="medium">Medium (Issue)</SelectItem>
+                <SelectItem value="high">High (Bug/Blocker)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="subject" className="text-[11px] uppercase tracking-wider text-muted-foreground">Subject</Label>
             <Input 
+              id="subject"
               placeholder="What do you need help with?" 
               value={ticketSubject}
               onChange={(e) => setTicketSubject(e.target.value)}
+              className="h-9"
             />
           </div>
           <div className="space-y-2">
-            <Label>Message</Label>
+            <Label htmlFor="message" className="text-[11px] uppercase tracking-wider text-muted-foreground">Message</Label>
             <Textarea 
+              id="message"
               placeholder="Describe your issue or suggestion in detail..." 
               rows={4}
               value={ticketMessage}
               onChange={(e) => setTicketMessage(e.target.value)}
+              className="resize-none"
             />
           </div>
-          <Button className="w-full" onClick={sendTicket} disabled={busy}>
+          <Button className="w-full shadow-lg shadow-primary/10" onClick={sendTicket} disabled={busy}>
             {busy ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
             Send Ticket
           </Button>

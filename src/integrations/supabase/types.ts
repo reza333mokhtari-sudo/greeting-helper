@@ -139,6 +139,7 @@ export type Database = {
       }
       support_tickets: {
         Row: {
+          assignee_id: string | null
           created_at: string
           id: string
           message: string
@@ -149,6 +150,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          assignee_id?: string | null
           created_at?: string
           id?: string
           message: string
@@ -159,6 +161,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          assignee_id?: string | null
           created_at?: string
           id?: string
           message?: string

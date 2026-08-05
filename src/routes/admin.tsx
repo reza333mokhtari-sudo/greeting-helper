@@ -451,11 +451,25 @@ function AdminPage() {
               columns={[
                 { key: "user", header: "User", value: (t) => profiles.find(p => p.id === t.user_id)?.display_name || t.user_id },
                 { key: "subject", header: "Subject", value: (t) => t.subject },
-                { key: "status", header: "Status", cell: (t) => (
-                  <Badge variant={t.status === 'open' ? 'destructive' : t.status === 'closed' ? 'secondary' : 'default'}>
-                    {t.status}
-                  </Badge>
-                )},
+                { 
+                  key: "priority", 
+                  header: "Priority", 
+                  value: (t) => t.priority || 'medium',
+                  cell: (t) => (
+                    <Badge variant={t.priority === 'high' ? 'destructive' : t.priority === 'low' ? 'outline' : 'secondary'} className="capitalize">
+                      {t.priority || 'medium'}
+                    </Badge>
+                  )
+                },
+                { 
+                  key: "status", 
+                  header: "Status", 
+                  cell: (t) => (
+                    <Badge variant={t.status === 'open' ? 'destructive' : t.status === 'closed' ? 'secondary' : 'default'} className="capitalize">
+                      {t.status}
+                    </Badge>
+                  )
+                },
                 { key: "created", header: "Date", value: (t) => new Date(t.created_at).toLocaleString() },
                 { key: "actions", header: "", sortable: false, cell: (t) => (
                   <div className="flex gap-2">
@@ -468,34 +482,64 @@ function AdminPage() {
                           <DialogTitle>{t.subject}</DialogTitle>
                         </DialogHeader>
                         <div className="space-y-4 py-4">
-                          <div className="space-y-1">
-                            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">From</p>
-                            <p className="text-sm">{profiles.find(p => p.id === t.user_id)?.display_name || t.user_id}</p>
+                          <div className="flex justify-between items-start">
+                            <div className="space-y-1">
+                              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">From</p>
+                              <p className="text-sm font-medium">{profiles.find(p => p.id === t.user_id)?.display_name || t.user_id}</p>
+                            </div>
+                            <div className="space-y-1 text-right">
+                              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Priority</p>
+                              <Badge variant={t.priority === 'high' ? 'destructive' : 'secondary'} className="capitalize">
+                                {t.priority || 'medium'}
+                              </Badge>
+                            </div>
                           </div>
                           <div className="space-y-1">
                             <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Message</p>
-                            <p className="text-sm whitespace-pre-wrap">{t.message}</p>
+                            <p className="text-sm whitespace-pre-wrap rounded-md bg-muted/30 p-3 border border-border/40">{t.message}</p>
                           </div>
                           <Separator />
-                          <div className="space-y-2">
-                            <Label>Update Status</Label>
-                            <Select 
-                              defaultValue={t.status} 
-                              onValueChange={async (v) => {
-                                await supabase.from('support_tickets').update({ status: v }).eq('id', t.id);
-                                load();
-                                toast.success("Status updated");
-                              }}
-                            >
-                              <SelectTrigger>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="open">Open</SelectItem>
-                                <SelectItem value="in_progress">In Progress</SelectItem>
-                                <SelectItem value="closed">Closed</SelectItem>
-                              </SelectContent>
-                            </Select>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <Label className="text-[11px] uppercase tracking-wider text-muted-foreground">Update Status</Label>
+                              <Select 
+                                defaultValue={t.status} 
+                                onValueChange={async (v) => {
+                                  await supabase.from('support_tickets').update({ status: v }).eq('id', t.id);
+                                  load();
+                                  toast.success("Status updated");
+                                }}
+                              >
+                                <SelectTrigger className="h-9">
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="open">Open</SelectItem>
+                                  <SelectItem value="in_progress">In Progress</SelectItem>
+                                  <SelectItem value="closed">Closed</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-[11px] uppercase tracking-wider text-muted-foreground">Update Priority</Label>
+                              <Select 
+                                defaultValue={t.priority || 'medium'} 
+                                onValueChange={async (v) => {
+                                  await supabase.from('support_tickets').update({ priority: v }).eq('id', t.id);
+                                  load();
+                                  toast.success("Priority updated");
+                                }}
+                              >
+                                <SelectTrigger className="h-9">
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="low">Low</SelectItem>
+                                  <SelectItem value="medium">Medium</SelectItem>
+                                  <SelectItem value="high">High</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
                           </div>
                         </div>
                       </DialogContent>
@@ -507,6 +551,11 @@ function AdminPage() {
               loading={busy}
               onRefresh={load}
               exportName="support-tickets"
+              facets={[
+                { key: "open", label: "Open", test: (t) => t.status === "open" },
+                { key: "in_progress", label: "In Progress", test: (t) => t.status === "in_progress" },
+                { key: "high_priority", label: "High Priority", test: (t) => t.priority === "high" },
+              ]}
             />
           )}
         </div>
