@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Sparkles, Loader2, WifiOff, Cpu } from "lucide-react";
+import { Sparkles, Loader2, WifiOff, Cpu, Settings2, RotateCcw, Save } from "lucide-react";
 import { toast } from "sonner";
 
-import { suggestMap, AI_ENGINES, type AiSuggestion, type AiEngine } from "@/lib/ai.functions";
+import { suggestMap, AI_ENGINES, SYSTEM_PROMPT, type AiSuggestion, type AiEngine } from "@/lib/ai.functions";
 import type { Doc } from "@/lib/dungeon/model";
 import { useOnlineStatus } from "@/hooks/use-online-status";
 import { Button } from "@/components/ui/button";
@@ -89,6 +89,8 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName }: Props) {
   const [engine, setEngine] = useState<AiEngine>("balanced");
   const [prompt, setPrompt] = useState("");
   const [busy, setBusy] = useState(false);
+  const [showEditor, setShowEditor] = useState(false);
+  const [customSystem, setCustomSystem] = useState(() => localStorage.getItem("ai-cartographer-system") || SYSTEM_PROMPT);
   const [result, setResult] = useState<AiSuggestion | null>(null);
   const [history, setHistory] = useState<Turn[]>([]);
 
@@ -114,6 +116,7 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName }: Props) {
           engine,
           gridSize: doc.settings.gridSize,
           history: history.slice(-6),
+          customSystem: customSystem !== SYSTEM_PROMPT ? customSystem : undefined,
         },
       });
       setResult(res);
@@ -140,9 +143,67 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName }: Props) {
 
   return (
     <section className="space-y-2">
-      <h2 className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-        <Sparkles className="h-3 w-3 text-accent" /> AI cartographer
-      </h2>
+      <div className="flex items-center justify-between">
+        <h2 className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+          <Sparkles className="h-3 w-3 text-accent" /> AI cartographer
+        </h2>
+        <Button
+          variant="ghost"
+          size="icon"
+          className={`size-6 ${showEditor ? "text-accent bg-accent/10" : ""}`}
+          title="Tweak AI System Prompt"
+          onClick={() => setShowEditor(!showEditor)}
+        >
+          <Settings2 className="h-3 w-3" />
+        </Button>
+      </div>
+
+      {showEditor && (
+        <div className="space-y-2 rounded-md border border-accent/30 bg-accent/5 p-2 animate-in fade-in slide-in-from-top-1">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-accent">System Persona Editor</span>
+            <div className="flex gap-1">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-5"
+                title="Reset to default"
+                onClick={() => {
+                  if (confirm("Reset to default persona?")) {
+                    setCustomSystem(SYSTEM_PROMPT);
+                    localStorage.removeItem("ai-cartographer-system");
+                    toast.success("Persona reset to default");
+                  }
+                }}
+              >
+                <RotateCcw className="h-3 w-3" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-5 text-emerald-500"
+                title="Save changes"
+                onClick={() => {
+                  localStorage.setItem("ai-cartographer-system", customSystem);
+                  toast.success("Persona saved to local storage");
+                }}
+              >
+                <Save className="h-3 w-3" />
+              </Button>
+            </div>
+          </div>
+          <Textarea
+            value={customSystem}
+            onChange={(e) => setCustomSystem(e.target.value)}
+            className="min-h-[160px] font-mono text-[9px] leading-tight"
+            placeholder="System instructions..."
+          />
+          <p className="text-[9px] text-muted-foreground italic">
+            Changes here alter how the AI thinks. Use carefully.
+          </p>
+        </div>
+      )}
+
       {floorName && (
         <p className="rounded-md border border-accent/40 bg-accent/10 px-2 py-1 text-[10px] text-muted-foreground">
           Working on floor <span className="font-semibold text-foreground">{floorName}</span> only.
