@@ -255,8 +255,14 @@ export function PropsPanel({ onPlace }: { onPlace: (url: string, name: string) =
                           <TooltipTrigger asChild>
                             <Info className="h-2.5 w-2.5 text-muted-foreground cursor-help" />
                           </TooltipTrigger>
-                          <TooltipContent className="text-[10px]">
-                            License: {a.license}
+                          <TooltipContent className="text-[10px] max-w-[200px]">
+                            <p className="font-semibold mb-1">License: {a.license}</p>
+                            {a.license?.includes("Attribution") && (
+                              <p className="text-amber-500 font-medium">⚠️ Attribution required for this asset.</p>
+                            )}
+                            {a.license?.includes("Proprietary") && (
+                              <p className="text-destructive font-medium">⚠️ Commercial use may require a license.</p>
+                            )}
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
