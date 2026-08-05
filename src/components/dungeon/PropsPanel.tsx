@@ -31,6 +31,7 @@ export function PropsPanel({ onPlace }: { onPlace: (url: string, name: string) =
   const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const [selectedLibrary, setSelectedLibrary] = useState("custom");
+  const [searchOpen, setSearchOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const refresh = useCallback(() => {
