@@ -46,7 +46,7 @@ export type AiSuggestion = {
   settings: Record<string, string | number | boolean>;
 };
 
-const SYSTEM = `You are an expert Dungeon Scrawl map-design assistant and veteran TTRPG cartographer.
+export const SYSTEM_PROMPT = `You are an expert Dungeon Scrawl map-design assistant and veteran TTRPG cartographer.
 
 Dungeon Scrawl is a tool for quickly drawing RPG/D&D battlemaps with a hand-drawn look.
 
@@ -83,6 +83,8 @@ MODES
 
 "settings" may only contain: hatch (boolean), hatchDensity (3-16), roughness (0-14), wallThickness (2-16),
 gridStyle ("square"|"dot"|"hex"|"none"), bgColor, floorColor, wallColor, gridColor, inkColor (hex strings).`;
+
+const SYSTEM = SYSTEM_PROMPT;
 
 const num = (v: unknown, fallback = 0) => (typeof v === "number" && Number.isFinite(v) ? v : fallback);
 
