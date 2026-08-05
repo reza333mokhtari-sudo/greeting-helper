@@ -1238,6 +1238,16 @@ export function DungeonEditor() {
     },
     paste: () => pasteAt(menuTarget.pt),
     dup: duplicateSelection,
+    selectAll: () => {
+      const allIds = [
+        ...doc.shapes.map((s) => s.id),
+        ...doc.objects.map((o) => o.id),
+      ];
+      setSelected(allIds);
+    },
+    deselectAll: () => {
+      setSelected([]);
+    },
   };
 
   const cursorStyle = useMemo(() => {
