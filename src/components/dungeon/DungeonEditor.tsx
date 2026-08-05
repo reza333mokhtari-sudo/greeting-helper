@@ -1318,6 +1318,8 @@ export function DungeonEditor() {
         );
       case "properties":
         return <PropertiesPanel doc={doc} object={selectedObject} onChange={updateObject} onDelete={deleteSelected} />;
+      case "help":
+        return <QuickStartPanel />;
       default:
         return null;
     }
