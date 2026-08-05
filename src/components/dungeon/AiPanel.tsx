@@ -19,7 +19,7 @@ const MODES: { id: Mode; label: string; placeholder: string; chips: string[] }[]
     id: "rooms",
     label: "Suggest rooms",
     placeholder: "A goblin warren with a flooded shrine and 3 side chambers",
-    chips: ["Small 5-room crypt", "Sprawling sewer network", "Wizard tower ground floor"],
+    chips: ["Small 6-room crypt", "Dungeon for level 3 party", "Wizard tower ground floor"],
   },
   {
     id: "encounter",
