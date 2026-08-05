@@ -68,6 +68,8 @@ import { CanvasContextMenu } from "./CanvasContextMenu";
 import { DiagnosticsPanel } from "./DiagnosticsPanel";
 import { recordDraw } from "@/lib/dungeon/perf";
 import { useOnlineStatus } from "@/hooks/use-online-status";
+import { OnboardingOverlay } from "./OnboardingOverlay";
+import { QuickStartPanel } from "./QuickStartPanel";
 
 const STORAGE_KEY = "dungeon-scrawl-doc-v1";
 const MIN_ZOOM = 0.08;
@@ -112,7 +114,7 @@ export function DungeonEditor() {
   const [activeLayer, setActiveLayer] = useState<string>(() => emptyDoc().layers[0]!.id);
   const [fogMode, setFogMode] = useState<FogMode>("brush");
   const [fogBrush, setFogBrush] = useState(96);
-  const [leftPanel, setLeftPanel] = useState<PanelId | null>("settings");
+  const [leftPanel, setLeftPanel] = useState<PanelId | null>("help");
   const [savedAt, setSavedAt] = useState<number | null>(null);
   const [saveMs, setSaveMs] = useState<number | null>(null);
   const [docBytes, setDocBytes] = useState(0);
@@ -1316,6 +1318,8 @@ export function DungeonEditor() {
         );
       case "properties":
         return <PropertiesPanel doc={doc} object={selectedObject} onChange={updateObject} onDelete={deleteSelected} />;
+      case "help":
+        return <QuickStartPanel />;
       default:
         return null;
     }
@@ -1396,11 +1400,17 @@ export function DungeonEditor() {
           <canvas ref={canvasRef} className="block h-full w-full" />
           {!doc.shapes.length && !polyPts.length && (
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <p className="rounded-xl border border-border bg-card/80 px-5 py-3 backdrop-blur text-center text-xs leading-relaxed text-muted-foreground">
-                Drag with the rectangle tool to carve your first room.
-                <br />
-                Scroll to zoom · Space or middle-drag to pan · Ctrl+Z to undo
-              </p>
+              <div className="animate-in fade-in slide-in-from-bottom-4 duration-1000 flex flex-col items-center gap-1.5 rounded-2xl border border-primary/20 bg-card/60 px-6 py-4 backdrop-blur shadow-2xl text-center">
+                <div className="flex items-center gap-2 text-sm font-bold text-foreground">
+                  <Sparkles className="size-4 text-primary animate-pulse" />
+                  <span>Ready to scrawl? Drag anywhere to draw your first room.</span>
+                </div>
+                <p className="max-w-xs text-[10px] leading-relaxed text-muted-foreground">
+                  Scroll to zoom · Space or middle-drag to pan · Ctrl+Z to undo.
+                  <br />
+                  Press (E) to erase or (D) for doors.
+                </p>
+              </div>
             </div>
           )}
           {aiPreview && (
@@ -1493,7 +1503,8 @@ export function DungeonEditor() {
             </div>
           </ScrollArea>
         </aside>
-      </div>
+      <OnboardingOverlay />
+    </div>
 
       <StatusBar
         toolLabel={toolLabel}

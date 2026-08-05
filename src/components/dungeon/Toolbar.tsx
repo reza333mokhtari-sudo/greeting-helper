@@ -19,6 +19,8 @@ export type ToolId =
   | "fogHide"
   | "fogReveal";
 
+import { TOOL_DESCRIPTIONS } from "@/lib/dungeon/onboarding";
+
 export const TOOLS: { id: ToolId; label: string; key: string; icon: string }[] = [
   { id: "select", label: "Select / Move", key: "V", icon: "M4 3l14 8-6 1.6L9.6 19z" },
   { id: "pan", label: "Pan", key: "H", icon: "M11 3a1.4 1.4 0 012.8 0v6h.4V4.6a1.4 1.4 0 012.8 0V12h.4V7a1.4 1.4 0 012.8 0v7.5c0 3.6-2.6 6.5-6.3 6.5-3.7 0-5.6-2-7.2-5L4.4 12c-.6-1.2 1-2.3 2-1.2L8.2 13V3z" },
@@ -44,6 +46,7 @@ export const TOOLS: { id: ToolId; label: string; key: string; icon: string }[] =
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
+import { Badge } from "@/components/ui/badge";
 import { Undo2, Redo2, ZoomIn, ZoomOut } from "lucide-react";
 
 type Props = {
@@ -106,8 +109,19 @@ export function Toolbar(props: Props) {
                   </svg>
                 </Button>
               </TooltipTrigger>
-              <TooltipContent side="top">
-                {t.label} <span className="opacity-60">({t.key})</span>
+              <TooltipContent side="top" className="max-w-xs space-y-1">
+                <div className="flex items-center justify-between gap-4 font-semibold">
+                  <span>{TOOL_DESCRIPTIONS[t.id]?.title || t.label}</span>
+                  <span className="text-[10px] opacity-60">({t.key})</span>
+                </div>
+                {TOOL_DESCRIPTIONS[t.id]?.desc && (
+                  <p className="text-[11px] leading-relaxed text-muted-foreground">
+                    {TOOL_DESCRIPTIONS[t.id]!.desc}
+                  </p>
+                )}
+                {TOOL_DESCRIPTIONS[t.id]?.pro && (
+                  <Badge variant="secondary" className="h-4 px-1 text-[9px] uppercase tracking-wider">Pro Feature</Badge>
+                )}
               </TooltipContent>
             </Tooltip>
           );

@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, X, Trash2 } from "lucide-react";
+import { Plus, X, Trash2, Crown } from "lucide-react";
 
 type Props = {
   doc: Doc;
@@ -61,14 +61,16 @@ const numInput = "h-7 w-32 text-xs";
 export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
   if (!o) {
     return (
-      <section>
-        <h2 className="mb-2 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-          <span className="h-1 w-1 rounded-full bg-primary" />
+      <section className="space-y-4">
+        <h2 className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
+          <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_8px_var(--primary)]" />
           Properties
         </h2>
-        <p className="rounded-md bg-muted/40 p-2 text-[11px] text-muted-foreground">
-          Select an object to edit its properties.
-        </p>
+        <div className="rounded-xl border border-dashed border-border p-4 text-center">
+          <p className="text-[10px] italic leading-relaxed text-muted-foreground">
+            Select an object or tool to tweak its specific settings.
+          </p>
+        </div>
       </section>
     );
   }
@@ -79,24 +81,31 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
     patch({ props: props.map((p, j) => (j === i ? { key, value } : p)) } as Partial<MapObject>);
 
   return (
-    <section>
-      <div className="mb-2 flex items-center justify-between">
-        <h2 className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-          <span className="h-1 w-1 rounded-full bg-primary" />
+    <section className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
+          <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_8px_var(--primary)]" />
           Properties
-          <Badge variant="outline" className="h-4 px-1.5 text-[9px] uppercase">
+          <Badge variant="outline" className="h-4 border-primary/20 bg-primary/5 px-1.5 text-[9px] uppercase tracking-wider text-primary">
             {o.kind}
           </Badge>
         </h2>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="size-6 text-destructive hover:bg-destructive/10 hover:text-destructive"
-          aria-label="Delete object"
-          onClick={() => onDelete(o.id)}
-        >
-          <Trash2 className="size-3.5" />
-        </Button>
+        <div className="flex items-center gap-1">
+          {(o as any).pro && (
+            <Badge variant="secondary" className="h-4 gap-1 px-1.5 text-[8px] font-bold uppercase tracking-wider text-primary bg-primary/10 border-none">
+              <Crown className="size-2" /> Pro
+            </Badge>
+          )}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-7 text-destructive hover:bg-destructive/10 hover:text-destructive"
+            aria-label="Delete object"
+            onClick={() => onDelete(o.id)}
+          >
+            <Trash2 className="size-3.5" />
+          </Button>
+        </div>
       </div>
 
       <Row label="Name">

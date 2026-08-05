@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Sliders, Layers, Image, Sparkles, CloudFog, History, Info, Activity, Building2 } from "lucide-react";
+import { Sliders, Layers, Image, Sparkles, CloudFog, History, Info, Activity, Building2, HelpCircle } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-export type PanelId = "settings" | "floors" | "layers" | "props" | "ai" | "fog" | "history" | "properties" | "diagnostics";
+export type PanelId = "settings" | "floors" | "layers" | "props" | "ai" | "fog" | "history" | "properties" | "diagnostics" | "help";
 
 const PANELS: { id: PanelId; label: string; icon: LucideIcon }[] = [
   { id: "settings", label: "Tool & map settings", icon: Sliders },
@@ -14,6 +14,7 @@ const PANELS: { id: PanelId; label: string; icon: LucideIcon }[] = [
   { id: "fog", label: "Fog of war", icon: CloudFog },
   { id: "history", label: "History", icon: History },
   { id: "properties", label: "Properties", icon: Info },
+  { id: "help", label: "Quick help", icon: HelpCircle },
   { id: "diagnostics", label: "Performance diagnostics", icon: Activity },
 ];
 
