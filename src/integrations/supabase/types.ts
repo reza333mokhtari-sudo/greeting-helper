@@ -53,6 +53,7 @@ export type Database = {
           favorite: boolean
           id: string
           kind: string
+          license: string | null
           name: string
           tags: string[]
           url: string
@@ -63,6 +64,7 @@ export type Database = {
           favorite?: boolean
           id?: string
           kind?: string
+          license?: string | null
           name: string
           tags?: string[]
           url: string
@@ -73,6 +75,7 @@ export type Database = {
           favorite?: boolean
           id?: string
           kind?: string
+          license?: string | null
           name?: string
           tags?: string[]
           url?: string

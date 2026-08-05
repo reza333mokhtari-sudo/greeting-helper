@@ -9,6 +9,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Info } from "lucide-react";
+
+const LIBRARIES = [
+  { id: "custom", label: "My Custom Assets", license: "Proprietary / Unknown" },
+  { id: "opengameart", label: "OpenGameArt", license: "Free / OSS (Check specific asset)" },
+  { id: "icons8", label: "Icons8", license: "Free with Attribution / Commercial" },
+  { id: "flaticon", label: "Flaticon", license: "Free with Attribution / Premium" },
+  { id: "noun", label: "Noun Project", license: "CC BY / Public Domain" },
+  { id: "kenney", label: "Kenney", license: "CC0 (Public Domain)" },
+];
 
 export function PropsPanel({ onPlace }: { onPlace: (url: string, name: string) => void }) {
   const [assets, setAssets] = useState<AssetRow[]>([]);
@@ -18,6 +30,7 @@ export function PropsPanel({ onPlace }: { onPlace: (url: string, name: string) =
   const [favOnly, setFavOnly] = useState(false);
   const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
   const [dragOver, setDragOver] = useState(false);
+  const [selectedLibrary, setSelectedLibrary] = useState("custom");
   const fileRef = useRef<HTMLInputElement>(null);
 
   const refresh = useCallback(() => {
@@ -26,7 +39,9 @@ export function PropsPanel({ onPlace }: { onPlace: (url: string, name: string) =
         setAssets(rows);
         preloadImages(rows.map((r) => r.url));
       })
-      .catch(() => undefined);
+      .catch((err) => {
+        console.error("Failed to load assets", err);
+      });
   }, []);
 
   useEffect(() => {
@@ -43,13 +58,15 @@ export function PropsPanel({ onPlace }: { onPlace: (url: string, name: string) =
   /** Bulk upload: sequential with a live progress bar and per-file error reporting. */
   const upload = useCallback(
     async (files: File[]) => {
+      const lib = LIBRARIES.find(l => l.id === selectedLibrary);
+      const license = lib?.license;
       const images = files.filter((f) => f.type.startsWith("image/"));
       if (!images.length) return;
       setProgress({ done: 0, total: images.length });
       let failed = 0;
       for (let i = 0; i < images.length; i++) {
         try {
-          await uploadAsset(images[i]!);
+          await uploadAsset(images[i]!, "prop", license);
         } catch {
           failed++;
         }
@@ -112,15 +129,29 @@ export function PropsPanel({ onPlace }: { onPlace: (url: string, name: string) =
     >
       <div className="flex items-center justify-between">
         <h2 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Props &amp; textures</h2>
-        <Button
-          size="sm"
-          variant="outline"
-          className="h-6 px-2 text-[10px]"
-          disabled={!signedIn || !!progress}
-          onClick={() => fileRef.current?.click()}
-        >
-          <ImagePlus className="mr-1 h-3 w-3" /> Upload
-        </Button>
+        <div className="flex items-center gap-2">
+          <Select value={selectedLibrary} onValueChange={setSelectedLibrary}>
+            <SelectTrigger className="h-6 w-[130px] text-[10px]">
+              <SelectValue placeholder="Library" />
+            </SelectTrigger>
+            <SelectContent>
+              {LIBRARIES.map(l => (
+                <SelectItem key={l.id} value={l.id} className="text-[10px]">
+                  {l.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Button
+            size="sm"
+            variant="outline"
+            className="h-6 px-2 text-[10px]"
+            disabled={!signedIn || !!progress}
+            onClick={() => fileRef.current?.click()}
+          >
+            <ImagePlus className="mr-1 h-3 w-3" /> Upload
+          </Button>
+        </div>
       </div>
       <input
         ref={fileRef}
@@ -216,7 +247,27 @@ export function PropsPanel({ onPlace }: { onPlace: (url: string, name: string) =
                   <button type="button" className="block w-full" title={`Place ${a.name}`} onClick={() => onPlace(a.url, a.name)}>
                     <img src={a.url} alt={a.name} className="h-14 w-full object-contain p-1" />
                   </button>
-                  <span className="block truncate px-1 pb-0.5 text-[9px] text-muted-foreground">{a.name}</span>
+                  <div className="flex items-center justify-between px-1 pb-0.5">
+                    <span className="block truncate text-[9px] text-muted-foreground">{a.name}</span>
+                    {a.license && (
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="h-2.5 w-2.5 text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent className="text-[10px] max-w-[200px]">
+                            <p className="font-semibold mb-1">License: {a.license}</p>
+                            {a.license?.includes("Attribution") && (
+                              <p className="text-amber-500 font-medium">⚠️ Attribution required for this asset.</p>
+                            )}
+                            {a.license?.includes("Proprietary") && (
+                              <p className="text-destructive font-medium">⚠️ Commercial use may require a license.</p>
+                            )}
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    )}
+                  </div>
                   <div className="absolute right-0.5 top-0.5 hidden flex-col gap-0.5 group-hover:flex">
                     <button
                       type="button"
