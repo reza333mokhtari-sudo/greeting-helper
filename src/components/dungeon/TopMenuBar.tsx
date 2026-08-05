@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { ProfileMenu } from "./ProfileMenu";
 import {
   Menubar,
   MenubarContent,
@@ -96,7 +97,10 @@ export function TopMenuBar(props: Props) {
         {props.dirty ? <span className="ml-2 text-[10px] text-muted-foreground">Unsaved changes</span> : null}
       </div>
 
-      <div className="ml-auto flex items-center gap-2">{props.right}</div>
+      <div className="ml-auto flex items-center gap-2">
+        <ProfileMenu />
+        {props.right}
+      </div>
     </header>
   );
 }
