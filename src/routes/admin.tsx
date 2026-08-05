@@ -8,6 +8,7 @@ import {
   Globe,
   Loader2,
   Map as MapIcon,
+  MessageSquare,
   Plus,
   ShieldCheck,
   Trash2,
@@ -48,13 +49,14 @@ type RoleRow = { id: string; user_id: string; role: "admin" | "moderator" | "use
 type MapRow = { id: string; name: string; user_id: string; is_public: boolean; share_slug: string; updated_at: string };
 type PageRow = { id: string; slug: string; title: string; body: string; published: boolean; updated_at: string };
 
-type Section = "overview" | "users" | "maps" | "cms";
+type Section = "overview" | "users" | "maps" | "cms" | "tickets";
 
-const NAV: { key: Section; label: string; icon: typeof Users }[] = [
+const NAV: { key: Section; label: string; icon: any }[] = [
   { key: "overview", label: "Overview", icon: Activity },
   { key: "users", label: "Users & roles", icon: Users },
   { key: "maps", label: "Maps", icon: MapIcon },
   { key: "cms", label: "CMS pages", icon: FileText },
+  { key: "tickets", label: "Support Tickets", icon: MessageSquare },
 ];
 
 function AdminPage() {
@@ -66,19 +68,22 @@ function AdminPage() {
   const [roles, setRoles] = useState<RoleRow[]>([]);
   const [maps, setMaps] = useState<MapRow[]>([]);
   const [pages, setPages] = useState<PageRow[]>([]);
+  const [tickets, setTickets] = useState<any[]>([]);
 
   const load = useCallback(async () => {
     setBusy(true);
-    const [p, r, m, c] = await Promise.all([
+    const [p, r, m, c, t] = await Promise.all([
       supabase.from("profiles").select("id,display_name,created_at").order("created_at", { ascending: false }),
       supabase.from("user_roles").select("id,user_id,role"),
       supabase.from("maps").select("id,name,user_id,is_public,share_slug,updated_at").order("updated_at", { ascending: false }),
       supabase.from("cms_pages").select("id,slug,title,body,published,updated_at").order("updated_at", { ascending: false }),
+      supabase.from("support_tickets").select("*").order("created_at", { ascending: false }),
     ]);
     setProfiles((p.data ?? []) as Profile[]);
     setRoles((r.data ?? []) as RoleRow[]);
     setMaps((m.data ?? []) as MapRow[]);
     setPages((c.data ?? []) as PageRow[]);
+    setTickets(t.data ?? []);
     setBusy(false);
   }, []);
 
@@ -109,6 +114,7 @@ function AdminPage() {
       { label: "Users", value: profiles.length, icon: Users, hint: `${roles.filter((r) => r.role === "admin").length} admins` },
       { label: "Maps", value: maps.length, icon: MapIcon, hint: `${maps.filter((m) => m.is_public).length} shared publicly` },
       { label: "CMS pages", value: pages.length, icon: FileText, hint: `${pages.filter((p) => p.published).length} published` },
+      { label: "Tickets", value: tickets.length, icon: MessageSquare, hint: `${tickets.filter(t => t.status === 'open').length} open` },
       {
         label: "Active this week",
         value: maps.filter((m) => Date.now() - new Date(m.updated_at).getTime() < 7 * 864e5).length,
@@ -439,6 +445,70 @@ function AdminPage() {
           )}
 
           {section === "cms" && <CmsTab pages={pages} reload={load} loading={busy} />}
+          {section === "tickets" && (
+            <DataTable
+              rows={tickets}
+              columns={[
+                { key: "user", header: "User", value: (t) => profiles.find(p => p.id === t.user_id)?.display_name || t.user_id },
+                { key: "subject", header: "Subject", value: (t) => t.subject },
+                { key: "status", header: "Status", cell: (t) => (
+                  <Badge variant={t.status === 'open' ? 'destructive' : t.status === 'closed' ? 'secondary' : 'default'}>
+                    {t.status}
+                  </Badge>
+                )},
+                { key: "created", header: "Date", value: (t) => new Date(t.created_at).toLocaleString() },
+                { key: "actions", header: "", sortable: false, cell: (t) => (
+                  <div className="flex gap-2">
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button size="sm" variant="outline">View</Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>{t.subject}</DialogTitle>
+                        </DialogHeader>
+                        <div className="space-y-4 py-4">
+                          <div className="space-y-1">
+                            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">From</p>
+                            <p className="text-sm">{profiles.find(p => p.id === t.user_id)?.display_name || t.user_id}</p>
+                          </div>
+                          <div className="space-y-1">
+                            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Message</p>
+                            <p className="text-sm whitespace-pre-wrap">{t.message}</p>
+                          </div>
+                          <Separator />
+                          <div className="space-y-2">
+                            <Label>Update Status</Label>
+                            <Select 
+                              defaultValue={t.status} 
+                              onValueChange={async (v) => {
+                                await supabase.from('support_tickets').update({ status: v }).eq('id', t.id);
+                                load();
+                                toast.success("Status updated");
+                              }}
+                            >
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="open">Open</SelectItem>
+                                <SelectItem value="in_progress">In Progress</SelectItem>
+                                <SelectItem value="closed">Closed</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                )}
+              ]}
+              rowKey={(r) => r.id}
+              loading={busy}
+              onRefresh={load}
+              exportName="support-tickets"
+            />
+          )}
         </div>
       </div>
     </main>
