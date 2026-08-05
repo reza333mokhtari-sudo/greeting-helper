@@ -191,7 +191,7 @@ export const suggestMap = createServerFn({ method: "POST" })
         maxRetries: isCustom ? 0 : 1,
         ...(providerOptions ? { providerOptions } : {}),
 
-        system: extra ? `${SYSTEM}\n\n${extra}` : SYSTEM,
+        system: data.customSystem || (extra ? `${SYSTEM}\n\n${extra}` : SYSTEM),
         messages: (extra
           ? [...messages, { role: "user" as const, content: extra }]
           : messages) as { role: "user" | "assistant"; content: string }[],
