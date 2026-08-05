@@ -43,7 +43,7 @@ export type AiSuggestion = {
   rooms: AiRoom[];
   corridors: { x1: number; y1: number; x2: number; y2: number }[];
   objects: AiObject[];
-  stamps: { url: string; x: number; y: number; w?: number; h?: number; name?: string }[];
+  stamps: { url: string; x: number; y: number; w?: number | null; h?: number | null; name?: string | null }[];
   encounters: { name: string; description: string }[];
   settings: Record<string, string | number | boolean>;
 };
