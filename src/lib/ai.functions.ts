@@ -241,7 +241,7 @@ export const suggestMap = createServerFn({ method: "POST" })
           // One repair pass: the model saw its own malformed reply is unusable.
           return parseJson(await run("Your previous reply was not valid JSON. Reply again with ONLY the JSON object."));
         } catch {
-          return { notes: text.slice(0, 800), rooms: [], corridors: [], objects: [], encounters: [], settings: {} };
+          return { notes: text.slice(0, 800), rooms: [], corridors: [], objects: [], stamps: [], encounters: [], settings: {} };
         }
       }
       const msg = (err as Error)?.message ?? "AI request failed";
