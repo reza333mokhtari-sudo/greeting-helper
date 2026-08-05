@@ -56,18 +56,46 @@ export function ProfileMenu() {
   const dialogs = {
     settings: { 
       title: "Settings", 
-      desc: "Manage your account preferences.",
+      desc: "Manage your account preferences and view shortcuts.",
       content: (
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Label>Display Name</Label>
-            <Input placeholder="Your name" defaultValue={user?.user_metadata?.display_name} />
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="display-name" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Profile Information</Label>
+              <div className="space-y-3 rounded-lg border border-border/50 bg-muted/20 p-3">
+                <div className="space-y-1.5">
+                  <Label htmlFor="display-name" className="text-[11px]">Display Name</Label>
+                  <Input id="display-name" placeholder="Your name" defaultValue={user?.user_metadata?.display_name} className="h-9 bg-background" />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="email" className="text-[11px]">Email Address</Label>
+                  <Input id="email" disabled value={user?.email || ""} className="h-9 opacity-70" />
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Keyboard Shortcuts</Label>
+              <div className="grid grid-cols-2 gap-2 rounded-lg border border-border/50 bg-muted/20 p-3">
+                {[
+                  { key: "V", label: "Select Tool" },
+                  { key: "R", label: "Rectangle Tool" },
+                  { key: "P", label: "Path Tool" },
+                  { key: "G", label: "Grid Toggle" },
+                  { key: "Z", label: "Undo", mod: "Ctrl" },
+                  { key: "Y", label: "Redo", mod: "Ctrl" },
+                ].map(s => (
+                  <div key={s.label} className="flex items-center justify-between text-[11px]">
+                    <span className="text-muted-foreground">{s.label}</span>
+                    <kbd className="inline-flex h-5 items-center rounded border border-border bg-background px-1.5 font-mono text-[10px] font-medium text-foreground shadow-sm">
+                      {s.mod ? <span className="mr-0.5 opacity-60">{s.mod}+</span> : null}{s.key}
+                    </kbd>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-          <div className="space-y-2">
-            <Label>Email</Label>
-            <Input disabled value={user?.email || ""} />
-          </div>
-          <Button className="w-full">Save Changes</Button>
+          <Button className="w-full shadow-lg shadow-primary/10">Save Changes</Button>
         </div>
       )
     },
