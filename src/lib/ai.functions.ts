@@ -43,6 +43,7 @@ export type AiSuggestion = {
   rooms: AiRoom[];
   corridors: { x1: number; y1: number; x2: number; y2: number }[];
   objects: AiObject[];
+  stamps: { url: string; x: number; y: number; w?: number; h?: number; name?: string }[];
   encounters: { name: string; description: string }[];
   settings: Record<string, string | number | boolean>;
 };
@@ -73,6 +74,7 @@ SHAPE
               {"kind":"light","x":4,"y":2},{"kind":"trigger","x":8,"y":5,"name":"Pit trap"},
               {"kind":"item","x":2,"y":3,"name":"Iron chest"},{"kind":"text","x":3,"y":1,"text":"Barracks"}],
   "encounters": [{"name":"...","description":"stat-light description"}],
+  "stamps": [{"url":"https://...png","x":10,"y":5,"name":"Altar"}],
   "settings": {}
 }
 
