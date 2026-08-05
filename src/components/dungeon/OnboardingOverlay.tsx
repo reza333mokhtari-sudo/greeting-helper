@@ -21,6 +21,7 @@ export function OnboardingOverlay() {
   };
 
   const current = ONBOARDING_STEPS[step];
+  if (!current) return null;
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && close()}>
