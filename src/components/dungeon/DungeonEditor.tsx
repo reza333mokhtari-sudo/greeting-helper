@@ -1503,7 +1503,8 @@ export function DungeonEditor() {
             </div>
           </ScrollArea>
         </aside>
-      </div>
+      <OnboardingOverlay />
+    </div>
 
       <StatusBar
         toolLabel={toolLabel}
