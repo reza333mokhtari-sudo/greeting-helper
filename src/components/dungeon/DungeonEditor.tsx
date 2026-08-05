@@ -348,6 +348,23 @@ export function DungeonEditor() {
         ctx.strokeStyle = "#f5c451";
         ctx.stroke();
       }
+      if (aiPreview.stamps) {
+        for (const st of aiPreview.stamps) {
+          const img = getImage(st.url);
+          const w = (st.w ? st.w : 2) * g;
+          const h = (st.h ? st.h : 2) * g;
+          ctx.save();
+          ctx.translate(st.x * g, st.y * g);
+          ctx.globalAlpha = 0.5;
+          if (img) {
+            ctx.drawImage(img, -w / 2, -h / 2, w, h);
+          } else {
+            ctx.strokeStyle = "#f5c451";
+            ctx.strokeRect(-w / 2, -h / 2, w, h);
+          }
+          ctx.restore();
+        }
+      }
       ctx.restore();
     }
   }, [doc, view, preview, selected, polyPts, cursor, aiPreview]);
