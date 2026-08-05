@@ -744,7 +744,14 @@ export function DungeonEditor() {
 
 
   /** Filled in below once the clipboard actions exist (avoids TDZ in the key handler). */
-  const kbRef = useRef({ copy: () => {}, cut: () => {}, paste: () => {}, dup: () => {} });
+  const kbRef = useRef({
+    copy: () => {},
+    cut: () => {},
+    paste: () => {},
+    dup: () => {},
+    selectAll: () => {},
+    deselectAll: () => {},
+  });
 
   // keyboard
   useEffect(() => {
