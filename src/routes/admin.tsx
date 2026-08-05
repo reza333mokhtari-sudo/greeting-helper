@@ -8,6 +8,7 @@ import {
   Globe,
   Loader2,
   Map as MapIcon,
+  MessageSquare,
   Plus,
   ShieldCheck,
   Trash2,
