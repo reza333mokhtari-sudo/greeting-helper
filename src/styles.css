@@ -176,4 +176,6 @@
 .panel-scroll {
   scrollbar-width: thin;
   scrollbar-color: color-mix(in oklab, var(--primary) 45%, transparent) transparent;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
