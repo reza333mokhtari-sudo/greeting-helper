@@ -8,7 +8,7 @@ export const AI_ENGINES = {
   balanced: { id: "openai/gpt-5.6-terra", label: "Balanced · GPT-5.6 Terra", hint: "Best all-round cartography" },
   deep: { id: "openai/gpt-5.6-sol", label: "Deep · GPT-5.6 Sol", hint: "Strongest reasoning, slower" },
   lite: { id: "openai/gpt-5.6-luna", label: "Lite · GPT-5.6 Luna", hint: "Cheapest, simple requests" },
-  grok: { id: "grok-4.5", label: "Grok 4.5", hint: "Expert map-design assistant" },
+  grok: { id: "grok-4.5", label: "Grok 4.5 Plus", hint: "Enhanced expert map-design assistant" },
   fable5: { id: "fable-5", label: "Fable 5 · Custom endpoint", hint: "Your own OpenAI-compatible endpoint", custom: true },
 } as const;
 
@@ -59,6 +59,7 @@ RULES
   endpoints touch a room edge. Corridors are straight (share x1==x2 or y1==y2); use two segments for an L.
 - Think about play: vary room sizes (3x3 up to 12x9), add a clear entrance room, at least one dead end or
   secret area when the request allows, and place doors where corridors meet rooms.
+- Scale: If suggesting 2D Icons or stamps, use a default size of 15x15 units (0.5 cells) for small props unless asked otherwise.
 - Suggest overall layout (entrance, rooms, loops, secrets, boss area).
 - Provide numbered, actionable steps in the "notes" using Dungeon Scrawl tools: Rectangle (R), Path (B), Door (D), Erase (E), Snap, Rough setting, Layers, etc.
 - Recommending styles/presets: Classic Hatching, Blueprint, Cave, or world-building presets.

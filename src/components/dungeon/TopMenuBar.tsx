@@ -42,7 +42,7 @@ export function TopMenuBar(props: Props) {
         <MenubarMenu>
           <MenubarTrigger className="h-8 px-3 text-xs">File</MenubarTrigger>
           <MenubarContent>
-            <MenubarItem onSelect={props.onNew}>now what do you think about site \nwhat need anymore ?</MenubarItem>
+            <MenubarItem onSelect={props.onNew}>now debug all model AI assist and enhance them (if CLIENT want make 2d ICON as 15px-15px(only) and other )\n\nmake sure has BIG update</MenubarItem>
             <MenubarItem onSelect={props.onImport}>Import savefile…</MenubarItem>
             <MenubarSeparator />
             <MenubarItem onSelect={props.onExportPng}>Export PNG</MenubarItem>
