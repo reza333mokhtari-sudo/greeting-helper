@@ -1,6 +1,6 @@
 export const ONBOARDING_STEPS = [
   {
-    title: "now what do you think about site \nwhat need anymore ?",
+    title: "now debug all model AI assist and enhance them (if CLIENT want make 2d ICON as 15px-15px(only) and other )\n\nmake sure has BIG update",
     content: "Dungeon Scrawl is a minimalist map maker. Everything you draw is automatically merged into a hand-drawn style.",
     image: "M3 5h18v14H3z", // Rectangle icon
   },
