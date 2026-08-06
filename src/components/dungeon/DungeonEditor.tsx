@@ -1480,7 +1480,7 @@ export function DungeonEditor() {
         <LeftRail active={leftPanel} onSelect={(id) => setLeftPanel((cur) => (cur === id ? null : id))} />
 
         {leftContent && (
-          <aside className="flex w-72 shrink-0 flex-col border-r border-border bg-sidebar">
+          <aside className="flex w-72 shrink-0 flex-col border-r border-border bg-sidebar resize-x overflow-auto min-w-[200px] max-w-[600px]">
             <ScrollArea className="min-h-0 flex-1">
               <div className="flex flex-col gap-4 p-4">{leftContent}</div>
             </ScrollArea>
@@ -1589,25 +1589,7 @@ export function DungeonEditor() {
         />
         </ContextMenu>
 
-        <aside className="flex w-72 shrink-0 flex-col border-l border-border bg-sidebar">
-          <ScrollArea className="min-h-0 flex-1">
-            <div className="flex flex-col gap-5 p-4">
-              <LayersPanel
-                doc={doc}
-                activeLayer={activeLayer}
-                onActiveLayer={setActiveLayer}
-                onUpdateLayer={updateLayer}
-                onMoveLayer={moveLayer}
-                onReorderLayer={reorderLayer}
-                onAddLayer={addLayer}
-                onDeleteLayer={deleteLayer}
-                selected={selected}
-                onSelect={setSelected}
-              />
-              <PropertiesPanel doc={doc} object={selectedObject} onChange={updateObject} onDelete={deleteSelected} />
-            </div>
-          </ScrollArea>
-        </aside>
+        {/* Removed redundant right-side panel as it's now accessible from the left rail */}
       <OnboardingOverlay />
     </div>
 

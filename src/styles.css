@@ -169,7 +169,11 @@
   color: transparent;
 }
 
-@utility panel-scroll {
+.resize-x {
+  resize: horizontal;
+}
+
+.panel-scroll {
   scrollbar-width: thin;
   scrollbar-color: color-mix(in oklab, var(--primary) 45%, transparent) transparent;
 }
