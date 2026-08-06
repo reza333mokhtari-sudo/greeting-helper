@@ -34,7 +34,7 @@ type Props = {
   onShowGrid: (v: boolean) => void;
 };
 
-export function TopMenuBar(props: Props) {
+export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => void }) {
   return (
     <header className="relative flex h-11 shrink-0 items-center gap-2 border-b border-border bg-sidebar px-2">
       <span className="px-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-arcane">Scrawl</span>
@@ -85,18 +85,18 @@ export function TopMenuBar(props: Props) {
         <MenubarMenu>
           <MenubarTrigger className="h-8 px-3 text-xs">Help</MenubarTrigger>
           <MenubarContent>
-            <MenubarItem disabled className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/60">Shortcuts</MenubarItem>
-            <MenubarItem disabled>R / B — Draw Room / Brush</MenubarItem>
-            <MenubarItem disabled>D / S — Door / Stairs</MenubarItem>
-            <MenubarItem disabled>E — Toggle Erase Mode</MenubarItem>
-            <MenubarItem disabled>Ctrl+A — Select All</MenubarItem>
-            <MenubarItem disabled>Ctrl+D — Deselect All</MenubarItem>
-            <MenubarItem disabled>Space — Pan View</MenubarItem>
-            <MenubarItem disabled>Scroll — Zoom</MenubarItem>
-            <MenubarSeparator />
-            <MenubarItem onSelect={() => window.open('https://dungeonscrawl.com/docs', '_blank')}>
+            <MenubarItem onSelect={() => props.onOpenHelp("quick-start")}>
               Documentation
             </MenubarItem>
+            <MenubarItem onSelect={() => props.onOpenHelp("shortcuts")}>
+              Keyboard Shortcuts
+            </MenubarItem>
+            <MenubarSeparator />
+            <MenubarItem disabled className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/60 px-2 py-1">Cheat Sheet</MenubarItem>
+            <MenubarItem disabled className="text-xs py-1">R / B — Room / Brush</MenubarItem>
+            <MenubarItem disabled className="text-xs py-1">D / S — Door / Stairs</MenubarItem>
+            <MenubarItem disabled className="text-xs py-1">E — Toggle Erase</MenubarItem>
+            <MenubarItem disabled className="text-xs py-1">Space — Pan View</MenubarItem>
           </MenubarContent>
         </MenubarMenu>
       </Menubar>

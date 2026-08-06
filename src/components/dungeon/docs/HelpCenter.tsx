@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import { Search, X, Book, QuickBlurp, ChevronRight, HelpCircle } from "lucide-react";
+import { useState, useMemo, useEffect } from "react";
+import { Search, Book, ChevronRight, HelpCircle } from "lucide-react";
 import { 
   Dialog, 
   DialogContent, 
@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DOCS_DATA, type DocSection } from "./docsData";
 import ReactMarkdown from "react-markdown";
@@ -21,14 +20,14 @@ interface HelpCenterProps {
 
 export function HelpCenter({ open, onOpenChange, initialSectionId }: HelpCenterProps) {
   const [search, setSearch] = useState("");
-  const [activeId, setActiveId] = useState<string>(initialSectionId || "quick-start");
+  const [activeId, setActiveId] = useState<string>("quick-start");
 
-  // Reset activeId if initialSectionId changes while open
-  useMemo(() => {
-    if (initialSectionId) {
+  // Sync activeId when initialSectionId changes or modal opens
+  useEffect(() => {
+    if (open && initialSectionId) {
       setActiveId(initialSectionId);
     }
-  }, [initialSectionId]);
+  }, [open, initialSectionId]);
 
   const filteredDocs = useMemo(() => {
     if (!search) return DOCS_DATA;
@@ -41,7 +40,7 @@ export function HelpCenter({ open, onOpenChange, initialSectionId }: HelpCenterP
   }, [search]);
 
   const activeDoc = useMemo(() => 
-    DOCS_DATA.find(d => d.id === activeId) || DOCS_DATA[0],
+    DOCS_DATA.find(d => d.id === activeId) || DOCS_DATA[0]!,
   [activeId]);
 
   return (
@@ -99,7 +98,7 @@ export function HelpCenter({ open, onOpenChange, initialSectionId }: HelpCenterP
                   <Badge variant="outline" className="capitalize text-[10px] py-0 px-2 h-5 border-arcane/30 text-arcane">
                     {activeDoc.category}
                   </Badge>
-                  {activeId === "quick-start" && <Badge className="bg-amber-500 text-black text-[10px] py-0 px-2 h-5">Recommended</Badge>}
+                  {activeDoc.id === "quick-start" && <Badge className="bg-amber-500 text-black text-[10px] py-0 px-2 h-5">Recommended</Badge>}
                 </div>
                 
                 <h1 className="text-3xl font-bold mb-6 tracking-tight text-foreground">{activeDoc.title}</h1>
@@ -112,6 +111,7 @@ export function HelpCenter({ open, onOpenChange, initialSectionId }: HelpCenterP
                   prose-table:border prose-table:border-border prose-th:bg-sidebar prose-th:p-2 prose-td:p-2 prose-td:border-b prose-td:border-border">
                   <ReactMarkdown>{activeDoc.content}</ReactMarkdown>
                 </div>
+
 
                 {/* Illustrated Step Placeholder (Visual Style Reference) */}
                 <div className="mt-12 p-6 rounded-xl border-2 border-dashed border-muted-foreground/10 bg-muted/5 flex flex-col items-center justify-center text-center">

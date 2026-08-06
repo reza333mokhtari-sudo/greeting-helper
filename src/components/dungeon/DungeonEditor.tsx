@@ -77,6 +77,9 @@ import { OnboardingOverlay } from "./OnboardingOverlay";
 import { QuickStartPanel } from "./QuickStartPanel";
 import { Minimap } from "./Minimap";
 import { PropPreviewModal } from "../props/PropPreviewModal";
+import { HelpCenter } from "./docs/HelpCenter";
+import { HelpButton } from "./docs/HelpButton";
+
 
 
 const STORAGE_KEY = "dungeon-scrawl-doc-v1";
@@ -159,6 +162,15 @@ export function DungeonEditor() {
       return { x: 16, y: 16 };
     }
   });
+
+  const [helpOpen, setHelpOpen] = useState(false);
+  const [helpSection, setHelpSection] = useState<string | null>(null);
+
+  const openHelp = useCallback((sectionId?: string) => {
+    setHelpSection(sectionId || "quick-start");
+    setHelpOpen(true);
+  }, []);
+
 
 
   // Debounce rapid history pushes with the same label into a single snapshot.
