@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, X, Trash2, Crown, Maximize2, Upload, Box } from "lucide-react";
+import { Plus, X, Trash2, Crown, Maximize2, Upload, Box, Image as ImageIcon } from "lucide-react";
 
 type Props = {
   doc: Doc;
