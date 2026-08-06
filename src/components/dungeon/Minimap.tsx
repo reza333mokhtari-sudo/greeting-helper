@@ -145,7 +145,7 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
     
     if (e.type === "pointermove") {
       if (isDraggingMap.current && dragStartPos.current) {
-        const newX = e.clientX - dragStartPos.current.x;
+        const newX = dragStartPos.current.x - e.clientX;
         const newY = e.clientY - dragStartPos.current.y;
         setPos({ x: newX, y: newY });
         onPositionChange?.({ x: newX, y: newY });
