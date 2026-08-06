@@ -157,6 +157,11 @@ export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc
     ctx.imageSmoothingEnabled = false;
   } else if (o.filter === "toon") {
     ctx.filter = "contrast(1.4) saturate(1.8) brightness(1.1) drop-shadow(0 0 1px rgba(0,0,0,0.5))";
+  } else if (o.filter === "remove-bg") {
+    // Basic white-remover filter using contrast/brightness extremes
+    // This works surprisingly well for black-on-white lineart
+    ctx.filter = "contrast(100) brightness(1.2) grayscale(1)";
+    ctx.globalCompositeOperation = "multiply";
   }
 
   ctx.translate(o.x, o.y);
