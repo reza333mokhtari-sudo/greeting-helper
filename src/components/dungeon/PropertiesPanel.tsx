@@ -153,6 +153,19 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
               onChange={(e) => patch({ angle: (Number(e.target.value) * Math.PI) / 180 } as Partial<MapObject>)}
             />
           </Row>
+          <Row label="Visual Filter">
+            <Select value={o.filter ?? "none"} onValueChange={(v) => patch({ filter: v as any })}>
+              <SelectTrigger className="h-7 w-32 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">No Filter</SelectItem>
+                <SelectItem value="pixel">Pixel Graphics</SelectItem>
+                <SelectItem value="toon">Toon Style</SelectItem>
+                <SelectItem value="remove-bg">Remove Background</SelectItem>
+              </SelectContent>
+            </Select>
+          </Row>
         </>
       )}
       {(o.kind === "door" || o.kind === "stairs") && (
