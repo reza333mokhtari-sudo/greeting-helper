@@ -129,7 +129,6 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
   const handlePointer = (e: React.PointerEvent) => {
     if (e.button !== 0 && e.type === "pointerdown") return;
     
-    // Check if clicking the "handle" (the top area) to drag the whole minimap
     const target = e.target as HTMLElement;
     const isHandle = target.closest('.minimap-handle');
 
@@ -148,9 +147,8 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
       if (isDraggingMap.current && dragStartPos.current) {
         const newX = e.clientX - dragStartPos.current.x;
         const newY = e.clientY - dragStartPos.current.y;
-        const newPos = { x: newX, y: newY };
-        setPos(newPos);
-        onPositionChange?.(newPos);
+        setPos({ x: newX, y: newY });
+        onPositionChange?.({ x: newX, y: newY });
         return;
       }
       if (dragging.current) {
