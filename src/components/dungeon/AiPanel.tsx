@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Sparkles, Loader2, WifiOff, Cpu, Settings2, RotateCcw, Save } from "lucide-react";
+import { Sparkles, Loader2, WifiOff, Cpu, Settings2, RotateCcw, Save, Maximize2, Minimize2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { suggestMap, AI_ENGINES, SYSTEM_PROMPT, type AiSuggestion, type AiEngine } from "@/lib/ai.functions";
@@ -87,6 +87,7 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName }: Props) {
   const online = useOnlineStatus();
   const [mode, setMode] = useState<Mode>("rooms");
   const [engine, setEngine] = useState<AiEngine>("balanced");
+  const [fixedSize, setFixedSize] = useState(true);
   const [prompt, setPrompt] = useState("");
   const [busy, setBusy] = useState(false);
   const [showEditor, setShowEditor] = useState(false);
@@ -115,8 +116,9 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName }: Props) {
           mode,
           engine,
           gridSize: doc.settings.gridSize,
-          history: history.slice(-6),
+           history: history.slice(-6),
           customSystem: customSystem !== SYSTEM_PROMPT ? customSystem : undefined,
+          fixedSize,
         },
       });
       setResult(res);
@@ -238,6 +240,28 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName }: Props) {
         </SelectContent>
       </Select>
       <p className="text-[10px] text-muted-foreground">{AI_ENGINES[engine].hint}</p>
+
+      <div className="flex items-center justify-between rounded-md border border-border/50 bg-background/40 px-2 py-1.5">
+        <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Icon Rendering</span>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-6 gap-1 px-2 text-[10px] hover:bg-accent/10 hover:text-accent"
+          onClick={() => setFixedSize(!fixedSize)}
+        >
+          {fixedSize ? (
+            <>
+              <Minimize2 className="h-3 w-3" />
+              <span>Fixed 15x15</span>
+            </>
+          ) : (
+            <>
+              <Maximize2 className="h-3 w-3" />
+              <span>Custom Sizes</span>
+            </>
+          )}
+        </Button>
+      </div>
 
 
 
