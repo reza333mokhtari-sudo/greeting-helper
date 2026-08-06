@@ -581,7 +581,14 @@ export function DungeonEditor() {
     const panning = e.button === 1 || e.button === 2 || tool === "pan" || spaceDown || e.altKey;
     if (panning) {
       if (doc.settings.cameraMode) {
-        drag.current = { mode: "camera_pan", startX: e.clientX, startY: e.clientY, ox: doc.settings.cameraTarget.x, oy: doc.settings.cameraTarget.y };
+        if (e.button === 1 || (e.button === 2 && (e.ctrlKey || e.metaKey || e.shiftKey))) {
+           drag.current = { mode: "camera_pan", startX: e.clientX, startY: e.clientY, ox: doc.settings.cameraTarget.x, oy: doc.settings.cameraTarget.y };
+        } else if (e.button === 2) {
+           // Right click for context menu handled by ContextMenuTrigger, 
+           // but we might want middle-drag or shift-drag specifically for 3D pan.
+           // Let's stick to standard: Left=Orbit, Middle/Right=Pan (if configured)
+           drag.current = { mode: "camera_pan", startX: e.clientX, startY: e.clientY, ox: doc.settings.cameraTarget.x, oy: doc.settings.cameraTarget.y };
+        }
       } else {
         drag.current = { mode: "pan", startX: e.clientX, startY: e.clientY, ox: view.x, oy: view.y };
       }
