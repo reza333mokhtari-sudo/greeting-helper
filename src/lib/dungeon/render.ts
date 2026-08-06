@@ -1,6 +1,7 @@
 import { getImage } from "./assets";
 import { fogTile, type FogStyle } from "./fogAssets";
 import { cellPolygon, objectsInDrawOrder, objectRadius, type Doc, type MapObject, type Pt, type Shape, type View } from "./model";
+import { drawAxisGuides, drawCornerAxisWidget } from "./camera";
 import { lightSources, occluders, visibilityPolygon } from "./los";
 
 export const UI_FONT =
@@ -579,6 +580,11 @@ export function renderScene(
     ctx.setLineDash([]);
   }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+  if (s.cameraMode) {
+    drawAxisGuides(ctx, s, w, h);
+    drawCornerAxisWidget(ctx, s, w, h);
+  }
 }
 
 export function screenToWorld(p: Pt, view: View): Pt {

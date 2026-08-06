@@ -124,9 +124,20 @@ export function GraphicsSettingsPanel({ settings: s, onChange }: Props) {
         <Row label="Invert Y">
           <Switch checked={s.cameraInvertY} onCheckedChange={(v) => onChange({ cameraInvertY: v })} />
         </Row>
-        <Row label="Show axes">
+        <Row label="Show widget">
           <Switch checked={s.showAxes} onCheckedChange={(v) => onChange({ showAxes: v })} />
         </Row>
+        <Row label="World origin">
+          <Switch checked={s.showWorldAxes} onCheckedChange={(v) => onChange({ showWorldAxes: v })} />
+        </Row>
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="w-full mt-2 h-7 text-[10px]"
+          onClick={() => onChange({ cameraYaw: 45, cameraPitch: 45, cameraDistance: 1000, cameraTarget: { x: 0, y: 0 } })}
+        >
+          Reset Camera View
+        </Button>
       </section>
 
       <div className="rounded-md bg-muted/30 p-2.5 text-[10px] leading-relaxed text-muted-foreground border border-border/40">

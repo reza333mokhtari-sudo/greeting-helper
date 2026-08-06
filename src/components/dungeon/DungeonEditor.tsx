@@ -87,7 +87,9 @@ type Drag =
   | { mode: "stroke" }
   | { mode: "fog"; hide: boolean; start: Pt }
   | { mode: "move"; last: Pt; moved: boolean }
-  | { mode: "place"; id: string; origin: Pt };
+  | { mode: "place"; id: string; origin: Pt }
+  | { mode: "camera_orbit"; startX: number; startY: number; yaw: number; pitch: number }
+  | { mode: "camera_pan"; startX: number; startY: number; ox: number; oy: number };
 
 
 export function DungeonEditor() {
@@ -453,10 +455,20 @@ export function DungeonEditor() {
     if (!el) return;
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
+      const dy = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 100 : 1);
+
+      if (stateRef.current.doc.settings.cameraMode) {
+        const s = stateRef.current.doc.settings;
+        const delta = dy > 0 ? 1.1 : 0.9;
+        setSettings({
+          cameraDistance: Math.max(100, Math.min(s.maxDrawDistance, s.cameraDistance * delta))
+        });
+        return;
+      }
+
       const rect = el.getBoundingClientRect();
       const px = e.clientX - rect.left;
       const py = e.clientY - rect.top;
-      const dy = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 100 : 1);
       setView((v) => {
         const next = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, v.scale * Math.exp(-dy * 0.0015)));
         const k = next / v.scale;
@@ -552,12 +564,21 @@ export function DungeonEditor() {
     const world = getPt(e);
     const p = snapped(world);
     setCursor(world);
-    const panning = e.button === 1 || tool === "pan" || spaceDown || e.altKey;
+    const panning = e.button === 1 || e.button === 2 || tool === "pan" || spaceDown || e.altKey;
     if (panning) {
-      drag.current = { mode: "pan", startX: e.clientX, startY: e.clientY, ox: view.x, oy: view.y };
+      if (doc.settings.cameraMode) {
+        drag.current = { mode: "camera_pan", startX: e.clientX, startY: e.clientY, ox: doc.settings.cameraTarget.x, oy: doc.settings.cameraTarget.y };
+      } else {
+        drag.current = { mode: "pan", startX: e.clientX, startY: e.clientY, ox: view.x, oy: view.y };
+      }
       return;
     }
     if (e.button !== 0) return;
+
+    if (doc.settings.cameraMode) {
+      drag.current = { mode: "camera_orbit", startX: e.clientX, startY: e.clientY, yaw: doc.settings.cameraYaw, pitch: doc.settings.cameraPitch };
+      return;
+    }
 
     switch (tool) {
       case "select": {
@@ -704,6 +725,32 @@ export function DungeonEditor() {
     const d = drag.current;
     if (d.mode === "pan") {
       setView((v) => ({ ...v, x: d.ox + (e.clientX - d.startX), y: d.oy + (e.clientY - d.startY) }));
+      return;
+    }
+    if (d.mode === "camera_orbit") {
+      const s = doc.settings;
+      const dx = (e.clientX - d.startX) * s.cameraSensitivity;
+      const dy = (e.clientY - d.startY) * s.cameraSensitivity;
+      const inv = s.cameraInvertY ? -1 : 1;
+      setSettings({
+        cameraYaw: d.yaw - dx,
+        cameraPitch: Math.max(5, Math.min(85, d.pitch + dy * inv))
+      });
+      return;
+    }
+    if (d.mode === "camera_pan") {
+      const s = doc.settings;
+      const dx = (e.clientX - d.startX) / view.scale;
+      const dy = (e.clientY - d.startY) / view.scale;
+      
+      // Rotate pan delta by camera yaw
+      const rad = (s.cameraYaw * Math.PI) / 180;
+      const rx = dx * Math.cos(rad) + dy * Math.sin(rad);
+      const ry = -dx * Math.sin(rad) + dy * Math.cos(rad);
+
+      setSettings({
+        cameraTarget: { x: d.ox - rx, y: d.oy - ry }
+      });
       return;
     }
     if (d.mode === "fog") {

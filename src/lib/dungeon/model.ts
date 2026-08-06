@@ -112,6 +112,11 @@ export type Settings = {
   cameraInvertY: boolean;
   cameraProjection: "perspective" | "orthographic";
   showAxes: boolean;
+  showWorldAxes: boolean;
+  cameraYaw: number;
+  cameraPitch: number;
+  cameraDistance: number;
+  cameraTarget: Pt;
 };
 
 export type Object3D = {
@@ -240,6 +245,11 @@ export const DEFAULT_SETTINGS: Settings = {
   cameraInvertY: false,
   cameraProjection: "perspective",
   showAxes: true,
+  showWorldAxes: true,
+  cameraYaw: 45,
+  cameraPitch: 45,
+  cameraDistance: 1000,
+  cameraTarget: { x: 0, y: 0 },
 };
 
 let counter = 0;
