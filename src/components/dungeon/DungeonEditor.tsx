@@ -1480,9 +1480,9 @@ export function DungeonEditor() {
         <LeftRail active={leftPanel} onSelect={(id) => setLeftPanel((cur) => (cur === id ? null : id))} />
 
         {leftContent && (
-          <aside className="flex w-72 shrink-0 flex-col border-r border-border bg-sidebar resize-x overflow-hidden min-w-[200px] max-w-[600px]">
-            <ScrollArea className="min-h-0 flex-1">
-              <div className="flex flex-col gap-4 p-4">{leftContent}</div>
+          <aside className="flex w-72 shrink-0 flex-col border-r border-border bg-sidebar resize-x min-w-[200px] max-w-[600px] overflow-visible">
+            <ScrollArea className="min-h-0 flex-1 h-full">
+              <div className="flex flex-col gap-4 p-4 min-w-0">
             </ScrollArea>
           </aside>
         )}

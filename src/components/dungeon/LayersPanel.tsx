@@ -222,7 +222,7 @@ export function LayersPanel(p: Props) {
               </div>
 
               {active && objs.length > 0 && (
-                <ScrollArea className="mt-1 max-h-28">
+                <ScrollArea className="mt-1 max-h-40 border border-border/30 rounded bg-muted/10 p-1">
                   <ul className="pr-2">
                     {objs.map((o) => (
                       <li key={o.id}>

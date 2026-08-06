@@ -116,9 +116,8 @@ function Color({ value, onChange }: { value: string; onChange: (v: string) => vo
 export function SidePanel(props: Props) {
   const { settings: s, onChange } = props;
   return (
-    <aside className="flex h-full min-h-0 w-full shrink-0 flex-col">
-      <ScrollArea className="min-h-0 flex-1 panel-scroll">
-        <div className="flex flex-col gap-5 p-4">
+    <aside className="flex h-full min-h-0 w-full shrink-0 flex-col overflow-visible">
+      <div className="flex flex-col gap-5 p-4 min-w-0">
           <section>
             <SectionTitle>Grid</SectionTitle>
             <Row label="Size">
@@ -300,10 +299,8 @@ export function SidePanel(props: Props) {
               “Blocks light” is on.
             </p>
           </section>
-        </div>
-      </ScrollArea>
-
-      <div className="flex flex-col gap-2 border-t border-border bg-card/60 p-4">
+      </div>
+      <div className="flex flex-col gap-2 border-t border-border bg-card/60 p-4 mt-auto">
         <Button variant="outline" size="sm" onClick={props.onFit}>
           <Maximize2 /> Fit map to screen
         </Button>
