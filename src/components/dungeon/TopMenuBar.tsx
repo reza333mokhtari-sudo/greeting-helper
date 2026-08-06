@@ -85,7 +85,7 @@ export function TopMenuBar(props: Props) {
           <MenubarTrigger className="h-8 px-3 text-xs">DIAGNOSTICS</MenubarTrigger>
           <MenubarContent>
             <MenubarItem disabled className="whitespace-pre-line text-[10px] text-muted-foreground">
-              {"Add a debug overlay that shows the computed world point under the cursor and where the object will be placed when I click or drag."}
+              {"Add a debug overlay that shows the computed world point under the cursor and where the object will be placed when I click or drag.\n\nEnsure the coordinate correction stays accurate after switching Camera Mode on/off and after changing orbit/pan/zoom settings by persisting the active camera transform."}
             </MenubarItem>
           </MenubarContent>
         </MenubarMenu>
