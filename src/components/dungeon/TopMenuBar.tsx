@@ -41,94 +41,43 @@ export function TopMenuBar(props: Props) {
       <Menubar className="h-8 border-0 bg-transparent p-0 shadow-none">
         <MenubarMenu>
           <MenubarTrigger className="h-8 px-3 text-xs">where is CUBE ?</MenubarTrigger>
-          <MenubarContent className="w-[500px] max-h-[85vh] overflow-y-auto p-4">
+          <MenubarContent className="w-[400px] max-h-[85vh] overflow-y-auto p-4">
             <div className="space-y-6 text-xs">
               <div>
                 <div className="font-bold border-b pb-1 uppercase mb-2">SKILLS</div>
                 <ul className="list-disc pl-4 space-y-1 text-muted-foreground">
-                  <li>Asset pipeline engineering</li>
-                  <li>glTF/GLB online runtime loading</li>
-                  <li>File validation and conversion backends</li>
-                  <li>Thumbnail generation</li>
-                  <li>Secure uploads and storage</li>
-                  <li>TanStack Start server functions / API design</li>
-                  <li>Python workers for heavy conversion (core.py)</li>
-                  <li>JS/TS runtime core (core.js)</li>
+                  <li>Production debugging</li>
+                  <li>Feature flag rollback</li>
+                  <li>Pointer event conflict resolution</li>
+                  <li>State single-source-of-truth fixes</li>
                 </ul>
               </div>
 
               <div>
-                <div className="font-bold border-b pb-1 uppercase mb-2">ROLE</div>
+                <div className="font-bold border-b pb-1 uppercase mb-2">TASK</div>
                 <p className="text-muted-foreground leading-relaxed">
-                  Add backend-supported 3D object import/placement like modern scrawl/map tools, without breaking the editor.
-                </p>
-              </div>
-
-              <div className="space-y-4">
-                <div className="font-bold border-b pb-1 uppercase">GOAL</div>
-                <p className="text-muted-foreground">
-                  Users can add 3D objects into the site/library and place them on the map:
-                  trees, bosses, NPCs, props, stairs, rocks, etc.
+                  Fix camera/cube/minimap/options regressions only.
+                  Do not add new feature scope.
                 </p>
               </div>
 
               <div className="space-y-2">
-                <div className="font-bold border-b pb-1 uppercase">FORMAT POLICY (REALISTIC)</div>
-                <p className="text-muted-foreground font-semibold">Runtime in browser:</p>
+                <div className="font-bold border-b pb-1 uppercase">CHECK/FIX</div>
                 <ul className="list-disc pl-4 text-muted-foreground">
-                  <li>Primary: .glb / .gltf</li>
-                  <li>Secondary: .obj</li>
-                </ul>
-                <p className="text-muted-foreground font-semibold mt-2">Backend conversion (best-effort):</p>
-                <p className="text-muted-foreground">.fbx .dae .stl .ply .3ds -{">"} optimized .glb</p>
-                <p className="text-muted-foreground italic mt-1 text-[10px]">
-                  Do not claim impossible native support for proprietary app formats (.max/.blend native) in-browser.
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <div className="font-bold border-b pb-1 uppercase">BACKEND ARCHITECTURE</div>
-                <div className="space-y-3">
-                  <div>
-                    <p className="font-semibold text-foreground/80">1) core.js</p>
-                    <p className="text-muted-foreground text-[10px]">Load GLB/OBJ, normalize scale, place in scene, serialize refs.</p>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground/80">2) core.py</p>
-                    <p className="text-muted-foreground text-[10px]">Validate, convert to GLB, optimize mesh, generate thumbnail, return metadata (polycount, bbox).</p>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground/80">API Endpoints:</p>
-                    <code className="block bg-muted p-1 rounded text-[10px] text-muted-foreground">
-                      POST /api/assets/import<br/>
-                      GET /api/assets/:id<br/>
-                      GET /api/assets (library)<br/>
-                      POST /api/assets/optimize
-                    </code>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <div className="font-bold border-b pb-1 uppercase">EDITOR INTEGRATION</div>
-                <ul className="list-disc pl-4 text-muted-foreground">
-                  <li>Asset library categories: Nature, Structures, Characters, Stairs, Rocks, Imported</li>
-                  <li>Drag/drop or click-to-place onto map</li>
-                  <li>Auto-scale & Drop to floor/elevation</li>
-                  <li>Works with Camera Enabled 3D view</li>
-                  <li>Visible in Top view & Transform persistence</li>
+                  <li>Camera on/off</li>
+                  <li>Cube view changes</li>
+                  <li>Top/Bottom/Left/Right</li>
+                  <li>XYZ/RGB helpers</li>
+                  <li>Minimap sync</li>
+                  <li>Tool drag vs camera drag</li>
+                  <li>Settings that do not apply</li>
+                  <li>Any 3D option causing crash</li>
                 </ul>
               </div>
 
               <div className="space-y-2">
-                <div className="font-bold border-b pb-1 uppercase">ACCEPTANCE</div>
-                <ul className="list-disc pl-4 text-muted-foreground">
-                  <li>Upload GLB works end-to-end</li>
-                  <li>Converted FBX/OBJ path works or cleanly errors</li>
-                  <li>Place tree/boss/npc on map</li>
-                  <li>Transforms persist</li>
-                  <li>Backend returns thumbnail + metadata</li>
-                </ul>
+                <div className="font-bold border-b pb-1 uppercase">OUTPUT</div>
+                <p className="text-muted-foreground">Root causes, files changed, test checklist.</p>
               </div>
             </div>
           </MenubarContent>
