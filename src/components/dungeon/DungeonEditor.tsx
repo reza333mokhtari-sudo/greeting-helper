@@ -57,6 +57,7 @@ import {
 import type { AiSuggestion } from "@/lib/ai.functions";
 import { exportPdfFile, exportSvgFile } from "@/lib/dungeon/exporters";
 import { renderScene, screenToWorld } from "@/lib/dungeon/render";
+import { unprojectToPlane } from "@/lib/dungeon/camera";
 import { CloudBar } from "./CloudBar";
 import { PropsPanel } from "./PropsPanel";
 import { getImage, onImageLoaded } from "@/lib/dungeon/assets";
