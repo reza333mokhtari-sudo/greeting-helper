@@ -1579,6 +1579,17 @@ export function DungeonEditor() {
         return <QuickStartPanel />;
       case "cms":
         return <CmsPanel />;
+      case "ai":
+        return (
+          <AiPanel
+            doc={doc}
+            onPreview={setAiPreview}
+            onApply={(s) => commit((d) => ({ ...d, shapes: [...d.shapes, ...s.rooms.map(r => ({ id: uid(), kind: 'rect' as const, erase: false, a: { x: r.x * d.settings.gridSize, y: r.y * d.settings.gridSize }, b: { x: (r.x + r.w) * d.settings.gridSize, y: (r.y + r.h) * d.settings.gridSize }, layerId: activeLayer }))], objects: [...d.objects, ...s.objects.map(o => ({ id: uid(), kind: 'npc' as const, x: o.x * d.settings.gridSize, y: o.y * d.settings.gridSize, layerId: activeLayer, color: '#ff4d4d' }))] }), 'AI Suggestion')}
+            staged={aiPreview}
+            floorName={doc.floors.find((f) => f.id === doc.activeFloorId)?.name}
+            onOpenHelp={openHelp}
+          />
+        );
       default:
         return null;
     }
@@ -1623,6 +1634,7 @@ export function DungeonEditor() {
         onPlayerView={(v) => setSettings({ playerView: v })}
         showGrid={doc.settings.gridStyle !== "none"}
         onShowGrid={(v) => setSettings({ gridStyle: v ? "square" : "none" })}
+        onOpenHelp={openHelp}
         right={<CloudBar doc={syncActiveFloor(doc)} thumbnail={thumbnail} onLoadDoc={(d) => commit(migrateDoc(d))} />}
       />
 
