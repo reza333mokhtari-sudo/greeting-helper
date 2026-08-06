@@ -169,8 +169,22 @@
   color: transparent;
 }
 
-.resize-x {
-  resize: horizontal;
+.resize-handle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 4px;
+  cursor: col-resize;
+  background: transparent;
+  transition: background 0.2s;
+  z-index: 50;
+}
+
+.resize-handle:hover,
+.resize-handle.is-resizing {
+  background: var(--primary);
+  width: 4px;
 }
 
 .panel-scroll {

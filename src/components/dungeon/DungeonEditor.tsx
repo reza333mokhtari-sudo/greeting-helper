@@ -116,6 +116,8 @@ export function DungeonEditor() {
   const [fogMode, setFogMode] = useState<FogMode>("brush");
   const [fogBrush, setFogBrush] = useState(96);
   const [leftPanel, setLeftPanel] = useState<PanelId | null>("help");
+  const [sidebarWidth, setSidebarWidth] = useState(320);
+  const [isResizing, setIsResizing] = useState(false);
   const [savedAt, setSavedAt] = useState<number | null>(null);
   const [saveMs, setSaveMs] = useState<number | null>(null);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
@@ -499,6 +501,32 @@ export function DungeonEditor() {
       return [];
     });
   }, [commit]);
+
+  const handleResizeMouseDown = useCallback((e: React.MouseEvent) => {
+    setIsResizing(true);
+    e.preventDefault();
+  }, []);
+
+  useEffect(() => {
+    if (!isResizing) return;
+
+    const onMouseMove = (e: MouseEvent) => {
+      // Offset by left rail width (approx 52px)
+      const newWidth = Math.max(200, Math.min(800, e.clientX - 52));
+      setSidebarWidth(newWidth);
+    };
+
+    const onMouseUp = () => {
+      setIsResizing(false);
+    };
+
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup", onMouseUp);
+    return () => {
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup", onMouseUp);
+    };
+  }, [isResizing]);
 
   const onPointerDown = (e: React.PointerEvent) => {
     (e.target as Element).setPointerCapture?.(e.pointerId);
@@ -1479,13 +1507,20 @@ export function DungeonEditor() {
       <div className="flex min-h-0 flex-1">
         <LeftRail active={leftPanel} onSelect={(id) => setLeftPanel((cur) => (cur === id ? null : id))} />
 
-        {leftContent && (
-          <aside className="flex w-72 shrink-0 flex-col border-r border-border bg-sidebar resize-x min-w-[200px] max-w-[600px] overflow-visible">
+        {leftPanel && (
+          <aside 
+            className="relative flex h-full shrink-0 flex-col border-r border-border bg-sidebar overflow-visible"
+            style={{ width: `${sidebarWidth}px` }}
+          >
             <ScrollArea className="min-h-0 flex-1 h-full">
               <div className="flex flex-col gap-4 p-4 min-w-0">
                 {leftContent}
               </div>
             </ScrollArea>
+            <div
+              onMouseDown={handleResizeMouseDown}
+              className={`resize-handle ${isResizing ? "is-resizing" : ""}`}
+            />
           </aside>
         )}
 
