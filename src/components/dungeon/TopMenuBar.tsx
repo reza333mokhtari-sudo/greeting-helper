@@ -42,13 +42,7 @@ export function TopMenuBar(props: Props) {
         <MenubarMenu>
           <MenubarTrigger className="h-8 px-3 text-xs">File</MenubarTrigger>
           <MenubarContent>
-            <MenubarItem onSelect={props.onNew}>
-              Add automatic model fallback and retry logic so AI assists continue working when Grok or other models fail or time out.
-              <br /><br />
-              Create automated QA checks that validate AI-generated icons and props against size, transparency, and canvas placement rules before applying edits.
-              <br /><br />
-              Implement a user-facing control to switch 2D icon/stamp rendering between fixed 15x15 and custom sizes while keeping layout consistent.
-            </MenubarItem>
+            <MenubarItem onSelect={props.onNew}>fix MINI map( has MULTIPLE ) fix it</MenubarItem>
 
             <MenubarItem onSelect={props.onImport}>Import savefile…</MenubarItem>
             <MenubarSeparator />

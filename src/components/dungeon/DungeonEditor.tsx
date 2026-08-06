@@ -1575,7 +1575,7 @@ export function DungeonEditor() {
           onContextMenu={openMenu}
         >
           <canvas ref={canvasRef} className="block h-full w-full" />
-          {doc.shapes.length > 0 && <Minimap doc={syncActiveFloor(doc)} view={view} onNavigate={zoomTo} />}
+          
           {!doc.shapes.length && !polyPts.length && (
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
               <div className="animate-in fade-in slide-in-from-bottom-4 duration-1000 flex flex-col items-center gap-1.5 rounded-2xl border border-primary/20 bg-card/60 px-6 py-4 backdrop-blur shadow-2xl text-center">
