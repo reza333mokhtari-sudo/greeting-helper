@@ -5,17 +5,11 @@ import type { Settings, Pt } from "./model";
  * Projects a 3D point (world space) to 2D screen space (pixels)
  * using the camera settings and the current canvas size.
  */
-export function project3D(
-  p: { x: number; y: number; z: number },
-  s: Settings,
-  width: number,
-  height: number
-): { x: number; y: number; z: number } | null {
+export function getCamera(s: Settings, width: number, height: number): THREE.Camera {
   const camera = s.cameraProjection === "perspective" 
     ? new THREE.PerspectiveCamera(s.cameraFov, width / height, 1, s.maxDrawDistance)
     : new THREE.OrthographicCamera(-width / 2, width / 2, height / 2, -height / 2, 1, s.maxDrawDistance);
 
-  // Orbit camera math
   const yaw = THREE.MathUtils.degToRad(s.cameraYaw);
   const pitch = THREE.MathUtils.degToRad(s.cameraPitch);
   
@@ -28,18 +22,52 @@ export function project3D(
   camera.lookAt(s.cameraTarget.x, s.cameraTarget.y, 0);
   camera.updateMatrixWorld();
   camera.updateProjectionMatrix();
+  return camera;
+}
 
+export function project3D(
+  p: { x: number; y: number; z: number },
+  s: Settings,
+  width: number,
+  height: number
+): { x: number; y: number; z: number } | null {
+  const camera = getCamera(s, width, height);
   const vector = new THREE.Vector3(p.x, p.y, p.z);
   vector.project(camera);
 
-  // Convert to screen coordinates
   const x = (vector.x + 1) * width / 2;
   const y = (-vector.y + 1) * height / 2;
 
-  // vector.z is normalized depth: [0, 1] means in front of camera
   if (vector.z < 0 || vector.z > 1) return null;
-
   return { x, y, z: vector.z };
+}
+
+/**
+ * Unprojects a screen point back to the z=0 world plane.
+ */
+export function unprojectToPlane(
+  screen: Pt,
+  s: Settings,
+  width: number,
+  height: number
+): Pt {
+  const camera = getCamera(s, width, height);
+  
+  // Normalized device coordinates
+  const ndc = new THREE.Vector3(
+    (screen.x / width) * 2 - 1,
+    -(screen.y / height) * 2 + 1,
+    0.5
+  );
+
+  const raycaster = new THREE.Raycaster();
+  raycaster.setFromCamera(ndc, camera);
+
+  const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+  const target = new THREE.Vector3();
+  raycaster.ray.intersectPlane(plane, target);
+
+  return { x: target.x, y: target.y };
 }
 
 export function drawAxisGuides(
