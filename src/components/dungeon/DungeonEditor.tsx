@@ -1733,6 +1733,9 @@ export function DungeonEditor() {
               copySelection();
               deleteSelected();
             },
+            onUpdateZ: (z) => {
+              if (menuTarget.id) updateObject(menuTarget.id, { z });
+            },
             onPaste: () => pasteAt(menuTarget.pt),
             onDuplicate: duplicateSelection,
             onDelete: deleteSelected,
