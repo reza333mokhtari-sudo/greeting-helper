@@ -1646,6 +1646,24 @@ export function DungeonEditor() {
           onPointerLeave={onPointerUp}
           onDoubleClick={finishPoly}
           onContextMenu={openMenu}
+          onWheel={(e) => {
+            if (e.ctrlKey || e.metaKey) {
+              // Browser zoom or custom zoom tool
+              const delta = e.deltaY > 0 ? -1 : 1;
+              zoomBy(delta as any);
+              e.preventDefault();
+            } else if (doc.settings.cameraMode) {
+              // Independent camera zoom in 3D
+              const delta = e.deltaY > 0 ? 1.1 : 0.9;
+              setSettings({
+                cameraDistance: Math.max(100, Math.min(doc.settings.maxDrawDistance, doc.settings.cameraDistance * delta))
+              });
+              e.preventDefault();
+            } else {
+              // standard pan
+              setView((v) => ({ ...v, x: v.x - e.deltaX, y: v.y - e.deltaY }));
+            }
+          }}
         >
           <canvas ref={canvasRef} className="block h-full w-full" />
           
