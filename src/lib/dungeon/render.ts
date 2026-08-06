@@ -278,15 +278,7 @@ export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc
   } else if (o.kind === "image") {
     const img = getImage(o.url);
     if (img) {
-      const isPixel = o.filter === "pixel";
-      const isToon = o.filter === "toon";
-      if (isPixel) ctx.imageSmoothingEnabled = false;
-      if (isToon) ctx.filter = "contrast(1.2) saturate(1.5) brightness(1.1)";
-      
       ctx.drawImage(img, -o.w / 2, -o.h / 2, o.w, o.h);
-      
-      if (isPixel) ctx.imageSmoothingEnabled = true;
-      if (isToon) ctx.filter = "none";
     } else {
       ctx.strokeStyle = inkColor;
       ctx.globalAlpha = 0.4;
