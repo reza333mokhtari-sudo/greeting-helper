@@ -23,7 +23,7 @@ const LIBRARIES = [
   { id: "kenney", label: "Kenney", license: "CC0 (Public Domain)", searchUrl: "https://www.kenney.nl/assets?q=" },
 ];
 
-export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name: string) => void, onPreview?: (prop: { id: string; url: string; name: string; license?: string }) => void }) {
+export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name: string) => void, onPreview?: (prop: { id: string; url: string; name: string; license?: string | null }) => void }) {
   const [assets, setAssets] = useState<AssetRow[]>([]);
   const [signedIn, setSignedIn] = useState(false);
   const [query, setQuery] = useState("");
