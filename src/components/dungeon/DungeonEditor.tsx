@@ -1748,11 +1748,10 @@ export function DungeonEditor() {
         <CanvasContextMenu
           target={{ 
             label: menuTarget.label, 
-            id: menuTarget.id,
+            id: menuTarget.id || (selected.length === 1 ? (selected[0] ?? null) : null),
             hasSelection: selected.length > 0, 
             canPaste: clipCount > 0,
-            id: menuTarget.id || (selected.length === 1 ? selected[0] : null),
-            z: doc.objects.find(o => o.id === (menuTarget.id || (selected.length === 1 ? selected[0] : null)))?.z
+            z: doc.objects.find(o => o.id === (menuTarget.id || (selected.length === 1 ? (selected[0] ?? null) : null)))?.z
           }}
           cameraMode={doc.settings.cameraMode}
           actions={{
