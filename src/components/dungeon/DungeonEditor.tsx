@@ -1646,21 +1646,6 @@ export function DungeonEditor() {
           onPointerLeave={onPointerUp}
           onDoubleClick={finishPoly}
           onContextMenu={openMenu}
-          onWheel={(e) => {
-            if (e.ctrlKey || e.metaKey) {
-              zoomBy(-e.deltaY * 0.01);
-              e.preventDefault();
-            } else if (doc.settings.cameraMode) {
-              // Independent camera zoom without affecting 2D view state
-              setSettings({
-                cameraDistance: Math.max(100, Math.min(5000, doc.settings.cameraDistance + e.deltaY * 2))
-              });
-              e.preventDefault();
-            } else {
-              // standard pan
-              setView((v) => ({ ...v, x: v.x - e.deltaX, y: v.y - e.deltaY }));
-            }
-          }}
         >
           <canvas ref={canvasRef} className="block h-full w-full" />
           
