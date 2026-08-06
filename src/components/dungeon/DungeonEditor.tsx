@@ -116,6 +116,8 @@ export function DungeonEditor() {
   const [fogMode, setFogMode] = useState<FogMode>("brush");
   const [fogBrush, setFogBrush] = useState(96);
   const [leftPanel, setLeftPanel] = useState<PanelId | null>("help");
+  const [sidebarWidth, setSidebarWidth] = useState(320);
+  const [isResizing, setIsResizing] = useState(false);
   const [savedAt, setSavedAt] = useState<number | null>(null);
   const [saveMs, setSaveMs] = useState<number | null>(null);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
