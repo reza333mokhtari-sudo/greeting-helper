@@ -81,9 +81,11 @@ type Props = {
   staged: AiSuggestion | null;
   /** Name of the floor the AI is allowed to edit. */
   floorName?: string;
+  onOpenHelp?: (sectionId?: string) => void;
 };
 
-export function AiPanel({ doc, onPreview, onApply, staged, floorName }: Props) {
+export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp }: Props) {
+
   const run = useServerFn(suggestMap);
   const online = useOnlineStatus();
   const [mode, setMode] = useState<Mode>("rooms");
@@ -149,7 +151,16 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName }: Props) {
       <div className="flex items-center justify-between">
         <h2 className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
           <Sparkles className="h-3 w-3 text-accent" /> AI cartographer
+          {onOpenHelp && (
+            <button 
+              onClick={() => onOpenHelp("quick-start")} 
+              className="p-1 hover:text-accent transition-colors"
+            >
+              <HelpCircle className="h-3 w-3" />
+            </button>
+          )}
         </h2>
+
         <Button
           variant="ghost"
           size="icon"
