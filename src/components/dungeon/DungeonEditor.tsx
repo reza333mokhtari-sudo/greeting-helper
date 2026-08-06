@@ -1205,7 +1205,7 @@ export function DungeonEditor() {
     setPolyPts([]);
     if (hit && !selected.includes(hit.id)) setSelected([hit.id]);
     if (!hit && !e.shiftKey) setSelected((sel) => (sel.length ? sel : []));
-    setMenuTarget({ pt: world, label: hit?.label ?? null, id: hit?.id ?? null });
+    setMenuTarget(prev => ({ ...prev, pt: world, label: hit?.label ?? null, id: hit?.id ?? null }));
   };
 
   const copySelection = useCallback(() => {
