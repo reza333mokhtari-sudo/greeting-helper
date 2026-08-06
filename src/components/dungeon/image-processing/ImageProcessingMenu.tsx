@@ -98,6 +98,9 @@ export function ImageProcessingMenu({
           <ContextMenuItem onSelect={() => runProcessor("Blur", (src) => applyFilter(src, "blur(4px)"))}>
             Blur
           </ContextMenuItem>
+          <ContextMenuItem onSelect={() => runProcessor("Sharpen", (src) => applyFilter(src, "contrast(1.2) brightness(1.1)"))}>
+            Sharpen
+          </ContextMenuItem>
           <ContextMenuSeparator />
           <ContextMenuItem onSelect={() => runProcessor("Contrast+", (src) => applyFilter(src, "contrast(1.5)"))}>
             <Contrast className="mr-2 size-3.5" /> Contrast +
