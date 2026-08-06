@@ -41,6 +41,7 @@ export type CanvasMenuActions = {
   onBringToFront: () => void;
   onSendToBack: () => void;
   onRotate: (deg: number) => void;
+  onUpdateFilter: (filter: "none" | "pixel" | "toon" | "remove-bg") => void;
   onSelectAll: () => void;
   onDeselect: () => void;
   onAdd: (kind: "npc" | "item" | "trigger" | "light" | "text") => void;
