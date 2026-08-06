@@ -531,7 +531,8 @@ export function renderScene(
     if (s.playerView && layer?.gmOnly) continue;
     if (o.kind === "light" && (opts.hideUi || s.playerView)) continue;
     ctx.globalAlpha = layer?.opacity ?? 1;
-    drawObject(ctx, o, doc);
+    const isProcessing = (opts.processingIds ?? []).includes(o.id);
+    drawObject(ctx, o, doc, isProcessing);
     ctx.globalAlpha = 1;
   }
 

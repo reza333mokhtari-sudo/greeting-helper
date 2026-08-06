@@ -17,10 +17,8 @@ import {
   Sun,
   Contrast,
   CircleDashed,
-  InvertIcon,
   Wind,
   Layers,
-  Undo2,
 } from "lucide-react";
 import { removeBackground, pixelate, toonify, applyFilter } from "@/lib/image-processing/processors";
 import { toast } from "sonner";

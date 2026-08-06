@@ -1637,6 +1637,15 @@ export function DungeonEditor() {
             onFog: (hide) => fogAt(menuTarget.pt, hide),
             onFit: fit,
             onZoomHere: () => zoomTo(menuTarget.pt),
+            imageProcessing: selectedObject?.kind === "image" ? {
+              objectId: selectedObject.id,
+              imageSrc: selectedObject.url,
+              actions: {
+                onUpdateImage: (id, url, label) => updateObject(id, { url }),
+                onProcessingStart: (id) => setMenuTarget(prev => ({ ...prev, processingIds: [...prev.processingIds, id] })),
+                onProcessingEnd: (id) => setMenuTarget(prev => ({ ...prev, processingIds: prev.processingIds.filter(pid => pid !== id) })),
+              }
+            } : undefined
           }}
         />
         </ContextMenu>
