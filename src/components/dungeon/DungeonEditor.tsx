@@ -10,6 +10,7 @@ import { LayersPanel } from "./LayersPanel";
 import { PropertiesPanel } from "./PropertiesPanel";
 import { SidePanel } from "./SidePanel";
 import { Toolbar, TOOLS, type ToolId } from "./Toolbar";
+import { GraphicsSettingsPanel } from "./GraphicsSettingsPanel";
 import { AiPanel } from "./AiPanel";
 import { FogPanel, type FogMode } from "./FogPanel";
 import { FloorsPanel } from "./FloorsPanel";
@@ -1492,7 +1493,8 @@ export function DungeonEditor() {
             onDelete={deleteSelected} 
           />
         );
-
+      case "graphics":
+        return <GraphicsSettingsPanel settings={doc.settings} onChange={setSettings} />;
       case "help":
         return <QuickStartPanel />;
       default:
