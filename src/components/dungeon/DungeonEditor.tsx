@@ -519,7 +519,8 @@ export function DungeonEditor() {
         { x: screenX, y: screenY },
         doc.settings,
         el.clientWidth,
-        el.clientHeight
+        el.clientHeight,
+        stateRef.current.view
       );
     }
     return screenToWorld({ x: screenX, y: screenY }, stateRef.current.view);
