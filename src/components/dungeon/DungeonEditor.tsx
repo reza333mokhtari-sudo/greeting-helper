@@ -1483,6 +1483,8 @@ export function DungeonEditor() {
           <aside className="flex w-72 shrink-0 flex-col border-r border-border bg-sidebar resize-x min-w-[200px] max-w-[600px] overflow-visible">
             <ScrollArea className="min-h-0 flex-1 h-full">
               <div className="flex flex-col gap-4 p-4 min-w-0">
+                {leftContent}
+              </div>
             </ScrollArea>
           </aside>
         )}
