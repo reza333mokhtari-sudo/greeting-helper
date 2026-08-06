@@ -1675,7 +1675,7 @@ export function DungeonEditor() {
         onZoom={zoomBy}
         onFit={fit}
       />
-      <Minimap doc={doc} view={view} onJump={(pt) => setView((v) => ({ ...v, ...pt }))} />
+      <Minimap doc={doc} view={view} onNavigate={(pt) => setView((v) => ({ ...v, x: -pt.x + (wrapRef.current?.clientWidth ?? 0) / 2 / v.scale, y: -pt.y + (wrapRef.current?.clientHeight ?? 0) / 2 / v.scale }))} />
       <PropPreviewModal 
         open={!!previewProp} 
         onOpenChange={(open) => !open && setPreviewProp(null)}

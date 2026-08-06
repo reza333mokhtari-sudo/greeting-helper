@@ -10,7 +10,7 @@ interface PropPreviewModalProps {
     id: string;
     url: string;
     name: string;
-    license?: string;
+    license?: string | null;
   } | null;
   onAction?: (action: string) => void;
 }
