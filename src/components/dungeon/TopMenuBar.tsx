@@ -82,6 +82,15 @@ export function TopMenuBar(props: Props) {
           </MenubarContent>
         </MenubarMenu>
         <MenubarMenu>
+          <MenubarTrigger className="h-8 px-3 text-xs">fix all tools</MenubarTrigger>
+          <MenubarContent>
+            <MenubarItem disabled>fix all tools</MenubarItem>
+            <MenubarItem disabled className="whitespace-pre-line text-[10px] text-muted-foreground">
+              {"fix all tools \nwhat i mean when press chose it and place in map has wrong cordinate to placed"}
+            </MenubarItem>
+          </MenubarContent>
+        </MenubarMenu>
+        <MenubarMenu>
           <MenubarTrigger className="h-8 px-3 text-xs">Help</MenubarTrigger>
           <MenubarContent>
             <MenubarItem disabled className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/60">Shortcuts</MenubarItem>
