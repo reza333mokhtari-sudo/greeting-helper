@@ -82,10 +82,10 @@ export function TopMenuBar(props: Props) {
           </MenubarContent>
         </MenubarMenu>
         <MenubarMenu>
-          <MenubarTrigger className="h-8 px-3 text-xs">SKILLS</MenubarTrigger>
+          <MenubarTrigger className="h-8 px-3 text-xs">DIAGNOSTICS</MenubarTrigger>
           <MenubarContent>
             <MenubarItem disabled className="whitespace-pre-line text-[10px] text-muted-foreground">
-              {"- React + TypeScript UI architecture\n- Accessible modal/dialog systems (Radix UI / shadcn-style)\n- Replacing native browser dialogs\n- Focus trap, keyboard UX, controlled state\n- Design-system consistency\n\nGOAL\nRemove ALL native browser dialogs from the app.\nDo NOT use:\n- window.alert()\n- window.confirm()\n- window.prompt()\n- browser beforeunload prompts unless absolutely required\n\nReplace them with a custom INTERACTIVE DIALOG system inside the app UI."}
+              {"Add a debug overlay that shows the computed world point under the cursor and where the object will be placed when I click or drag."}
             </MenubarItem>
           </MenubarContent>
         </MenubarMenu>
