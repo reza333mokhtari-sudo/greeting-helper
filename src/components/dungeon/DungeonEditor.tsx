@@ -1467,7 +1467,24 @@ export function DungeonEditor() {
           />
         );
       case "properties":
-        return <PropertiesPanel doc={doc} object={selectedObject} onChange={updateObject} onDelete={deleteSelected} />;
+        return (
+          <PropertiesPanel 
+            doc={doc} 
+            object={selectedObject} 
+            onChange={(id, patch) => {
+              if ((patch as any).preview) {
+                const o = doc.objects.find(obj => obj.id === id);
+                if (o && o.kind === "image") {
+                  setPreviewProp({ id: o.id, url: o.url, name: o.name || "Prop", license: (o as any).license });
+                }
+                return;
+              }
+              updateObject(id, patch);
+            }} 
+            onDelete={deleteSelected} 
+          />
+        );
+
       case "help":
         return <QuickStartPanel />;
       default:
