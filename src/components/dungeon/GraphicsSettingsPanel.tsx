@@ -127,6 +127,14 @@ export function GraphicsSettingsPanel({ settings: s, onChange }: Props) {
         <Row label="Show axes">
           <Switch checked={s.showAxes} onCheckedChange={(v) => onChange({ showAxes: v })} />
         </Row>
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="w-full mt-2 h-7 text-[10px]"
+          onClick={() => onChange({ cameraYaw: 45, cameraPitch: 45, cameraDistance: 1000, cameraTarget: { x: 0, y: 0 } })}
+        >
+          Reset Camera View
+        </Button>
       </section>
 
       <div className="rounded-md bg-muted/30 p-2.5 text-[10px] leading-relaxed text-muted-foreground border border-border/40">
