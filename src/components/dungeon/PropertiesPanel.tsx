@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, X, Trash2, Crown, Maximize2 } from "lucide-react";
+import { Plus, X, Trash2, Crown, Maximize2, Upload, Box } from "lucide-react";
 
 type Props = {
   doc: Doc;
@@ -139,44 +139,112 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
 
       {o.kind === "image" && (
         <>
-          <Row label="Width">
-            <NumSlider value={o.w} min={8} max={2000} onChange={(v) => patch({ w: v } as Partial<MapObject>)} />
-          </Row>
-          <Row label="Height">
-            <NumSlider value={o.h} min={8} max={2000} onChange={(v) => patch({ h: v } as Partial<MapObject>)} />
-          </Row>
-          <Row label="Rotation°">
-            <Input
-              type="number"
-              className={numInput}
-              value={Math.round((o.angle * 180) / Math.PI)}
-              onChange={(e) => patch({ angle: (Number(e.target.value) * Math.PI) / 180 } as Partial<MapObject>)}
-            />
-          </Row>
-          <div className="flex gap-2 py-1">
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full text-xs"
-              onClick={() => (onChange as any)(o.id, { preview: true })}
-            >
-              <Maximize2 className="mr-2 size-3" /> View Fullscreen
-            </Button>
+          <div className="rounded-lg border border-primary/20 bg-primary/5 p-3 space-y-3">
+            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-primary">
+              <Box className="size-3" />
+              Source & Texture
+            </div>
+            
+            <div className="flex flex-col gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 w-full justify-start text-[10px] bg-background"
+                onClick={() => {
+                  const input = document.createElement("input");
+                  input.type = "file";
+                  input.accept = "image/*";
+                  input.onchange = (e) => {
+                    const file = (e.target as HTMLInputElement).files?.[0];
+                    if (file) {
+                      const url = URL.createObjectURL(file);
+                      patch({ url } as Partial<MapObject>);
+                    }
+                  };
+                  input.click();
+                }}
+              >
+                <Upload className="mr-2 size-3" />
+                Upload Image
+              </Button>
+
+              <div 
+                className="group relative flex h-24 w-full cursor-default items-center justify-center rounded-md border border-dashed border-primary/30 bg-background/50 transition-colors hover:bg-primary/5"
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  e.currentTarget.classList.add("bg-primary/10", "border-primary");
+                }}
+                onDragLeave={(e) => {
+                  e.currentTarget.classList.remove("bg-primary/10", "border-primary");
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  e.currentTarget.classList.remove("bg-primary/10", "border-primary");
+                  
+                  // Handle file drop
+                  const file = e.dataTransfer.files[0];
+                  if (file && file.type.startsWith("image/")) {
+                    const url = URL.createObjectURL(file);
+                    patch({ url } as Partial<MapObject>);
+                    return;
+                  }
+
+                  // Handle props/texture panel drop (using URL from dataTransfer)
+                  const url = e.dataTransfer.getData("text/plain");
+                  if (url && (url.startsWith("http") || url.startsWith("blob:") || url.startsWith("/"))) {
+                    patch({ url } as Partial<MapObject>);
+                  }
+                }}
+              >
+                <div className="text-center">
+                  <ImageIcon className="mx-auto size-6 text-muted-foreground/40" />
+                  <p className="mt-1 text-[9px] text-muted-foreground">Drop Image here</p>
+                  <p className="text-[8px] text-muted-foreground/60">from PC or Props Panel</p>
+                </div>
+              </div>
+            </div>
+
+            <Row label="Visual Filter">
+              <Select value={o.filter ?? "none"} onValueChange={(v) => patch({ filter: v as any })}>
+                <SelectTrigger className="h-7 w-full text-xs bg-background">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">No Filter</SelectItem>
+                  <SelectItem value="pixel">Pixel Graphics</SelectItem>
+                  <SelectItem value="toon">Toon Style</SelectItem>
+                  <SelectItem value="remove-bg">Remove Background</SelectItem>
+                </SelectContent>
+              </Select>
+            </Row>
           </div>
 
-          <Row label="Visual Filter">
-            <Select value={o.filter ?? "none"} onValueChange={(v) => patch({ filter: v as any })}>
-              <SelectTrigger className="h-7 w-32 text-xs">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">No Filter</SelectItem>
-                <SelectItem value="pixel">Pixel Graphics</SelectItem>
-                <SelectItem value="toon">Toon Style</SelectItem>
-                <SelectItem value="remove-bg">Remove Background</SelectItem>
-              </SelectContent>
-            </Select>
-          </Row>
+          <div className="space-y-1">
+            <Row label="Width">
+              <NumSlider value={o.w} min={8} max={2000} onChange={(v) => patch({ w: v } as Partial<MapObject>)} />
+            </Row>
+            <Row label="Height">
+              <NumSlider value={o.h} min={8} max={2000} onChange={(v) => patch({ h: v } as Partial<MapObject>)} />
+            </Row>
+            <Row label="Rotation°">
+              <Input
+                type="number"
+                className={numInput}
+                value={Math.round((o.angle * 180) / Math.PI)}
+                onChange={(e) => patch({ angle: (Number(e.target.value) * Math.PI) / 180 } as Partial<MapObject>)}
+              />
+            </Row>
+            <div className="flex gap-2 py-1">
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full text-xs"
+                onClick={() => (onChange as any)(o.id, { preview: true })}
+              >
+                <Maximize2 className="mr-2 size-3" /> View Fullscreen
+              </Button>
+            </div>
+          </div>
         </>
       )}
       {(o.kind === "door" || o.kind === "stairs") && (
