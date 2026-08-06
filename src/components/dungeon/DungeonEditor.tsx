@@ -1565,6 +1565,8 @@ export function DungeonEditor() {
         return <GraphicsSettingsPanel settings={doc.settings} onChange={setSettings} />;
       case "help":
         return <QuickStartPanel />;
+      case "cms":
+        return <CmsPanel />;
       default:
         return null;
     }
