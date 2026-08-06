@@ -42,7 +42,7 @@ export function TopMenuBar(props: Props) {
         <MenubarMenu>
           <MenubarTrigger className="h-8 px-3 text-xs">File</MenubarTrigger>
           <MenubarContent>
-            <MenubarItem onSelect={props.onNew}>Add minimap zoom in/out controls so I can adjust the minimap detail without affecting the main canvas.</MenubarItem>
+            <MenubarItem onSelect={props.onNew}>so now what AI genereted import in props and TEXTURE \nonly 2d icon</MenubarItem>
 
             <MenubarItem onSelect={props.onImport}>Import savefile…</MenubarItem>
             <MenubarSeparator />
