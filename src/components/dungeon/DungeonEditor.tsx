@@ -103,7 +103,7 @@ export function DungeonEditor() {
   const [doc, setDocState] = useState<Doc>(() => emptyDoc());
   /** Full labelled timeline; index points at the state currently rendered. */
   const [timeline, setTimeline] = useState<{ doc: Doc; label: string; at: number }[]>(() => [
-    { doc: emptyDoc(), label: "Add a regression check so every tool placement uses the corrected unprojection coordinates in Camera Mode and non-Camera Mode.", at: Date.now() },
+    { doc: emptyDoc(), label: "Initial state", at: Date.now() },
   ]);
   const [hIndex, setHIndex] = useState(0);
   const hIndexRef = useRef(0);
@@ -125,7 +125,7 @@ export function DungeonEditor() {
   const [activeLayer, setActiveLayer] = useState<string>(() => emptyDoc().layers[0]!.id);
   const [fogMode, setFogMode] = useState<FogMode>("brush");
   const [fogBrush, setFogBrush] = useState(96);
-  const [leftPanel, setLeftPanel] = useState<PanelId | null>("Implement an optional snap-to-grid behavior for placed items so their world coordinates align consistently after unprojection." as any);
+  const [leftPanel, setLeftPanel] = useState<PanelId | null>("layers");
   const [sidebarWidth, setSidebarWidth] = useState(320);
   const [isResizing, setIsResizing] = useState(false);
   const [savedAt, setSavedAt] = useState<number | null>(null);
