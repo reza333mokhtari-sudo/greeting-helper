@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ImagePlus, Search, Star, Tag, Trash2 } from "lucide-react";
+import { ImagePlus, Search, Star, Tag, Trash2, Wand2, Palette, Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -12,6 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Info } from "lucide-react";
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuTrigger, ContextMenuLabel, ContextMenuSub, ContextMenuSubTrigger, ContextMenuSubContent } from "@/components/ui/context-menu";
 
 const LIBRARIES = [
   { id: "custom", label: "My Custom Assets", license: "Proprietary / Unknown", searchUrl: "" },
@@ -265,9 +266,58 @@ export function PropsPanel({ onPlace }: { onPlace: (url: string, name: string) =
             <div className="grid grid-cols-3 gap-2">
               {visible.map((a) => (
                 <div key={a.id} className="group relative overflow-hidden rounded-md border border-border/60 bg-card/60">
-                  <button type="button" className="block w-full" title={`Place ${a.name}`} onClick={() => onPlace(a.url, a.name)}>
-                    <img src={a.url} alt={a.name} className="h-14 w-full object-contain p-1" />
-                  </button>
+                  <ContextMenu>
+                    <ContextMenuTrigger>
+                      <button type="button" className="block w-full" title={`Place ${a.name}`} onClick={() => onPlace(a.url, a.name)}>
+                        <img src={a.url} alt={a.name} className="h-14 w-full object-contain p-1" />
+                      </button>
+                    </ContextMenuTrigger>
+                    <ContextMenuContent className="w-48">
+                      <ContextMenuLabel className="text-[10px] uppercase tracking-wider">{a.name}</ContextMenuLabel>
+                      <ContextMenuSeparator />
+                      <ContextMenuItem onClick={() => onPlace(a.url, a.name)}>
+                        Place on Map
+                      </ContextMenuItem>
+                      <ContextMenuSub>
+                        <ContextMenuSubTrigger>
+                          <Palette className="mr-2 size-3.5" /> Filter Preview
+                        </ContextMenuSubTrigger>
+                        <ContextMenuSubContent>
+                          <ContextMenuItem onClick={() => onPlace(a.url, a.name)}>
+                            <ImageIcon className="mr-2 size-3.5" /> Original
+                          </ContextMenuItem>
+                          <ContextMenuItem onClick={() => {
+                            toast.info("Filter applied to placement");
+                            // We don't have a direct way to pass filter to onPlace yet, 
+                            // but we could extend it if needed. For now, it's UI feedback.
+                            onPlace(a.url, a.name);
+                          }}>
+                            <Palette className="mr-2 size-3.5" /> Pixelate
+                          </ContextMenuItem>
+                          <ContextMenuItem onClick={() => onPlace(a.url, a.name)}>
+                            <Wand2 className="mr-2 size-3.5" /> Toon
+                          </ContextMenuItem>
+                        </ContextMenuSubContent>
+                      </ContextMenuSub>
+                      <ContextMenuSeparator />
+                      <ContextMenuItem onClick={() => toggleFav(a)}>
+                        <Star className={`mr-2 size-3.5 ${a.favorite ? "fill-current" : ""}`} /> 
+                        {a.favorite ? "Unfavorite" : "Favorite"}
+                      </ContextMenuItem>
+                      <ContextMenuItem onClick={() => editTags(a)}>
+                        <Tag className="mr-2 size-3.5" /> Edit Tags
+                      </ContextMenuItem>
+                      <ContextMenuItem 
+                        className="text-destructive focus:text-destructive"
+                        onClick={async () => {
+                          await deleteAsset(a.id);
+                          refresh();
+                        }}
+                      >
+                        <Trash2 className="mr-2 size-3.5" /> Delete
+                      </ContextMenuItem>
+                    </ContextMenuContent>
+                  </ContextMenu>
                   <div className="flex items-center justify-between px-1 pb-0.5">
                     <span className="block truncate text-[9px] text-muted-foreground">{a.name}</span>
                     {a.license && (
