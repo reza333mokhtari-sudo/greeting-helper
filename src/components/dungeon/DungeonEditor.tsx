@@ -94,7 +94,7 @@ export function DungeonEditor() {
   const [doc, setDocState] = useState<Doc>(() => emptyDoc());
   /** Full labelled timeline; index points at the state currently rendered. */
   const [timeline, setTimeline] = useState<{ doc: Doc; label: string; at: number }[]>(() => [
-    { doc: emptyDoc(), label: "see we have bug here", at: Date.now() },
+    { doc: emptyDoc(), label: "now what do you think about site \nwhat need anymore ?", at: Date.now() },
   ]);
   const [hIndex, setHIndex] = useState(0);
   const hIndexRef = useRef(0);

@@ -42,7 +42,7 @@ export function TopMenuBar(props: Props) {
         <MenubarMenu>
           <MenubarTrigger className="h-8 px-3 text-xs">File</MenubarTrigger>
           <MenubarContent>
-            <MenubarItem onSelect={props.onNew}>see we have bug here</MenubarItem>
+            <MenubarItem onSelect={props.onNew}>now what do you think about site \nwhat need anymore ?</MenubarItem>
             <MenubarItem onSelect={props.onImport}>Import savefile…</MenubarItem>
             <MenubarSeparator />
             <MenubarItem onSelect={props.onExportPng}>Export PNG</MenubarItem>
