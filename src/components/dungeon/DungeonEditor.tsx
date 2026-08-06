@@ -90,7 +90,8 @@ type Drag =
   | { mode: "move"; last: Pt; moved: boolean }
   | { mode: "place"; id: string; origin: Pt }
   | { mode: "camera_orbit"; startX: number; startY: number; yaw: number; pitch: number }
-  | { mode: "camera_pan"; startX: number; startY: number; ox: number; oy: number };
+  | { mode: "camera_pan"; startX: number; startY: number; ox: number; oy: number }
+  | { mode: "camera_zoom"; startY: number; startDistance: number };
 
 
 export function DungeonEditor() {
@@ -518,7 +519,8 @@ export function DungeonEditor() {
         { x: screenX, y: screenY },
         doc.settings,
         el.clientWidth,
-        el.clientHeight
+        el.clientHeight,
+        stateRef.current.view
       );
     }
     return screenToWorld({ x: screenX, y: screenY }, stateRef.current.view);
@@ -573,6 +575,9 @@ export function DungeonEditor() {
   }, [isResizing]);
 
   const onPointerDown = (e: React.PointerEvent) => {
+    // If a modal is open, block all canvas interaction
+    if (previewProp) return;
+
     (e.target as Element).setPointerCapture?.(e.pointerId);
     const world = getPt(e);
     const p = snapped(world);
@@ -580,7 +585,14 @@ export function DungeonEditor() {
     const panning = e.button === 1 || e.button === 2 || tool === "pan" || spaceDown || e.altKey;
     if (panning) {
       if (doc.settings.cameraMode) {
-        drag.current = { mode: "camera_pan", startX: e.clientX, startY: e.clientY, ox: doc.settings.cameraTarget.x, oy: doc.settings.cameraTarget.y };
+        if (e.button === 1 || (e.button === 2 && (e.ctrlKey || e.metaKey || e.shiftKey))) {
+           drag.current = { mode: "camera_pan", startX: e.clientX, startY: e.clientY, ox: doc.settings.cameraTarget.x, oy: doc.settings.cameraTarget.y };
+        } else if (e.button === 2) {
+           // Right click for context menu handled by ContextMenuTrigger, 
+           // but we might want middle-drag or shift-drag specifically for 3D pan.
+           // Let's stick to standard: Left=Orbit, Middle/Right=Pan (if configured)
+           drag.current = { mode: "camera_pan", startX: e.clientX, startY: e.clientY, ox: doc.settings.cameraTarget.x, oy: doc.settings.cameraTarget.y };
+        }
       } else {
         drag.current = { mode: "pan", startX: e.clientX, startY: e.clientY, ox: view.x, oy: view.y };
       }
@@ -733,6 +745,9 @@ export function DungeonEditor() {
 
 
   const onPointerMove = (e: React.PointerEvent) => {
+    // If a modal is open, block all canvas interaction
+    if (previewProp) return;
+
     const world = getPt(e);
     queueCursor(world);
     const d = drag.current;
@@ -1260,7 +1275,9 @@ export function DungeonEditor() {
     (world: Pt) => {
       const pickable = doc.objects.filter((o) => {
         const l = doc.layers.find((x) => x.id === o.layerId);
-        return !l || (l.visible && !l.locked);
+        const isLocked = o.locked || l?.locked;
+        const isVisible = o.visible !== false && l?.visible !== false;
+        return isVisible && !isLocked;
       });
       const obj = [...pickable].reverse().find((o) => objectHit(world, o));
       if (obj) return { id: obj.id, label: ("name" in obj && obj.name) || obj.kind };
@@ -1273,7 +1290,7 @@ export function DungeonEditor() {
   const openMenu = (e: React.MouseEvent) => {
     const rect = wrapRef.current?.getBoundingClientRect();
     if (!rect) return;
-    const world = screenToWorld({ x: e.clientX - rect.left, y: e.clientY - rect.top }, view);
+    const world = getPt(e as any);
     const hit = pickAt(world);
     setPolyPts([]);
     if (hit && !selected.includes(hit.id)) setSelected([hit.id]);
@@ -1643,6 +1660,25 @@ export function DungeonEditor() {
           onPointerLeave={onPointerUp}
           onDoubleClick={finishPoly}
           onContextMenu={openMenu}
+          onWheel={(e) => {
+            if (previewProp) return;
+            if (e.ctrlKey || e.metaKey) {
+              // Browser zoom or custom zoom tool
+              const delta = e.deltaY > 0 ? -1 : 1;
+              zoomBy(delta as any);
+              e.preventDefault();
+            } else if (doc.settings.cameraMode) {
+              // Independent camera zoom in 3D
+              const delta = e.deltaY > 0 ? 1.1 : 0.9;
+              setSettings({
+                cameraDistance: Math.max(100, Math.min(doc.settings.maxDrawDistance, doc.settings.cameraDistance * delta))
+              });
+              e.preventDefault();
+            } else {
+              // standard pan
+              setView((v) => ({ ...v, x: v.x - e.deltaX, y: v.y - e.deltaY }));
+            }
+          }}
         >
           <canvas ref={canvasRef} className="block h-full w-full" />
           
@@ -1710,19 +1746,30 @@ export function DungeonEditor() {
         </div>
         </ContextMenuTrigger>
         <CanvasContextMenu
-          target={{ label: menuTarget.label, hasSelection: selected.length > 0, canPaste: clipCount > 0 }}
-            actions={{
-              onPreview: () => {
-                const o = doc.objects.find(obj => selected.includes(obj.id) && obj.kind === "image");
-                if (o && o.kind === "image") {
-                  setPreviewProp({ id: o.id, url: o.url, name: o.name || "Prop", license: (o as any).license });
-                }
-              },
+          target={{ 
+            label: menuTarget.label, 
+            id: menuTarget.id || (selected.length === 1 ? (selected[0] ?? null) : null),
+            hasSelection: selected.length > 0, 
+            canPaste: clipCount > 0,
+            z: doc.objects.find(o => o.id === (menuTarget.id || (selected.length === 1 ? (selected[0] ?? null) : null)))?.z
+          }}
+          cameraMode={doc.settings.cameraMode}
+          actions={{
+            onPreview: () => {
+              const o = doc.objects.find(obj => selected.includes(obj.id) && obj.kind === "image");
+              if (o && o.kind === "image") {
+                setPreviewProp({ id: o.id, url: o.url, name: o.name || "Prop", license: (o as any).license });
+              }
+            },
 
             onCopy: copySelection,
             onCut: () => {
               copySelection();
               deleteSelected();
+            },
+            onUpdateZ: (z) => {
+              const targetId = menuTarget.id || (selected.length === 1 ? selected[0] : null);
+              if (targetId) updateObject(targetId, { z });
             },
             onPaste: () => pasteAt(menuTarget.pt),
             onDuplicate: duplicateSelection,

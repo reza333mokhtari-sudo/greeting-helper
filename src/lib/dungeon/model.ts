@@ -21,6 +21,14 @@ export type ObjCommon = {
   notes?: string;
   props?: CustomProp[];
   filter?: "none" | "pixel" | "toon" | "remove-bg";
+  z?: number;
+  elevation?: number;
+  scale?: number;
+  rx?: number;
+  ry?: number;
+  rz?: number;
+  locked?: boolean;
+  visible?: boolean;
 };
 
 export type MapObject =
@@ -131,6 +139,18 @@ export type Object3D = {
   ry: number;
   rz: number;
   layerId: string;
+  locked?: boolean;
+  hidden?: boolean;
+};
+
+export type Obj3DCommon = {
+  z?: number;
+  scale?: number;
+  rx?: number;
+  ry?: number;
+  rz?: number;
+  locked?: boolean;
+  hidden?: boolean;
 };
 
 

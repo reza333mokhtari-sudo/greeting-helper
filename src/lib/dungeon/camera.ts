@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import type { Settings, Pt } from "./model";
+import { type Settings, type Pt, type View } from "./model";
 
 /**
  * Projects a 3D point (world space) to 2D screen space (pixels)
@@ -49,7 +49,8 @@ export function unprojectToPlane(
   screen: Pt,
   s: Settings,
   width: number,
-  height: number
+  height: number,
+  view: View
 ): Pt {
   const camera = getCamera(s, width, height);
   
@@ -59,6 +60,14 @@ export function unprojectToPlane(
     -(screen.y / height) * 2 + 1,
     0.5
   );
+
+  // In 3D mode, the "standard" 2D view state (panning/zooming) should usually be ignored
+  // or combined. For now, since cameraMode is active, the 2D view.x/y/scale are 
+  // effectively bypassed by the THREE.js projection.
+  // However, if we want to support a "2D pan" on top of 3D (like an offset), 
+  // we'd need to adjust ndc.
+  
+  // No changes needed to ndc calculation for pure 3D world unprojection.
 
   const raycaster = new THREE.Raycaster();
   (raycaster as any).setFromCamera(ndc, camera);
