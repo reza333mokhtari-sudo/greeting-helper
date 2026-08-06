@@ -49,7 +49,8 @@ export function unprojectToPlane(
   screen: Pt,
   s: Settings,
   width: number,
-  height: number
+  height: number,
+  view: View
 ): Pt {
   const camera = getCamera(s, width, height);
   
