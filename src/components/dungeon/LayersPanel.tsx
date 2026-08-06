@@ -6,7 +6,8 @@ import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Eye, EyeOff, Lock, LockOpen, ChevronUp, ChevronDown, X, Plus, GripVertical } from "lucide-react";
+import { Eye, EyeOff, Lock, LockOpen, ChevronUp, ChevronDown, X, Plus, GripVertical, Image as ImageIcon, Wand2, Palette } from "lucide-react";
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuTrigger } from "@/components/ui/context-menu";
 
 type Props = {
   doc: Doc;
@@ -19,6 +20,8 @@ type Props = {
   onDeleteLayer: (id: string) => void;
   selected: string[];
   onSelect: (ids: string[]) => void;
+  onUpdateObject?: (id: string, patch: any) => void;
+  onDeleteObject?: (id: string) => void;
 };
 
 function countOn(objects: MapObject[], id: string) {
@@ -226,19 +229,49 @@ export function LayersPanel(p: Props) {
                   <ul className="pr-2">
                     {objs.map((o) => (
                       <li key={o.id}>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            p.onSelect([o.id]);
-                          }}
-                          className={`w-full truncate rounded px-1 py-0.5 text-left text-[11px] ${
-                            p.selected.includes(o.id)
-                              ? "bg-primary/25 text-foreground"
-                              : "text-muted-foreground hover:bg-accent"
-                          }`}
-                        >
-                          {o.kind} · {o.name || ("label" in o && o.label) || ("text" in o && o.text) || o.id.slice(-4)}
-                        </button>
+                        <ContextMenu>
+                          <ContextMenuTrigger>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                p.onSelect([o.id]);
+                              }}
+                              className={`w-full truncate rounded px-1 py-0.5 text-left text-[11px] ${
+                                p.selected.includes(o.id)
+                                  ? "bg-primary/25 text-foreground"
+                                  : "text-muted-foreground hover:bg-accent"
+                              }`}
+                            >
+                              {o.kind} · {o.name || ("label" in o && o.label) || ("text" in o && o.text) || o.id.slice(-4)}
+                            </button>
+                          </ContextMenuTrigger>
+                          <ContextMenuContent className="w-48">
+                            <ContextMenuItem onClick={() => p.onSelect([o.id])}>
+                              Select
+                            </ContextMenuItem>
+                            <ContextMenuSeparator />
+                            {o.kind === "image" && (
+                              <>
+                                <ContextMenuItem onClick={() => p.onUpdateObject?.(o.id, { filter: "none" })}>
+                                  <ImageIcon className="mr-2 size-3.5" /> No Filter
+                                </ContextMenuItem>
+                                <ContextMenuItem onClick={() => p.onUpdateObject?.(o.id, { filter: "pixel" })}>
+                                  <Palette className="mr-2 size-3.5" /> Pixel Graphics
+                                </ContextMenuItem>
+                                <ContextMenuItem onClick={() => p.onUpdateObject?.(o.id, { filter: "toon" })}>
+                                  <Wand2 className="mr-2 size-3.5" /> Toon Style
+                                </ContextMenuItem>
+                                <ContextMenuSeparator />
+                              </>
+                            )}
+                            <ContextMenuItem 
+                              className="text-destructive focus:text-destructive"
+                              onClick={() => p.onDeleteObject?.(o.id)}
+                            >
+                              <X className="mr-2 size-3.5" /> Remove
+                            </ContextMenuItem>
+                          </ContextMenuContent>
+                        </ContextMenu>
                       </li>
                     ))}
                   </ul>
