@@ -133,7 +133,7 @@ export function Minimap({ doc, view, onNavigate }: Props) {
   return (
     <div
       ref={wrapRef}
-      className="pointer-events-auto absolute right-4 top-4 z-10 overflow-hidden rounded-lg border border-border/60 bg-card/80 shadow-lg backdrop-blur"
+      className="pointer-events-auto absolute right-4 top-0 z-10 overflow-hidden rounded-b-lg border-x border-b border-border/60 bg-card/80 shadow-lg backdrop-blur"
       style={{ width: size, height: size }}
       onPointerDown={handlePointer}
       onPointerMove={(e) => dragging.current && handlePointer(e)}
