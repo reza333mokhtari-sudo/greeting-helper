@@ -575,7 +575,7 @@ export function DungeonEditor() {
     };
   }, [isResizing]);
 
-  const onPointerDown = (e: React.PointerEvent) => {
+  const onPointerDown = async (e: React.PointerEvent) => {
     // If a modal is open, block all canvas interaction
     if (previewProp) return;
 
@@ -1365,7 +1365,7 @@ export function DungeonEditor() {
   );
 
   const addObjectAt = useCallback(
-    (kind: "npc" | "item" | "trigger" | "light" | "text", at: Pt) => {
+    async (kind: "npc" | "item" | "trigger" | "light" | "text", at: Pt) => {
       const g = doc.settings.gridSize;
       const p = snapPt(at, g, doc.settings.snap);
       const layerId = doc.layers.find((l) => l.id === DEFAULT_LAYER_FOR[kind])?.id ?? activeLayer;
