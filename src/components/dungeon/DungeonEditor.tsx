@@ -1493,7 +1493,8 @@ export function DungeonEditor() {
             onDelete={deleteSelected} 
           />
         );
-
+      case "graphics":
+        return <GraphicsSettingsPanel settings={doc.settings} onChange={setSettings} />;
       case "help":
         return <QuickStartPanel />;
       default:
