@@ -60,7 +60,7 @@ export type CanvasMenuActions = {
       onProcessingStart: (id: string) => void;
       onProcessingEnd: (id: string) => void;
     };
-  };
+  } | undefined;
 };
 
 /** Right-click menu for the map canvas. */

@@ -124,11 +124,16 @@ export function DungeonEditor() {
   const [engineReady, setEngineReady] = useState(false);
   const [docBytes, setDocBytes] = useState(0);
 
-  const [menuTarget, setMenuTarget] = useState<{ pt: Pt; label: string | null; id: string | null }>({
+  const [menuTarget, setMenuTarget] = useState<{
+    pt: Pt;
+    label: string | null;
+    id: string | null;
+    processingIds: string[];
+  }>({
     pt: { x: 0, y: 0 },
     label: null,
     id: null,
-    processingIds: [] as string[],
+    processingIds: [],
   });
   const clipboard = useRef<{ shapes: Shape[]; objects: MapObject[] } | null>(null);
   const [clipCount, setClipCount] = useState(0);
