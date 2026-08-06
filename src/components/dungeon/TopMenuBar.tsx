@@ -82,7 +82,7 @@ export function TopMenuBar(props: Props) {
           </MenubarContent>
         </MenubarMenu>
         <MenubarMenu>
-          <MenubarTrigger className="h-8 px-3 text-xs">documentation page i want interactive</MenubarTrigger>
+          <MenubarTrigger className="h-8 px-3 text-xs">Documentation</MenubarTrigger>
           <MenubarContent>
             <MenubarItem disabled className="whitespace-pre-line text-[10px] text-muted-foreground">
               {"Add a debug overlay that shows the computed world point under the cursor and where the object will be placed when I click or drag.\n\nEnsure the coordinate correction stays accurate after switching Camera Mode on/off and after changing orbit/pan/zoom settings by persisting the active camera transform.\n\nCorrect any offset between the drag preview position and the final placed coordinates for each tool.\n\ni want this LINE OF XYZ RGB in BOTTOM LEFT CORNER(has padding)"}
