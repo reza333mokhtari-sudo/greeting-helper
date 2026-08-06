@@ -1397,6 +1397,8 @@ export function DungeonEditor() {
             onDeleteLayer={deleteLayer}
             selected={selected}
             onSelect={setSelected}
+            onUpdateObject={updateObject}
+            onDeleteObject={deleteObject}
           />
         );
       case "props":
