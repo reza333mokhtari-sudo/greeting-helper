@@ -51,7 +51,10 @@ export async function pixelate(imageSrc: string, blockSize: number = 8): Promise
       
       resolve(canvas.toDataURL("image/png"));
     };
-    img.onerror = reject;
+    img.onerror = (e) => {
+      console.error("Image load failed for pixelate:", e);
+      reject(new Error("Failed to load image for processing."));
+    };
     img.src = imageSrc;
   });
 }
@@ -77,15 +80,17 @@ export async function applyFilter(
       
       resolve(canvas.toDataURL("image/png"));
     };
-    img.onerror = reject;
+    img.onerror = (e) => {
+      console.error("Image load failed for filter:", e);
+      reject(new Error("Failed to load image for processing."));
+    };
     img.src = imageSrc;
   });
 }
 
 /**
- * Toon/Cartoon effect using edge detection and posterization.
+ * Toon/Cartoon effect using high contrast and saturation.
  */
 export async function toonify(imageSrc: string): Promise<string> {
-  // Simple toon effect: high contrast + saturation + posterize-like feel via filter
-  return applyFilter(imageSrc, "contrast(1.5) saturate(2) brightness(1.1) grayscale(0.2)");
+  return applyFilter(imageSrc, "contrast(1.6) saturate(1.8) brightness(1.1)");
 }
