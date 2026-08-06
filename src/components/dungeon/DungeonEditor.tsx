@@ -141,7 +141,7 @@ export function DungeonEditor() {
   const [clipCount, setClipCount] = useState(0);
   const online = useOnlineStatus();
   const importRef = useRef<HTMLInputElement>(null);
-  const [previewProp, setPreviewProp] = useState<{ id: string; url: string; name: string; license?: string } | null>(null);
+  const [previewProp, setPreviewProp] = useState<{ id: string; url: string; name: string; license?: string | null } | null>(null);
 
 
   // Debounce rapid history pushes with the same label into a single snapshot.
@@ -1675,7 +1675,22 @@ export function DungeonEditor() {
         onZoom={zoomBy}
         onFit={fit}
       />
-
+      <Minimap doc={doc} view={view} onJump={(pt) => setView((v) => ({ ...v, ...pt }))} />
+      <PropPreviewModal 
+        open={!!previewProp} 
+        onOpenChange={(open) => !open && setPreviewProp(null)}
+        prop={previewProp}
+        onAction={(action) => {
+          if (!previewProp) return;
+          if (action === "place") {
+            placeImage(previewProp.url, previewProp.name);
+            setPreviewProp(null);
+          } else {
+            toast.info(`Processing ${action}... (feature integration pending)`);
+          }
+        }}
+      />
     </div>
   );
 }
+
