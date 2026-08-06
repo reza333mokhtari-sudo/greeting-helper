@@ -90,7 +90,8 @@ type Drag =
   | { mode: "move"; last: Pt; moved: boolean }
   | { mode: "place"; id: string; origin: Pt }
   | { mode: "camera_orbit"; startX: number; startY: number; yaw: number; pitch: number }
-  | { mode: "camera_pan"; startX: number; startY: number; ox: number; oy: number };
+  | { mode: "camera_pan"; startX: number; startY: number; ox: number; oy: number }
+  | { mode: "camera_zoom"; startY: number; startDistance: number };
 
 
 export function DungeonEditor() {
