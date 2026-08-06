@@ -92,7 +92,19 @@ export const HelpCenter = ({ isOpen, onOpenChange, initialSectionId }: HelpCente
 
           {/* Content */}
           <ScrollArea className="flex-1 p-8">
-            <div className="max-w-3xl mx-auto prose prose-invert prose-slate prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-li:text-muted-foreground prose-code:text-primary prose-pre:bg-muted/50 prose-img:rounded-lg">
+            <div className="max-w-3xl mx-auto prose prose-invert prose-slate 
+              prose-headings:text-foreground prose-headings:font-bold prose-h1:text-3xl prose-h2:text-2xl prose-h2:border-b prose-h2:border-border prose-h2:pb-2
+              prose-p:text-muted-foreground prose-p:leading-relaxed
+              prose-strong:text-foreground prose-strong:font-semibold
+              prose-li:text-muted-foreground prose-li:marker:text-primary
+              prose-code:text-primary prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none
+              prose-pre:bg-muted/50 prose-pre:border prose-pre:border-border prose-pre:rounded-lg
+              prose-img:rounded-lg prose-img:shadow-lg
+              prose-table:border prose-table:border-border prose-table:rounded-lg prose-table:overflow-hidden
+              prose-th:bg-muted/50 prose-th:p-3 prose-th:text-left
+              prose-td:p-3 prose-td:border-t prose-td:border-border
+              prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-primary/5 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:rounded-r-lg prose-blockquote:italic prose-blockquote:text-foreground
+            ">
               <ReactMarkdown>{markdown}</ReactMarkdown>
             </div>
           </ScrollArea>
