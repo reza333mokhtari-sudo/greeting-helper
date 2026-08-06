@@ -1,50 +1,58 @@
 import * as React from "react";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+
+import { cn } from "@/lib/utils";
 
 interface FullscreenModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   children: React.ReactNode;
   title?: string;
+  className?: string;
 }
 
+/**
+ * Previews and tools use fullscreen popup; real pages use routes.
+ */
 export function FullscreenModal({
   open,
   onOpenChange,
   children,
   title,
+  className,
 }: FullscreenModalProps) {
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent 
-        className="fixed inset-0 z-[100] flex h-screen w-screen max-w-none flex-col border-none bg-black/90 p-0 text-white shadow-none sm:rounded-none"
-        onOpenAutoFocus={(e) => e.preventDefault()}
-      >
-        <VisuallyHidden>
-          <DialogTitle>{title || "Content Preview"}</DialogTitle>
-        </VisuallyHidden>
-        
-        <div className="absolute right-4 top-4 z-[110]">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="size-10 rounded-full bg-white/10 text-white hover:bg-white/20 hover:text-white"
-            onClick={() => onOpenChange(false)}
-          >
-            <X className="size-6" />
-            <span className="sr-only">Close</span>
-          </Button>
-        </div>
-
-        <div className="flex flex-1 items-center justify-center overflow-auto p-4 md:p-8">
-          <div className="relative h-full w-full max-w-6xl animate-in fade-in zoom-in-95 duration-200">
+    <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
+      <DialogPrimitive.Portal>
+        <DialogPrimitive.Overlay className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm transition-all duration-300 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
+        <DialogPrimitive.Content
+          className={cn(
+            "fixed inset-0 z-[101] flex flex-col bg-sidebar text-foreground p-6 shadow-2xl transition-all duration-300 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
+            className
+          )}
+          onPointerDownOutside={(e) => {
+            // Check if we're clicking the overlay
+            if (e.target === e.currentTarget) onOpenChange(false);
+          }}
+        >
+          <div className="flex items-center justify-between mb-6 shrink-0">
+            {title && (
+              <DialogPrimitive.Title className="text-lg font-semibold tracking-tight">
+                {title}
+              </DialogPrimitive.Title>
+            )}
+            <DialogPrimitive.Close className="ml-auto rounded-full p-2 text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-sidebar">
+              <X className="size-6" />
+              <span className="sr-only">Close</span>
+            </DialogPrimitive.Close>
+          </div>
+          
+          <div className="flex-1 min-h-0">
             {children}
           </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+        </DialogPrimitive.Content>
+      </DialogPrimitive.Portal>
+    </DialogPrimitive.Root>
   );
 }
