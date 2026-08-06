@@ -1,16 +1,21 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useState as useEffectState } from "react";
 import { type Doc, type View, type Pt, docBounds, shapePoints, objectRadius } from "@/lib/dungeon/model";
 
 type Props = {
   doc: Doc;
   view: View;
   onNavigate: (world: Pt) => void;
+  initialPos?: { x: number; y: number };
+  onPositionChange?: (pos: { x: number; y: number }) => void;
 };
 
-export function Minimap({ doc, view, onNavigate }: Props) {
+export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
+  const [pos, setPos] = useEffectState(initialPos || { x: 16, y: 16 });
+  const dragStartPos = useRef<{ x: number; y: number } | null>(null);
+  const isDraggingMap = useRef(false);
 
   const size = 160;
   const dpr = typeof window !== "undefined" ? Math.min(window.devicePixelRatio || 1, 2) : 1;
@@ -120,30 +125,69 @@ export function Minimap({ doc, view, onNavigate }: Props) {
 
   const handlePointer = (e: React.PointerEvent) => {
     if (e.button !== 0 && e.type === "pointerdown") return;
+    
+    // Check if clicking the "handle" (the top area) to drag the whole minimap
+    const target = e.target as HTMLElement;
+    const isHandle = target.closest('.minimap-handle');
+
     if (e.type === "pointerdown") {
+      if (isHandle) {
+        isDraggingMap.current = true;
+        dragStartPos.current = { x: e.clientX - pos.x, y: e.clientY - pos.y };
+        target.setPointerCapture?.(e.pointerId);
+        return;
+      }
       dragging.current = true;
       (e.target as Element).setPointerCapture?.(e.pointerId);
     }
+    
+    if (e.type === "pointermove") {
+      if (isDraggingMap.current && dragStartPos.current) {
+        const newX = e.clientX - dragStartPos.current.x;
+        const newY = e.clientY - dragStartPos.current.y;
+        const newPos = { x: newX, y: newY };
+        setPos(newPos);
+        onPositionChange?.(newPos);
+        return;
+      }
+      if (dragging.current) {
+        onNavigate(toWorld(e.clientX, e.clientY));
+      }
+      return;
+    }
+
     if (e.type === "pointerup" || e.type === "pointerleave") {
       dragging.current = false;
+      isDraggingMap.current = false;
+      dragStartPos.current = null;
     }
-    onNavigate(toWorld(e.clientX, e.clientY));
+    
+    if (e.type === "pointerdown" && !isHandle) {
+       onNavigate(toWorld(e.clientX, e.clientY));
+    }
   };
 
   return (
     <div
       ref={wrapRef}
-      className="pointer-events-auto absolute right-4 top-4 z-10 overflow-hidden rounded-lg border border-border/60 bg-card/80 shadow-lg backdrop-blur"
-      style={{ width: size, height: size }}
+      className="pointer-events-auto absolute z-20 overflow-hidden rounded-lg border border-border/60 bg-card/80 shadow-lg backdrop-blur sm:w-[160px] sm:h-[160px] w-[120px] h-[120px]"
+      style={{ 
+        right: pos.x, 
+        top: pos.y,
+        width: typeof window !== 'undefined' && window.innerWidth < 640 ? 120 : 160,
+        height: typeof window !== 'undefined' && window.innerWidth < 640 ? 120 : 160
+      }}
       onPointerDown={handlePointer}
-      onPointerMove={(e) => dragging.current && handlePointer(e)}
+      onPointerMove={handlePointer}
       onPointerUp={handlePointer}
       onPointerLeave={handlePointer}
-      title="Minimap: drag to navigate"
+      title="Minimap: drag handle to move, click map to navigate"
     >
-      <canvas ref={canvasRef} className="block" />
-      <div className="pointer-events-none absolute left-1.5 top-1.5 rounded bg-background/80 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-muted-foreground">
-        Map
+      <canvas ref={canvasRef} className="block w-full h-full" />
+      <div className="minimap-handle pointer-events-auto absolute inset-x-0 top-0 h-6 cursor-move bg-background/20 hover:bg-background/40 transition-colors flex items-center px-1.5">
+        <div className="rounded bg-background/80 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-muted-foreground">
+          Map
+        </div>
       </div>
     </div>
   );

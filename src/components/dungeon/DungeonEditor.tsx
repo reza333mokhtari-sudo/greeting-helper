@@ -142,6 +142,14 @@ export function DungeonEditor() {
   const online = useOnlineStatus();
   const importRef = useRef<HTMLInputElement>(null);
   const [previewProp, setPreviewProp] = useState<{ id: string; url: string; name: string; license?: string | null } | null>(null);
+  const [minimapPos, setMinimapPos] = useState(() => {
+    try {
+      const saved = localStorage.getItem("minimap-pos");
+      return saved ? JSON.parse(saved) : { x: 16, y: 16 };
+    } catch {
+      return { x: 16, y: 16 };
+    }
+  });
 
 
   // Debounce rapid history pushes with the same label into a single snapshot.
@@ -1700,7 +1708,16 @@ export function DungeonEditor() {
         onFit={fit}
       />
 
-      <Minimap doc={doc} view={view} onNavigate={(pt) => setView((v) => ({ ...v, x: -pt.x + (wrapRef.current?.clientWidth ?? 0) / 2 / v.scale, y: -pt.y + (wrapRef.current?.clientHeight ?? 0) / 2 / v.scale }))} />
+      <Minimap 
+        doc={doc} 
+        view={view} 
+        initialPos={minimapPos}
+        onPositionChange={(pos) => {
+          setMinimapPos(pos);
+          localStorage.setItem("minimap-pos", JSON.stringify(pos));
+        }}
+        onNavigate={(pt) => setView((v) => ({ ...v, x: -pt.x + (wrapRef.current?.clientWidth ?? 0) / 2 / v.scale, y: -pt.y + (wrapRef.current?.clientHeight ?? 0) / 2 / v.scale }))} 
+      />
       
       <PropPreviewModal 
         open={!!previewProp} 

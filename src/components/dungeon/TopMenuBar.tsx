@@ -42,7 +42,9 @@ export function TopMenuBar(props: Props) {
         <MenubarMenu>
           <MenubarTrigger className="h-8 px-3 text-xs">File</MenubarTrigger>
           <MenubarContent>
-            <MenubarItem onSelect={props.onNew}>fix minimap dont want stick to top bar</MenubarItem>
+            <MenubarItem onSelect={props.onNew}>Adjust the minimap sizing and placement for smaller screens so it never overlaps the top menu or other canvas controls.
+
+Add drag-and-drop positioning for the floating minimap and persist the layout in local storage so it stays where I set it.</MenubarItem>
 
             <MenubarItem onSelect={props.onImport}>Import savefile…</MenubarItem>
             <MenubarSeparator />
