@@ -58,12 +58,14 @@ type Props = {
   canRedo: boolean;
   zoom: number;
   onZoom: (dir: 1 | -1) => void;
+  vertical?: boolean;
 };
 
 export function Toolbar(props: Props) {
   return (
     <TooltipProvider delayDuration={200}>
-      <div className="pointer-events-auto flex items-center gap-1 rounded-2xl border border-border bg-card/90 px-2 py-1.5 shadow-[var(--shadow-arcane)] backdrop-blur">
+      <div className={`pointer-events-auto flex ${props.vertical ? "flex-col border-0 bg-transparent px-1 shadow-none backdrop-blur-0" : "items-center gap-1 rounded-2xl border border-border bg-card/90 px-2 py-1.5 shadow-[var(--shadow-arcane)] backdrop-blur"}`}>
+
         <Tooltip>
           <TooltipTrigger asChild>
             <Button variant="ghost" size="icon" className="size-9" aria-label="Undo" disabled={!props.canUndo} onClick={props.onUndo}>
@@ -81,7 +83,8 @@ export function Toolbar(props: Props) {
           <TooltipContent side="top">Redo (Ctrl+Shift+Z)</TooltipContent>
         </Tooltip>
 
-        <Separator orientation="vertical" className="mx-1 h-7" />
+        <Separator orientation={props.vertical ? "horizontal" : "vertical"} className={props.vertical ? "my-1 w-7 mx-auto" : "mx-1 h-7"} />
+
 
         {TOOLS.map((t) => {
           const active = props.tool === t.id;
@@ -109,7 +112,7 @@ export function Toolbar(props: Props) {
                   </svg>
                 </Button>
               </TooltipTrigger>
-              <TooltipContent side="top" className="max-w-xs space-y-1">
+              <TooltipContent side={props.vertical ? "left" : "top"} className="max-w-xs space-y-1">
                 <div className="flex items-center justify-between gap-4 font-semibold">
                   <span>{TOOL_DESCRIPTIONS[t.id]?.title || t.label}</span>
                   <span className="text-[10px] opacity-60">({t.key})</span>
@@ -127,17 +130,18 @@ export function Toolbar(props: Props) {
           );
         })}
 
-        <Separator orientation="vertical" className="mx-1 h-7" />
+        <Separator orientation={props.vertical ? "horizontal" : "vertical"} className={props.vertical ? "my-1 w-7 mx-auto" : "mx-1 h-7"} />
 
         <Button variant="ghost" size="icon" className="size-9" aria-label="Zoom out" onClick={() => props.onZoom(-1)}>
           <ZoomOut className="size-4" />
         </Button>
-        <span className="w-10 text-center text-[11px] tabular-nums text-muted-foreground">
+        <span className={`text-center text-[10px] tabular-nums text-muted-foreground ${props.vertical ? "py-1" : "w-10"}`}>
           {Math.round(props.zoom * 100)}%
         </span>
         <Button variant="ghost" size="icon" className="size-9" aria-label="Zoom in" onClick={() => props.onZoom(1)}>
           <ZoomIn className="size-4" />
         </Button>
+
       </div>
     </TooltipProvider>
   );

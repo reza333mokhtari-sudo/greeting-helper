@@ -1821,9 +1821,25 @@ export function DungeonEditor() {
         />
         </ContextMenu>
 
-        {/* Removed redundant right-side panel as it's now accessible from the left rail */}
-      <OnboardingOverlay />
-    </div>
+        <div className="flex w-12 shrink-0 flex-col border-l border-border bg-sidebar pt-2 overflow-hidden">
+          <ScrollArea className="flex-1">
+            <Toolbar
+              tool={tool}
+              onTool={setTool}
+              onUndo={undo}
+              onRedo={redo}
+              canUndo={hIndex > 0}
+              canRedo={hIndex < timeline.length - 1}
+              zoom={view.scale}
+              onZoom={zoomBy}
+              vertical
+            />
+          </ScrollArea>
+        </div>
+        
+        <OnboardingOverlay />
+      </div>
+
 
       <StatusBar
         toolLabel={toolLabel}
