@@ -124,8 +124,11 @@ export function GraphicsSettingsPanel({ settings: s, onChange }: Props) {
         <Row label="Invert Y">
           <Switch checked={s.cameraInvertY} onCheckedChange={(v) => onChange({ cameraInvertY: v })} />
         </Row>
-        <Row label="Show axes">
+        <Row label="Show widget">
           <Switch checked={s.showAxes} onCheckedChange={(v) => onChange({ showAxes: v })} />
+        </Row>
+        <Row label="World origin">
+          <Switch checked={s.showWorldAxes} onCheckedChange={(v) => onChange({ showWorldAxes: v })} />
         </Row>
         <Button 
           variant="outline" 
