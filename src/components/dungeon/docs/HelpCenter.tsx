@@ -46,7 +46,7 @@ export const HelpCenter = ({ isOpen, onOpenChange, initialSectionId }: HelpCente
   );
 
   const activeSection = docSections.find(s => s.slug === activeId) || docSections[0];
-  const markdown = useMdxContent(activeSection.slug);
+  const markdown = useMdxContent(activeSection?.slug || docsConfig.defaultSection);
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
