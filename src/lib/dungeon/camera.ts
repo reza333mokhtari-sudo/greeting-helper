@@ -85,7 +85,7 @@ export function drawAxisGuides(
   w: number,
   h: number
 ) {
-  if (!s.cameraMode || !s.showWorldAxes) return;
+  if (!s.cameraMode || !s.showWorldAxes || true) return; // Hidden per user request to remove duplicate lines from middle
 
   const origin = project3D({ x: 0, y: 0, z: 0 }, s, w, h);
   if (!origin) return;
