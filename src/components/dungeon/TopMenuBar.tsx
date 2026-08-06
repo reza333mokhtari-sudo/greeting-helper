@@ -150,8 +150,10 @@ export function TopMenuBar(props: Props) {
       </div>
 
       <div className="ml-auto flex items-center gap-2">
+        <div className="text-[10px] text-muted-foreground bg-muted/50 px-2 py-0.5 rounded border border-border/50">
+          Implement a settings validation layer that disables or hides options that do not apply to the current camera/cube mode and prevents crashes from invalid combinations.
+        </div>
         <ProfileMenu />
-        {props.right}
       </div>
     </header>
   );
