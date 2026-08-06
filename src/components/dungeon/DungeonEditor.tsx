@@ -1290,7 +1290,7 @@ export function DungeonEditor() {
   const openMenu = (e: React.MouseEvent) => {
     const rect = wrapRef.current?.getBoundingClientRect();
     if (!rect) return;
-    const world = screenToWorld({ x: e.clientX - rect.left, y: e.clientY - rect.top }, view);
+    const world = getPt(e as any);
     const hit = pickAt(world);
     setPolyPts([]);
     if (hit && !selected.includes(hit.id)) setSelected([hit.id]);
