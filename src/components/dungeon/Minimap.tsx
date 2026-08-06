@@ -1,4 +1,6 @@
 import { useEffect, useRef, useCallback, useState as useEffectState } from "react";
+import { ZoomIn, ZoomOut } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { type Doc, type View, type Pt, docBounds, shapePoints, objectRadius } from "@/lib/dungeon/model";
 
 type Props = {
@@ -17,6 +19,7 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
   const dragStartPos = useRef<{ x: number; y: number } | null>(null);
   const isDraggingMap = useRef(false);
 
+  const [minimapZoom, setMinimapZoom] = useEffectState(1.0);
   const size = 160;
   const dpr = typeof window !== "undefined" ? Math.min(window.devicePixelRatio || 1, 2) : 1;
 
@@ -38,7 +41,7 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
     const y2 = bounds.y2 + pad;
     const bw = Math.max(1, x2 - x1);
     const bh = Math.max(1, y2 - y1);
-    const scale = Math.min(size / bw, size / bh);
+    const scale = Math.min(size / bw, size / bh) * minimapZoom;
     const ox = (size - bw * scale) / 2 - x1 * scale;
     const oy = (size - bh * scale) / 2 - y1 * scale;
 
@@ -98,7 +101,7 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
       ctx.fillStyle = "rgba(77, 163, 255, 0.12)";
       ctx.fillRect(vx * dpr, vy * dpr, vw * dpr, vh * dpr);
     }
-  }, [doc, view, dpr]);
+  }, [doc, view, dpr, minimapZoom]);
 
   useEffect(() => {
     draw();
@@ -117,7 +120,7 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
     const y2 = bounds.y2 + pad;
     const bw = Math.max(1, x2 - x1);
     const bh = Math.max(1, y2 - y1);
-    const scale = Math.min(size / bw, size / bh);
+    const scale = Math.min(size / bw, size / bh) * minimapZoom;
     const ox = (size - bw * scale) / 2 - x1 * scale;
     const oy = (size - bh * scale) / 2 - y1 * scale;
     return { x: (px * size - ox) / scale, y: (py * size - oy) / scale };
@@ -184,9 +187,27 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
       title="Minimap: drag handle to move, click map to navigate"
     >
       <canvas ref={canvasRef} className="block w-full h-full" />
-      <div className="minimap-handle pointer-events-auto absolute inset-x-0 top-0 h-6 cursor-move bg-background/20 hover:bg-background/40 transition-colors flex items-center px-1.5">
+      <div className="minimap-handle pointer-events-auto absolute inset-x-0 top-0 h-6 cursor-move bg-background/20 hover:bg-background/40 transition-colors flex items-center justify-between px-1.5">
         <div className="rounded bg-background/80 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-muted-foreground">
           Map
+        </div>
+        <div className="flex items-center gap-1 pointer-events-auto">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-4 w-4 bg-background/60 hover:bg-background" 
+            onClick={(e) => { e.stopPropagation(); setMinimapZoom(z => Math.max(0.2, z - 0.2)); }}
+          >
+            <ZoomOut className="h-3 w-3" />
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-4 w-4 bg-background/60 hover:bg-background" 
+            onClick={(e) => { e.stopPropagation(); setMinimapZoom(z => Math.min(5, z + 0.2)); }}
+          >
+            <ZoomIn className="h-3 w-3" />
+          </Button>
         </div>
       </div>
     </div>
