@@ -27,6 +27,8 @@ const Input = z.object({
     .max(8)
     .default([]),
   customSystem: z.string().optional(),
+  /** If true, enforce a strict 15x15 unit size for all stamps. */
+  fixedSize: z.boolean().default(true),
 });
 
 
@@ -88,8 +90,6 @@ MODES
 "settings" may only contain: hatch (boolean), hatchDensity (3-16), roughness (0-14), wallThickness (2-16),
 gridStyle ("square"|"dot"|"hex"|"none"), bgColor, floorColor, wallColor, gridColor, inkColor (hex strings).`;
 
-const SYSTEM = SYSTEM_PROMPT;
-
 const num = (v: unknown, fallback = 0) => (typeof v === "number" && Number.isFinite(v) ? v : fallback);
 
 /** Pull the outermost JSON object out of a model reply, tolerating fences and stray prose. */
@@ -102,12 +102,55 @@ function extractJson(text: string): string {
   return body.slice(start, end + 1);
 }
 
-function parseJson(text: string): AiSuggestion {
+/** Automated QA check for AI suggestions. */
+function qaCheck(suggestion: AiSuggestion, fixedSize: boolean): AiSuggestion {
+  // 1. Validate coordinates and bounds
+  const MAX_COORD = 100; // Stay within reasonable bounds
+  suggestion.rooms = suggestion.rooms.filter(r => 
+    Math.abs(r.x) < MAX_COORD && Math.abs(r.y) < MAX_COORD && r.w > 0 && r.h > 0
+  );
+
+  // 2. Validate stamps/icons
+  suggestion.stamps = suggestion.stamps.map(s => {
+    let w = s.w ?? 15;
+    let h = s.h ?? 15;
+    
+    // Enforce size rules
+    if (fixedSize) {
+      w = 15;
+      h = 15;
+    } else {
+      // Keep within sane limits even if custom
+      w = Math.max(5, Math.min(100, w));
+      h = Math.max(5, Math.min(100, h));
+    }
+
+    return { ...s, w, h };
+  }).filter(s => {
+    // Basic URL validation
+    try {
+      new URL(s.url);
+      return true;
+    } catch {
+      return false;
+    }
+  });
+
+  // 3. Filter invalid objects
+  suggestion.objects = suggestion.objects.filter(o => 
+    Math.abs(o.x) < MAX_COORD && Math.abs(o.y) < MAX_COORD
+  );
+
+  return suggestion;
+}
+
+function parseJson(text: string, fixedSize: boolean): AiSuggestion {
   const raw = JSON.parse(extractJson(text)) as Partial<AiSuggestion>;
   const rooms = Array.isArray(raw.rooms) ? raw.rooms : [];
   const objects = Array.isArray(raw.objects) ? raw.objects : [];
   const stamps = Array.isArray(raw.stamps) ? raw.stamps : [];
-  return {
+  
+  const suggestion: AiSuggestion = {
     notes: typeof raw.notes === "string" ? raw.notes.slice(0, 1200) : "",
     rooms: rooms
       .slice(0, 20)
@@ -151,41 +194,40 @@ function parseJson(text: string): AiSuggestion {
     })),
     settings: raw.settings && typeof raw.settings === "object" ? (raw.settings as Record<string, string | number | boolean>) : {},
   };
+
+  return qaCheck(suggestion, fixedSize);
+}
+
+async function getAiModel(engineKey: AiEngine) {
+  const { createLovableAiGatewayProvider, createCustomProvider } = await import("./ai-gateway.server");
+  const engine = AI_ENGINES[engineKey];
+  const isCustom = "custom" in engine && engine.custom === true;
+
+  if (isCustom) {
+    const customKey = process.env["CONDUIT_API_KEY"];
+    if (!customKey) throw new Error("Custom AI endpoint is not configured — add the CONDUIT_API_KEY secret.");
+    const baseURL = process.env["CONDUIT_BASE_URL"] || "https://conduit.ozdoev.net/v1";
+    const modelId = (process.env["CONDUIT_MODEL"] || engine.id).trim().replace(/fabel/gi, "fable");
+    return { model: createCustomProvider(customKey, baseURL)(modelId), isCustom: true, modelId };
+  } else {
+    const key = process.env["LOVABLE_API_KEY"];
+    if (!key) throw new Error("AI is not configured");
+    const modelId = engine.id;
+    const model = createLovableAiGatewayProvider(key)(modelId);
+    let providerOptions: any = undefined;
+    if (modelId.startsWith("openai/gpt-5.6")) providerOptions = { lovable: { reasoningEffort: "none" } };
+    return { model, isCustom: false, modelId, providerOptions };
+  }
 }
 
 export const suggestMap = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => Input.parse(input))
   .handler(async ({ data }): Promise<AiSuggestion> => {
-    const engine = AI_ENGINES[data.engine];
-    const isCustom = "custom" in engine && engine.custom === true;
-    const { createLovableAiGatewayProvider, createCustomProvider } = await import("./ai-gateway.server");
-
-    let model;
-    let providerOptions: { lovable: { reasoningEffort: string } } | undefined;
-    if (isCustom) {
-      const customKey = process.env["CONDUIT_API_KEY"];
-      if (!customKey) throw new Error("Custom AI endpoint is not configured — add the CONDUIT_API_KEY secret.");
-      const baseURL = process.env["CONDUIT_BASE_URL"] || "https://conduit.ozdoev.net/v1";
-      // Tolerate the common "fabel" spelling of the model id.
-      const modelId = (process.env["CONDUIT_MODEL"] || engine.id).trim().replace(/fabel/gi, "fable");
-      model = createCustomProvider(customKey, baseURL)(modelId);
-    } else {
-      const key = process.env["LOVABLE_API_KEY"];
-      if (!key) throw new Error("AI is not configured");
-      const modelId = engine.id;
-      model = createLovableAiGatewayProvider(key)(modelId);
-      // GPT-5.6 models must run with reasoning explicitly off on chat completions.
-      if (modelId.startsWith("openai/gpt-5.6")) providerOptions = { lovable: { reasoningEffort: "none" } };
-      if (modelId === "grok-4.5") {
-        // Apply the specific authorization header for Grok if it's the specific key provided
-        // Note: The key is handled via the gateway ordinarily, but we can set it via secret if needed.
-      }
-    }
-
     const userTurn = [
       `Mode: ${data.mode}`,
       `Grid cell size: ${data.gridSize}px`,
       `Current map: ${data.summary || "(empty map)"}`,
+      `Strict 15x15 icon size: ${data.fixedSize ? "Yes" : "No"}`,
       "",
       `Request: ${data.prompt}`,
     ].join("\n");
@@ -195,68 +237,74 @@ export const suggestMap = createServerFn({ method: "POST" })
       { role: "user" as const, content: userTurn },
     ];
 
-    // Streamed so long generations keep bytes flowing; we still consume it as one shot.
-    // streamText never throws — it reports failures through onError and then surfaces
-    // a useless "No output generated", so capture the real cause and rethrow it.
-    const run = async (extra?: string) => {
+    const runAttempt = async (engineKey: AiEngine, extra?: string) => {
+      const { model, isCustom, providerOptions } = await getAiModel(engineKey);
+      
       let streamError: unknown;
       const result = streamText({
         model,
-        // Quota/auth errors are terminal — retrying just multiplies the same failure.
         maxRetries: isCustom ? 0 : 1,
         ...(providerOptions ? { providerOptions } : {}),
-
-        system: data.customSystem || (extra ? `${SYSTEM}\n\n${extra}` : SYSTEM),
+        system: data.customSystem || (extra ? `${SYSTEM_PROMPT}\n\n${extra}` : SYSTEM_PROMPT),
         messages: (extra
           ? [...messages, { role: "user" as const, content: extra }]
           : messages) as { role: "user" | "assistant"; content: string }[],
         onError: ({ error }) => {
           streamError = error;
-          console.error("[ai.suggestMap] stream error", error);
+          console.error(`[ai.suggestMap] error with ${engineKey}`, error);
         },
       });
+
       const toError = (e: unknown) =>
         e instanceof Error
           ? e
           : new Error(typeof e === "string" ? e : JSON.stringify(e, Object.getOwnPropertyNames(Object(e))).slice(0, 500));
-      let out: string;
+
       try {
-        out = await result.text;
+        const text = await result.text;
+        if (streamError) throw toError(streamError);
+        return text;
       } catch (e) {
         throw toError(streamError ?? e);
       }
-      if (streamError) throw toError(streamError);
-      return out;
     };
 
-
-
-
+    // 1. Initial attempt
     let text = "";
     try {
-      text = await run();
-      return parseJson(text);
+      text = await runAttempt(data.engine);
+      return parseJson(text, data.fixedSize);
     } catch (err) {
+      console.warn(`Initial AI attempt failed with ${data.engine}, attempting fallback...`, err);
+      
+      // Fallback logic: if initial engine fails, try 'balanced' if it's different
+      if (data.engine !== 'balanced') {
+        try {
+          text = await runAttempt('balanced', "The previous model failed. Please provide a reliable response now.");
+          return parseJson(text, data.fixedSize);
+        } catch (fallbackErr) {
+          console.error("Fallback engine also failed", fallbackErr);
+        }
+      }
+
+      // If everything failed or it was a parsing error, check if we can repair
       if (err instanceof SyntaxError || (err as Error)?.message === "no json") {
         try {
-          // One repair pass: the model saw its own malformed reply is unusable.
-          return parseJson(await run("Your previous reply was not valid JSON. Reply again with ONLY the JSON object."));
+          // Repair attempt with original engine or balanced if that's where we are
+          const repairEngine = data.engine === 'balanced' ? 'balanced' : 'swift';
+          text = await runAttempt(repairEngine, "Your previous reply was not valid JSON. Reply again with ONLY the JSON object.");
+          return parseJson(text, data.fixedSize);
         } catch {
+          // Final fallback
           return { notes: text.slice(0, 800), rooms: [], corridors: [], objects: [], stamps: [], encounters: [], settings: {} };
         }
       }
-      const msg = (err as Error)?.message ?? "AI request failed";
-      if (msg.includes("429")) throw new Error("429 Too many AI requests — wait a moment and try again.");
-      if (msg.includes("402")) throw new Error("402 AI credits exhausted — add credits to keep generating.");
-      if (/free_premium_limit|premium-model limit/i.test(msg))
-        throw new Error(
-          "Your custom endpoint's free premium-model quota is used up — pick another engine (Swift / Balanced / Deep / Lite) or set CONDUIT_MODEL to a non-premium model.",
-        );
 
-      if (msg.includes("Unknown model"))
-        throw new Error("Your endpoint does not know this model id — update the CONDUIT_MODEL secret.");
-      if (msg.includes("Temporary service interruption"))
-        throw new Error("Your custom endpoint is temporarily unavailable — retry or pick another engine.");
+      const msg = (err as Error)?.message ?? "AI request failed";
+      // Handle known errors
+      if (msg.includes("429")) throw new Error("Too many AI requests — wait a moment and try again.");
+      if (msg.includes("402")) throw new Error("AI credits exhausted.");
+      
       throw new Error(msg);
     }
   });
