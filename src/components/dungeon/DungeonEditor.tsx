@@ -102,7 +102,7 @@ export function DungeonEditor() {
   const [doc, setDocState] = useState<Doc>(() => emptyDoc());
   /** Full labelled timeline; index points at the state currently rendered. */
   const [timeline, setTimeline] = useState<{ doc: Doc; label: string; at: number }[]>(() => [
-    { doc: emptyDoc(), label: "now debug all model AI assist and enhance them (if CLIENT want make 2d ICON as 15px-15px(only) and other )\n\nmake sure has BIG update", at: Date.now() },
+    { doc: emptyDoc(), label: "Add a regression check so every tool placement uses the corrected unprojection coordinates in Camera Mode and non-Camera Mode.", at: Date.now() },
   ]);
   const [hIndex, setHIndex] = useState(0);
   const hIndexRef = useRef(0);
