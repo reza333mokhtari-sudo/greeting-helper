@@ -514,7 +514,6 @@ export function DungeonEditor() {
     const screenY = e.clientY - rect.top;
 
     if (doc.settings.cameraMode) {
-      const { unprojectToPlane } = await import("@/lib/dungeon/camera");
       return unprojectToPlane(
         { x: screenX, y: screenY },
         doc.settings,
