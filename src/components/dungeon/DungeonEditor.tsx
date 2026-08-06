@@ -1161,6 +1161,14 @@ export function DungeonEditor() {
     [commit],
   );
 
+  const deleteObject = useCallback((id: string) => {
+    commit((d) => ({
+      ...d,
+      objects: d.objects.filter((o) => o.id !== id),
+    }), "Delete object");
+    setSelected((prev) => prev.filter(sid => sid !== id));
+  }, [commit]);
+
   const selectedObject = useMemo(
     () => doc.objects.find((o) => selected.includes(o.id)) ?? null,
     [doc.objects, selected],
