@@ -13,6 +13,7 @@ interface DialogOptions {
   variant?: DialogVariant;
   defaultValue?: string; // For prompt
   content?: React.ReactNode; // For custom
+  fullscreen?: boolean;
 }
 
 interface DialogState {
