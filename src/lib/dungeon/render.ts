@@ -481,14 +481,16 @@ export function renderScene(
   h: number,
   opts: RenderOpts = {},
 ) {
-  const dpr = opts.dpr ?? 1;
   const s = doc.settings;
+  const renderScale = s.renderScale ?? 1;
+  const dpr = (opts.dpr ?? 1) * renderScale;
   const pw = w * dpr;
   const ph = h * dpr;
+  ctx.imageSmoothingEnabled = !!s.antiAliasing;
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  ctx.clearRect(0, 0, pw, ph);
+  ctx.clearRect(0, 0, w * (opts.dpr ?? 1), h * (opts.dpr ?? 1));
   ctx.fillStyle = s.bgColor;
-  ctx.fillRect(0, 0, pw, ph);
+  ctx.fillRect(0, 0, w * (opts.dpr ?? 1), h * (opts.dpr ?? 1));
 
   const shapes = opts.preview ? [...doc.shapes, opts.preview] : doc.shapes;
 
@@ -516,10 +518,10 @@ export function renderScene(
     ctx.shadowColor = "rgba(0,0,0,0.5)";
     ctx.shadowBlur = 22 * dpr;
     ctx.shadowOffsetY = 8 * dpr;
-    ctx.drawImage(wallC, 0, 0);
+    ctx.drawImage(wallC, 0, 0, w * (opts.dpr ?? 1), h * (opts.dpr ?? 1));
     ctx.restore();
   }
-  ctx.drawImage(wallC, 0, 0);
+  ctx.drawImage(wallC, 0, 0, w * (opts.dpr ?? 1), h * (opts.dpr ?? 1));
 
   const floorC = makeCanvas(pw, ph);
   const fc = floorC.getContext("2d")!;
@@ -529,7 +531,7 @@ export function renderScene(
   fc.fillRect(0, 0, pw, ph);
   fc.globalCompositeOperation = "source-over";
   drawGrid(fc, doc, view, pw / dpr, ph / dpr, dpr);
-  ctx.drawImage(floorC, 0, 0);
+  ctx.drawImage(floorC, 0, 0, w * (opts.dpr ?? 1), h * (opts.dpr ?? 1));
 
   applyView(ctx, view, dpr);
   const layerById = new Map(doc.layers.map((l) => [l.id, l]));
