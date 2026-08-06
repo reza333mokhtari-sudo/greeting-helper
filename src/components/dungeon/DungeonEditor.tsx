@@ -3,6 +3,7 @@ import { Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { dialog } from "@/lib/dialog";
 
 
 
@@ -1085,7 +1086,7 @@ export function DungeonEditor() {
           commit(migrated, "Import map");
           setActiveLayer(migrated.layers[0]!.id);
         } catch {
-          window.alert("That file isn't a valid dungeon map.");
+          dialog.alert("Invalid Map", "That file isn't a valid dungeon map.", "danger");
         }
       });
     },
@@ -1094,7 +1095,7 @@ export function DungeonEditor() {
 
   const exportSvg = useCallback(() => exportSvgFile(doc), [doc]);
   const exportPdf = useCallback(() => {
-    exportPdfFile(doc).catch(() => window.alert("PDF export failed."));
+    exportPdfFile(doc).catch(() => dialog.alert("Export Error", "PDF export failed.", "danger"));
   }, [doc]);
 
   // ---- fog of war helpers ----
@@ -1477,8 +1478,13 @@ export function DungeonEditor() {
             onSelectFloor={selectFloor}
             onAddFloor={(dup) => commit((d) => addFloor(d, undefined, dup), dup ? "Duplicate floor" : "Add floor")}
             onRenameFloor={(id, name) => commit((d) => renameFloor(d, id, name), "Rename floor")}
-            onDeleteFloor={(id) => {
-              if (window.confirm("Delete this floor and all of its content?")) commit((d) => deleteFloor(d, id), "Delete floor");
+            onDeleteFloor={async (id) => {
+              if (await dialog.confirm({
+                title: "Delete Floor",
+                message: "Delete this floor and all of its content?",
+                confirmText: "Delete",
+                variant: "danger"
+              })) commit((d) => deleteFloor(d, id), "Delete floor");
             }}
             onMoveFloor={(id, dir) => commit((d) => moveFloor(d, id, dir), "Reorder floors")}
             onToggleUnderlay={(on) => commit((d) => ({ ...d, showUnderlay: on }), "Floor underlay")}
@@ -1598,8 +1604,13 @@ export function DungeonEditor() {
         onUndo={undo}
         onRedo={redo}
         onDelete={deleteSelected}
-        onNew={() => {
-          if (window.confirm("Start a new map?")) commit(emptyDoc(), "New map");
+        onNew={async () => {
+          if (await dialog.confirm({
+            title: "New Map",
+            message: "Start a new map? Unsaved changes might be lost.",
+            confirmText: "New Map",
+            variant: "warning"
+          })) commit(emptyDoc(), "New map");
         }}
         onImport={() => importRef.current?.click()}
         onExportPng={exportPng}
