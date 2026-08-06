@@ -124,10 +124,16 @@ export function DungeonEditor() {
   const [engineReady, setEngineReady] = useState(false);
   const [docBytes, setDocBytes] = useState(0);
 
-  const [menuTarget, setMenuTarget] = useState<{ pt: Pt; label: string | null; id: string | null }>({
+  const [menuTarget, setMenuTarget] = useState<{
+    pt: Pt;
+    label: string | null;
+    id: string | null;
+    processingIds: string[];
+  }>({
     pt: { x: 0, y: 0 },
     label: null,
     id: null,
+    processingIds: [],
   });
   const clipboard = useRef<{ shapes: Shape[]; objects: MapObject[] } | null>(null);
   const [clipCount, setClipCount] = useState(0);
@@ -298,7 +304,7 @@ export function DungeonEditor() {
         ? { id: "poly-preview", kind: "poly", erase: false, pts: [...polyPts, cursor] }
         : null);
     const t0 = performance.now();
-    renderScene(ctx, doc, view, w, h, { preview: livePreview, selectedIds: selected, dpr });
+    renderScene(ctx, doc, view, w, h, { preview: livePreview, selectedIds: selected, processingIds: menuTarget.processingIds, dpr });
     recordDraw(performance.now() - t0);
 
     if (polyPts.length) {
@@ -1199,7 +1205,7 @@ export function DungeonEditor() {
     setPolyPts([]);
     if (hit && !selected.includes(hit.id)) setSelected([hit.id]);
     if (!hit && !e.shiftKey) setSelected((sel) => (sel.length ? sel : []));
-    setMenuTarget({ pt: world, label: hit?.label ?? null, id: hit?.id ?? null });
+    setMenuTarget(prev => ({ ...prev, pt: world, label: hit?.label ?? null, id: hit?.id ?? null }));
   };
 
   const copySelection = useCallback(() => {
@@ -1636,6 +1642,15 @@ export function DungeonEditor() {
             onFog: (hide) => fogAt(menuTarget.pt, hide),
             onFit: fit,
             onZoomHere: () => zoomTo(menuTarget.pt),
+            imageProcessing: selectedObject?.kind === "image" ? {
+              objectId: selectedObject.id,
+              imageSrc: selectedObject.url,
+              actions: {
+                onUpdateImage: (id, url, label) => updateObject(id, { url }),
+                onProcessingStart: (id) => setMenuTarget(prev => ({ ...prev, processingIds: [...prev.processingIds, id] })),
+                onProcessingEnd: (id) => setMenuTarget(prev => ({ ...prev, processingIds: prev.processingIds.filter(pid => pid !== id) })),
+              }
+            } : undefined
           }}
         />
         </ContextMenu>
