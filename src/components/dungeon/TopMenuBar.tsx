@@ -39,49 +39,6 @@ export function TopMenuBar(props: Props) {
     <header className="relative flex h-11 shrink-0 items-center gap-2 border-b border-border bg-sidebar px-2">
       <span className="px-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-arcane">Scrawl</span>
       <Menubar className="h-8 border-0 bg-transparent p-0 shadow-none">
-        <MenubarMenu>
-          <MenubarTrigger className="h-8 px-3 text-xs">where is CUBE ?</MenubarTrigger>
-          <MenubarContent className="w-[400px] max-h-[85vh] overflow-y-auto p-4">
-            <div className="space-y-6 text-xs">
-              <div>
-                <div className="font-bold border-b pb-1 uppercase mb-2">SKILLS</div>
-                <ul className="list-disc pl-4 space-y-1 text-muted-foreground">
-                  <li>Production debugging</li>
-                  <li>Feature flag rollback</li>
-                  <li>Pointer event conflict resolution</li>
-                  <li>State single-source-of-truth fixes</li>
-                </ul>
-              </div>
-
-              <div>
-                <div className="font-bold border-b pb-1 uppercase mb-2">TASK</div>
-                <p className="text-muted-foreground leading-relaxed">
-                  Fix camera/cube/minimap/options regressions only.
-                  Do not add new feature scope.
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <div className="font-bold border-b pb-1 uppercase">CHECK/FIX</div>
-                <ul className="list-disc pl-4 text-muted-foreground">
-                  <li>Camera on/off</li>
-                  <li>Cube view changes</li>
-                  <li>Top/Bottom/Left/Right</li>
-                  <li>XYZ/RGB helpers</li>
-                  <li>Minimap sync</li>
-                  <li>Tool drag vs camera drag</li>
-                  <li>Settings that do not apply</li>
-                  <li>Any 3D option causing crash</li>
-                </ul>
-              </div>
-
-              <div className="space-y-2">
-                <div className="font-bold border-b pb-1 uppercase">OUTPUT</div>
-                <p className="text-muted-foreground">Root causes, files changed, test checklist.</p>
-              </div>
-            </div>
-          </MenubarContent>
-        </MenubarMenu>
 
         <MenubarMenu>
           <MenubarTrigger className="h-8 px-3 text-xs">File</MenubarTrigger>
