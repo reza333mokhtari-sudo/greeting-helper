@@ -141,8 +141,8 @@ function parseJson(text: string): AiSuggestion {
         url: String(s.url),
         x: Math.round(num(s.x)),
         y: Math.round(num(s.y)),
-        w: num(s.w, 0) || null,
-        h: num(s.h, 0) || null,
+        w: num(s.w, 15) || 15,
+        h: num(s.h, 15) || 15,
         name: typeof s.name === "string" ? s.name.slice(0, 60) : null,
       })),
     encounters: (Array.isArray(raw.encounters) ? raw.encounters : []).slice(0, 20).map((e) => ({
