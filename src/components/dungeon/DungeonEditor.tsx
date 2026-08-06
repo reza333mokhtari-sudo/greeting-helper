@@ -1260,7 +1260,9 @@ export function DungeonEditor() {
     (world: Pt) => {
       const pickable = doc.objects.filter((o) => {
         const l = doc.layers.find((x) => x.id === o.layerId);
-        return !l || (l.visible && !l.locked);
+        const isLocked = o.locked || l?.locked;
+        const isVisible = o.visible !== false && l?.visible !== false;
+        return isVisible && !isLocked;
       });
       const obj = [...pickable].reverse().find((o) => objectHit(world, o));
       if (obj) return { id: obj.id, label: ("name" in obj && obj.name) || obj.kind };
