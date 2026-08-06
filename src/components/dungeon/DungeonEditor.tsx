@@ -123,7 +123,7 @@ export function DungeonEditor() {
   const [activeLayer, setActiveLayer] = useState<string>(() => emptyDoc().layers[0]!.id);
   const [fogMode, setFogMode] = useState<FogMode>("brush");
   const [fogBrush, setFogBrush] = useState(96);
-  const [leftPanel, setLeftPanel] = useState<PanelId | null>("help");
+  const [leftPanel, setLeftPanel] = useState<PanelId | null>("Implement an optional snap-to-grid behavior for placed items so their world coordinates align consistently after unprojection." as any);
   const [sidebarWidth, setSidebarWidth] = useState(320);
   const [isResizing, setIsResizing] = useState(false);
   const [savedAt, setSavedAt] = useState<number | null>(null);
