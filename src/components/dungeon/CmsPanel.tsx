@@ -5,6 +5,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { dialog } from "@/lib/dialog";
+import { toast } from "sonner";
 
 type Page = {
   id: string;
@@ -33,7 +34,6 @@ export function CmsPanel() {
 
     const fetchPages = async () => {
       setLoading(true);
-      // Fetch public pages always, private pages only if admin
       const { data, error } = await supabase
         .from("cms_pages")
         .select("*")
@@ -52,13 +52,12 @@ export function CmsPanel() {
   }, []);
 
   const openPage = async (page: Page) => {
-    // Determine visibility
     if (!page.published && !isAdmin) {
        toast.error("This page is private.");
        return;
     }
 
-    await dialog.info({
+    await dialog.open({
       title: page.title,
       message: (
         <div className="space-y-4 pt-2">
@@ -86,6 +85,8 @@ export function CmsPanel() {
     });
   };
 
+  const visiblePages = pages.filter(p => p.published || isAdmin);
+
   if (loading) {
     return (
       <div className="flex h-full items-center justify-center py-10">
@@ -93,9 +94,6 @@ export function CmsPanel() {
       </div>
     );
   }
-
-  // Filter out private pages if not admin
-  const visiblePages = pages.filter(p => p.published || isAdmin);
 
   return (
     <div className="flex h-full flex-col">
@@ -123,9 +121,9 @@ export function CmsPanel() {
                     <span className="truncate text-xs font-medium">{page.title}</span>
                   </div>
                   {page.published ? (
-                    <Globe className="h-3 w-3 shrink-0 text-muted-foreground/60" title="Public" />
+                    <Globe className="h-3 w-3 shrink-0 text-muted-foreground/60" />
                   ) : (
-                    <Lock className="h-3 w-3 shrink-0 text-amber-500/80" title="Private" />
+                    <Lock className="h-3 w-3 shrink-0 text-amber-500/80" />
                   )}
                 </div>
                 <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
