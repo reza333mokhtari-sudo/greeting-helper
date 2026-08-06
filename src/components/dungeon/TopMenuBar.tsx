@@ -42,7 +42,7 @@ export function TopMenuBar(props: Props) {
         <MenubarMenu>
           <MenubarTrigger className="h-8 px-3 text-xs">File</MenubarTrigger>
           <MenubarContent>
-            <MenubarItem onSelect={props.onNew}>fix mini map (stick to top bar and CLIENT can see other options in top bar)</MenubarItem>
+            <MenubarItem onSelect={props.onNew}>fix minimap dont want stick to top bar</MenubarItem>
 
             <MenubarItem onSelect={props.onImport}>Import savefile…</MenubarItem>
             <MenubarSeparator />
