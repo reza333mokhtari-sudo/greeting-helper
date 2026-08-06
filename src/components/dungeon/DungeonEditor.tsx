@@ -1700,9 +1700,7 @@ export function DungeonEditor() {
         onFit={fit}
       />
 
-      <div className="absolute right-4 top-0 z-20 pointer-events-none">
-        <Minimap doc={doc} view={view} onNavigate={(pt) => setView((v) => ({ ...v, x: -pt.x + (wrapRef.current?.clientWidth ?? 0) / 2 / v.scale, y: -pt.y + (wrapRef.current?.clientHeight ?? 0) / 2 / v.scale }))} />
-      </div>
+      <Minimap doc={doc} view={view} onNavigate={(pt) => setView((v) => ({ ...v, x: -pt.x + (wrapRef.current?.clientWidth ?? 0) / 2 / v.scale, y: -pt.y + (wrapRef.current?.clientHeight ?? 0) / 2 / v.scale }))} />
       
       <PropPreviewModal 
         open={!!previewProp} 
