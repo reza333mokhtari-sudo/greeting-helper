@@ -170,8 +170,6 @@ export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc
   } else if (o.filter === "toon") {
     ctx.filter = "contrast(1.4) saturate(1.8) brightness(1.1) drop-shadow(0 0 1px rgba(0,0,0,0.5))";
   } else if (o.filter === "remove-bg") {
-    // Basic white-remover filter using contrast/brightness extremes
-    // This works surprisingly well for black-on-white lineart
     ctx.filter = "contrast(100) brightness(1.2) grayscale(1)";
     ctx.globalCompositeOperation = "multiply";
   }
@@ -302,6 +300,16 @@ export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc
         ctx.imageSmoothingEnabled = false;
         ctx.drawImage(off, -o.w / 2, -o.h / 2, o.w, o.h);
         ctx.imageSmoothingEnabled = true;
+      } else if (o.filter === "toon") {
+        ctx.filter = "contrast(1.5) saturate(2) brightness(1.1) drop-shadow(0 0 2px rgba(0,0,0,0.8))";
+        ctx.drawImage(img, -o.w / 2, -o.h / 2, o.w, o.h);
+        ctx.filter = "none";
+      } else if (o.filter === "remove-bg") {
+        ctx.filter = "contrast(200) brightness(1.5) grayscale(1)";
+        ctx.globalCompositeOperation = "multiply";
+        ctx.drawImage(img, -o.w / 2, -o.h / 2, o.w, o.h);
+        ctx.filter = "none";
+        ctx.globalCompositeOperation = "source-over";
       } else {
         ctx.drawImage(img, -o.w / 2, -o.h / 2, o.w, o.h);
       }
