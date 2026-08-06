@@ -507,8 +507,21 @@ export function DungeonEditor() {
   }, [doc]);
 
   const getPt = (e: React.PointerEvent): Pt => {
-    const rect = wrapRef.current!.getBoundingClientRect();
-    return screenToWorld({ x: e.clientX - rect.left, y: e.clientY - rect.top }, stateRef.current.view);
+    const el = wrapRef.current!;
+    const rect = el.getBoundingClientRect();
+    const screenX = e.clientX - rect.left;
+    const screenY = e.clientY - rect.top;
+
+    if (doc.settings.cameraMode) {
+      const { unprojectToPlane } = await import("@/lib/dungeon/camera");
+      return unprojectToPlane(
+        { x: screenX, y: screenY },
+        doc.settings,
+        el.clientWidth,
+        el.clientHeight
+      );
+    }
+    return screenToWorld({ x: screenX, y: screenY }, stateRef.current.view);
   };
 
   const snapped = (p: Pt) => snapPt(p, doc.settings.gridSize, doc.settings.snap);
