@@ -61,7 +61,7 @@ export function unprojectToPlane(
   );
 
   const raycaster = new THREE.Raycaster();
-  raycaster.setFromCamera(ndc, camera);
+  (raycaster as any).setFromCamera(ndc, camera);
 
   const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
   const target = new THREE.Vector3();
