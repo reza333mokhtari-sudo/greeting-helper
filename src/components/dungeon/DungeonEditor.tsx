@@ -77,6 +77,9 @@ import { OnboardingOverlay } from "./OnboardingOverlay";
 import { QuickStartPanel } from "./QuickStartPanel";
 import { Minimap } from "./Minimap";
 import { PropPreviewModal } from "../props/PropPreviewModal";
+import { HelpCenter } from "./docs/HelpCenter";
+import { HelpButton } from "./docs/HelpButton";
+
 
 
 const STORAGE_KEY = "dungeon-scrawl-doc-v1";
@@ -159,6 +162,15 @@ export function DungeonEditor() {
       return { x: 16, y: 16 };
     }
   });
+
+  const [helpOpen, setHelpOpen] = useState(false);
+  const [helpSection, setHelpSection] = useState<string | null>(null);
+
+  const openHelp = useCallback((sectionId?: string) => {
+    setHelpSection(sectionId || "quick-start");
+    setHelpOpen(true);
+  }, []);
+
 
 
   // Debounce rapid history pushes with the same label into a single snapshot.
@@ -1567,6 +1579,17 @@ export function DungeonEditor() {
         return <QuickStartPanel />;
       case "cms":
         return <CmsPanel />;
+      case "ai":
+        return (
+          <AiPanel
+            doc={doc}
+            onPreview={setAiPreview}
+            onApply={applyAi}
+            staged={aiPreview}
+            floorName={doc.floors.find((f) => f.id === doc.activeFloorId)?.name || "Main Floor"}
+            onOpenHelp={openHelp}
+          />
+        );
       default:
         return null;
     }
@@ -1611,6 +1634,7 @@ export function DungeonEditor() {
         onPlayerView={(v) => setSettings({ playerView: v })}
         showGrid={doc.settings.gridStyle !== "none"}
         onShowGrid={(v) => setSettings({ gridStyle: v ? "square" : "none" })}
+        onOpenHelp={openHelp}
         right={<CloudBar doc={syncActiveFloor(doc)} thumbnail={thumbnail} onLoadDoc={(d) => commit(migrateDoc(d))} />}
       />
 
@@ -1836,16 +1860,38 @@ export function DungeonEditor() {
         onFit={fit}
       />
 
-      <Minimap 
-        doc={doc} 
-        view={view} 
-        initialPos={minimapPos}
-        onPositionChange={(pos) => {
-          setMinimapPos(pos);
-          localStorage.setItem("minimap-pos", JSON.stringify(pos));
-        }}
-        onNavigate={(pt) => setView((v) => ({ ...v, x: -pt.x + (wrapRef.current?.clientWidth ?? 0) / 2 / v.scale, y: -pt.y + (wrapRef.current?.clientHeight ?? 0) / 2 / v.scale }))} 
-      />
+      <div className="absolute top-4 right-4 z-30 flex flex-col items-end gap-2">
+        <Minimap 
+          doc={doc} 
+          view={view} 
+          initialPos={minimapPos}
+          onPositionChange={(pos) => {
+            setMinimapPos(pos);
+            localStorage.setItem("minimap-pos", JSON.stringify(pos));
+          }}
+          onNavigate={(pt) => setView((v) => ({ ...v, x: -pt.x + (wrapRef.current?.clientWidth ?? 0) / 2 / v.scale, y: -pt.y + (wrapRef.current?.clientHeight ?? 0) / 2 / v.scale }))} 
+        />
+        <div className="flex flex-col gap-2">
+          <HelpButton 
+            onClick={() => openHelp("navigation")} 
+            label="Navigation"
+          />
+          {doc.settings.cameraMode && (
+            <HelpButton 
+              onClick={() => openHelp("camera")} 
+              label="Camera"
+            />
+          )}
+        </div>
+      </div>
+
+      <div className="absolute bottom-4 right-16 z-20 flex flex-col gap-2">
+        <div className="flex items-center gap-2 px-2 py-1 bg-background/80 backdrop-blur rounded-lg border border-border/50 text-[10px] font-medium text-muted-foreground uppercase tracking-widest">
+          Graphics Quality
+          <HelpButton onClick={() => openHelp("right-click")} label="Filters" />
+        </div>
+      </div>
+
       
       <PropPreviewModal 
         open={!!previewProp} 
@@ -1861,8 +1907,14 @@ export function DungeonEditor() {
           }
         }}
       />
+      <HelpCenter 
+        open={helpOpen} 
+        onOpenChange={setHelpOpen} 
+        initialSectionId={helpSection} 
+      />
     </div>
   );
 }
+
 
 
