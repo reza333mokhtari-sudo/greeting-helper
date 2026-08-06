@@ -71,6 +71,8 @@ import { useOnlineStatus } from "@/hooks/use-online-status";
 import { OnboardingOverlay } from "./OnboardingOverlay";
 import { QuickStartPanel } from "./QuickStartPanel";
 import { Minimap } from "./Minimap";
+import { PropPreviewModal } from "../props/PropPreviewModal";
+
 
 const STORAGE_KEY = "dungeon-scrawl-doc-v1";
 const MIN_ZOOM = 0.08;
@@ -139,6 +141,8 @@ export function DungeonEditor() {
   const [clipCount, setClipCount] = useState(0);
   const online = useOnlineStatus();
   const importRef = useRef<HTMLInputElement>(null);
+  const [previewProp, setPreviewProp] = useState<{ id: string; url: string; name: string; license?: string } | null>(null);
+
 
   // Debounce rapid history pushes with the same label into a single snapshot.
   const pendingHistory = useRef<{ value: Doc; label: string } | null>(null);
@@ -1416,7 +1420,7 @@ export function DungeonEditor() {
           />
         );
       case "props":
-        return <PropsPanel onPlace={placeImage} />;
+        return <PropsPanel onPlace={placeImage} onPreview={(p) => setPreviewProp(p)} />;
       case "ai":
         return (
           <AiPanel

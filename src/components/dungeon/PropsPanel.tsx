@@ -23,7 +23,7 @@ const LIBRARIES = [
   { id: "kenney", label: "Kenney", license: "CC0 (Public Domain)", searchUrl: "https://www.kenney.nl/assets?q=" },
 ];
 
-export function PropsPanel({ onPlace }: { onPlace: (url: string, name: string) => void }) {
+export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name: string) => void, onPreview?: (prop: { id: string; url: string; name: string; license?: string }) => void }) {
   const [assets, setAssets] = useState<AssetRow[]>([]);
   const [signedIn, setSignedIn] = useState(false);
   const [query, setQuery] = useState("");
@@ -268,7 +268,17 @@ export function PropsPanel({ onPlace }: { onPlace: (url: string, name: string) =
                 <div key={a.id} className="group relative overflow-hidden rounded-md border border-border/60 bg-card/60">
                   <ContextMenu>
                     <ContextMenuTrigger>
-                      <button type="button" className="block w-full" title={`Place ${a.name}`} onClick={() => onPlace(a.url, a.name)}>
+                      <button 
+                        type="button" 
+                        className="block w-full" 
+                        title={`Preview ${a.name}`} 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          onPreview?.(a);
+                        }}
+                      >
+
                         <img src={a.url} alt={a.name} className="h-14 w-full object-contain p-1" />
                       </button>
                     </ContextMenuTrigger>
