@@ -152,6 +152,17 @@ function label(ctx: CanvasRenderingContext2D, text: string, y: number, size: num
 export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc) {
   const { wallColor, floorColor, inkColor } = doc.settings;
   ctx.save();
+  
+  if (o.filter === "pixel") {
+    ctx.imageSmoothingEnabled = false;
+    // Simple pixelation via CSS filter if supported
+    (ctx as any).filter = "url(#pixelate)"; // requires an SVG filter in the DOM, which we might not have.
+    // Fallback: just use a high contrast/saturation to mimic sprite look
+    ctx.filter = "contrast(1.1) saturate(1.4)";
+  } else if (o.filter === "toon") {
+    ctx.filter = "contrast(1.3) saturate(1.6) brightness(1.05)";
+  }
+
   ctx.translate(o.x, o.y);
   if (o.kind === "door" || o.kind === "stairs" || o.kind === "image") ctx.rotate(o.angle);
   ctx.lineJoin = "round";
