@@ -128,6 +128,7 @@ export function DungeonEditor() {
     pt: { x: 0, y: 0 },
     label: null,
     id: null,
+    processingIds: [] as string[],
   });
   const clipboard = useRef<{ shapes: Shape[]; objects: MapObject[] } | null>(null);
   const [clipCount, setClipCount] = useState(0);
@@ -298,7 +299,7 @@ export function DungeonEditor() {
         ? { id: "poly-preview", kind: "poly", erase: false, pts: [...polyPts, cursor] }
         : null);
     const t0 = performance.now();
-    renderScene(ctx, doc, view, w, h, { preview: livePreview, selectedIds: selected, dpr });
+    renderScene(ctx, doc, view, w, h, { preview: livePreview, selectedIds: selected, processingIds: menuTarget.processingIds, dpr });
     recordDraw(performance.now() - t0);
 
     if (polyPts.length) {

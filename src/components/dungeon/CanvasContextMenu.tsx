@@ -27,6 +27,7 @@ import {
   Wand2,
   Palette,
 } from "lucide-react";
+import { ImageProcessingMenu } from "./image-processing/ImageProcessingMenu";
 
 export type CanvasMenuTarget = {
   /** Name of the object/shape under the cursor, if any. */
@@ -51,6 +52,15 @@ export type CanvasMenuActions = {
   onFog: (hide: boolean) => void;
   onFit: () => void;
   onZoomHere: () => void;
+  imageProcessing?: {
+    objectId: string;
+    imageSrc: string;
+    actions: {
+      onUpdateImage: (id: string, newUrl: string, label: string) => void;
+      onProcessingStart: (id: string) => void;
+      onProcessingEnd: (id: string) => void;
+    };
+  };
 };
 
 /** Right-click menu for the map canvas. */
@@ -105,6 +115,14 @@ export function CanvasContextMenu({ target, actions }: { target: CanvasMenuTarge
           </ContextMenuItem>
         </ContextMenuSubContent>
       </ContextMenuSub>
+
+      {actions.imageProcessing && (
+        <ImageProcessingMenu
+          objectId={actions.imageProcessing.objectId}
+          imageSrc={actions.imageProcessing.imageSrc}
+          actions={actions.imageProcessing.actions}
+        />
+      )}
 
       <ContextMenuSeparator />
 

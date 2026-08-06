@@ -149,9 +149,21 @@ function label(ctx: CanvasRenderingContext2D, text: string, y: number, size: num
   ctx.fillText(text, 0, y);
 }
 
-export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc) {
+export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc, processing: boolean = false) {
   const { wallColor, floorColor, inkColor } = doc.settings;
   ctx.save();
+
+  if (processing) {
+    ctx.save();
+    ctx.translate(o.x, o.y);
+    ctx.beginPath();
+    ctx.arc(0, 0, objectRadius(o) + 5, 0, Math.PI * 2);
+    ctx.strokeStyle = "#4da3ff";
+    ctx.setLineDash([4, 4]);
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.restore();
+  }
   
   if (o.filter === "pixel") {
     ctx.imageSmoothingEnabled = false;
@@ -448,6 +460,7 @@ function drawFog(
 export type RenderOpts = {
   preview?: Shape | null;
   selectedIds?: string[];
+  processingIds?: string[];
   hideUi?: boolean;
   dpr?: number;
 };
