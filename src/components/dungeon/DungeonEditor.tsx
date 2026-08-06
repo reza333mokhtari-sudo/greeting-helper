@@ -455,10 +455,20 @@ export function DungeonEditor() {
     if (!el) return;
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
+      const dy = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 100 : 1);
+
+      if (stateRef.current.doc.settings.cameraMode) {
+        const s = stateRef.current.doc.settings;
+        const delta = dy > 0 ? 1.1 : 0.9;
+        setSettings({
+          cameraDistance: Math.max(100, Math.min(s.maxDrawDistance, s.cameraDistance * delta))
+        });
+        return;
+      }
+
       const rect = el.getBoundingClientRect();
       const px = e.clientX - rect.left;
       const py = e.clientY - rect.top;
-      const dy = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 100 : 1);
       setView((v) => {
         const next = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, v.scale * Math.exp(-dy * 0.0015)));
         const k = next / v.scale;
