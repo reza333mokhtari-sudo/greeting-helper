@@ -1712,14 +1712,21 @@ export function DungeonEditor() {
         </div>
         </ContextMenuTrigger>
         <CanvasContextMenu
-          target={{ label: menuTarget.label, hasSelection: selected.length > 0, canPaste: clipCount > 0 }}
-            actions={{
-              onPreview: () => {
-                const o = doc.objects.find(obj => selected.includes(obj.id) && obj.kind === "image");
-                if (o && o.kind === "image") {
-                  setPreviewProp({ id: o.id, url: o.url, name: o.name || "Prop", license: (o as any).license });
-                }
-              },
+          target={{ 
+            label: menuTarget.label, 
+            id: menuTarget.id,
+            hasSelection: selected.length > 0, 
+            canPaste: clipCount > 0,
+            z: doc.objects.find(o => o.id === menuTarget.id)?.z
+          }}
+          cameraMode={doc.settings.cameraMode}
+          actions={{
+            onPreview: () => {
+              const o = doc.objects.find(obj => selected.includes(obj.id) && obj.kind === "image");
+              if (o && o.kind === "image") {
+                setPreviewProp({ id: o.id, url: o.url, name: o.name || "Prop", license: (o as any).license });
+              }
+            },
 
             onCopy: copySelection,
             onCut: () => {
