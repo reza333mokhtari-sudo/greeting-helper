@@ -82,11 +82,10 @@ export function TopMenuBar(props: Props) {
           </MenubarContent>
         </MenubarMenu>
         <MenubarMenu>
-          <MenubarTrigger className="h-8 px-3 text-xs">fix all tools</MenubarTrigger>
+          <MenubarTrigger className="h-8 px-3 text-xs">SKILLS</MenubarTrigger>
           <MenubarContent>
-            <MenubarItem disabled>fix all tools</MenubarItem>
             <MenubarItem disabled className="whitespace-pre-line text-[10px] text-muted-foreground">
-              {"fix all tools \nwhat i mean when press chose it and place in map has wrong cordinate to placed"}
+              {"- React + TypeScript UI architecture\n- Accessible modal/dialog systems (Radix UI / shadcn-style)\n- Replacing native browser dialogs\n- Focus trap, keyboard UX, controlled state\n- Design-system consistency\n\nGOAL\nRemove ALL native browser dialogs from the app.\nDo NOT use:\n- window.alert()\n- window.confirm()\n- window.prompt()\n- browser beforeunload prompts unless absolutely required\n\nReplace them with a custom INTERACTIVE DIALOG system inside the app UI."}
             </MenubarItem>
           </MenubarContent>
         </MenubarMenu>
