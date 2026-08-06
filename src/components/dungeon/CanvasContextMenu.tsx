@@ -36,7 +36,7 @@ export type CanvasMenuTarget = {
   id: string | null;
   hasSelection: boolean;
   canPaste: boolean;
-  z?: number;
+  z?: number | undefined;
 };
 
 export type CanvasMenuActions = {
