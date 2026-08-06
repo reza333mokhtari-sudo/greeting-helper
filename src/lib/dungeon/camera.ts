@@ -61,6 +61,14 @@ export function unprojectToPlane(
     0.5
   );
 
+  // In 3D mode, the "standard" 2D view state (panning/zooming) should usually be ignored
+  // or combined. For now, since cameraMode is active, the 2D view.x/y/scale are 
+  // effectively bypassed by the THREE.js projection.
+  // However, if we want to support a "2D pan" on top of 3D (like an offset), 
+  // we'd need to adjust ndc.
+  
+  // No changes needed to ndc calculation for pure 3D world unprojection.
+
   const raycaster = new THREE.Raycaster();
   (raycaster as any).setFromCamera(ndc, camera);
 
