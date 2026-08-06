@@ -7,13 +7,13 @@ type DialogVariant = "default" | "success" | "warning" | "danger";
 
 interface DialogOptions {
   title: string;
-  message?: string;
-  confirmText?: string;
-  cancelText?: string;
-  variant?: DialogVariant;
-  defaultValue?: string; // For prompt
-  content?: React.ReactNode; // For custom
-  fullscreen?: boolean;
+  message?: string | undefined;
+  confirmText?: string | undefined;
+  cancelText?: string | undefined;
+  variant?: DialogVariant | undefined;
+  defaultValue?: string | undefined; // For prompt
+  content?: React.ReactNode | undefined; // For custom
+  fullscreen?: boolean | undefined;
 }
 
 interface DialogState {
