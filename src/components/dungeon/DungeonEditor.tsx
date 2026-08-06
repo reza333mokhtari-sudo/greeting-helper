@@ -686,7 +686,7 @@ export function DungeonEditor() {
         if (tool === "light")
           obj = { ...base, kind: "light", x: p.x, y: p.y, radius: g * 6, color: "#ffcf8a", intensity: 0.85, name: "Light" };
         if (tool === "text") {
-          const text = window.prompt("Label text", "Room");
+          const text = await dialog.prompt("Label text", "Room");
           if (!text) return;
           obj = { ...base, kind: "text", x: world.x, y: world.y, text, size: Math.max(12, g * 0.6) };
         }
@@ -1377,7 +1377,7 @@ export function DungeonEditor() {
       if (kind === "trigger") obj = { ...base, kind: "trigger", x: p.x, y: p.y, w: g * 2, h: g * 2, color: "#9b59b6", trigger: "trap", label: "", name: "Trigger" };
       if (kind === "light") obj = { ...base, kind: "light", x: p.x, y: p.y, radius: g * 6, color: "#ffcf8a", intensity: 0.85, name: "Light" };
       if (kind === "text") {
-        const text = window.prompt("Label text", "Room");
+        const text = await dialog.prompt("Label text", "Room");
         if (!text) return;
         obj = { ...base, kind: "text", x: at.x, y: at.y, text, size: Math.max(12, g * 0.6) };
       }
@@ -1466,8 +1466,13 @@ export function DungeonEditor() {
             onExportJson={exportJson}
             onImportJson={importJson}
             onFit={fit}
-            onClear={() => {
-              if (window.confirm("Clear the whole map?")) commit(emptyDoc(), "Clear map");
+            onClear={async () => {
+              if (await dialog.confirm({
+                title: "Clear Map",
+                message: "Clear the whole map? This cannot be undone.",
+                confirmText: "Clear All",
+                variant: "danger"
+              })) commit(emptyDoc(), "Clear map");
             }}
           />
         );
