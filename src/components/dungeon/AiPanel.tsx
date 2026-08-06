@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { dialog } from "@/lib/dialog";
 
 type Mode = "rooms" | "encounter" | "hatching" | "refine";
 
@@ -170,8 +171,13 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName }: Props) {
                 size="icon"
                 className="size-5"
                 title="Reset to default"
-                onClick={() => {
-                  if (confirm("Reset to default persona?")) {
+                onClick={async () => {
+                  if (await dialog.confirm({
+                    title: "Reset Persona",
+                    message: "Reset to default persona? All custom instructions will be lost.",
+                    confirmText: "Reset",
+                    variant: "danger"
+                  })) {
                     setCustomSystem(SYSTEM_PROMPT);
                     localStorage.removeItem("ai-cartographer-system");
                     toast.success("Persona reset to default");

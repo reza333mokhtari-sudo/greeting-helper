@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { dialog } from "@/lib/dialog";
 import {
   Activity,
   ArrowLeft,
@@ -258,7 +259,12 @@ function AdminPage() {
           className="size-7 text-destructive"
           aria-label={`Delete ${r.name}`}
           onClick={async () => {
-            if (!window.confirm(`Delete map "${r.name}"?`)) return;
+            if (!await dialog.confirm({
+              title: "Delete Map",
+              message: `Delete map "${r.name}"? This cannot be undone.`,
+              confirmText: "Delete",
+              variant: "danger"
+            })) return;
             const { error } = await supabase.from("maps").delete().eq("id", r.id);
             if (error) toast.error(error.message);
             else load();
@@ -294,7 +300,12 @@ function AdminPage() {
       destructive: true,
       icon: <Trash2 className="h-3 w-3" />,
       run: async (rows) => {
-        if (!window.confirm(`Delete ${rows.length} map(s)?`)) return;
+        if (!await dialog.confirm({
+          title: "Delete Maps",
+          message: `Delete ${rows.length} map(s)? This cannot be undone.`,
+          confirmText: "Delete",
+          variant: "danger"
+        })) return;
         const { error } = await supabase.from("maps").delete().in("id", rows.map((r) => r.id));
         if (error) toast.error(error.message);
         else toast.success("Maps deleted");
@@ -624,7 +635,12 @@ function CmsTab({ pages, reload, loading }: { pages: PageRow[]; reload: () => vo
             className="size-6 text-destructive"
             aria-label={`Delete ${r.title}`}
             onClick={async () => {
-              if (!window.confirm(`Delete page "${r.title}"?`)) return;
+              if (!await dialog.confirm({
+                title: "Delete Page",
+                message: `Delete page "${r.title}"?`,
+                confirmText: "Delete",
+                variant: "danger"
+              })) return;
               const { error } = await supabase.from("cms_pages").delete().eq("id", r.id);
               if (error) toast.error(error.message);
               else reload();
@@ -661,7 +677,12 @@ function CmsTab({ pages, reload, loading }: { pages: PageRow[]; reload: () => vo
       destructive: true,
       icon: <Trash2 className="h-3 w-3" />,
       run: async (rows) => {
-        if (!window.confirm(`Delete ${rows.length} page(s)?`)) return;
+        if (!await dialog.confirm({
+          title: "Delete Pages",
+          message: `Delete ${rows.length} page(s)?`,
+          confirmText: "Delete",
+          variant: "danger"
+        })) return;
         const { error } = await supabase.from("cms_pages").delete().in("id", rows.map((r) => r.id));
         if (error) toast.error(error.message);
         else toast.success("Pages deleted");

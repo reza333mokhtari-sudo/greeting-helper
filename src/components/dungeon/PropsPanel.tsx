@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ImagePlus, Search, Star, Tag, Trash2, Wand2, Palette, Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
+import { dialog } from "@/lib/dialog";
 
 import { supabase } from "@/integrations/supabase/client";
 import { deleteAsset, listAssets, updateAsset, uploadAsset, type AssetRow } from "@/lib/cloud";
@@ -98,7 +99,7 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
   }, [assets, favOnly, query, tagFilter]);
 
   const editTags = async (a: AssetRow) => {
-    const next = window.prompt(`Tags for "${a.name}" (comma separated)`, (a.tags ?? []).join(", "));
+    const next = await dialog.prompt(`Tags for "${a.name}"`, (a.tags ?? []).join(", "), "Enter tags separated by commas");
     if (next === null) return;
     const tags = next
       .split(",")
@@ -320,8 +321,15 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
                       <ContextMenuItem 
                         className="text-destructive focus:text-destructive"
                         onClick={async () => {
-                          await deleteAsset(a.id);
-                          refresh();
+                          if (await dialog.confirm({
+                            title: "Delete Prop",
+                            message: `Delete "${a.name}"? This cannot be undone.`,
+                            confirmText: "Delete",
+                            variant: "danger"
+                          })) {
+                            await deleteAsset(a.id);
+                            refresh();
+                          }
                         }}
                       >
                         <Trash2 className="mr-2 size-3.5" /> Delete
@@ -366,8 +374,15 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
                       aria-label="Delete prop"
                       className="rounded bg-background/85 p-0.5 text-destructive"
                       onClick={async () => {
-                        await deleteAsset(a.id);
-                        refresh();
+                        if (await dialog.confirm({
+                          title: "Delete Prop",
+                          message: `Delete "${a.name}"? This cannot be undone.`,
+                          confirmText: "Delete",
+                          variant: "danger"
+                        })) {
+                          await deleteAsset(a.id);
+                          refresh();
+                        }
                       }}
                     >
                       <Trash2 className="h-3 w-3" />

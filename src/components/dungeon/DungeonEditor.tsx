@@ -3,6 +3,7 @@ import { Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { dialog } from "@/lib/dialog";
 
 
 
@@ -574,7 +575,7 @@ export function DungeonEditor() {
     };
   }, [isResizing]);
 
-  const onPointerDown = (e: React.PointerEvent) => {
+  const onPointerDown = async (e: React.PointerEvent) => {
     // If a modal is open, block all canvas interaction
     if (previewProp) return;
 
@@ -685,7 +686,7 @@ export function DungeonEditor() {
         if (tool === "light")
           obj = { ...base, kind: "light", x: p.x, y: p.y, radius: g * 6, color: "#ffcf8a", intensity: 0.85, name: "Light" };
         if (tool === "text") {
-          const text = window.prompt("Label text", "Room");
+          const text = await dialog.prompt("Label text", "Room");
           if (!text) return;
           obj = { ...base, kind: "text", x: world.x, y: world.y, text, size: Math.max(12, g * 0.6) };
         }
@@ -1085,7 +1086,7 @@ export function DungeonEditor() {
           commit(migrated, "Import map");
           setActiveLayer(migrated.layers[0]!.id);
         } catch {
-          window.alert("That file isn't a valid dungeon map.");
+          dialog.alert("Invalid Map", "That file isn't a valid dungeon map.", "danger");
         }
       });
     },
@@ -1094,7 +1095,7 @@ export function DungeonEditor() {
 
   const exportSvg = useCallback(() => exportSvgFile(doc), [doc]);
   const exportPdf = useCallback(() => {
-    exportPdfFile(doc).catch(() => window.alert("PDF export failed."));
+    exportPdfFile(doc).catch(() => dialog.alert("Export Error", "PDF export failed.", "danger"));
   }, [doc]);
 
   // ---- fog of war helpers ----
@@ -1231,10 +1232,15 @@ export function DungeonEditor() {
   }, [commit]);
 
   const deleteLayer = useCallback(
-    (id: string) => {
+    async (id: string) => {
       const count = doc.objects.filter((o) => o.layerId === id).length;
       if (doc.layers.length <= 1) return;
-      if (count && !window.confirm(`Delete this layer and its ${count} object(s)?`)) return;
+      if (count && !(await dialog.confirm({
+        title: "Delete Layer",
+        message: `Delete this layer and its ${count} object(s)?`,
+        confirmText: "Delete",
+        variant: "danger"
+      }))) return;
       commit((d) => ({
         ...d,
         layers: d.layers.filter((l) => l.id !== id),
@@ -1364,7 +1370,7 @@ export function DungeonEditor() {
   );
 
   const addObjectAt = useCallback(
-    (kind: "npc" | "item" | "trigger" | "light" | "text", at: Pt) => {
+    async (kind: "npc" | "item" | "trigger" | "light" | "text", at: Pt) => {
       const g = doc.settings.gridSize;
       const p = snapPt(at, g, doc.settings.snap);
       const layerId = doc.layers.find((l) => l.id === DEFAULT_LAYER_FOR[kind])?.id ?? activeLayer;
@@ -1376,7 +1382,7 @@ export function DungeonEditor() {
       if (kind === "trigger") obj = { ...base, kind: "trigger", x: p.x, y: p.y, w: g * 2, h: g * 2, color: "#9b59b6", trigger: "trap", label: "", name: "Trigger" };
       if (kind === "light") obj = { ...base, kind: "light", x: p.x, y: p.y, radius: g * 6, color: "#ffcf8a", intensity: 0.85, name: "Light" };
       if (kind === "text") {
-        const text = window.prompt("Label text", "Room");
+        const text = await dialog.prompt("Label text", "Room");
         if (!text) return;
         obj = { ...base, kind: "text", x: at.x, y: at.y, text, size: Math.max(12, g * 0.6) };
       }
@@ -1465,8 +1471,13 @@ export function DungeonEditor() {
             onExportJson={exportJson}
             onImportJson={importJson}
             onFit={fit}
-            onClear={() => {
-              if (window.confirm("Clear the whole map?")) commit(emptyDoc(), "Clear map");
+            onClear={async () => {
+              if (await dialog.confirm({
+                title: "Clear Map",
+                message: "Clear the whole map? This cannot be undone.",
+                confirmText: "Clear All",
+                variant: "danger"
+              })) commit(emptyDoc(), "Clear map");
             }}
           />
         );
@@ -1477,8 +1488,13 @@ export function DungeonEditor() {
             onSelectFloor={selectFloor}
             onAddFloor={(dup) => commit((d) => addFloor(d, undefined, dup), dup ? "Duplicate floor" : "Add floor")}
             onRenameFloor={(id, name) => commit((d) => renameFloor(d, id, name), "Rename floor")}
-            onDeleteFloor={(id) => {
-              if (window.confirm("Delete this floor and all of its content?")) commit((d) => deleteFloor(d, id), "Delete floor");
+            onDeleteFloor={async (id) => {
+              if (await dialog.confirm({
+                title: "Delete Floor",
+                message: "Delete this floor and all of its content?",
+                confirmText: "Delete",
+                variant: "danger"
+              })) commit((d) => deleteFloor(d, id), "Delete floor");
             }}
             onMoveFloor={(id, dir) => commit((d) => moveFloor(d, id, dir), "Reorder floors")}
             onToggleUnderlay={(on) => commit((d) => ({ ...d, showUnderlay: on }), "Floor underlay")}
@@ -1598,8 +1614,13 @@ export function DungeonEditor() {
         onUndo={undo}
         onRedo={redo}
         onDelete={deleteSelected}
-        onNew={() => {
-          if (window.confirm("Start a new map?")) commit(emptyDoc(), "New map");
+        onNew={async () => {
+          if (await dialog.confirm({
+            title: "New Map",
+            message: "Start a new map? Unsaved changes might be lost.",
+            confirmText: "New Map",
+            variant: "warning"
+          })) commit(emptyDoc(), "New map");
         }}
         onImport={() => importRef.current?.click()}
         onExportPng={exportPng}
