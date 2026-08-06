@@ -85,49 +85,10 @@ export function drawAxisGuides(
   w: number,
   h: number
 ) {
-  if (!s.cameraMode || !s.showWorldAxes || true) return; // Hidden per user request to remove duplicate lines from middle
-
-  const origin = project3D({ x: 0, y: 0, z: 0 }, s, w, h);
-  if (!origin) return;
-
-  const len = 100; // axis length in world units
-  const xAxis = project3D({ x: len, y: 0, z: 0 }, s, w, h);
-  const yAxis = project3D({ x: 0, y: len, z: 0 }, s, w, h);
-  const zAxis = project3D({ x: 0, y: 0, z: len }, s, w, h);
-
-  ctx.save();
-  ctx.lineWidth = 2;
-  ctx.setLineDash([]);
-
-  // X - Red
-  if (xAxis) {
-    ctx.strokeStyle = "#ff4d4d";
-    ctx.beginPath();
-    ctx.moveTo(origin.x, origin.y);
-    ctx.lineTo(xAxis.x, xAxis.y);
-    ctx.stroke();
-  }
-
-  // Y - Green
-  if (yAxis) {
-    ctx.strokeStyle = "#4dff4d";
-    ctx.beginPath();
-    ctx.moveTo(origin.x, origin.y);
-    ctx.lineTo(yAxis.x, yAxis.y);
-    ctx.stroke();
-  }
-
-  // Z - Blue
-  if (zAxis) {
-    ctx.strokeStyle = "#4d4dff";
-    ctx.beginPath();
-    ctx.moveTo(origin.x, origin.y);
-    ctx.lineTo(zAxis.x, zAxis.y);
-    ctx.stroke();
-  }
-
-  ctx.restore();
+  // Function disabled per user request to remove duplicate lines from middle of editor
+  return;
 }
+
 
 export function drawCornerAxisWidget(
   ctx: CanvasRenderingContext2D,
