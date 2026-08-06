@@ -1626,6 +1626,10 @@ export function DungeonEditor() {
             onBringToFront: () => reorderSelection(true),
             onSendToBack: () => reorderSelection(false),
             onRotate: (deg) => rotateSelected((deg * Math.PI) / 180),
+            onUpdateFilter: (filter) => {
+              const obj = selectedObject;
+              if (obj) updateObject(obj.id, { filter });
+            },
             onSelectAll: () => setSelected([...doc.shapes.map((sh) => sh.id), ...doc.objects.map((o) => o.id)]),
             onDeselect: () => setSelected([]),
             onAdd: (kind) => addObjectAt(kind, menuTarget.pt),

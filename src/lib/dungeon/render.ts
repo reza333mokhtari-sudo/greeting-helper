@@ -152,6 +152,18 @@ function label(ctx: CanvasRenderingContext2D, text: string, y: number, size: num
 export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc) {
   const { wallColor, floorColor, inkColor } = doc.settings;
   ctx.save();
+  
+  if (o.filter === "pixel") {
+    ctx.imageSmoothingEnabled = false;
+  } else if (o.filter === "toon") {
+    ctx.filter = "contrast(1.4) saturate(1.8) brightness(1.1) drop-shadow(0 0 1px rgba(0,0,0,0.5))";
+  } else if (o.filter === "remove-bg") {
+    // Basic white-remover filter using contrast/brightness extremes
+    // This works surprisingly well for black-on-white lineart
+    ctx.filter = "contrast(100) brightness(1.2) grayscale(1)";
+    ctx.globalCompositeOperation = "multiply";
+  }
+
   ctx.translate(o.x, o.y);
   if (o.kind === "door" || o.kind === "stairs" || o.kind === "image") ctx.rotate(o.angle);
   ctx.lineJoin = "round";
@@ -267,15 +279,20 @@ export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc
   } else if (o.kind === "image") {
     const img = getImage(o.url);
     if (img) {
-      const isPixel = o.filter === "pixel";
-      const isToon = o.filter === "toon";
-      if (isPixel) ctx.imageSmoothingEnabled = false;
-      if (isToon) ctx.filter = "contrast(1.2) saturate(1.5) brightness(1.1)";
-      
-      ctx.drawImage(img, -o.w / 2, -o.h / 2, o.w, o.h);
-      
-      if (isPixel) ctx.imageSmoothingEnabled = true;
-      if (isToon) ctx.filter = "none";
+      if (o.filter === "pixel") {
+        // Real pixelation by downscaling and upscaling
+        const size = 64; // downscale to 64px
+        const off = makeCanvas(size, size);
+        const oc = off.getContext("2d")!;
+        oc.imageSmoothingEnabled = false;
+        oc.drawImage(img, 0, 0, size, size);
+        
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(off, -o.w / 2, -o.h / 2, o.w, o.h);
+        ctx.imageSmoothingEnabled = true;
+      } else {
+        ctx.drawImage(img, -o.w / 2, -o.h / 2, o.w, o.h);
+      }
     } else {
       ctx.strokeStyle = inkColor;
       ctx.globalAlpha = 0.4;

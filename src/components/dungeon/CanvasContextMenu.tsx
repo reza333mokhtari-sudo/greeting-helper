@@ -23,6 +23,9 @@ import {
   Trash2,
   Type,
   User,
+  Image as ImageIcon,
+  Wand2,
+  Palette,
 } from "lucide-react";
 
 export type CanvasMenuTarget = {
@@ -41,6 +44,7 @@ export type CanvasMenuActions = {
   onBringToFront: () => void;
   onSendToBack: () => void;
   onRotate: (deg: number) => void;
+  onUpdateFilter: (filter: "none" | "pixel" | "toon" | "remove-bg") => void;
   onSelectAll: () => void;
   onDeselect: () => void;
   onAdd: (kind: "npc" | "item" | "trigger" | "light" | "text") => void;
@@ -79,6 +83,28 @@ export function CanvasContextMenu({ target, actions }: { target: CanvasMenuTarge
         <Trash2 className="mr-2 size-3.5" /> Delete
         <ContextMenuShortcut>⌫</ContextMenuShortcut>
       </ContextMenuItem>
+
+      <ContextMenuSeparator />
+
+      <ContextMenuSub>
+        <ContextMenuSubTrigger disabled={!sel || target.label === "shape"}>
+          <Palette className="mr-2 size-3.5" /> Visual Filter
+        </ContextMenuSubTrigger>
+        <ContextMenuSubContent className="w-48">
+          <ContextMenuItem onSelect={() => actions.onUpdateFilter("none")}>
+            <ImageIcon className="mr-2 size-3.5" /> No Filter
+          </ContextMenuItem>
+          <ContextMenuItem onSelect={() => actions.onUpdateFilter("pixel")}>
+            <Palette className="mr-2 size-3.5" /> Pixel Graphics
+          </ContextMenuItem>
+          <ContextMenuItem onSelect={() => actions.onUpdateFilter("toon")}>
+            <Wand2 className="mr-2 size-3.5" /> Toon Style
+          </ContextMenuItem>
+          <ContextMenuItem onSelect={() => actions.onUpdateFilter("remove-bg")}>
+            <ImageIcon className="mr-2 size-3.5" /> Remove Background
+          </ContextMenuItem>
+        </ContextMenuSubContent>
+      </ContextMenuSub>
 
       <ContextMenuSeparator />
 

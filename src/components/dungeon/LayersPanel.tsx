@@ -261,6 +261,9 @@ export function LayersPanel(p: Props) {
                                 <ContextMenuItem onClick={() => p.onUpdateObject?.(o.id, { filter: "toon" })}>
                                   <Wand2 className="mr-2 size-3.5" /> Toon Style
                                 </ContextMenuItem>
+                                <ContextMenuItem onClick={() => p.onUpdateObject?.(o.id, { filter: "remove-bg" })}>
+                                  <ImageIcon className="mr-2 size-3.5" /> Remove Background
+                                </ContextMenuItem>
                                 <ContextMenuSeparator />
                               </>
                             )}
