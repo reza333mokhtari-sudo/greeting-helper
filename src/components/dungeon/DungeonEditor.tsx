@@ -16,6 +16,7 @@ import { AiPanel } from "./AiPanel";
 import { FogPanel, type FogMode } from "./FogPanel";
 import { FloorsPanel } from "./FloorsPanel";
 import { HistoryPanel, type HistoryEntry } from "./HistoryPanel";
+import { CmsPanel } from "./CmsPanel";
 import {
   allMapCells,
   cellKeyAt,
