@@ -26,7 +26,7 @@ const useMdxContent = (slug: string) => {
 interface HelpCenterProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  initialSectionId?: string | null;
+  initialSectionId?: string | null | undefined;
 }
 
 export const HelpCenter = ({ isOpen, onOpenChange, initialSectionId }: HelpCenterProps) => {
