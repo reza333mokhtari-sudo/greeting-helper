@@ -1910,7 +1910,7 @@ export function DungeonEditor() {
       <HelpCenter 
         isOpen={helpOpen} 
         onOpenChange={setHelpOpen} 
-        initialSectionId={helpSection || undefined} 
+        initialSectionId={helpSection} 
       />
     </div>
   );
