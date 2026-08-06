@@ -581,7 +581,7 @@ export function renderScene(
   }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
 
-  if (s.cameraMode && s.showAxes) {
+  if (s.cameraMode) {
     drawAxisGuides(ctx, s, w, h);
     drawCornerAxisWidget(ctx, s, w, h);
   }
