@@ -42,19 +42,20 @@ export function TopMenuBar(props: Props) {
         <MenubarMenu>
           <MenubarTrigger className="h-8 px-3 text-xs">File</MenubarTrigger>
           <MenubarContent>
-            <MenubarItem onSelect={props.onNew}>You are an expert React + TanStack Start engineer working on my Lovable project (canvas / props / dungeon editor).
-
-GOAL
-When the user CLICKS any prop image, thumbnail, or item, DO NOT navigate to any route (no /root, no /prop/:id, no Link, no useNavigate, no window.location).
-
-Instead, open a FULLSCREEN POPUP (modal/overlay) that shows the content, with a clear X close button.</MenubarItem>
+            <MenubarItem onSelect={props.onNew}>
+              Add automatic model fallback and retry logic so AI assists continue working when Grok or other models fail or time out.
+              <br /><br />
+              Create automated QA checks that validate AI-generated icons and props against size, transparency, and canvas placement rules before applying edits.
+              <br /><br />
+              Implement a user-facing control to switch 2D icon/stamp rendering between fixed 15x15 and custom sizes while keeping layout consistent.
+            </MenubarItem>
 
             <MenubarItem onSelect={props.onImport}>Import savefile…</MenubarItem>
             <MenubarSeparator />
-            <MenubarItem onSelect={props.onExportPng}>Export PNG</MenubarItem>
-            <MenubarItem onSelect={props.onExportSvg}>Export SVG</MenubarItem>
-            <MenubarItem onSelect={props.onExportPdf}>Export PDF</MenubarItem>
-            <MenubarItem onSelect={props.onExportJson}>Save as .ds file (Manual save)</MenubarItem>
+            <MenubarItem onExportPng={props.onExportPng}>Export PNG</MenubarItem>
+            <MenubarItem onExportSvg={props.onExportSvg}>Export SVG</MenubarItem>
+            <MenubarItem onExportPdf={props.onExportPdf}>Export PDF</MenubarItem>
+            <MenubarItem onExportJson={props.onExportJson}>Save as .ds file (Manual save)</MenubarItem>
           </MenubarContent>
         </MenubarMenu>
         <MenubarMenu>
