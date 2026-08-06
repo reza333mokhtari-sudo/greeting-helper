@@ -10,6 +10,7 @@ import { LayersPanel } from "./LayersPanel";
 import { PropertiesPanel } from "./PropertiesPanel";
 import { SidePanel } from "./SidePanel";
 import { Toolbar, TOOLS, type ToolId } from "./Toolbar";
+import { GraphicsSettingsPanel } from "./GraphicsSettingsPanel";
 import { AiPanel } from "./AiPanel";
 import { FogPanel, type FogMode } from "./FogPanel";
 import { FloorsPanel } from "./FloorsPanel";

@@ -97,6 +97,35 @@ export type Settings = {
   fogGmOpacity: number;
   /** Texture scale multiplier for the fog asset. */
   fogScale: number;
+  /** Graphics quality preset. */
+  qualityPreset: "low" | "medium" | "high" | "ultra";
+  /** Performance & rendering toggles. */
+  renderScale: number;
+  antiAliasing: boolean;
+  maxTextureSize: number;
+  maxDrawDistance: number;
+  /** Camera mode settings. */
+  cameraMode: boolean;
+  cameraFov: number;
+  cameraSensitivity: number;
+  cameraDamping: number;
+  cameraInvertY: boolean;
+  cameraProjection: "perspective" | "orthographic";
+  showAxes: boolean;
+};
+
+export type Object3D = {
+  id: string;
+  name: string;
+  url: string; // .glb or .gltf
+  x: number;
+  y: number;
+  z: number;
+  scale: number;
+  rx: number;
+  ry: number;
+  rz: number;
+  layerId: string;
 };
 
 
@@ -130,6 +159,8 @@ export type Doc = {
   /** Ordered top-to-bottom stack of floors; the active one mirrors the fields above. */
   floors: Floor[];
   activeFloorId: string;
+  /** 3D objects placed in the world. */
+  objects3d: Object3D[];
   /** Connections between floors. */
   links: FloorLink[];
   /** Show the floor directly below as a faint ghost underlay. */
@@ -197,6 +228,18 @@ export const DEFAULT_SETTINGS: Settings = {
   fogSoftness: 0.45,
   fogGmOpacity: 0.58,
   fogScale: 1,
+  qualityPreset: "medium",
+  renderScale: 1,
+  antiAliasing: true,
+  maxTextureSize: 2048,
+  maxDrawDistance: 5000,
+  cameraMode: false,
+  cameraFov: 60,
+  cameraSensitivity: 1,
+  cameraDamping: 0.1,
+  cameraInvertY: false,
+  cameraProjection: "perspective",
+  showAxes: true,
 };
 
 let counter = 0;
@@ -241,6 +284,7 @@ export function emptyDoc(): Doc {
   return {
     shapes: [],
     objects: [],
+    objects3d: [],
     layers: defaultLayers(),
     settings: { ...DEFAULT_SETTINGS },
     fog: [],
@@ -279,6 +323,7 @@ export function migrateDoc(input: Partial<Doc> | null | undefined): Doc {
   const doc: Doc = {
     shapes,
     objects,
+    objects3d: Array.isArray(input.objects3d) ? input.objects3d : [],
     layers,
     settings: { ...base.settings, ...(input.settings ?? {}) },
     fog,
