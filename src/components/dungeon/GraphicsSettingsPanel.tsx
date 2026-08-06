@@ -124,11 +124,17 @@ export function GraphicsSettingsPanel({ settings: s, onChange }: Props) {
         <Row label="Invert Y">
           <Switch checked={s.cameraInvertY} onCheckedChange={(v) => onChange({ cameraInvertY: v })} />
         </Row>
-        <Row label="Show widget">
-          <Switch checked={s.showAxes} onCheckedChange={(v) => onChange({ showAxes: v })} />
+        <Row label="Show View Cube">
+          <Switch checked={s.showViewCube} onCheckedChange={(v) => onChange({ showViewCube: v })} />
         </Row>
-        <Row label="World origin">
-          <Switch checked={s.showWorldAxes} onCheckedChange={(v) => onChange({ showWorldAxes: v })} />
+        <Row label="Cube Size">
+          <NumSlider value={s.cubeSize} min={40} max={120} onChange={(v) => onChange({ cubeSize: v })} />
+        </Row>
+        <Row label="Snap to Ortho">
+          <Switch checked={s.snapToOrtho} onCheckedChange={(v) => onChange({ snapToOrtho: v })} />
+        </Row>
+        <Row label="Show Corner Axis">
+          <Switch checked={s.showAxes} onCheckedChange={(v) => onChange({ showAxes: v })} />
         </Row>
         <Button 
           variant="outline" 
@@ -142,11 +148,11 @@ export function GraphicsSettingsPanel({ settings: s, onChange }: Props) {
 
       <div className="rounded-md bg-muted/30 p-2.5 text-[10px] leading-relaxed text-muted-foreground border border-border/40">
         <p className="font-medium text-foreground/80 mb-1 flex items-center gap-1.5">
-          <Activity className="size-3" /> Senior Engine Note
+          <Activity className="size-3" /> Tools Engineer Note
         </p>
-        Camera Mode enables a 3D orbit view. Use <kbd className="bg-muted px-1 rounded text-[9px]">L-DRAG</kbd> to orbit, 
-        <kbd className="bg-muted px-1 rounded text-[9px]">R-DRAG</kbd> to pan, and <kbd className="bg-muted px-1 rounded text-[9px]">SCROLL</kbd> to zoom. 
-        Higher presets enable heavier post-processing.
+        Camera Mode interaction is now stabilized. Use the <span className="text-primary font-bold">View Cube</span> to orient the view. 
+        Main editing remains in a stable top-down 2D plane for maximum precision.
+        Use <kbd className="bg-muted px-1 rounded text-[9px]">Space+Drag</kbd> to pan the map.
       </div>
     </section>
   );
