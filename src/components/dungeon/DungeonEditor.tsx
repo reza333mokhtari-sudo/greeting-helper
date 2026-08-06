@@ -575,6 +575,9 @@ export function DungeonEditor() {
   }, [isResizing]);
 
   const onPointerDown = (e: React.PointerEvent) => {
+    // If a modal is open, block all canvas interaction
+    if (previewProp) return;
+
     (e.target as Element).setPointerCapture?.(e.pointerId);
     const world = getPt(e);
     const p = snapped(world);
@@ -742,6 +745,9 @@ export function DungeonEditor() {
 
 
   const onPointerMove = (e: React.PointerEvent) => {
+    // If a modal is open, block all canvas interaction
+    if (previewProp) return;
+
     const world = getPt(e);
     queueCursor(world);
     const d = drag.current;
