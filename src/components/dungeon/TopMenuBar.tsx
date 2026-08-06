@@ -43,7 +43,7 @@ export function TopMenuBar(props: Props) {
           <MenubarTrigger className="h-8 px-3 text-xs">where is CUBE ?</MenubarTrigger>
           <MenubarContent className="w-80 p-4">
             <div className="space-y-4 text-xs">
-              <div className="font-bold border-b pb-1">SENIOR EDITOR ARCHITECTURE</div>
+              <div className="font-bold border-b pb-1 uppercase">Enable Cloud for this project.</div>
               <ul className="list-disc pl-4 space-y-1 text-muted-foreground">
                 <li>2D primary viewport (Stable)</li>
                 <li>Regression recovery / feature rollback</li>
