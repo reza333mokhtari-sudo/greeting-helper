@@ -52,10 +52,10 @@ export function TopMenuBar(props: Props) {
 
             <MenubarItem onSelect={props.onImport}>Import savefile…</MenubarItem>
             <MenubarSeparator />
-            <MenubarItem onExportPng={props.onExportPng}>Export PNG</MenubarItem>
-            <MenubarItem onExportSvg={props.onExportSvg}>Export SVG</MenubarItem>
-            <MenubarItem onExportPdf={props.onExportPdf}>Export PDF</MenubarItem>
-            <MenubarItem onExportJson={props.onExportJson}>Save as .ds file (Manual save)</MenubarItem>
+            <MenubarItem onSelect={props.onExportPng}>Export PNG</MenubarItem>
+            <MenubarItem onSelect={props.onExportSvg}>Export SVG</MenubarItem>
+            <MenubarItem onSelect={props.onExportPdf}>Export PDF</MenubarItem>
+            <MenubarItem onSelect={props.onExportJson}>Save as .ds file (Manual save)</MenubarItem>
           </MenubarContent>
         </MenubarMenu>
         <MenubarMenu>
