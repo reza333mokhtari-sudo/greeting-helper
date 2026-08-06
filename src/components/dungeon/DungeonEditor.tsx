@@ -114,7 +114,6 @@ export function DungeonEditor() {
   /** AI suggestion staged as a ghost overlay, awaiting accept/reject. */
   const [aiPreview, setAiPreview] = useState<AiSuggestion | null>(null);
 
-  const [show3dPreview, setShow3dPreview] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
   const [show3dPreview, setShow3dPreview] = useState(false);
   const [polyPts, setPolyPts] = useState<Pt[]>([]);

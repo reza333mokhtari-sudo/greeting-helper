@@ -40,6 +40,30 @@ export function TopMenuBar(props: Props) {
       <span className="px-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-arcane">Scrawl</span>
       <Menubar className="h-8 border-0 bg-transparent p-0 shadow-none">
         <MenubarMenu>
+          <MenubarTrigger className="h-8 px-3 text-xs">SKILLS</MenubarTrigger>
+          <MenubarContent className="w-80 p-4">
+            <div className="space-y-4 text-xs">
+              <div className="font-bold border-b pb-1">SENIOR EDITOR ARCHITECTURE</div>
+              <ul className="list-disc pl-4 space-y-1 text-muted-foreground">
+                <li>2D primary viewport (Stable)</li>
+                <li>Regression recovery / feature rollback</li>
+                <li>Minimap systems</li>
+                <li>3ds Max–style View Cube UX</li>
+                <li>React + TypeScript + canvas/editor state isolation</li>
+                <li>Safe non-destructive UI overlays</li>
+              </ul>
+              
+              <div className="font-bold border-b pb-1">ROLE: PRINCIPAL TOOLS ENGINEER</div>
+              <p className="text-muted-foreground leading-relaxed">
+                Lovable/experimental 3D camera work has destabilized the app. 
+                Your job is controlled recovery + a professional orientation widget, 
+                without converting the main editor into a full 3D viewport.
+              </p>
+            </div>
+          </MenubarContent>
+        </MenubarMenu>
+
+        <MenubarMenu>
           <MenubarTrigger className="h-8 px-3 text-xs">File</MenubarTrigger>
           <MenubarContent>
             <MenubarItem onSelect={props.onNew}>New map</MenubarItem>
