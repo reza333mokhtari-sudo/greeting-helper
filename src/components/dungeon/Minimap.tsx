@@ -91,10 +91,10 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
     const el = wrapRef.current;
     if (el) {
       ctx.setTransform(1, 0, 0, 1, 0, 0);
-      const vx = view.x + ox * scale;
-      const vy = view.y + oy * scale;
-      const vw = el.clientWidth / view.scale * scale;
-      const vh = el.clientHeight / view.scale * scale;
+      const vx = (-view.x / view.scale) * scale + ox;
+      const vy = (-view.y / view.scale) * scale + oy;
+      const vw = (el.clientWidth / view.scale) * scale;
+      const vh = (el.clientHeight / view.scale) * scale;
       ctx.strokeStyle = "#4da3ff";
       ctx.lineWidth = 2 * dpr;
       ctx.strokeRect(vx * dpr, vy * dpr, vw * dpr, vh * dpr);
@@ -129,14 +129,13 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
   const handlePointer = (e: React.PointerEvent) => {
     if (e.button !== 0 && e.type === "pointerdown") return;
     
-    // Check if clicking the "handle" (the top area) to drag the whole minimap
     const target = e.target as HTMLElement;
     const isHandle = target.closest('.minimap-handle');
 
     if (e.type === "pointerdown") {
       if (isHandle) {
         isDraggingMap.current = true;
-        dragStartPos.current = { x: e.clientX - pos.x, y: e.clientY - pos.y };
+        dragStartPos.current = { x: e.clientX + pos.x, y: e.clientY - pos.y };
         target.setPointerCapture?.(e.pointerId);
         return;
       }
@@ -146,11 +145,10 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
     
     if (e.type === "pointermove") {
       if (isDraggingMap.current && dragStartPos.current) {
-        const newX = e.clientX - dragStartPos.current.x;
+        const newX = dragStartPos.current.x - e.clientX;
         const newY = e.clientY - dragStartPos.current.y;
-        const newPos = { x: newX, y: newY };
-        setPos(newPos);
-        onPositionChange?.(newPos);
+        setPos({ x: newX, y: newY });
+        onPositionChange?.({ x: newX, y: newY });
         return;
       }
       if (dragging.current) {

@@ -58,7 +58,8 @@ import {
 import type { AiSuggestion } from "@/lib/ai.functions";
 import { exportPdfFile, exportSvgFile } from "@/lib/dungeon/exporters";
 import { renderScene, screenToWorld } from "@/lib/dungeon/render";
-import { unprojectToPlane } from "@/lib/dungeon/camera";
+import { unprojectToPlane, getCamera } from "@/lib/dungeon/camera";
+import { ViewCube } from "./view-cube/ViewCube";
 import { CloudBar } from "./CloudBar";
 import { PropsPanel } from "./PropsPanel";
 import { getImage, onImageLoaded } from "@/lib/dungeon/assets";
@@ -114,6 +115,7 @@ export function DungeonEditor() {
   const [aiPreview, setAiPreview] = useState<AiSuggestion | null>(null);
 
   const [selected, setSelected] = useState<string[]>([]);
+  const [show3dPreview, setShow3dPreview] = useState(false);
   const [polyPts, setPolyPts] = useState<Pt[]>([]);
   const [brushWidth, setBrushWidth] = useState(48);
   const [doorVariant, setDoorVariant] = useState<DoorVariant>("door");
@@ -515,15 +517,8 @@ export function DungeonEditor() {
     const screenX = e.clientX - rect.left;
     const screenY = e.clientY - rect.top;
 
-    if (doc.settings.cameraMode) {
-      return unprojectToPlane(
-        { x: screenX, y: screenY },
-        doc.settings,
-        el.clientWidth,
-        el.clientHeight,
-        stateRef.current.view
-      );
-    }
+    // Main editor returns to stable 2D (or original) interaction model
+    // 3D camera unprojection is revoked from the primary workspace to ensure stability.
     return screenToWorld({ x: screenX, y: screenY }, stateRef.current.view);
   };
 
@@ -599,12 +594,13 @@ export function DungeonEditor() {
       }
       return;
     }
-    if (e.button !== 0) return;
-
     if (doc.settings.cameraMode) {
-      drag.current = { mode: "camera_orbit", startX: e.clientX, startY: e.clientY, yaw: doc.settings.cameraYaw, pitch: doc.settings.cameraPitch };
-      return;
+      if (spaceDown || e.button === 1) {
+        drag.current = { mode: "pan", startX: e.clientX, startY: e.clientY, ox: view.x, oy: view.y };
+        return;
+      }
     }
+    if (e.button !== 0) return;
 
     switch (tool) {
       case "select": {
@@ -756,30 +752,8 @@ export function DungeonEditor() {
       setView((v) => ({ ...v, x: d.ox + (e.clientX - d.startX), y: d.oy + (e.clientY - d.startY) }));
       return;
     }
-    if (d.mode === "camera_orbit") {
-      const s = doc.settings;
-      const dx = (e.clientX - d.startX) * s.cameraSensitivity;
-      const dy = (e.clientY - d.startY) * s.cameraSensitivity;
-      const inv = s.cameraInvertY ? -1 : 1;
-      setSettings({
-        cameraYaw: d.yaw - dx,
-        cameraPitch: Math.max(5, Math.min(85, d.pitch + dy * inv))
-      });
-      return;
-    }
-    if (d.mode === "camera_pan") {
-      const s = doc.settings;
-      const dx = (e.clientX - d.startX) / view.scale;
-      const dy = (e.clientY - d.startY) / view.scale;
-      
-      // Rotate pan delta by camera yaw
-      const rad = (s.cameraYaw * Math.PI) / 180;
-      const rx = dx * Math.cos(rad) + dy * Math.sin(rad);
-      const ry = -dx * Math.sin(rad) + dy * Math.cos(rad);
-
-      setSettings({
-        cameraTarget: { x: d.ox - rx, y: d.oy - ry }
-      });
+    if (d.mode === "camera_orbit" || d.mode === "camera_pan") {
+      // 3D interaction revoked from main viewport
       return;
     }
     if (d.mode === "fog") {
@@ -1702,6 +1676,26 @@ export function DungeonEditor() {
           }}
         >
           <canvas ref={canvasRef} className="block h-full w-full" />
+
+          {doc.settings.cameraMode && doc.settings.showViewCube && (
+            <div className="absolute top-4 right-4 z-30 pointer-events-auto">
+              <ViewCube 
+                settings={doc.settings} 
+                onUpdateSettings={setSettings}
+                onResetView={() => {
+                  setSettings({
+                    cameraYaw: 45,
+                    cameraPitch: 45,
+                    cameraDistance: 1000,
+                  });
+                  const el = wrapRef.current;
+                  if (el) {
+                    setView({ x: el.clientWidth / 2, y: el.clientHeight / 2, scale: 1 });
+                  }
+                }}
+              />
+            </div>
+          )}
           
           {!doc.shapes.length && !polyPts.length && (
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center">

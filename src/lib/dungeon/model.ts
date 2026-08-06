@@ -119,6 +119,9 @@ export type Settings = {
   cameraDamping: number;
   cameraInvertY: boolean;
   cameraProjection: "perspective" | "orthographic";
+  showViewCube: boolean;
+  cubeSize: number;
+  snapToOrtho: boolean;
   showAxes: boolean;
   showWorldAxes: boolean;
   cameraYaw: number;
@@ -264,6 +267,9 @@ export const DEFAULT_SETTINGS: Settings = {
   cameraDamping: 0.1,
   cameraInvertY: false,
   cameraProjection: "perspective",
+  showViewCube: true,
+  cubeSize: 64,
+  snapToOrtho: true,
   showAxes: true,
   showWorldAxes: true,
   cameraYaw: 45,
