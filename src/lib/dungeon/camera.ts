@@ -139,8 +139,8 @@ export function drawCornerAxisWidget(
 
   const widgetSize = 80;
   const padding = 20;
-  const centerX = w - widgetSize / 2 - padding;
-  const centerY = widgetSize / 2 + padding;
+  const centerX = padding + widgetSize / 2;
+  const centerY = h - padding - widgetSize / 2;
 
   // Use a small local projection for the widget
   // We want to project relative to the camera rotation only
