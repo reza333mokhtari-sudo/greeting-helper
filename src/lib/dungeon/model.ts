@@ -131,6 +131,18 @@ export type Object3D = {
   ry: number;
   rz: number;
   layerId: string;
+  locked?: boolean;
+  hidden?: boolean;
+};
+
+export type Obj3DCommon = {
+  z?: number;
+  scale?: number;
+  rx?: number;
+  ry?: number;
+  rz?: number;
+  locked?: boolean;
+  hidden?: boolean;
 };
 
 
