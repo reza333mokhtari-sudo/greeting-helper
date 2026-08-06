@@ -40,7 +40,7 @@ export function TopMenuBar(props: Props) {
       <span className="px-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-arcane">Scrawl</span>
       <Menubar className="h-8 border-0 bg-transparent p-0 shadow-none">
         <MenubarMenu>
-          <MenubarTrigger className="h-8 px-3 text-xs">SKILLS</MenubarTrigger>
+          <MenubarTrigger className="h-8 px-3 text-xs">where is CUBE ?</MenubarTrigger>
           <MenubarContent className="w-80 p-4">
             <div className="space-y-4 text-xs">
               <div className="font-bold border-b pb-1">SENIOR EDITOR ARCHITECTURE</div>
