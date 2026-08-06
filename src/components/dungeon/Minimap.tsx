@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback, useState as useEffectState } from "react";
-import { ZoomIn, ZoomOut } from "lucide-react";
+import { ZoomIn, ZoomOut, Move, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { type Doc, type View, type Pt, docBounds, shapePoints, objectRadius } from "@/lib/dungeon/model";
 
@@ -194,6 +194,16 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
             variant="ghost" 
             size="icon" 
             className="h-4 w-4 bg-background/60 hover:bg-background" 
+            title="Reset View"
+            onClick={(e) => { e.stopPropagation(); onNavigate({ x: 0, y: 0 }); }}
+          >
+            <RotateCcw className="h-2.5 w-2.5" />
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-4 w-4 bg-background/60 hover:bg-background" 
+            title="Zoom Out"
             onClick={(e) => { e.stopPropagation(); setMinimapZoom(z => Math.max(0.2, z - 0.2)); }}
           >
             <ZoomOut className="h-3 w-3" />
@@ -202,6 +212,7 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
             variant="ghost" 
             size="icon" 
             className="h-4 w-4 bg-background/60 hover:bg-background" 
+            title="Zoom In"
             onClick={(e) => { e.stopPropagation(); setMinimapZoom(z => Math.min(5, z + 0.2)); }}
           >
             <ZoomIn className="h-3 w-3" />
