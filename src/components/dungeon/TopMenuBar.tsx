@@ -53,7 +53,7 @@ export function TopMenuBar(props: Props) {
                 <li>Safe non-destructive UI overlays</li>
               </ul>
               
-              <div className="font-bold border-b pb-1">ROLE: PRINCIPAL TOOLS ENGINEER</div>
+              <div className="font-bold border-b pb-1 uppercase">why enabled camera but dont enable 3d ?</div>
               <p className="text-muted-foreground leading-relaxed">
                 Lovable/experimental 3D camera work has destabilized the app. 
                 Your job is controlled recovery + a professional orientation widget, 
