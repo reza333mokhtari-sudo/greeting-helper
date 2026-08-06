@@ -274,7 +274,20 @@ export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc
   } else if (o.kind === "image") {
     const img = getImage(o.url);
     if (img) {
-      ctx.drawImage(img, -o.w / 2, -o.h / 2, o.w, o.h);
+      if (o.filter === "pixel") {
+        // Real pixelation by downscaling and upscaling
+        const size = 64; // downscale to 64px
+        const off = makeCanvas(size, size);
+        const oc = off.getContext("2d")!;
+        oc.imageSmoothingEnabled = false;
+        oc.drawImage(img, 0, 0, size, size);
+        
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(off, -o.w / 2, -o.h / 2, o.w, o.h);
+        ctx.imageSmoothingEnabled = true;
+      } else {
+        ctx.drawImage(img, -o.w / 2, -o.h / 2, o.w, o.h);
+      }
     } else {
       ctx.strokeStyle = inkColor;
       ctx.globalAlpha = 0.4;
