@@ -8,7 +8,7 @@ import { toast } from "sonner";
 export async function removeBackground(imageSrc: string): Promise<string> {
   try {
     const blob = await imglyRemoveBackground(imageSrc, {
-      model: "medium",
+      model: "isnet",
       output: {
         format: "image/png",
         quality: 0.9,
