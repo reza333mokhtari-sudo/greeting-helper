@@ -1749,21 +1749,6 @@ export function DungeonEditor() {
               </div>
             </div>
           )}
-          <div className="pointer-events-none absolute inset-x-0 bottom-4 flex justify-center px-4">
-            <Toolbar
-              tool={tool}
-              onTool={(t) => {
-                setTool(t);
-                setPolyPts([]);
-              }}
-              onUndo={undo}
-              onRedo={redo}
-              canUndo={hIndex > 0}
-              canRedo={hIndex < timeline.length - 1}
-              zoom={view.scale}
-              onZoom={zoomBy}
-            />
-          </div>
         </div>
         </ContextMenuTrigger>
         <CanvasContextMenu
