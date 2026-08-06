@@ -71,6 +71,8 @@ import { useOnlineStatus } from "@/hooks/use-online-status";
 import { OnboardingOverlay } from "./OnboardingOverlay";
 import { QuickStartPanel } from "./QuickStartPanel";
 import { Minimap } from "./Minimap";
+import { PropPreviewModal } from "../props/PropPreviewModal";
+
 
 const STORAGE_KEY = "dungeon-scrawl-doc-v1";
 const MIN_ZOOM = 0.08;
@@ -139,6 +141,8 @@ export function DungeonEditor() {
   const [clipCount, setClipCount] = useState(0);
   const online = useOnlineStatus();
   const importRef = useRef<HTMLInputElement>(null);
+  const [previewProp, setPreviewProp] = useState<{ id: string; url: string; name: string; license?: string | null } | null>(null);
+
 
   // Debounce rapid history pushes with the same label into a single snapshot.
   const pendingHistory = useRef<{ value: Doc; label: string } | null>(null);
@@ -1416,7 +1420,7 @@ export function DungeonEditor() {
           />
         );
       case "props":
-        return <PropsPanel onPlace={placeImage} />;
+        return <PropsPanel onPlace={placeImage} onPreview={(p) => setPreviewProp(p)} />;
       case "ai":
         return (
           <AiPanel
@@ -1463,7 +1467,24 @@ export function DungeonEditor() {
           />
         );
       case "properties":
-        return <PropertiesPanel doc={doc} object={selectedObject} onChange={updateObject} onDelete={deleteSelected} />;
+        return (
+          <PropertiesPanel 
+            doc={doc} 
+            object={selectedObject} 
+            onChange={(id, patch) => {
+              if ((patch as any).preview) {
+                const o = doc.objects.find(obj => obj.id === id);
+                if (o && o.kind === "image") {
+                  setPreviewProp({ id: o.id, url: o.url, name: o.name || "Prop", license: (o as any).license });
+                }
+                return;
+              }
+              updateObject(id, patch);
+            }} 
+            onDelete={deleteSelected} 
+          />
+        );
+
       case "help":
         return <QuickStartPanel />;
       default:
@@ -1620,7 +1641,14 @@ export function DungeonEditor() {
         </ContextMenuTrigger>
         <CanvasContextMenu
           target={{ label: menuTarget.label, hasSelection: selected.length > 0, canPaste: clipCount > 0 }}
-          actions={{
+            actions={{
+              onPreview: () => {
+                const o = doc.objects.find(obj => selected.includes(obj.id) && obj.kind === "image");
+                if (o && o.kind === "image") {
+                  setPreviewProp({ id: o.id, url: o.url, name: o.name || "Prop", license: (o as any).license });
+                }
+              },
+
             onCopy: copySelection,
             onCut: () => {
               copySelection();
@@ -1672,6 +1700,24 @@ export function DungeonEditor() {
         onFit={fit}
       />
 
+      <Minimap doc={doc} view={view} onNavigate={(pt) => setView((v) => ({ ...v, x: -pt.x + (wrapRef.current?.clientWidth ?? 0) / 2 / v.scale, y: -pt.y + (wrapRef.current?.clientHeight ?? 0) / 2 / v.scale }))} />
+      
+      <PropPreviewModal 
+        open={!!previewProp} 
+        onOpenChange={(open) => !open && setPreviewProp(null)}
+        prop={previewProp}
+        onAction={(action) => {
+          if (!previewProp) return;
+          if (action === "place") {
+            placeImage(previewProp.url, previewProp.name);
+            setPreviewProp(null);
+          } else {
+            toast.info(`Processing ${action}... (feature integration pending)`);
+          }
+        }}
+      />
     </div>
   );
 }
+
+

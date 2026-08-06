@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, X, Trash2, Crown } from "lucide-react";
+import { Plus, X, Trash2, Crown, Maximize2 } from "lucide-react";
 
 type Props = {
   doc: Doc;
@@ -153,6 +153,17 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
               onChange={(e) => patch({ angle: (Number(e.target.value) * Math.PI) / 180 } as Partial<MapObject>)}
             />
           </Row>
+          <div className="flex gap-2 py-1">
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full text-xs"
+              onClick={() => (onChange as any)(o.id, { preview: true })}
+            >
+              <Maximize2 className="mr-2 size-3" /> View Fullscreen
+            </Button>
+          </div>
+
           <Row label="Visual Filter">
             <Select value={o.filter ?? "none"} onValueChange={(v) => patch({ filter: v as any })}>
               <SelectTrigger className="h-7 w-32 text-xs">

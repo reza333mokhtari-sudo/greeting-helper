@@ -42,7 +42,13 @@ export function TopMenuBar(props: Props) {
         <MenubarMenu>
           <MenubarTrigger className="h-8 px-3 text-xs">File</MenubarTrigger>
           <MenubarContent>
-            <MenubarItem onSelect={props.onNew}>now debug all model AI assist and enhance them (if CLIENT want make 2d ICON as 15px-15px(only) and other )\n\nmake sure has BIG update</MenubarItem>
+            <MenubarItem onSelect={props.onNew}>You are an expert React + TanStack Start engineer working on my Lovable project (canvas / props / dungeon editor).
+
+GOAL
+When the user CLICKS any prop image, thumbnail, or item, DO NOT navigate to any route (no /root, no /prop/:id, no Link, no useNavigate, no window.location).
+
+Instead, open a FULLSCREEN POPUP (modal/overlay) that shows the content, with a clear X close button.</MenubarItem>
+
             <MenubarItem onSelect={props.onImport}>Import savefile…</MenubarItem>
             <MenubarSeparator />
             <MenubarItem onSelect={props.onExportPng}>Export PNG</MenubarItem>

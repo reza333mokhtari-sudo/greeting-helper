@@ -37,6 +37,8 @@ export type CanvasMenuTarget = {
 };
 
 export type CanvasMenuActions = {
+  onPreview: () => void;
+
   onCopy: () => void;
   onCut: () => void;
   onPaste: () => void;
@@ -72,6 +74,10 @@ export function CanvasContextMenu({ target, actions }: { target: CanvasMenuTarge
         {target.label ?? "Canvas"}
       </ContextMenuLabel>
       <ContextMenuSeparator />
+      <ContextMenuItem disabled={!sel || target.label === "shape"} onSelect={actions.onPreview}>
+        <Maximize2 className="mr-2 size-3.5" /> View Fullscreen
+      </ContextMenuItem>
+
 
       <ContextMenuItem disabled={!sel} onSelect={actions.onCopy}>
         <Copy className="mr-2 size-3.5" /> Copy
