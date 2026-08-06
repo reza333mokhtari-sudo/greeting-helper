@@ -1768,7 +1768,8 @@ export function DungeonEditor() {
               deleteSelected();
             },
             onUpdateZ: (z) => {
-              if (menuTarget.id) updateObject(menuTarget.id, { z });
+              const targetId = menuTarget.id || (selected.length === 1 ? selected[0] : null);
+              if (targetId) updateObject(targetId, { z });
             },
             onPaste: () => pasteAt(menuTarget.pt),
             onDuplicate: duplicateSelection,
