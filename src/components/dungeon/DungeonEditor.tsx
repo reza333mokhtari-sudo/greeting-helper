@@ -1908,7 +1908,7 @@ export function DungeonEditor() {
         }}
       />
       <HelpCenter 
-        open={helpOpen} 
+        isOpen={helpOpen} 
         onOpenChange={setHelpOpen} 
         initialSectionId={helpSection || undefined} 
       />
