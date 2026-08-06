@@ -1751,6 +1751,7 @@ export function DungeonEditor() {
             id: menuTarget.id,
             hasSelection: selected.length > 0, 
             canPaste: clipCount > 0,
+            id: menuTarget.id || (selected.length === 1 ? selected[0] : null),
             z: doc.objects.find(o => o.id === (menuTarget.id || (selected.length === 1 ? selected[0] : null)))?.z
           }}
           cameraMode={doc.settings.cameraMode}
