@@ -1661,6 +1661,7 @@ export function DungeonEditor() {
           onDoubleClick={finishPoly}
           onContextMenu={openMenu}
           onWheel={(e) => {
+            if (previewProp) return;
             if (e.ctrlKey || e.metaKey) {
               // Browser zoom or custom zoom tool
               const delta = e.deltaY > 0 ? -1 : 1;
