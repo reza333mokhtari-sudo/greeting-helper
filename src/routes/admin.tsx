@@ -738,7 +738,7 @@ function CmsTab({ pages, reload, loading }: { pages: PageRow[]; reload: () => vo
                 </div>
                 <div className="flex items-center gap-2">
                   <Switch checked={form.published} onCheckedChange={(v) => setForm((f) => ({ ...f, published: v }))} />
-                  <Label className="text-xs">Published</Label>
+                  <Label className="text-xs">{form.published ? "Public" : "Private"}</Label>
                 </div>
               </div>
               <div className="space-y-1.5">

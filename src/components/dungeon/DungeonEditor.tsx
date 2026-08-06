@@ -16,6 +16,7 @@ import { AiPanel } from "./AiPanel";
 import { FogPanel, type FogMode } from "./FogPanel";
 import { FloorsPanel } from "./FloorsPanel";
 import { HistoryPanel, type HistoryEntry } from "./HistoryPanel";
+import { CmsPanel } from "./CmsPanel";
 import {
   allMapCells,
   cellKeyAt,
@@ -1564,6 +1565,8 @@ export function DungeonEditor() {
         return <GraphicsSettingsPanel settings={doc.settings} onChange={setSettings} />;
       case "help":
         return <QuickStartPanel />;
+      case "cms":
+        return <CmsPanel />;
       default:
         return null;
     }
