@@ -16,8 +16,6 @@ import {
   MinusCircle,
   Sun,
   Contrast,
-  CircleDashed,
-  Wind,
   Layers,
 } from "lucide-react";
 import { removeBackground, pixelate, toonify, applyFilter } from "@/lib/image-processing/processors";
