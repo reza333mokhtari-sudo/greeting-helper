@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import type { Settings, Pt } from "./model";
+import { type Settings, type Pt, type View } from "./model";
 
 /**
  * Projects a 3D point (world space) to 2D screen space (pixels)
