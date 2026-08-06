@@ -1232,10 +1232,15 @@ export function DungeonEditor() {
   }, [commit]);
 
   const deleteLayer = useCallback(
-    (id: string) => {
+    async (id: string) => {
       const count = doc.objects.filter((o) => o.layerId === id).length;
       if (doc.layers.length <= 1) return;
-      if (count && !window.confirm(`Delete this layer and its ${count} object(s)?`)) return;
+      if (count && !(await dialog.confirm({
+        title: "Delete Layer",
+        message: `Delete this layer and its ${count} object(s)?`,
+        confirmText: "Delete",
+        variant: "danger"
+      }))) return;
       commit((d) => ({
         ...d,
         layers: d.layers.filter((l) => l.id !== id),
