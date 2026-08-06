@@ -1,6 +1,6 @@
 export const ONBOARDING_STEPS = [
   {
-    title: "Welcome to Scrawl!",
+    title: "I have approved the plan",
     content: "Dungeon Scrawl is a minimalist map maker. Everything you draw is automatically merged into a hand-drawn style.",
     image: "M3 5h18v14H3z", // Rectangle icon
   },
