@@ -71,13 +71,11 @@ function summarise(doc: Doc): string {
 /**
  * Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.
  *                                            
- * now i dont wana you coding right now 
- *
- * TEST ai part of AI ASSISTANCE to create a map design as some PLOT of ELDEN RING or dark souls first map
- *
- * (make or create any of them also check props and texture to added)
- *
- * this is test and i APROVE
+ * OBJECTIVE
+ * 1) Revoke/disable all problematic, duplicate, or half-broken tools
+ * 2) Preserve only essential tools
+ * 3) Rebuild those essential tools to professional quality
+ * 4) Keep the editor stable (viewport, minimap, selection, save/load)
  */
 
 type Turn = { role: "user" | "assistant"; content: string };

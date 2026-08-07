@@ -15,7 +15,9 @@ import { supabase } from "@/integrations/supabase/client";
 /**
  * Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.
  *                                            
- * add MAPS layer (how many USER/CLIENT has maps show in list CRUD)
+ * PHASE 1 — REVOKE (SAFE DISABLE)
+ * - Prefer feature flags over hard deletion
+ * - Remove from UI menus/toolbars when revoked
  */
 
 type MapEntry = {
