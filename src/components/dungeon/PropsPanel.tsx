@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ImagePlus, Search, Star, Tag, Trash2, Wand2, Palette, Image as ImageIcon } from "lucide-react";
+import { ImagePlus, Search, Star, Tag, Trash2, Wand2, Palette, Image as ImageIcon, X } from "lucide-react";
 import { toast } from "sonner";
 import { dialog } from "@/lib/dialog";
 
@@ -94,7 +94,15 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
     return assets
       .filter((a) => (favOnly ? a.favorite : true))
       .filter((a) => (tagFilter ? a.tags?.includes(tagFilter) : true))
-      .filter((a) => (q ? a.name.toLowerCase().includes(q) || a.tags?.some((t) => t.toLowerCase().includes(q)) : true))
+      .filter((a) => {
+        if (!q) return true;
+        return (
+          a.name.toLowerCase().includes(q) ||
+          a.tags?.some((t) => t.toLowerCase().includes(q)) ||
+          a.kind.toLowerCase().includes(q) ||
+          a.id.toLowerCase().includes(q)
+        );
+      })
       .sort((a, b) => Number(b.favorite) - Number(a.favorite));
   }, [assets, favOnly, query, tagFilter]);
 
@@ -131,7 +139,7 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
       }}
     >
       <div className="flex items-center justify-between">
-        <h2 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Props &amp; textures</h2>
+        <h2 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">{selectedLibrary === "custom" ? "My Props & Textures" : "Props & Textures"}</h2>
         <div className="flex items-center gap-2">
           <Select value={selectedLibrary} onValueChange={setSelectedLibrary}>
             <SelectTrigger className="h-6 w-[130px] text-[10px]">
@@ -170,7 +178,7 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
                   }
                 }}
               >
-                <Search className="mr-1 h-3 w-3" /> Browse Icons
+                <Search className="mr-1 h-3 w-3" /> Browse Icons Library
               </Button>
             )}
           </div>
@@ -190,7 +198,7 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
 
       {!signedIn ? (
         <div className="space-y-4">
-          <p className="text-[11px] text-muted-foreground">Sign in to upload your own props and textures.</p>
+          <p className="text-[11px] text-muted-foreground">Sign in to upload and manage your own custom props and textures.</p>
           <div className="rounded-md border border-border/50 bg-muted/20 p-2 text-[10px] space-y-2">
             <p className="font-semibold text-foreground flex items-center gap-1">
               <Star className="h-3 w-3 text-accent fill-current" /> Recommended Icon Libraries
@@ -228,9 +236,25 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
               <Input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search props…"
-                className="h-7 pl-7 text-[11px]"
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") {
+                    setQuery("");
+                    e.currentTarget.blur();
+                  }
+                }}
+                placeholder={selectedLibrary === "custom" ? "Search props & textures..." : "Search props..."}
+                className="h-7 pl-7 pr-7 text-[11px]"
               />
+              {query && (
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="absolute right-0 top-0 h-7 w-7 text-muted-foreground hover:text-foreground"
+                  onClick={() => setQuery("")}
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              )}
             </div>
             <Button
               size="icon"
