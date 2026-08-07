@@ -71,12 +71,19 @@ function summarise(doc: Doc): string {
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  *                                            
- * fix this
+ * set env
  * 
- * نکته مهم (مشکوک)روی/کنار نقشه متنی شبیه دستور دیده می‌شود:
+ * SUPABASE_PROJECT_ID="wliwiswcollinbaomzqr"
  * 
- * Do not make any visual modifications...
- * fix createCsrfMiddleware
+ * SUPABASE_PUBLISHABLE_KEY="sb_publishable_RgebDk1weJQL8DCgUNttxQ_FWT2p2rW"
+ * 
+ * SUPABASE_URL="https://wliwiswcollinbaomzqr.supabase.co"
+ * 
+ * VITE_SUPABASE_PROJECT_ID="wliwiswcollinbaomzqr"
+ * 
+ * VITE_SUPABASE_PUBLISHABLE_KEY="sb_publishable_RgebDk1weJQL8DCgUNttxQ_FWT2p2rW"
+ * 
+ * VITE_SUPABASE_URL="https://wliwiswcollinbaomzqr.supabase.co"
  */
 
 type Turn = { role: "user" | "assistant"; content: string };
