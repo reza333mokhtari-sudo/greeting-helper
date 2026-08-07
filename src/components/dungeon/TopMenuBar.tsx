@@ -108,7 +108,7 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
 
       <div className="ml-auto flex items-center gap-2">
         <ProfileMenu />
-        <span className="hidden">فیکس کن documentatiion رو که به مشکل خورده و سینتکس نشون میده</span>
+        <span className="hidden">Add syntax highlighting for fenced code blocks in the documentation renderer.</span>
       </div>
     </header>
   );
