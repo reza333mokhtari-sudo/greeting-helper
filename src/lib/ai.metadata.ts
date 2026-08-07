@@ -22,7 +22,7 @@
  */
 
 export const ASSISTANT_METADATA = {
-  version: "1.2.0",
+  version: "1.2.1",
   model: "competition-grade-rag-v1",
   intents: ["docs_help", "bug_troubleshoot", "generate_layout", "place_objects", "camera_view_help", "export_save_help"],
   quality_metrics: {
