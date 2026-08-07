@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { dialog } from "@/lib/dialog";
 
 type Mode = "rooms" | "encounter" | "hatching" | "refine";
@@ -151,240 +152,181 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
   const active = MODES.find((m) => m.id === mode)!;
 
   return (
-    <section className="space-y-2">
-      <div className="flex items-center justify-between">
+    <section className="flex h-full flex-col gap-3">
+      <div className="flex items-center justify-between border-b pb-2">
         <h2 className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-          <Sparkles className="h-3 w-3 text-accent" /> AI cartographer
-          {onOpenHelp && (
-            <button 
-              onClick={() => onOpenHelp("quick-start")} 
-              className="p-1 hover:text-accent transition-colors"
-            >
-              <HelpCircle className="h-3 w-3" />
-            </button>
-          )}
+          <Sparkles className="h-3.5 w-3.5 text-accent" /> AI Assistant
         </h2>
-
-        <Button
-          variant="ghost"
-          size="icon"
-          className={`size-6 ${showEditor ? "text-accent bg-accent/10" : ""}`}
-          title="Tweak AI System Prompt"
-          onClick={() => setShowEditor(!showEditor)}
-        >
-          <Settings2 className="h-3 w-3" />
-        </Button>
+        <div className="flex gap-1">
+          {onOpenHelp && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-6 text-muted-foreground hover:text-accent"
+              onClick={() => onOpenHelp("quick-start")}
+              title="Help"
+            >
+              <HelpCircle className="h-3.5 w-3.5" />
+            </Button>
+          )}
+          <Button
+            variant="ghost"
+            size="icon"
+            className={`size-6 ${showEditor ? "text-accent bg-accent/10" : "text-muted-foreground"}`}
+            title="AI Settings"
+            onClick={() => setShowEditor(!showEditor)}
+          >
+            <Settings2 className="h-3.5 w-3.5" />
+          </Button>
+          {history.length > 0 && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-6 text-muted-foreground hover:text-destructive"
+              title="Clear Chat"
+              onClick={() => setHistory([])}
+            >
+              <RotateCcw className="h-3.5 w-3.5" />
+            </Button>
+          )}
+        </div>
       </div>
 
       {showEditor && (
         <div className="space-y-2 rounded-md border border-accent/30 bg-accent/5 p-2 animate-in fade-in slide-in-from-top-1">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-accent">System Persona Editor</span>
-            <div className="flex gap-1">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="size-5"
-                title="Reset to default"
-                onClick={async () => {
-                  if (await dialog.confirm({
-                    title: "Reset Persona",
-                    message: "Reset to default persona? All custom instructions will be lost.",
-                    confirmText: "Reset",
-                    variant: "danger"
-                  })) {
-                    setCustomSystem(SYSTEM_PROMPT);
-                    localStorage.removeItem("ai-cartographer-system");
-                    toast.success("Persona reset to default");
-                  }
-                }}
-              >
-                <RotateCcw className="h-3 w-3" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="size-5 text-emerald-500"
-                title="Save changes"
-                onClick={() => {
-                  localStorage.setItem("ai-cartographer-system", customSystem);
-                  toast.success("Persona saved to local storage");
-                }}
-              >
-                <Save className="h-3 w-3" />
-              </Button>
-            </div>
-          </div>
+          <p className="text-[10px] font-bold uppercase tracking-wider text-accent">System Instructions</p>
           <Textarea
             value={customSystem}
             onChange={(e) => setCustomSystem(e.target.value)}
-            className="min-h-[160px] font-mono text-[9px] leading-tight"
-            placeholder="System instructions..."
+            className="min-h-[120px] font-mono text-[9px] leading-tight"
           />
-          <p className="text-[9px] text-muted-foreground italic">
-            Changes here alter how the AI thinks. Use carefully.
-          </p>
-        </div>
-      )}
-
-      {floorName && (
-        <p className="rounded-md border border-accent/40 bg-accent/10 px-2 py-1 text-[10px] text-muted-foreground">
-          Working on floor <span className="font-semibold text-foreground">{floorName}</span> only.
-        </p>
-      )}
-
-      <Select value={mode} onValueChange={(v) => setMode(v as Mode)}>
-
-        <SelectTrigger className="h-7 text-[11px]">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {MODES.map((m) => (
-            <SelectItem key={m.id} value={m.id} className="text-[11px]">
-              {m.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-
-      <Select value={engine} onValueChange={(v) => setEngine(v as AiEngine)}>
-        <SelectTrigger className="h-7 text-[11px]">
-          <Cpu className="mr-1 h-3 w-3 text-accent" />
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {(Object.keys(AI_ENGINES) as AiEngine[]).map((k) => (
-            <SelectItem key={k} value={k} className="text-[11px]">
-              {AI_ENGINES[k].label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <p className="text-[10px] text-muted-foreground">{AI_ENGINES[engine].hint}</p>
-
-      <div className="flex items-center justify-between rounded-md border border-border/50 bg-background/40 px-2 py-1.5">
-        <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Icon Rendering</span>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="h-6 gap-1 px-2 text-[10px] hover:bg-accent/10 hover:text-accent"
-          onClick={() => setFixedSize(!fixedSize)}
-        >
-          {fixedSize ? (
-            <>
-              <Minimize2 className="h-3 w-3" />
-              <span>Fixed 15x15</span>
-            </>
-          ) : (
-            <>
-              <Maximize2 className="h-3 w-3" />
-              <span>Custom Sizes</span>
-            </>
-          )}
-        </Button>
-      </div>
-
-
-
-      <div className="flex flex-wrap gap-1">
-        {active.chips.map((c) => (
-          <button
-            key={c}
-            type="button"
-            disabled={busy}
-            onClick={() => setPrompt(c)}
-            className="rounded-full border border-border/70 px-2 py-0.5 text-[10px] text-muted-foreground transition-colors hover:border-primary hover:text-foreground disabled:opacity-50"
-          >
-            {c}
-          </button>
-        ))}
-      </div>
-
-      <Textarea
-        value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) void ask();
-        }}
-        placeholder={active.placeholder}
-        rows={3}
-        className="text-[11px]"
-      />
-      <Button size="sm" className="h-7 w-full text-[11px]" disabled={busy || !prompt.trim()} onClick={() => void ask()}>
-        {busy ? <Loader2 className="mr-1 h-3 w-3 animate-spin" /> : !online ? <WifiOff className="mr-1 h-3 w-3" /> : <Sparkles className="mr-1 h-3 w-3" />}
-        {busy ? "Thinking…" : online ? "Ask the AI  (⌘⏎)" : "Offline"}
-      </Button>
-
-      {history.length > 0 && (
-        <div className="max-h-40 space-y-1.5 overflow-y-auto rounded-md border border-border/50 bg-background/40 p-2">
-          {history.map((t, i) => (
-            <p key={i} className={`text-[10px] leading-relaxed ${t.role === "user" ? "text-foreground/80" : "text-muted-foreground"}`}>
-              <span className="font-semibold uppercase tracking-wide">{t.role === "user" ? "you" : "ai"}: </span>
-              {t.content}
-            </p>
-          ))}
-        </div>
-      )}
-
-      {result && (
-        <div className="space-y-2 rounded-md border border-border/60 bg-card/60 p-2">
-          {result.notes && <p className="text-[11px] leading-relaxed text-muted-foreground">{result.notes}</p>}
-          <div className="flex flex-wrap gap-1">
-            {result.rooms.length > 0 && <Badge variant="secondary" className="text-[9px]">{result.rooms.length} rooms</Badge>}
-            {result.corridors.length > 0 && <Badge variant="secondary" className="text-[9px]">{result.corridors.length} corridors</Badge>}
-            {result.objects.length > 0 && <Badge variant="secondary" className="text-[9px]">{result.objects.length} objects</Badge>}
-            {Object.keys(result.settings).length > 0 && <Badge variant="secondary" className="text-[9px]">style tweaks</Badge>}
+          <div className="flex justify-end gap-2">
+            <Button size="sm" variant="ghost" className="h-6 text-[10px]" onClick={() => setCustomSystem(SYSTEM_PROMPT)}>Reset</Button>
+            <Button size="sm" className="h-6 text-[10px]" onClick={() => {
+              localStorage.setItem("ai-cartographer-system", customSystem);
+              toast.success("Settings saved");
+            }}>Save</Button>
           </div>
-          {result.encounters.length > 0 && (
-            <ul className="space-y-1">
-              {result.encounters.map((e, i) => (
-                <li key={i} className="text-[11px]">
-                  <span className="font-medium text-foreground">{e.name}</span>
-                  <span className="text-muted-foreground"> — {e.description}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-          {hasGeometry(result) &&
-            (staged ? (
-              <div className="space-y-1.5 rounded-md border border-accent/50 bg-accent/10 p-2">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-accent">Preview on canvas</p>
-                <p className="text-[10px] text-muted-foreground">
-                  The dashed ghost shows what will be added. Nothing has changed on your map yet.
-                </p>
-                <div className="flex gap-1.5">
-                  <Button
-                    size="sm"
-                    className="h-6 flex-1 text-[10px]"
-                    onClick={() => {
-                      onApply(result);
-                      onPreview(null);
-                      toast.success("Suggestion accepted");
-                    }}
-                  >
-                    Accept
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="h-6 flex-1 text-[10px]"
-                    onClick={() => {
-                      onPreview(null);
-                      toast("Suggestion rejected");
-                    }}
-                  >
-                    Reject
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <Button size="sm" variant="secondary" className="h-6 w-full text-[10px]" onClick={() => onPreview(result)}>
-                Preview again
-              </Button>
-            ))}
-
         </div>
       )}
+
+      <ScrollArea className="flex-1 pr-3">
+        <div className="space-y-3 py-1">
+          {history.length === 0 && (
+            <div className="space-y-3">
+              <p className="text-[11px] text-muted-foreground italic">
+                Ask me how to use the editor, find props, or suggest a layout.
+              </p>
+              <div className="grid grid-cols-1 gap-1.5">
+                {active.chips.map((c) => (
+                  <button
+                    key={c}
+                    onClick={() => {
+                      setPrompt(c);
+                      void ask(c);
+                    }}
+                    className="flex items-center gap-2 rounded-md border border-border/50 bg-background/50 px-2.5 py-1.5 text-left text-[11px] text-muted-foreground transition-colors hover:border-accent/40 hover:bg-accent/5 hover:text-foreground"
+                  >
+                    <Sparkles className="h-3 w-3 text-accent/60" />
+                    {c}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {history.map((t, i) => (
+            <div key={i} className={`flex flex-col gap-1 ${t.role === "user" ? "items-end" : "items-start"}`}>
+              <div className={`max-w-[90%] rounded-lg px-2.5 py-2 text-[11px] leading-relaxed shadow-sm ${
+                t.role === "user" 
+                  ? "bg-primary text-primary-foreground" 
+                  : "bg-muted/80 text-foreground border border-border/40"
+              }`}>
+                {t.content}
+              </div>
+            </div>
+          ))}
+
+          {result && (
+            <div className="space-y-2 rounded-lg border border-border/60 bg-card/60 p-2.5 animate-in fade-in zoom-in-95">
+              {result.notes && <div className="text-[11px] leading-relaxed text-muted-foreground whitespace-pre-wrap">{result.notes}</div>}
+              
+              {hasGeometry(result) && !staged && (
+                <Button size="sm" variant="secondary" className="h-7 w-full gap-1.5 text-[10px]" onClick={() => onPreview(result)}>
+                  <Maximize2 className="h-3 w-3" /> Preview suggestion on map
+                </Button>
+              )}
+
+              {staged && (
+                <div className="space-y-2 rounded-md border border-accent/40 bg-accent/5 p-2">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-accent flex items-center gap-1.5">
+                    <Sparkles className="h-3 w-3" /> Map Preview Active
+                  </p>
+                  <div className="flex gap-1.5">
+                    <Button
+                      size="sm"
+                      className="h-7 flex-1 text-[10px]"
+                      onClick={() => {
+                        onApply(result);
+                        onPreview(null);
+                        setResult(null);
+                        toast.success("Applied to map");
+                      }}
+                    >
+                      Accept
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-7 flex-1 text-[10px]"
+                      onClick={() => {
+                        onPreview(null);
+                        toast("Preview cleared");
+                      }}
+                    >
+                      Reject
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+          {busy && (
+            <div className="flex items-center gap-2 text-[10px] text-muted-foreground animate-pulse">
+              <Loader2 className="h-3 w-3 animate-spin" /> Thinking...
+            </div>
+          )}
+        </div>
+      </ScrollArea>
+
+      <div className="space-y-2 pt-2 border-t">
+        <div className="relative">
+          <Textarea
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                void ask();
+              }
+            }}
+            placeholder="Ask a question..."
+            rows={1}
+            className="min-h-[40px] resize-none pr-10 text-[11px] focus-visible:ring-accent/30"
+          />
+          <Button 
+            size="icon" 
+            className="absolute right-1.5 top-1.5 size-7 rounded-md" 
+            disabled={busy || !prompt.trim() || !online} 
+            onClick={() => void ask()}
+          >
+            {busy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
+          </Button>
+        </div>
+        <p className="text-center text-[9px] text-muted-foreground">
+          {!online ? "You are offline" : "Press Enter to send"}
+        </p>
+      </div>
     </section>
   );
 }

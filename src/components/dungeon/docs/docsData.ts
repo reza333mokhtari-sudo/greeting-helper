@@ -106,4 +106,17 @@ Right-click any prop or map area for advanced options:
 - **3D Library Empty**: Check your internet connection; assets are loaded on demand.
 - **Tools Not Working**: Ensure you're on a visible layer and not in "Player View" mode.`,
   },
+  {
+    id: "ai-assist",
+    category: "advanced",
+    title: "AI Assistant",
+    keywords: ["ai", "help", "guide", "suggest", "chat"],
+    content: `### Your Map Co-Pilot
+The AI Assistant is designed to help you build maps faster.
+
+- **How to use**: Type questions in the AI panel (Sparkles icon).
+- **Safe Mode**: The AI provides guidance and layout suggestions. It will NEVER overwrite your map without your permission.
+- **Preview**: If the AI suggests a layout, click **Preview** to see a ghost of the changes on your canvas.
+- **Grounding**: The AI is trained on this editor's tools. Ask "How do I pan?" or "What does the Poly tool do?" for instant answers.`,
+  },
 ];

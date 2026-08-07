@@ -230,9 +230,9 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
             </div>
           )}
 
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5">
             <div className="relative flex-1">
-              <Search className="pointer-events-none absolute left-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground" />
+              <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground/60" />
               <Input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -242,30 +242,35 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
                     e.currentTarget.blur();
                   }
                 }}
-                placeholder={selectedLibrary === "custom" ? "Search props & textures..." : "Search props..."}
-                className="h-7 pl-7 pr-7 text-[11px]"
+                placeholder={selectedLibrary === "custom" ? "Search your library..." : "Search icons..."}
+                className="h-8 pl-8 pr-8 text-[11px] bg-background/50 focus-visible:ring-accent/30"
               />
               {query && (
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="absolute right-0 top-0 h-7 w-7 text-muted-foreground hover:text-foreground"
+                  className="absolute right-0.5 top-0.5 h-7 w-7 text-muted-foreground hover:text-foreground"
                   onClick={() => setQuery("")}
                 >
-                  <X className="h-3 w-3" />
+                  <X className="h-3.5 w-3.5" />
                 </Button>
               )}
             </div>
-            <Button
-              size="icon"
-              variant={favOnly ? "default" : "outline"}
-              className="size-7"
-              aria-label="Show favourites only"
-              aria-pressed={favOnly}
-              onClick={() => setFavOnly((v) => !v)}
-            >
-              <Star className={`h-3 w-3 ${favOnly ? "fill-current" : ""}`} />
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    size="icon"
+                    variant={favOnly ? "default" : "outline"}
+                    className="size-8 shrink-0"
+                    onClick={() => setFavOnly((v) => !v)}
+                  >
+                    <Star className={`h-3.5 w-3.5 ${favOnly ? "fill-current" : ""}`} />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent className="text-[10px]">Show favorites only</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
 
           {allTags.length > 0 && (

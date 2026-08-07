@@ -108,7 +108,8 @@ export function DungeonEditor() {
   const [doc, setDocState] = useState<Doc>(() => {
     const d = emptyDoc();
     // Scrub prompt text if it somehow persisted to a new empty doc
-    d.objects = d.objects.filter(o => o.kind !== 'text' || (!o.text.includes('Do not make any') && !o.text.includes('/skill:')));
+    // Fresh load is clean
+    d.objects = d.objects.filter(o => o.kind !== 'text' || (!o.text.includes('Do not make') && !o.text.includes('/skill:') && !o.text.includes('fix createCsrf')));
     return d;
   });
   /** Full labelled timeline; index points at the state currently rendered. */
@@ -1548,6 +1549,7 @@ export function DungeonEditor() {
             onApply={applyAi}
             staged={aiPreview}
             floorName={doc.floors.find((f) => f.id === doc.activeFloorId)?.name ?? "Ground floor"}
+            onOpenHelp={openHelp}
           />
         );
       case "fog":
@@ -1625,17 +1627,6 @@ export function DungeonEditor() {
               });
               if (ok) commit(emptyDoc(), "New map");
             }}
-          />
-        );
-      case "ai":
-        return (
-          <AiPanel
-            doc={doc}
-            onPreview={setAiPreview}
-            onApply={applyAi}
-            staged={aiPreview}
-            floorName={doc.floors.find((f) => f.id === doc.activeFloorId)?.name || "Main Floor"}
-            onOpenHelp={openHelp}
           />
         );
       default:
