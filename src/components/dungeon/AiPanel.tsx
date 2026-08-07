@@ -329,5 +329,3 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
     </section>
   );
 }
-  );
-}
