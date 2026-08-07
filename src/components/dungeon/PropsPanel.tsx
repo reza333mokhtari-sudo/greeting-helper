@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ImagePlus, Search, Star, Tag, Trash2, Wand2, Palette, Image as ImageIcon } from "lucide-react";
+import { ImagePlus, Search, Star, Tag, Trash2, Wand2, Palette, Image as ImageIcon, X } from "lucide-react";
 import { toast } from "sonner";
 import { dialog } from "@/lib/dialog";
 
