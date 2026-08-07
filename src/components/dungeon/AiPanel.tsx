@@ -132,8 +132,8 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
       setHistory((h) => [...h.slice(-4), { role: "user", content: q }, { role: "assistant", content: res.notes || "(layout returned)" }]);
       setPrompt("");
       // AI check: if the model returned raw canvas text that looks like a prompt instruction, remove it.
-      if (res.objects.some(o => o.kind === 'text' && o.text?.includes('Do not make any visual modifications'))) {
-        res.objects = res.objects.filter(o => o.kind !== 'text' || !o.text?.includes('Do not make any visual modifications'));
+      if (res.objects.some(o => o.kind === 'text' && (o.text?.includes('Do not make any') || o.text?.includes('/skill:')))) {
+        res.objects = res.objects.filter(o => o.kind !== 'text' || (!o.text?.includes('Do not make any') && !o.text?.includes('/skill:')));
       }
     } catch (e) {
       const msg = e instanceof Error ? e.message : "AI request failed";

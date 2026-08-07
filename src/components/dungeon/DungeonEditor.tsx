@@ -108,7 +108,7 @@ export function DungeonEditor() {
   const [doc, setDocState] = useState<Doc>(() => {
     const d = emptyDoc();
     // Scrub prompt text if it somehow persisted to a new empty doc
-    d.objects = d.objects.filter(o => o.kind !== 'text' || !o.text.includes('Do not make any visual modifications'));
+    d.objects = d.objects.filter(o => o.kind !== 'text' || (!o.text.includes('Do not make any') && !o.text.includes('/skill:')));
     return d;
   });
   /** Full labelled timeline; index points at the state currently rendered. */
