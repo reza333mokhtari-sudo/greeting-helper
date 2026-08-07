@@ -13,21 +13,42 @@ import { docsConfig } from "@/docs/config";
 // Simulated MDX loader since we're using static files in this environment
 const useMdxContent = (slug: string) => {
   const [content, setContent] = React.useState<string>("");
+  const [isLoading, setIsLoading] = React.useState(true);
   
   React.useEffect(() => {
-    // In a real MDX setup, this would be an import()
-    // Here we fetch the local file content
-    fetch(`/src/docs/content/${slug}.mdx`)
-      .then(res => res.text())
-      .then(text => {
+    setIsLoading(true);
+    // Try both absolute and relative paths to be safe
+    const paths = [
+      `/src/docs/content/${slug}.mdx`,
+      `src/docs/content/${slug}.mdx`,
+      `./src/docs/content/${slug}.mdx`
+    ];
+
+    const tryFetch = async (index: number) => {
+      const currentPath = paths[index];
+      if (!currentPath || index >= paths.length) {
+        setContent("# Not Found\nThe requested documentation section could not be loaded.");
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const res = await fetch(currentPath);
+        if (!res.ok) throw new Error("Failed to load");
+        const text = await res.text();
         // Simple frontmatter removal for display
         const cleaned = text.replace(/^---[\s\S]*?---/, "");
         setContent(cleaned);
-      })
-      .catch(() => setContent("# Not Found\nThe requested documentation section could not be loaded."));
+        setIsLoading(false);
+      } catch (err) {
+        tryFetch(index + 1);
+      }
+    };
+
+    tryFetch(0);
   }, [slug]);
 
-  return content;
+  return { content, isLoading };
 };
 
 interface HelpCenterProps {
@@ -70,7 +91,7 @@ export const HelpCenter = ({ isOpen, onOpenChange, initialSectionId }: HelpCente
   );
 
   const activeSection = docSections.find(s => s.slug === activeId) || docSections[0];
-  const markdown = useMdxContent(activeSection?.slug || docsConfig.defaultSection);
+  const { content: markdown, isLoading } = useMdxContent(activeSection?.slug || docsConfig.defaultSection);
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
