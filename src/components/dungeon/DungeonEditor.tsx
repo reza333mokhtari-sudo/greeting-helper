@@ -17,6 +17,7 @@ import { FogPanel, type FogMode } from "./FogPanel";
 import { FloorsPanel } from "./FloorsPanel";
 import { HistoryPanel, type HistoryEntry } from "./HistoryPanel";
 import { CmsPanel } from "./CmsPanel";
+import { MapsPanel } from "./MapsPanel";
 import {
   allMapCells,
   cellKeyAt,
@@ -1579,6 +1580,24 @@ export function DungeonEditor() {
         return <QuickStartPanel />;
       case "cms":
         return <CmsPanel />;
+      case "maps":
+        return (
+          <MapsPanel 
+            currentMapId={undefined as any} 
+            onLoadMap={(id) => {
+              toast.info("Loading map...");
+            }}
+            onNewMap={async () => {
+              const ok = await dialog.confirm({
+                title: "New Map",
+                message: "This will clear the current canvas. Continue?",
+                confirmText: "New Map",
+                variant: "warning"
+              });
+              if (ok) commit(emptyDoc(), "New map");
+            }}
+          />
+        );
       case "ai":
         return (
           <AiPanel
