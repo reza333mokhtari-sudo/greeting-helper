@@ -307,7 +307,10 @@ export function DungeonEditor() {
 
   // Engine readiness spinner: dismissed after first paint or on timeout.
   useEffect(() => {
-    const t = setTimeout(() => setEngineReady(true), 600);
+    const t = setTimeout(() => {
+      setEngineReady(true);
+      console.log("Engine initialization complete (safety fallback)");
+    }, 1500); // Increased timeout for stability
     return () => clearTimeout(t);
   }, []);
 

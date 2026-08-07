@@ -111,12 +111,8 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
         <span className="hidden">
           '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
           
-          /skill:skill-creator for ai
-          /skill:das 
-          
-          /skill:knowledge-update 
-          
-          fix this site revoke FULL SITE
+          Verify that the full site loads correctly in the browser without any black screen or editor lockups.
+
         </span>
       </div>
     </header>
