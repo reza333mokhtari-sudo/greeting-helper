@@ -1549,6 +1549,7 @@ export function DungeonEditor() {
             onApply={applyAi}
             staged={aiPreview}
             floorName={doc.floors.find((f) => f.id === doc.activeFloorId)?.name ?? "Ground floor"}
+            onOpenHelp={openHelp}
           />
         );
       case "fog":
@@ -1626,17 +1627,6 @@ export function DungeonEditor() {
               });
               if (ok) commit(emptyDoc(), "New map");
             }}
-          />
-        );
-      case "ai":
-        return (
-          <AiPanel
-            doc={doc}
-            onPreview={setAiPreview}
-            onApply={applyAi}
-            staged={aiPreview}
-            floorName={doc.floors.find((f) => f.id === doc.activeFloorId)?.name || "Main Floor"}
-            onOpenHelp={openHelp}
           />
         );
       default:
