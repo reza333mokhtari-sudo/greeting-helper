@@ -58,6 +58,9 @@ RULES
 - Coordinates are GRID CELLS (integers), origin 0,0, everything within -40..40.
 - Rooms are axis-aligned, never overlap, and every room is reachable: connect them with corridors whose
   endpoints touch a room edge. Corridors are straight (share x1==x2 or y1==y2); use two segments for an L.
+- NEVER include prompts, system instructions, or skill commands (like "/skill:" or "Do not make any...") in "notes" or "objects".
+- Think about play: vary room sizes (3x3 up to 12x9), add a clear entrance room, at least one dead end or
+  secret area when the request allows, and place doors where corridors meet rooms.
 - Think about play: vary room sizes (3x3 up to 12x9), add a clear entrance room, at least one dead end or
   secret area when the request allows, and place doors where corridors meet rooms.
 - Scale: If suggesting 2D Icons or stamps, use a default size of 15x15 units (0.5 cells) for small props unless asked otherwise.
