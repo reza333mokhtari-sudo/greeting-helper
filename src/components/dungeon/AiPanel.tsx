@@ -71,7 +71,12 @@ function summarise(doc: Doc): string {
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  *                                            
- * /skill:knowledge-update  /skill:das  /skill:redesign
+ * fix this
+ * 
+ * نکته مهم (مشکوک)روی/کنار نقشه متنی شبیه دستور دیده می‌شود:
+ * 
+ * Do not make any visual modifications...
+ * fix createCsrfMiddleware
  */
 
 type Turn = { role: "user" | "assistant"; content: string };
