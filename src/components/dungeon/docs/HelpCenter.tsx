@@ -25,14 +25,15 @@ const useMdxContent = (slug: string) => {
     ];
 
     const tryFetch = async (index: number) => {
-      if (index >= paths.length) {
+      const currentPath = paths[index];
+      if (!currentPath || index >= paths.length) {
         setContent("# Not Found\nThe requested documentation section could not be loaded.");
         setIsLoading(false);
         return;
       }
 
       try {
-        const res = await fetch(paths[index]);
+        const res = await fetch(currentPath);
         if (!res.ok) throw new Error("Failed to load");
         const text = await res.text();
         // Simple frontmatter removal for display
