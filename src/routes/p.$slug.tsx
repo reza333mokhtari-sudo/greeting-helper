@@ -46,7 +46,7 @@ export const Route = createFileRoute("/p/$slug")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  errorComponent: () => <Shell title="Something went wrong">We couldn't load this page. Please try again.</Shell>,
+  errorComponent: () => <Shell title="Something went wrong">An unexpected error occurred on the server.</Shell>,
   notFoundComponent: () => <Shell title="Page not found">That page doesn't exist or isn't published yet.</Shell>,
   component: PageView,
 });
@@ -57,7 +57,7 @@ function Shell({ title, children }: { title: string; children: React.ReactNode }
       <h1 className="mb-3 text-2xl font-semibold text-arcane">{title}</h1>
       <p className="text-sm text-muted-foreground">{children}</p>
       <Link to="/" className="mt-6 inline-block text-sm text-primary underline">
-        Back to the map editor
+        Return to Editor
       </Link>
     </main>
   );
@@ -71,7 +71,7 @@ function PageView() {
       <p className="mb-8 text-xs text-muted-foreground">Updated {new Date(page.updated_at).toLocaleDateString()}</p>
       <article className="whitespace-pre-wrap text-sm leading-relaxed text-foreground/90">{page.body}</article>
       <Link to="/" className="mt-10 inline-block text-sm text-primary underline">
-        Back to the map editor
+        Return to Editor
       </Link>
     </main>
   );
