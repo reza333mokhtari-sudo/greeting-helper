@@ -112,7 +112,31 @@ export const HelpCenter = ({ isOpen, onOpenChange, initialSectionId }: HelpCente
               prose-td:p-3 prose-td:border-t prose-td:border-border
               prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-primary/5 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:rounded-r-lg prose-blockquote:italic prose-blockquote:text-foreground
             ">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{markdown}</ReactMarkdown>
+              <ReactMarkdown 
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  code({ node, inline, className, children, ...props }: any) {
+                    const match = /language-(\w+)/.exec(className || "");
+                    return !inline && match ? (
+                      <SyntaxHighlighter
+                        style={vscDarkPlus}
+                        language={match[1]}
+                        PreTag="div"
+                        className="rounded-lg !my-4 !bg-zinc-950 border border-border"
+                        {...props}
+                      >
+                        {String(children).replace(/\n$/, "")}
+                      </SyntaxHighlighter>
+                    ) : (
+                      <code className={className} {...props}>
+                        {children}
+                      </code>
+                    );
+                  },
+                }}
+              >
+                {markdown}
+              </ReactMarkdown>
             </div>
           </ScrollArea>
         </div>
