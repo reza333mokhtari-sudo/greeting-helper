@@ -94,7 +94,15 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
     return assets
       .filter((a) => (favOnly ? a.favorite : true))
       .filter((a) => (tagFilter ? a.tags?.includes(tagFilter) : true))
-      .filter((a) => (q ? a.name.toLowerCase().includes(q) || a.tags?.some((t) => t.toLowerCase().includes(q)) : true))
+      .filter((a) => {
+        if (!q) return true;
+        return (
+          a.name.toLowerCase().includes(q) ||
+          a.tags?.some((t) => t.toLowerCase().includes(q)) ||
+          a.kind.toLowerCase().includes(q) ||
+          a.id.toLowerCase().includes(q)
+        );
+      })
       .sort((a, b) => Number(b.favorite) - Number(a.favorite));
   }, [assets, favOnly, query, tagFilter]);
 
@@ -228,9 +236,25 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
               <Input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search props…"
-                className="h-7 pl-7 text-[11px]"
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") {
+                    setQuery("");
+                    e.currentTarget.blur();
+                  }
+                }}
+                placeholder={selectedLibrary === "custom" ? "Search props & textures..." : "Search props..."}
+                className="h-7 pl-7 pr-7 text-[11px]"
               />
+              {query && (
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="absolute right-0 top-0 h-7 w-7 text-muted-foreground hover:text-foreground"
+                  onClick={() => setQuery("")}
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              )}
             </div>
             <Button
               size="icon"
