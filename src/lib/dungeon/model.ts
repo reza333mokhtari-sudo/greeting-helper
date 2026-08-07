@@ -1,8 +1,3 @@
-/**
- * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
- *                                            
- * Verify that the full site loads correctly in the browser without any black screen or editor lockups.
- */
 import type { FogStyle } from "./fogAssets";
 
 export type Pt = { x: number; y: number };
