@@ -71,9 +71,8 @@ function summarise(doc: Doc): string {
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  *                                            
- * fix it i see blackscrean
- * 
- * turn back editor
+ * چرا سایت لود نمیشه 
+ * من نمیتونم سایت رو ببینم راه حل پیدا کن حلش کن
  */
 
 type Turn = { role: "user" | "assistant"; content: string };
