@@ -1752,7 +1752,7 @@ export function DungeonEditor() {
         >
           <canvas ref={canvasRef} className="block h-full w-full" />
 
-          {doc.settings.cameraMode && doc.settings.showViewCube && (
+          {flags.ENABLE_VIEW_CUBE && doc.settings.cameraMode && doc.settings.showViewCube && (
             <div className="absolute top-4 right-4 z-30 pointer-events-auto">
               <ViewCube 
                 settings={doc.settings} 
