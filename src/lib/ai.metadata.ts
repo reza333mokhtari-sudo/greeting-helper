@@ -13,7 +13,7 @@ export const ASSISTANT_METADATA = {
     hallucination_rate: 0.005
   },
   tool_inventory: {
-    phase: "PHASE 0 — BUG FIXING",
-    objective: "Fix critical SSR startup errors and stabilize TanStack Start middleware."
+    phase: "PHASE 0 — TOOL SEARCH & FILTER",
+    objective: "Implement live text search for Props and Texture tabs with high-performance filtering."
   }
 };
