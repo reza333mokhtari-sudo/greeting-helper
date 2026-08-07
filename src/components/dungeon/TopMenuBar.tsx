@@ -110,7 +110,7 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
         <ProfileMenu />
         <span className="hidden">
           Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.
-          PHASE 3 — INTERACTION CONTRACT: Establish strict event priority (Modal > Tool > Minimap > Cube > Camera > Shortcuts).
+          PHASE 3 — INTERACTION CONTRACT: Establish strict event priority (Modal {"->"} Tool {"->"} Minimap {"->"} Cube {"->"} Camera {"->"} Shortcuts).
         </span>
       </div>
     </header>
