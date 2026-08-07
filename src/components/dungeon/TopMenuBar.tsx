@@ -108,7 +108,7 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
 
       <div className="ml-auto flex items-center gap-2">
         <ProfileMenu />
-        <span className="hidden">now i want add some FUTURE in left side bar(add update to when add new page in cms to show the CLIENT if public(also add this future public and private) private(who is admin) and has list in there when any page(show as popup))</span>
+        <span className="hidden">I have approved the plan</span>
       </div>
     </header>
   );
