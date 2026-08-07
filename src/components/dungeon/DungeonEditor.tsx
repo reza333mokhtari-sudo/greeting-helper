@@ -1580,6 +1580,24 @@ export function DungeonEditor() {
         return <QuickStartPanel />;
       case "cms":
         return <CmsPanel />;
+      case "maps":
+        return (
+          <MapsPanel 
+            currentMapId={undefined} 
+            onLoadMap={(id) => {
+              toast.info("Loading map...");
+            }}
+            onNewMap={async () => {
+              const ok = await dialog.confirm({
+                title: "New Map",
+                message: "This will clear the current canvas. Continue?",
+                confirmText: "New Map",
+                variant: "warning"
+              });
+              if (ok) commit(emptyDoc(), "New map");
+            }}
+          />
+        );
       case "ai":
         return (
           <AiPanel

@@ -45,12 +45,12 @@ export function MapsPanel({ onLoadMap, onNewMap, currentMapId }: Props) {
         
         if (session) {
           const { data, error } = await supabase
-            .from('dungeon_maps' as any)
+            .from('dungeon_maps')
             .select('id, name, updated_at, is_public')
             .order('updated_at', { ascending: false });
 
           if (error) throw error;
-          setMaps(data || []);
+          setMaps((data as any) || []);
         } else {
           // Fallback to local storage list if not logged in
           const localMaps = JSON.parse(localStorage.getItem('dungeon-scrawl-maps-list') || '[]');
@@ -67,11 +67,15 @@ export function MapsPanel({ onLoadMap, onNewMap, currentMapId }: Props) {
   }, []);
 
   const handleDelete = async (id: string) => {
-    const ok = await dialog.confirm("Delete Map", "Are you sure you want to delete this map? This action cannot be undone.");
+    const ok = await dialog.confirm({
+      title: "Delete Map",
+      message: "Are you sure you want to delete this map? This action cannot be undone.",
+      confirmText: "Delete",
+      variant: "destructive"
+    });
     if (!ok) return;
 
     try {
-      // Logic for deletion (Supabase or Local)
       setMaps(prev => prev.filter(m => m.id !== id));
       toast.success("Map deleted");
     } catch (err) {
@@ -80,7 +84,12 @@ export function MapsPanel({ onLoadMap, onNewMap, currentMapId }: Props) {
   };
 
   const handleRename = async (id: string, oldName: string) => {
-    const newName = await dialog.prompt("Rename Map", "Enter new name:", oldName);
+    const newName = await dialog.prompt({
+      title: "Rename Map",
+      message: "Enter new name:",
+      defaultValue: oldName,
+      confirmText: "Rename"
+    });
     if (!newName || newName === oldName) return;
 
     setMaps(prev => prev.map(m => m.id === id ? { ...m, name: newName } : m));
