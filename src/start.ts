@@ -19,13 +19,11 @@ const errorMiddleware = createMiddleware().server(async ({ next }) => {
   }
 });
 
-const csrfMiddleware = (typeof createCsrfMiddleware === 'function') 
-  ? createCsrfMiddleware({
-      filter: (ctx) => ctx.handlerType === "serverFn",
-    })
-  : null;
+const csrfMiddleware = createCsrfMiddleware({
+  filter: (ctx) => ctx.handlerType === "serverFn",
+});
 
 export const startInstance = createStart(() => ({
   functionMiddleware: [attachSupabaseAuth],
-  requestMiddleware: [errorMiddleware, ...(csrfMiddleware ? [csrfMiddleware] : [])],
+  requestMiddleware: [errorMiddleware, csrfMiddleware],
 }));

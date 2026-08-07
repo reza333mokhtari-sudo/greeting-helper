@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ClientOnly } from "@tanstack/react-router";
+
 
 import { DungeonEditor } from "@/components/dungeon/DungeonEditor";
 
@@ -27,9 +27,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <div className="h-screen w-screen overflow-hidden bg-background">
-      <ClientOnly fallback={<div className="flex h-screen items-center justify-center text-sm text-muted-foreground">Loading map editor…</div>}>
-        <DungeonEditor />
-      </ClientOnly>
+      <DungeonEditor />
     </div>
   );
 }
