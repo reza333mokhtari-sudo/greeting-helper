@@ -307,10 +307,11 @@ export function DungeonEditor() {
 
   // Engine readiness spinner: dismissed after first paint or on timeout.
   useEffect(() => {
+    // Safety fallback to clear loader
     const t = setTimeout(() => {
       setEngineReady(true);
       console.log("Engine initialization complete (safety fallback)");
-    }, 1500); // Increased timeout for stability
+    }, 500);
     return () => clearTimeout(t);
   }, []);
 
@@ -500,6 +501,13 @@ export function DungeonEditor() {
     el.addEventListener("wheel", onWheel, { passive: false });
     return () => el.removeEventListener("wheel", onWheel);
   }, []);
+
+  // Force engine ready if we see the canvas has size
+  useEffect(() => {
+    if (!engineReady && canvasRef.current && canvasRef.current.width > 0) {
+      setEngineReady(true);
+    }
+  }, [engineReady]);
 
   const zoomBy = useCallback((dir: 1 | -1) => {
     const el = wrapRef.current;
