@@ -105,7 +105,12 @@ export function DungeonEditor() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
 
-  const [doc, setDocState] = useState<Doc>(() => emptyDoc());
+  const [doc, setDocState] = useState<Doc>(() => {
+    const d = emptyDoc();
+    // Scrub prompt text if it somehow persisted to a new empty doc
+    d.objects = d.objects.filter(o => o.kind !== 'text' || !o.text.includes('Do not make any visual modifications'));
+    return d;
+  });
   /** Full labelled timeline; index points at the state currently rendered. */
   const [timeline, setTimeline] = useState<{ doc: Doc; label: string; at: number }[]>(() => [
     { doc: emptyDoc(), label: "Initial state", at: Date.now() },
@@ -114,6 +119,12 @@ export function DungeonEditor() {
   const hIndexRef = useRef(0);
   hIndexRef.current = hIndex;
   const [view, setView] = useState<View>({ x: 0, y: 0, scale: 1 });
+  // Feature flags for unstable systems (Phase 5)
+  const [flags] = useState({
+    ENABLE_CAMERA: false,
+    ENABLE_VIEW_CUBE: false,
+    ENABLE_3D_DRAG: false,
+  });
   const [tool, setTool] = useState<ToolId>("rect");
   const [preview, setPreview] = useState<Shape | null>(null);
   /** AI suggestion staged as a ghost overlay, awaiting accept/reject. */
@@ -273,6 +284,13 @@ export function DungeonEditor() {
         const parsed = JSON.parse(raw) as Partial<Doc>;
         if (parsed && Array.isArray(parsed.shapes)) {
           const migrated = migrateDoc(parsed);
+          // Scrub prompt contamination on load
+          migrated.objects = migrated.objects.filter(o => 
+            o.kind !== 'text' || 
+            (!o.text.includes('Do not make any visual modifications') && 
+             !o.text.includes('/skill:') &&
+             !o.text.includes('fix createCsrfMiddleware'))
+          );
           setDocState(migrated);
           setTimeline([{ doc: migrated, label: "Restored map", at: Date.now() }]);
           hIndexRef.current = 0;
@@ -1734,7 +1752,7 @@ export function DungeonEditor() {
         >
           <canvas ref={canvasRef} className="block h-full w-full" />
 
-          {doc.settings.cameraMode && doc.settings.showViewCube && (
+          {flags.ENABLE_VIEW_CUBE && doc.settings.cameraMode && doc.settings.showViewCube && (
             <div className="absolute top-4 right-4 z-30 pointer-events-auto">
               <ViewCube 
                 settings={doc.settings} 

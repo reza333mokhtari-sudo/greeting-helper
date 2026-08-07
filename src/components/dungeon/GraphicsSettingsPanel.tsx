@@ -98,8 +98,12 @@ export function GraphicsSettingsPanel({ settings: s, onChange }: Props) {
       </div>
 
       <section className="space-y-1.5">
-        <Row label="Enabled">
-          <Switch checked={s.cameraMode} onCheckedChange={(v) => onChange({ cameraMode: v })} />
+        <Row label="Enabled (Experimental)">
+          <Switch 
+            disabled 
+            checked={false} 
+            onCheckedChange={(v) => onChange({ cameraMode: v })} 
+          />
         </Row>
         <Row label="Projection">
           <Select value={s.cameraProjection} onValueChange={(v) => onChange({ cameraProjection: v as any })}>
@@ -124,8 +128,8 @@ export function GraphicsSettingsPanel({ settings: s, onChange }: Props) {
         <Row label="Invert Y">
           <Switch checked={s.cameraInvertY} onCheckedChange={(v) => onChange({ cameraInvertY: v })} />
         </Row>
-        <Row label="Show View Cube">
-          <Switch checked={s.showViewCube} onCheckedChange={(v) => onChange({ showViewCube: v })} />
+        <Row label="Show View Cube (Exp.)">
+          <Switch disabled checked={false} onCheckedChange={(v) => onChange({ showViewCube: v })} />
         </Row>
         <Row label="Cube Size">
           <NumSlider value={s.cubeSize} min={40} max={120} onChange={(v) => onChange({ cubeSize: v })} />
