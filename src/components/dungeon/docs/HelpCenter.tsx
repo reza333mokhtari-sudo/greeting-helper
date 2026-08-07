@@ -89,8 +89,7 @@ export const HelpCenter = ({ isOpen, onOpenChange, initialSectionId }: HelpCente
     section.keywords?.some(k => k.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
-  const activeSection = docSections.find(s => s.slug === activeId) || docSections[0];
-  const markdown = useMdxContent(activeSection?.slug || docsConfig.defaultSection);
+  const { content: markdown, isLoading } = useMdxContent(activeSection?.slug || docsConfig.defaultSection);
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
