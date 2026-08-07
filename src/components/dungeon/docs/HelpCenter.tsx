@@ -17,7 +17,8 @@ const useMdxContent = (slug: string) => {
   React.useEffect(() => {
     // In a real MDX setup, this would be an import()
     // Here we fetch the local file content
-    fetch(`/src/docs/content/${slug}.mdx`)
+    const path = slug.startsWith("/") ? slug : `/src/docs/content/${slug}.mdx`;
+    fetch(path)
       .then(res => res.text())
       .then(text => {
         // Simple frontmatter removal for display
