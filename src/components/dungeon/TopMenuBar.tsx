@@ -108,7 +108,7 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
 
       <div className="ml-auto flex items-center gap-2">
         <ProfileMenu />
-        <span className="hidden">Add syntax highlighting for fenced code blocks in the documentation renderer.</span>
+        <span className="hidden">Add automatic theme switching for syntax highlighting to match light and dark mode.</span>
       </div>
     </header>
   );

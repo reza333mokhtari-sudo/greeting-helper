@@ -6,7 +6,7 @@ import { Search, ChevronRight, Book, HelpCircle, X } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { vscDarkPlus, vs } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { docSections, DocSection } from "@/docs/meta";
 import { docsConfig } from "@/docs/config";
 
@@ -37,6 +37,23 @@ interface HelpCenterProps {
 }
 
 export const HelpCenter = ({ isOpen, onOpenChange, initialSectionId }: HelpCenterProps) => {
+  const [isDarkMode, setIsDarkMode] = React.useState(true);
+
+  React.useEffect(() => {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === "class") {
+          setIsDarkMode(document.documentElement.classList.contains("dark"));
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, { attributes: true });
+    setIsDarkMode(document.documentElement.classList.contains("dark"));
+
+    return () => observer.disconnect();
+  }, []);
+
   const [activeId, setActiveId] = React.useState(initialSectionId || docsConfig.defaultSection);
   const [searchQuery, setSearchQuery] = React.useState("");
 
@@ -119,10 +136,10 @@ export const HelpCenter = ({ isOpen, onOpenChange, initialSectionId }: HelpCente
                     const match = /language-(\w+)/.exec(className || "");
                     return !inline && match ? (
                       <SyntaxHighlighter
-                        style={vscDarkPlus}
+                        style={isDarkMode ? vscDarkPlus : vs}
                         language={match[1]}
                         PreTag="div"
-                        className="rounded-lg !my-4 !bg-zinc-950 border border-border"
+                        className={`rounded-lg !my-4 border border-border ${isDarkMode ? "!bg-zinc-950" : "!bg-zinc-50"}`}
                         {...props}
                       >
                         {String(children).replace(/\n$/, "")}
