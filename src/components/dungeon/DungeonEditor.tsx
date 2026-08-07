@@ -77,8 +77,8 @@ import { OnboardingOverlay } from "./OnboardingOverlay";
 import { QuickStartPanel } from "./QuickStartPanel";
 import { Minimap } from "./Minimap";
 import { PropPreviewModal } from "../props/PropPreviewModal";
-import { HelpCenter } from "./docs/HelpCenter";
-import { HelpButton } from "./docs/HelpButton";
+// import { HelpCenter } from "./docs/HelpCenter";
+// import { HelpButton } from "./docs/HelpButton";
 
 
 
