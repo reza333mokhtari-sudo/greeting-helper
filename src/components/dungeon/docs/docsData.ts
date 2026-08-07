@@ -1,8 +1,12 @@
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  *                                            
- * چرا سایت لود نمیشه 
- * من نمیتونم سایت رو ببینم راه حل پیدا کن حلش کن
+ * /skill:skill-creator for ai
+ * /skill:das 
+ * 
+ * /skill:knowledge-update 
+ * 
+ * fix this site revoke FULL SITE
  */
 export interface DocSection {
   id: string;
