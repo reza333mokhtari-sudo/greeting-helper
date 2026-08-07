@@ -1,5 +1,4 @@
 import { createServerFn } from "@tanstack/react-start";
-import { streamText } from "ai";
 import { z } from "zod";
 
 /** Selectable AI engines. Keys are stable ids the UI sends; values are gateway model ids. */
@@ -238,7 +237,9 @@ export const suggestMap = createServerFn({ method: "POST" })
     ];
 
     const runAttempt = async (engineKey: AiEngine, extra?: string) => {
+      const { streamText } = await import("ai");
       const { model, isCustom, providerOptions } = await getAiModel(engineKey);
+
       
       let streamError: unknown;
       const result = streamText({
