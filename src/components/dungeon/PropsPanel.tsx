@@ -139,7 +139,7 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
       }}
     >
       <div className="flex items-center justify-between">
-        <h2 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Props &amp; textures</h2>
+        <h2 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">{selectedLibrary === "custom" ? "My Props & Textures" : "Props & Textures"}</h2>
         <div className="flex items-center gap-2">
           <Select value={selectedLibrary} onValueChange={setSelectedLibrary}>
             <SelectTrigger className="h-6 w-[130px] text-[10px]">
@@ -178,7 +178,7 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
                   }
                 }}
               >
-                <Search className="mr-1 h-3 w-3" /> Browse Icons
+                <Search className="mr-1 h-3 w-3" /> Browse Icons Library
               </Button>
             )}
           </div>
@@ -198,7 +198,7 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
 
       {!signedIn ? (
         <div className="space-y-4">
-          <p className="text-[11px] text-muted-foreground">Sign in to upload your own props and textures.</p>
+          <p className="text-[11px] text-muted-foreground">Sign in to upload and manage your own custom props and textures.</p>
           <div className="rounded-md border border-border/50 bg-muted/20 p-2 text-[10px] space-y-2">
             <p className="font-semibold text-foreground flex items-center gap-1">
               <Star className="h-3 w-3 text-accent fill-current" /> Recommended Icon Libraries
