@@ -147,7 +147,7 @@ export function DungeonEditor() {
   const [savedAt, setSavedAt] = useState<number | null>(null);
   const [saveMs, setSaveMs] = useState<number | null>(null);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
-  const [engineReady, setEngineReady] = useState(false);
+  const [engineReady, setEngineReady] = useState(true); // Default to true to prevent black screen if JS fails to hydrate correctly
   const [docBytes, setDocBytes] = useState(0);
 
   const [menuTarget, setMenuTarget] = useState<{
@@ -325,11 +325,11 @@ export function DungeonEditor() {
 
   // Engine readiness spinner: dismissed after first paint or on timeout.
   useEffect(() => {
-    // Safety fallback to clear loader
+    // Safety fallback to clear loader - decreased timeout to 300ms for faster recovery
     const t = setTimeout(() => {
       setEngineReady(true);
       console.log("Engine initialization complete (safety fallback)");
-    }, 500);
+    }, 300);
     return () => clearTimeout(t);
   }, []);
 
