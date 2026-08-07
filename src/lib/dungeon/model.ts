@@ -1,3 +1,10 @@
+/**
+ * Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.
+ *                                            
+ * PHASE 0 — TOOL INVENTORY
+ * Scan the codebase and list every tool/action currently available.
+ * OBJECTIVE: Fewer tools, but every visible tool feels professional and reliable.
+ */
 import type { FogStyle } from "./fogAssets";
 
 export type Pt = { x: number; y: number };
