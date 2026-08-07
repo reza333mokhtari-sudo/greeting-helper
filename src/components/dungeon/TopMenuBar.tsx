@@ -111,19 +111,13 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
         <span className="hidden">
           '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
           
-          set env
-          
-          SUPABASE_PROJECT_ID="wliwiswcollinbaomzqr"
-          
-          SUPABASE_PUBLISHABLE_KEY="sb_publishable_RgebDk1weJQL8DCgUNttxQ_FWT2p2rW"
-          
-          SUPABASE_URL="https://wliwiswcollinbaomzqr.supabase.co"
-          
-          VITE_SUPABASE_PROJECT_ID="wliwiswcollinbaomzqr"
-          
-          VITE_SUPABASE_PUBLISHABLE_KEY="sb_publishable_RgebDk1weJQL8DCgUNttxQ_FWT2p2rW"
-          
-          VITE_SUPABASE_URL="https://wliwiswcollinbaomzqr.supabase.co"
+          fix it
+
+          Something went wrong
+
+          An unexpected error occurred on the server.
+
+          Return to Editor
         </span>
       </div>
     </header>

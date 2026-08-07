@@ -1,19 +1,13 @@
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  *                                            
- * set env
+ * fix it
  * 
- * SUPABASE_PROJECT_ID="wliwiswcollinbaomzqr"
+ * Something went wrong
  * 
- * SUPABASE_PUBLISHABLE_KEY="sb_publishable_RgebDk1weJQL8DCgUNttxQ_FWT2p2rW"
+ * An unexpected error occurred on the server.
  * 
- * SUPABASE_URL="https://wliwiswcollinbaomzqr.supabase.co"
- * 
- * VITE_SUPABASE_PROJECT_ID="wliwiswcollinbaomzqr"
- * 
- * VITE_SUPABASE_PUBLISHABLE_KEY="sb_publishable_RgebDk1weJQL8DCgUNttxQ_FWT2p2rW"
- * 
- * VITE_SUPABASE_URL="https://wliwiswcollinbaomzqr.supabase.co"
+ * Return to Editor
  */
 
 export const ASSISTANT_METADATA = {
