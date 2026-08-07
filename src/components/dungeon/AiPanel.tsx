@@ -50,14 +50,6 @@ function summarise(doc: Doc): string {
     .slice(0, 24)
     .map((s) =>
       s.kind === "rect" || s.kind === "ellipse"
-        ? `${s.kind} at ${Math.round(s.a.x / g)},${Math.round(s.a.y / g)} size ${Math.round(Math.abs(s.b.x - s.a.x) / g)}x${Math.round(
-            Math.abs(s.b.y - s.a.y) / g,
-          )}`
-        : "",
-    );
-  const objs = doc.objects
-    .slice(0, 30)
-    .map((o) => `${o.kind}${"name" in o && o.name ? `(${o.name})` : ""}@${Math.round(o.x / g)},${Math.round(o.y / g)}`);
   return [
     `${doc.shapes.length} shapes, ${doc.objects.length} objects, ${doc.layers.length} layers, ${doc.fog.length} fogged cells`,
     rooms.length ? `rooms: ${rooms.join("; ")}` : "",
@@ -68,7 +60,10 @@ function summarise(doc: Doc): string {
     .join(". ")
     .slice(0, 5000);
 }
-
+/**
+ * Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.
+ */
+}
 type Turn = { role: "user" | "assistant"; content: string };
 
 type Props = {
