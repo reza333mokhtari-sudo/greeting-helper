@@ -1,0 +1,38 @@
+[
+  {
+    "prompt": "How do I create a new room?",
+    "intent": "docs_help",
+    "citation_id": "quick-start",
+    "answer": "Select the Room (R) tool from the toolbar and drag on the canvas to carve out your dungeon."
+  },
+  {
+    "prompt": "Suggest a small 6-room crypt layout.",
+    "intent": "generate_layout",
+    "citation_id": "quick-start",
+    "answer": "A small crypt typically features a central hall, 4 burial chambers, and a hidden sanctuary."
+  },
+  {
+    "prompt": "My map won't pan when I use the spacebar.",
+    "intent": "bug_troubleshoot",
+    "citation_id": "troubleshooting",
+    "answer": "Make sure you are holding Space and not currently in a modal window."
+  },
+  {
+    "prompt": "How do I use the view cube?",
+    "intent": "camera_view_help",
+    "citation_id": "camera",
+    "answer": "Click the faces (Top, Front, etc.) on the View Cube to snap the camera to standard orientations."
+  },
+  {
+    "prompt": "Can I export my map to PDF?",
+    "intent": "export_save_help",
+    "citation_id": "quick-start",
+    "answer": "Yes, use File > Export > Export PDF to save your map."
+  },
+  {
+    "prompt": "Add a dragon to my map.",
+    "intent": "place_objects",
+    "citation_id": "objects",
+    "answer": "Open the Props panel and search for 'Dragon', then drag it onto your map."
+  }
+]
