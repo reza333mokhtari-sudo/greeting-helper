@@ -5,8 +5,11 @@ import { Input } from "@/components/ui/input";
 import { Search, ChevronRight, Book, HelpCircle, X } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus, vs } from "react-syntax-highlighter/dist/esm/styles/prism";
+// import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+// import { vscDarkPlus, vs } from "react-syntax-highlighter/dist/esm/styles/prism";
+const SyntaxHighlighter: any = ({ children }: any) => <pre>{children}</pre>;
+const vscDarkPlus = {};
+const vs = {};
 import { docSections, DocSection } from "@/docs/meta";
 import { docsConfig } from "@/docs/config";
 
