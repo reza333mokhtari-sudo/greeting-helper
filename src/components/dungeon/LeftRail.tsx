@@ -1,13 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Sliders, Layers, Image, Sparkles, CloudFog, History, Info, Activity, Building2, HelpCircle, Monitor, FileText } from "lucide-react";
+import { Sliders, Layers, Image, Sparkles, CloudFog, History, Info, Activity, Building2, HelpCircle, Monitor, FileText, Map as MapIcon } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-export type PanelId = "settings" | "floors" | "layers" | "props" | "ai" | "fog" | "history" | "properties" | "diagnostics" | "help" | "graphics" | "cms";
+export type PanelId = "settings" | "floors" | "layers" | "props" | "ai" | "fog" | "history" | "properties" | "diagnostics" | "help" | "graphics" | "cms" | "maps";
 
 const PANELS: { id: PanelId; label: string; icon: LucideIcon }[] = [
   { id: "settings", label: "Tool & map settings", icon: Sliders },
   { id: "graphics", label: "Graphics & camera", icon: Monitor },
+  { id: "maps", label: "My Maps", icon: MapIcon },
   { id: "floors", label: "Floors & connections", icon: Building2 },
   { id: "layers", label: "Layers", icon: Layers },
   { id: "props", label: "Props & textures", icon: Image },
