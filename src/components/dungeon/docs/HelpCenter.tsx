@@ -4,6 +4,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { Search, ChevronRight, Book, HelpCircle, X } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { docSections, DocSection } from "@/docs/meta";
 import { docsConfig } from "@/docs/config";
 
@@ -16,7 +17,11 @@ const useMdxContent = (slug: string) => {
     // Here we fetch the local file content
     fetch(`/src/docs/content/${slug}.mdx`)
       .then(res => res.text())
-      .then(text => setContent(text))
+      .then(text => {
+        // Simple frontmatter removal for display
+        const cleaned = text.replace(/^---[\s\S]*?---/, "");
+        setContent(cleaned);
+      })
       .catch(() => setContent("# Not Found\nThe requested documentation section could not be loaded."));
   }, [slug]);
 
@@ -105,7 +110,7 @@ export const HelpCenter = ({ isOpen, onOpenChange, initialSectionId }: HelpCente
               prose-td:p-3 prose-td:border-t prose-td:border-border
               prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-primary/5 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:rounded-r-lg prose-blockquote:italic prose-blockquote:text-foreground
             ">
-              <ReactMarkdown>{markdown}</ReactMarkdown>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{markdown}</ReactMarkdown>
             </div>
           </ScrollArea>
         </div>
