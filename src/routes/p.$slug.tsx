@@ -46,7 +46,7 @@ export const Route = createFileRoute("/p/$slug")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  errorComponent: () => <Shell title="Something went wrong">We couldn't load this page. Please try again.</Shell>,
+  errorComponent: () => <Shell title="Something went wrong">An unexpected error occurred on the server.</Shell>,
   notFoundComponent: () => <Shell title="Page not found">That page doesn't exist or isn't published yet.</Shell>,
   component: PageView,
 });
