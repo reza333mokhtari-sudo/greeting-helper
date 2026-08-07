@@ -1,7 +1,13 @@
 /**
  * Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.
  *                                            
- * I have approved the plan
+ * now i dont wana you coding right now 
+ *
+ * TEST ai part of AI ASSISTANCE to create a map design as some PLOT of ELDEN RING or dark souls first map
+ *
+ * (make or create any of them also check props and texture to added)
+ *
+ * this is test and i APROVE
  */
 
 export const ASSISTANT_METADATA = {
