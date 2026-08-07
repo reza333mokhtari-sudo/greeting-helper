@@ -110,14 +110,7 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
         <ProfileMenu />
         <span className="hidden">
           Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.
-                                            
-          now i dont wana you coding right now 
-
-          TEST ai part of AI ASSISTANCE to create a map design as some PLOT of ELDEN RING or dark souls first map
-
-          (make or create any of them also check props and texture to added)
-
-          this is test and i APROVE
+          PHASE 3 — INTERACTION CONTRACT: Establish strict event priority (Modal > Tool > Minimap > Cube > Camera > Shortcuts).
         </span>
       </div>
     </header>
