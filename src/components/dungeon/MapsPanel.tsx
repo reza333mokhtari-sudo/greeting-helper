@@ -45,7 +45,7 @@ export function MapsPanel({ onLoadMap, onNewMap, currentMapId }: Props) {
         
         if (session) {
           const { data, error } = await supabase
-            .from('dungeon_maps')
+            .from('dungeon_maps' as any)
             .select('id, name, updated_at, is_public')
             .order('updated_at', { ascending: false });
 
@@ -71,7 +71,7 @@ export function MapsPanel({ onLoadMap, onNewMap, currentMapId }: Props) {
       title: "Delete Map",
       message: "Are you sure you want to delete this map? This action cannot be undone.",
       confirmText: "Delete",
-      variant: "destructive"
+      variant: "danger"
     });
     if (!ok) return;
 
@@ -84,12 +84,7 @@ export function MapsPanel({ onLoadMap, onNewMap, currentMapId }: Props) {
   };
 
   const handleRename = async (id: string, oldName: string) => {
-    const newName = await dialog.prompt({
-      title: "Rename Map",
-      message: "Enter new name:",
-      defaultValue: oldName,
-      confirmText: "Rename"
-    });
+    const newName = await dialog.prompt("Rename Map", oldName, "Enter new name:");
     if (!newName || newName === oldName) return;
 
     setMaps(prev => prev.map(m => m.id === id ? { ...m, name: newName } : m));

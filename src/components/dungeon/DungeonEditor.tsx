@@ -1583,7 +1583,7 @@ export function DungeonEditor() {
       case "maps":
         return (
           <MapsPanel 
-            currentMapId={undefined} 
+            currentMapId={undefined as any} 
             onLoadMap={(id) => {
               toast.info("Loading map...");
             }}
