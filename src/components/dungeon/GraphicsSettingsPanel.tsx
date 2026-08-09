@@ -52,10 +52,10 @@ function NumSlider({
 export function GraphicsSettingsPanel({ settings: s, onChange }: Props) {
   const setPreset = (preset: Settings["qualityPreset"]) => {
     const patches: Record<Settings["qualityPreset"], Partial<Settings>> = {
-      low: { qualityPreset: "low", renderScale: 0.5, antiAliasing: false, shadow: false, hatch: false },
-      medium: { qualityPreset: "medium", renderScale: 0.8, antiAliasing: true, shadow: true, hatch: true },
-      high: { qualityPreset: "high", renderScale: 1.0, antiAliasing: true, shadow: true, hatch: true },
-      ultra: { qualityPreset: "ultra", renderScale: 1.5, antiAliasing: true, shadow: true, hatch: true },
+      low: { qualityPreset: "low", renderScale: 0.5, objectRenderScale: 1.0, antiAliasing: false, shadow: false, hatch: false },
+      medium: { qualityPreset: "medium", renderScale: 0.8, objectRenderScale: 1.0, antiAliasing: true, shadow: true, hatch: true },
+      high: { qualityPreset: "high", renderScale: 1.0, objectRenderScale: 1.0, antiAliasing: true, shadow: true, hatch: true },
+      ultra: { qualityPreset: "ultra", renderScale: 1.5, objectRenderScale: 1.0, antiAliasing: true, shadow: true, hatch: true },
     };
     onChange(patches[preset]);
   };
@@ -82,6 +82,9 @@ export function GraphicsSettingsPanel({ settings: s, onChange }: Props) {
         </Row>
         <Row label="Render scale">
           <NumSlider value={s.renderScale} min={0.25} max={2} step={0.05} onChange={(v) => onChange({ renderScale: v })} />
+        </Row>
+        <Row label="Object scale">
+          <NumSlider value={s.objectRenderScale || 1} min={0.1} max={5} step={0.1} onChange={(v) => onChange({ objectRenderScale: v })} />
         </Row>
         <Row label="Anti-aliasing">
           <Switch checked={s.antiAliasing} onCheckedChange={(v) => onChange({ antiAliasing: v })} />

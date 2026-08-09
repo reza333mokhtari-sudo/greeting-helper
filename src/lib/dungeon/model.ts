@@ -107,8 +107,10 @@ export type Settings = {
   fogScale: number;
   /** Graphics quality preset. */
   qualityPreset: "low" | "medium" | "high" | "ultra";
-  /** Performance & rendering toggles. */
+  /** Base render scale for the main viewport. */
   renderScale: number;
+  /** Individual object scaling factor (multiplier for all object scales). */
+  objectRenderScale: number;
   antiAliasing: boolean;
   maxTextureSize: number;
   maxDrawDistance: number;
@@ -260,6 +262,7 @@ export const DEFAULT_SETTINGS: Settings = {
   fogScale: 1,
   qualityPreset: "medium",
   renderScale: 1,
+  objectRenderScale: 1,
   antiAliasing: true,
   maxTextureSize: 2048,
   maxDrawDistance: 5000,
@@ -532,7 +535,23 @@ export function pointInShape(p: Pt, s: Shape): boolean {
   return inside;
 }
 
-export function objectHit(p: Pt, o: MapObject): boolean {
+export function objectHit(p: Pt, o: MapObject, scale: number = 1): boolean {
+  const s = scale;
+  if (o.kind === "text") return Math.hypot(p.x - o.x, p.y - o.y) <= Math.max(20, o.size * s);
+  if (o.kind === "pillar") return Math.hypot(p.x - o.x, p.y - o.y) <= (o.r + 4) * s;
+  if (o.kind === "npc") return Math.hypot(p.x - o.x, p.y - o.y) <= (o.r + 4) * s;
+  if (o.kind === "item") return Math.hypot(p.x - o.x, p.y - o.y) <= (o.size * 0.7) * s;
+  if (o.kind === "light") return Math.hypot(p.x - o.x, p.y - o.y) <= 14 * s;
+  if (o.kind === "image") {
+    return p.x >= o.x - (o.w / 2) * s && p.x <= o.x + (o.w / 2) * s && p.y >= o.y - (o.h / 2) * s && p.y <= o.y + (o.h / 2) * s;
+  }
+  if (o.kind === "trigger") {
+    return p.x >= o.x - (o.w / 2) * s && p.x <= o.x + (o.w / 2) * s && p.y >= o.y - (o.h / 2) * s && p.y <= o.y + (o.h / 2) * s;
+  }
+  return Math.hypot(p.x - o.x, p.y - o.y) <= (o.size * 0.7) * s;
+}
+
+export function objectHitLegacy(p: Pt, o: MapObject): boolean {
   if (o.kind === "text") return Math.hypot(p.x - o.x, p.y - o.y) <= Math.max(20, o.size);
   if (o.kind === "pillar") return Math.hypot(p.x - o.x, p.y - o.y) <= o.r + 4;
   if (o.kind === "npc") return Math.hypot(p.x - o.x, p.y - o.y) <= o.r + 4;

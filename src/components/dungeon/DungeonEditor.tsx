@@ -692,7 +692,18 @@ export function DungeonEditor() {
           const l = doc.layers.find((x) => x.id === o.layerId);
           return !l || (l.visible && !l.locked);
         });
-        const obj = [...pickable].reverse().find((o) => objectHit(world, o));
+        const globalObjScale = doc.settings.objectRenderScale || 1;
+        const obj = [...pickable].reverse().find((o) => {
+          const isSelected = selected.includes(o.id);
+          const hasAnySelected = selected.length > 0;
+          let extraScale = 1;
+          if (hasAnySelected) {
+            if (isSelected) extraScale = globalObjScale;
+          } else {
+            extraScale = globalObjScale;
+          }
+          return objectHit(world, o, extraScale);
+        });
         const shape = obj ? null : [...doc.shapes].reverse().find((s) => !s.erase && pointInShape(world, s));
         const id = obj?.id ?? shape?.id;
         if (id) {
