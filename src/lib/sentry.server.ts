@@ -1,9 +1,7 @@
-import * as Sentry from "@sentry/node";
-
 /**
  * Initialize Sentry for the server (Nitro/Vercel Edge).
  */
-export function initSentryServer() {
+export async function initSentryServer() {
   const dsn = process.env['SENTRY_DSN'] || process.env['VITE_SENTRY_DSN'];
   
   if (!dsn) {
@@ -11,12 +9,24 @@ export function initSentryServer() {
     return;
   }
 
-  Sentry.init({
-    dsn,
-    // Performance Monitoring
-    tracesSampleRate: 1.0,
-    environment: process.env['NODE_ENV'],
-  });
+  try {
+    const Sentry = await import("@sentry/node");
+    Sentry.init({
+      dsn,
+      tracesSampleRate: 1.0,
+      environment: process.env['NODE_ENV'],
+    });
+    console.log("[Sentry] Server SDK initialized");
+  } catch (err) {
+    console.error("Failed to initialize Sentry Server:", err);
+  }
+}
 
-  console.log("[Sentry] Server SDK initialized");
+export async function captureServerException(error: unknown) {
+  try {
+    const Sentry = await import("@sentry/node");
+    Sentry.captureException(error);
+  } catch (err) {
+    console.error("Failed to capture server exception:", err, error);
+  }
 }
