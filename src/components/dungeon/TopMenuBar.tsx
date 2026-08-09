@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { ProfileMenu } from "./ProfileMenu";
+import { useDesktop } from "@/hooks/use-desktop";
 import {
   Menubar,
   MenubarContent,
