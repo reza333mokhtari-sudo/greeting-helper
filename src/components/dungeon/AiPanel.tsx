@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef } from "react";
-import { useChat } from "@ai-sdk/react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Sparkles, Loader2, Maximize2, HelpCircle, Settings2, RotateCcw, Send } from "lucide-react";
 import { toast } from "sonner";
 import DOMPurify from "dompurify";
@@ -39,17 +38,13 @@ function summarise(doc: Doc): string {
     .slice(0, 5000);
 }
 
-type Turn = { role: "user" | "assistant"; content: string };
+type Message = { id: string; role: 'user' | 'assistant'; content: string };
 
 type Props = {
   doc: Doc;
-  /** Stage the suggestion on the canvas as a ghost preview (null clears it). */
   onPreview: (s: AiSuggestion | null) => void;
-  /** Commit the staged suggestion to the document. */
   onApply: (s: AiSuggestion) => void;
-  /** Suggestion currently staged on the canvas, if any. */
   staged: AiSuggestion | null;
-  /** Name of the floor the AI is allowed to edit. */
   floorName?: string;
   onOpenHelp?: (sectionId?: string) => void;
 };
@@ -61,52 +56,86 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
   const [customSystem, setCustomSystem] = useState(() => localStorage.getItem("ai-cartographer-system") || SYSTEM_PROMPT);
   const [result, setResult] = useState<AiSuggestion | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-
+  
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
-  const { messages, isLoading, setMessages, append } = useChat({
-    body: {
-      summary: summarise(doc),
-      engine,
-    },
-    onFinish: (message) => {
-      // Try to parse layout if it's hidden in the message
-      try {
-        const jsonMatch = message.content.match(/```json\n([\s\S]*?)\n```/);
-        if (jsonMatch && jsonMatch[1]) {
-          const parsed = JSON.parse(jsonMatch[1]) as AiSuggestion;
-          if (parsed.rooms || parsed.objects) {
-            setResult(parsed);
-            onPreview(parsed);
-            toast.info("Preview staged from message content");
-          }
-        }
-      } catch (e) {
-        console.warn("Failed to parse AI layout from message", e);
-      }
-    },
-    onError: (err) => {
-      toast.error(err.message || "AI request failed");
-    }
-  });
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit = async (e?: React.FormEvent) => {
-    e?.preventDefault();
-    const q = inputValue.trim();
-    if (!q || !online || isLoading) return;
-    setInputValue("");
-    onPreview(null);
-    setResult(null);
-    await append({ role: 'user', content: q });
-  };
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
 
   const ask = async (text: string) => {
-    if (!online || isLoading) {
-      toast.error("AI is busy or you are offline");
-      return;
-    }
-    onPreview(null);
+    if (!online || isLoading) return;
+    
+    const userMsg: Message = { id: Date.now().toString(), role: 'user', content: text };
+    setMessages(prev => [...prev, userMsg]);
+    setIsLoading(true);
     setResult(null);
-    await append({ role: 'user', content: text });
+    onPreview(null);
+
+    try {
+      const response = await fetch('/api/ai/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prompt: text,
+          history: messages.map(m => ({ role: m.role, content: m.content })),
+          summary: summarise(doc),
+          engine,
+        }),
+      });
+
+      if (!response.ok) throw new Error('Chat request failed');
+
+      const reader = response.body?.getReader();
+      if (!reader) throw new Error('No reader available');
+
+      const assistantId = (Date.now() + 1).toString();
+      let assistantContent = "";
+      
+      setMessages(prev => [...prev, { id: assistantId, role: 'assistant', content: "" }]);
+
+      const decoder = new TextDecoder();
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        
+        const chunk = decoder.decode(value, { stream: true });
+        assistantContent += chunk;
+        
+        setMessages(prev => prev.map(m => m.id === assistantId ? { ...m, content: assistantContent } : m));
+      }
+
+      // Final processing for JSON layout
+      try {
+        const jsonMatch = assistantContent.match(/```json\n([\s\S]*?)\n```/);
+        if (jsonMatch && jsonMatch[1]) {
+          const parsed = JSON.parse(jsonMatch[1]) as AiSuggestion;
+          setResult(parsed);
+          onPreview(parsed);
+        }
+      } catch (e) {
+        console.warn("No layout found in response");
+      }
+
+    } catch (err) {
+      toast.error("AI Assistant is currently unavailable.");
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = inputValue.trim();
+    if (q) {
+      setInputValue("");
+      ask(q);
+    }
   };
 
   const SUGGESTED_CHIPS = [
@@ -114,7 +143,7 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
     "How do I zoom and pan?",
     "Show me the Room tool",
     "How do I place props?",
-    "Suggest a small 4-room layout for a wizard tower",
+    "Suggest a layout for a wizard tower",
   ];
 
   return (
@@ -170,7 +199,7 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
           className="w-full bg-background border border-border/50 rounded px-2 py-1 text-[11px] outline-none focus:border-accent/50"
         >
           {Object.entries(AI_ENGINES).map(([key, config]) => (
-            <option key={key} value={key}>{config.label}</option>
+            <option key={key} value={key as AiEngine}>{config.label}</option>
           ))}
         </select>
       </div>
@@ -222,20 +251,14 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
                   ? "bg-primary text-primary-foreground" 
                   : "bg-muted/80 text-foreground border border-border/40"
               }`}>
-                <div className="prose prose-invert prose-xs max-w-none">
-                  <ReactMarkdown 
-                    components={{
-                      p: ({children}) => <p className="mb-2 last:mb-0">{children}</p>,
-                      code: ({children}) => <code className="bg-black/20 rounded px-1 font-mono text-[10px]">{children}</code>
-                    }}
-                  >
+                <div className="prose prose-invert prose-xs max-w-none prose-p:leading-relaxed prose-pre:bg-black/20 prose-code:text-accent">
+                  <ReactMarkdown>
                     {DOMPurify.sanitize(m.content)}
                   </ReactMarkdown>
                 </div>
               </div>
             </div>
           ))}
-          <div ref={scrollRef} />
 
           {result && (
             <div className="space-y-2 rounded-lg border border-border/60 bg-card/60 p-2.5 animate-in fade-in zoom-in-95">
@@ -281,11 +304,13 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
               )}
             </div>
           )}
+          
           {isLoading && messages[messages.length - 1]?.role !== 'assistant' && (
             <div className="flex items-center gap-2 text-[10px] text-muted-foreground animate-pulse">
               <Loader2 className="h-3 w-3 animate-spin" /> Thinking...
             </div>
           )}
+          <div ref={scrollRef} />
         </div>
       </ScrollArea>
 
@@ -297,7 +322,7 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
-                void onSubmit();
+                onSubmit();
               }
             }}
             placeholder="Ask a question..."
@@ -308,7 +333,7 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
             size="icon" 
             type="submit"
             className="absolute right-1.5 top-1.5 size-7 rounded-md" 
-            disabled={isLoading || !input.trim() || !online} 
+            disabled={isLoading || !inputValue.trim() || !online} 
           >
             {isLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
           </Button>
