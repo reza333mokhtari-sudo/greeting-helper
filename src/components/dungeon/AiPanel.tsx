@@ -129,7 +129,7 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
     }
   };
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = (e?: React.FormEvent) => {
     e.preventDefault();
     const q = inputValue.trim();
     if (q) {

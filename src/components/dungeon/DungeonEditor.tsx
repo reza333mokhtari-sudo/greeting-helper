@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Sparkles } from "lucide-react";
+import { Sparkles, AlertCircle, X } from "lucide-react";
 import { toast } from "sonner";
+import { useHotkeys } from "react-hotkeys-hook";
+import { useAutosave } from "@/hooks/use-autosave";
 
 import { Button } from "@/components/ui/button";
 import { dialog } from "@/lib/dialog";
@@ -185,6 +187,13 @@ export function DungeonEditor() {
 
   const [helpOpen, setHelpOpen] = useState(false);
   const [helpSection, setHelpSection] = useState<string | null>(null);
+
+  const { hasDraft, recoverDraft, discardDraft } = useAutosave(doc, (draft) => {
+    setDocState(draft);
+    setTimeline([{ doc: draft, label: "Recovered draft", at: Date.now() }]);
+    hIndexRef.current = 0;
+    setHIndex(0);
+  });
 
   const openHelp = useCallback((sectionId?: string) => {
     setHelpSection(sectionId || "quick-start");
