@@ -1,10 +1,10 @@
 import { createStart, createMiddleware, createCsrfMiddleware } from "@tanstack/react-start";
 import { renderErrorPage } from "./lib/error-page";
 import { attachSupabaseAuth } from "@/integrations/supabase/auth-attacher";
-import * as SentryServer from "@sentry/node";
-import { initSentryServer } from "./lib/sentry.server";
+import { initSentryServer, captureServerException } from "./lib/sentry.server";
 
-initSentryServer();
+// Nitro will await the top-level-await during start.
+await initSentryServer();
 
 /**
  * Global error handler for server-side exceptions.
@@ -21,7 +21,7 @@ const errorMiddleware = createMiddleware().server(async ({ next }) => {
     }
     
     console.error("[Start] Server Runtime Error:", error);
-    SentryServer.captureException(error);
+    captureServerException(error);
     
     // Return a structured error response that the client can handle
     return new Response(renderErrorPage(), {
