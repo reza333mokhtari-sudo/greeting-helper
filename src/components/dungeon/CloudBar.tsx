@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import { Link } from "@tanstack/react-router";
-import { Cloud, CloudUpload, FolderOpen, LogOut, Trash2 } from "lucide-react";
+import { Cloud, CloudUpload, FolderOpen, LogOut, Trash2, CheckCircle2, AlertCircle, RefreshCw } from "lucide-react";
+
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -30,6 +31,9 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired }: Props) {
   const [name, setName] = useState("Untitled map");
   const [busy, setBusy] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [syncStatus, setSyncStatus] = useState<"idle" | "saving" | "synced" | "error">("idle");
+  const [localLastSaved, setLocalLastSaved] = useState<number | null>(null);
+
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setEmail(data.session?.user.email ?? null));
@@ -62,8 +66,24 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired }: Props) {
   }, [email, refresh]);
 
   const save = async () => {
-    if (!email) return;
+    if (!email) {
+      // Manual save for local users
+      setSyncStatus("saving");
+      try {
+        localStorage.setItem("dungeon-scrawl-doc-v1", JSON.stringify(doc));
+        setLocalLastSaved(Date.now());
+        setSyncStatus("synced");
+        setTimeout(() => setSyncStatus("idle"), 2000);
+        toast.success("Map saved locally");
+      } catch (e) {
+        setSyncStatus("error");
+        toast.error("Local save failed");
+      }
+      return;
+    }
+
     setBusy(true);
+    setSyncStatus("saving");
     try {
       if (current) {
         await updateMap(current.id, { name, doc, thumbnail_url: thumbnail() });
@@ -73,12 +93,16 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired }: Props) {
         setCurrent(row);
         toast.success("Map saved to the cloud");
       }
+      setSyncStatus("synced");
+      setTimeout(() => setSyncStatus("idle"), 2000);
       refresh();
     } catch (e) {
+      setSyncStatus("error");
       toast.error(e instanceof Error ? e.message : "Save failed");
     }
     setBusy(false);
   };
+
 
   const open_ = async (row: MapRow) => {
     try {
@@ -114,8 +138,43 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired }: Props) {
   }
 
 
+  const statusIndicator = useMemo(() => {
+    switch (syncStatus) {
+      case "saving":
+        return (
+          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-500 text-[10px] font-medium animate-pulse">
+            <RefreshCw className="h-3 w-3 animate-spin" />
+            Saving...
+          </div>
+        );
+      case "synced":
+        return (
+          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-green-500/10 text-green-500 text-[10px] font-medium">
+            <CheckCircle2 className="h-3 w-3" />
+            Synced
+          </div>
+        );
+      case "error":
+        return (
+          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-destructive/10 text-destructive text-[10px] font-medium">
+            <AlertCircle className="h-3 w-3" />
+            Error
+          </div>
+        );
+      default:
+        return (
+          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-muted text-muted-foreground text-[10px] font-medium opacity-60">
+            <div className="h-1.5 w-1.5 rounded-full bg-muted-foreground/40" />
+            {email ? "Cloud" : "Local"}
+          </div>
+        );
+    }
+  }, [syncStatus, email]);
+
   return (
     <div className="flex items-center gap-2">
+      {statusIndicator}
+
       <Input value={name} onChange={(e) => setName(e.target.value)} className="h-7 w-40 text-xs" placeholder="Map name" />
       <Button size="sm" className="h-7 text-xs" disabled={busy} onClick={save}>
         <CloudUpload className="mr-1 h-3.5 w-3.5" /> Save
