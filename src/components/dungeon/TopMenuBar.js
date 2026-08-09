@@ -1,46 +1,10 @@
-import type { ReactNode } from "react";
 import { ProfileMenu } from "./ProfileMenu";
 import { useDesktop } from "@/hooks/use-desktop";
 import { HealthCheckIndicator } from "./HealthCheckIndicator";
-import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarSeparator,
-  MenubarShortcut,
-  MenubarTrigger,
-} from "@/components/ui/menubar";
-
-type Props = {
-  title: string;
-  dirty?: boolean;
-  right?: ReactNode;
-  canUndo: boolean;
-  canRedo: boolean;
-  onUndo: () => void;
-  onRedo: () => void;
-  onDelete: () => void;
-  onNew: () => void;
-  onImport: () => void;
-  onExportPng: () => void;
-  onExportSvg: () => void;
-  onExportPdf: () => void;
-  onExportJson: () => void;
-  onFit: () => void;
-  onZoomIn: () => void;
-  onZoomOut: () => void;
-  playerView: boolean;
-  onPlayerView: (v: boolean) => void;
-  showGrid: boolean;
-  onShowGrid: (v: boolean) => void;
-};
-
-export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => void }) {
-  const { isDesktop } = useDesktop();
-  
-  return (
-    <header className="relative flex h-11 shrink-0 items-center gap-2 border-b border-border bg-sidebar px-2">
+import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarSeparator, MenubarShortcut, MenubarTrigger, } from "@/components/ui/menubar";
+export function TopMenuBar(props) {
+    const { isDesktop } = useDesktop();
+    return (<header className="relative flex h-11 shrink-0 items-center gap-2 border-b border-border bg-sidebar px-2">
       <span className="px-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-arcane">
         {isDesktop ? "Dungeon Scrawl Desktop" : "Scrawl"}
       </span>
@@ -103,12 +67,10 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
             <MenubarItem disabled className="text-xs py-1">D / S — Door / Stairs</MenubarItem>
             <MenubarItem disabled className="text-xs py-1">E — Toggle Erase</MenubarItem>
             <MenubarItem disabled className="text-xs py-1">Space — Pan View</MenubarItem>
-            {isDesktop && (
-              <>
+            {isDesktop && (<>
                 <MenubarSeparator />
                 <MenubarItem disabled className="text-xs py-1 opacity-70 italic">Desktop App v0.1.0</MenubarItem>
-              </>
-            )}
+              </>)}
           </MenubarContent>
         </MenubarMenu>
       </Menubar>
@@ -122,6 +84,5 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
         <HealthCheckIndicator />
         <ProfileMenu />
       </div>
-    </header>
-  );
+    </header>);
 }
