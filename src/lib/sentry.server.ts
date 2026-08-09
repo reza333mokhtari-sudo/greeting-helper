@@ -1,9 +1,7 @@
 import * as Sentry from "@sentry/node";
-import { nodeProfilingIntegration } from "@sentry/profiling-node";
 
 /**
  * Initialize Sentry for the server (Nitro/Vercel Edge).
- * Note: Profiling might not be available in Edge runtimes.
  */
 export function initSentryServer() {
   const dsn = process.env['SENTRY_DSN'] || process.env['VITE_SENTRY_DSN'];
