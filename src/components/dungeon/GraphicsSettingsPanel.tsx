@@ -89,6 +89,21 @@ export function GraphicsSettingsPanel({ settings: s, onChange }: Props) {
         <Row label="Shadows">
           <Switch checked={s.shadow} onCheckedChange={(v) => onChange({ shadow: v })} />
         </Row>
+        <Row label="Animations">
+          <Select 
+            value={String(s.animationIntensity ?? 2)} 
+            onValueChange={(v) => onChange({ animationIntensity: parseInt(v) })}
+          >
+            <SelectTrigger className="h-7 w-28 text-[10px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="0">Off</SelectItem>
+              <SelectItem value="1">Subtle</SelectItem>
+              <SelectItem value="2">Full</SelectItem>
+            </SelectContent>
+          </Select>
+        </Row>
       </section>
 
       <Separator className="opacity-50" />

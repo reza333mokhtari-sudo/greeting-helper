@@ -1692,12 +1692,17 @@ export function DungeonEditor() {
       />
 
       <div className="flex min-h-0 flex-1">
-        <LeftRail active={leftPanel} onSelect={(id) => setLeftPanel((cur) => (cur === id ? null : id))} />
+        <LeftRail 
+          active={leftPanel} 
+          onSelect={(id) => setLeftPanel((cur) => (cur === id ? null : id))} 
+          animationIntensity={doc.settings.animationIntensity}
+        />
 
         {leftPanel && (
           <aside 
             className="relative flex h-full shrink-0 flex-col border-r border-border bg-sidebar overflow-visible"
             style={{ width: `${sidebarWidth}px` }}
+            data-animation={doc.settings.animationIntensity}
           >
             <ScrollArea className="min-h-0 flex-1 h-full">
               <div className="flex flex-col gap-4 p-4 min-w-0">
@@ -1880,6 +1885,7 @@ export function DungeonEditor() {
               zoom={view.scale}
               onZoom={zoomBy}
               vertical
+              animationIntensity={doc.settings.animationIntensity}
             />
           </ScrollArea>
         </div>

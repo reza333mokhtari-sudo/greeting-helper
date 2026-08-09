@@ -24,12 +24,16 @@ const PANELS: { id: PanelId; label: string; icon: LucideIcon }[] = [
 type Props = {
   active: PanelId | null;
   onSelect: (id: PanelId) => void;
+  animationIntensity?: number;
 };
 
-export function LeftRail({ active, onSelect }: Props) {
+export function LeftRail({ active, onSelect, animationIntensity = 2 }: Props) {
   return (
     <TooltipProvider delayDuration={200}>
-      <nav className="flex w-12 shrink-0 flex-col items-center gap-1 border-r border-border bg-sidebar py-2">
+      <nav 
+        className="flex w-12 shrink-0 flex-col items-center gap-1 border-r border-border bg-sidebar py-2"
+        data-animation={animationIntensity}
+      >
         {PANELS.map((p) => {
           const Icon = p.icon;
           const on = active === p.id;

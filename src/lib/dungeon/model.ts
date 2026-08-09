@@ -124,6 +124,8 @@ export type Settings = {
   snapToOrtho: boolean;
   showAxes: boolean;
   showWorldAxes: boolean;
+  /** UI Animation intensity: 0 (off), 1 (subtle), 2 (full) */
+  animationIntensity: number;
   cameraYaw: number;
   cameraPitch: number;
   cameraDistance: number;
@@ -272,6 +274,7 @@ export const DEFAULT_SETTINGS: Settings = {
   snapToOrtho: true,
   showAxes: true,
   showWorldAxes: true,
+  animationIntensity: 2,
   cameraYaw: 45,
   cameraPitch: 45,
   cameraDistance: 1000,

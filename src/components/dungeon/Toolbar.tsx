@@ -59,12 +59,17 @@ type Props = {
   zoom: number;
   onZoom: (dir: 1 | -1) => void;
   vertical?: boolean;
+  animationIntensity?: number;
 };
 
 export function Toolbar(props: Props) {
+  const intensity = props.animationIntensity ?? 2;
   return (
     <TooltipProvider delayDuration={200}>
-      <div className={`pointer-events-auto flex ${props.vertical ? "flex-col border-0 bg-transparent px-1 shadow-none backdrop-blur-0" : "items-center gap-1 rounded-2xl border border-border bg-card/90 px-2 py-1.5 shadow-[var(--shadow-arcane)] backdrop-blur"}`}>
+      <div 
+        data-animation={intensity}
+        className={`pointer-events-auto flex ${props.vertical ? "flex-col border-0 bg-transparent px-1 shadow-none backdrop-blur-0" : "items-center gap-1 rounded-2xl border border-border bg-card/90 px-2 py-1.5 shadow-[var(--shadow-arcane)] backdrop-blur"}`}
+      >
 
         <Tooltip>
           <TooltipTrigger asChild>
