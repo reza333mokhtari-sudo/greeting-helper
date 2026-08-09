@@ -150,7 +150,7 @@ function label(ctx: CanvasRenderingContext2D, text: string, y: number, size: num
   ctx.fillText(text, 0, y);
 }
 
-export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc, processing: boolean = false) {
+export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc, processing: boolean = false, extraScale: number = 1) {
   const { wallColor, floorColor, inkColor } = doc.settings;
   ctx.save();
 
@@ -176,6 +176,7 @@ export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc
   }
 
   ctx.translate(o.x, o.y);
+  ctx.scale(extraScale, extraScale);
   if (o.kind === "door" || o.kind === "stairs" || o.kind === "image") ctx.rotate(o.angle);
   ctx.lineJoin = "round";
   ctx.lineCap = "butt";
@@ -536,6 +537,9 @@ export function renderScene(
 
   applyView(ctx, view, dpr);
   const layerById = new Map(doc.layers.map((l) => [l.id, l]));
+  const globalObjScale = s.objectRenderScale || 1;
+  const selectedIds = new Set(opts.selectedIds ?? []);
+  
   for (const o of objectsInDrawOrder(doc)) {
     const layer = layerById.get(o.layerId);
     if (layer && !layer.visible) continue;
@@ -543,7 +547,19 @@ export function renderScene(
     if (o.kind === "light" && (opts.hideUi || s.playerView)) continue;
     ctx.globalAlpha = layer?.opacity ?? 1;
     const isProcessing = (opts.processingIds ?? []).includes(o.id);
-    drawObject(ctx, o, doc, isProcessing);
+    
+    // If something is selected, objectRenderScale only applies to selected items.
+    // If nothing is selected, it applies to all.
+    let extraScale = 1;
+    if (selectedIds.size > 0) {
+      if (selectedIds.has(o.id)) {
+        extraScale = globalObjScale;
+      }
+    } else {
+      extraScale = globalObjScale;
+    }
+    
+    drawObject(ctx, o, doc, isProcessing, extraScale);
     ctx.globalAlpha = 1;
   }
 
