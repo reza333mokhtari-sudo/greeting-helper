@@ -20,9 +20,11 @@ type Props = {
   thumbnail: () => string | null;
   onLoadDoc: (doc: Doc) => void;
   onAuthRequired?: () => void;
+  saveStatus?: "idle" | "saving" | "saved" | "error";
 };
 
-export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired }: Props) {
+export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus: externalSaveStatus }: Props) {
+
 
   const [email, setEmail] = useState<string | null>(null);
   const [maps, setMaps] = useState<MapRow[]>([]);
@@ -31,8 +33,10 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired }: Props) {
   const [name, setName] = useState("Untitled map");
   const [busy, setBusy] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [syncStatus, setSyncStatus] = useState<"idle" | "saving" | "synced" | "error">("idle");
+  const [internalSyncStatus, setInternalSyncStatus] = useState<"idle" | "saving" | "synced" | "error">("idle");
+  const syncStatus = externalSaveStatus === "saved" ? "synced" : (externalSaveStatus || internalSyncStatus);
   const [localLastSaved, setLocalLastSaved] = useState<number | null>(null);
+
 
 
   useEffect(() => {
