@@ -117,9 +117,6 @@ export function DungeonEditor() {
     // Scrub prompt text if it somehow persisted to a new empty doc
     d.objects = d.objects.filter(o => o.kind !== 'text' || (!o.text.includes('Do not make') && !o.text.includes('/skill:') && !o.text.includes('fix createCsrf')));
     
-    // Add prompt instructions to the document for visibility
-    const promptText = "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                            \n                                            Build a production desktop release with Tauri v2 and ensure the packaged app launches successfully.";
-    
     return d;
   });
   /** Full labelled timeline; index points at the state currently rendered. */

@@ -119,13 +119,6 @@ The AI Assistant is designed to help you build maps faster.
 - **Preview**: If the AI suggests a layout, click **Preview** to see a ghost of the changes on your canvas.
 - **Grounding**: The AI is trained on this editor's tools. Ask "How do I pan?" or "What does the Poly tool do?" for instant answers.
 
-**Production Status**: 
-'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
-                                            
-                                            bun run build
-
-bun: The term 'bun' is not recognized as a name of a cmdlet, function, script file, or executable program.
-
-Check the spelling of the name, or if a path was included, verify that the path is correct and try again.`,
+**Production Status**: Stabilized web build. Use standard \`npm run build\` for production.`,
   },
 ];
