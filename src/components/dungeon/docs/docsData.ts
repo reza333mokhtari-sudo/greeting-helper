@@ -123,6 +123,6 @@ The AI Assistant is designed to help you build maps faster.
 
 '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
 
-Run end-to-end tests to verify the Supabase auth callback redirects correctly to greeting-helper.vercel.app after login.`,
+Add end-to-end coverage for logout and re-authentication to confirm session handling and redirects work correctly across multiple login cycles.`,
   },
 ];
