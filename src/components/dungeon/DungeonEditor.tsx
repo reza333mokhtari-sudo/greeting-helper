@@ -1169,6 +1169,10 @@ export function DungeonEditor() {
         const shapes: Shape[] = [...d.shapes];
         const objects: MapObject[] = [...d.objects];
         const noteLayer = d.layers.find((l) => l.id === DEFAULT_LAYER_FOR.text)?.id ?? d.layers[0]!.id;
+        const doorLayer = d.layers.find((l) => l.id === DEFAULT_LAYER_FOR.door)?.id ?? d.layers[0]!.id;
+        const propLayer = d.layers.find((l) => l.id === DEFAULT_LAYER_FOR.npc)?.id ?? d.layers[0]!.id;
+        const imgLayer = d.layers.find((l) => l.id === DEFAULT_LAYER_FOR.image)?.id ?? d.layers[0]!.id;
+
         for (const r of s.rooms) {
           const a = { x: r.x * g, y: r.y * g };
           const b = { x: (r.x + Math.max(1, r.w)) * g, y: (r.y + Math.max(1, r.h)) * g };
@@ -1197,6 +1201,48 @@ export function DungeonEditor() {
             width: Math.max(16, g * 0.9),
           });
         }
+
+        // Add doors, NPCs, etc.
+        if (s.objects && Array.isArray(s.objects)) {
+          for (const o of s.objects) {
+            if (o.kind === "door") {
+              objects.push({
+                id: uid("d"),
+                kind: "door",
+                x: o.x * g,
+                y: o.y * g,
+                angle: 0,
+                size: g,
+                variant: "door",
+                layerId: doorLayer,
+              });
+            } else if (o.kind === "text") {
+              objects.push({
+                id: uid("t"),
+                kind: "text",
+                x: o.x * g,
+                y: o.y * g,
+                layerId: noteLayer,
+                text: o.text || o.name || "Text",
+                size: 12,
+              });
+            } else {
+              objects.push({
+                id: uid("o"),
+                kind: "npc",
+                x: o.x * g,
+                y: o.y * g,
+                layerId: propLayer,
+                name: o.name || o.kind,
+                r: g / 3,
+                color: "#ff0000",
+                label: (o.name || o.kind).slice(0, 1),
+                hostile: false,
+              });
+            }
+          }
+        }
+
         const allowed: (keyof Settings)[] = [
           "hatch",
           "hatchDensity",
@@ -1214,11 +1260,10 @@ export function DungeonEditor() {
           if (allowed.includes(k as keyof Settings)) (settings as Record<string, unknown>)[k] = v;
         }
         if (s.stamps && Array.isArray(s.stamps)) {
-          const layerId = d.layers.find((l) => l.id === DEFAULT_LAYER_FOR.image)?.id ?? d.layers[0]!.id;
           for (const st of s.stamps) {
             objects.push({
               id: uid("img"),
-              layerId,
+              layerId: imgLayer,
               kind: "image",
               x: st.x * g,
               y: st.y * g,
