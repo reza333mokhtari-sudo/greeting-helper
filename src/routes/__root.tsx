@@ -16,8 +16,6 @@ import { DialogProvider } from "@/components/ui/DialogProvider";
 import { OfflineOverlay } from "@/components/OfflineOverlay";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
-
-
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -41,23 +39,27 @@ function NotFoundComponent() {
 }
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
-  console.error(error);
+  console.error("[Root Error Boundary]:", error);
   const router = useRouter();
+  
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
 
   const isSupabaseError = error.message?.includes("Supabase configuration");
+  const isHydrationError = error.message?.includes("hydration") || error.message?.includes("Hydration");
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          {isSupabaseError ? "Configuration Required" : "Something went wrong"}
+          {isSupabaseError ? "Configuration Required" : isHydrationError ? "Syncing App State" : "Something went wrong"}
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
           {isSupabaseError 
             ? "Your project is not connected to a backend. Please connect Supabase in the Lovable editor to enable all features."
+            : isHydrationError
+            ? "The app is synchronizing its internal state. If this takes more than a few seconds, please try a hard refresh."
             : "An unexpected error occurred. Please try refreshing the page."}
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
@@ -71,12 +73,12 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
             Try again
           </button>
           {!isSupabaseError && (
-            <a
-              href="/"
+            <button
+              onClick={() => window.location.href = '/'}
               className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
             >
-              Return to Editor
-            </a>
+              Reload Editor
+            </button>
           )}
         </div>
       </div>
@@ -130,7 +132,6 @@ function RootShell({ children }: { children: ReactNode }) {
         <Toaster position="top-center" richColors />
         <OfflineOverlay />
         <Scripts />
-
       </body>
     </html>
   );
@@ -141,7 +142,6 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
     </QueryClientProvider>
   );
