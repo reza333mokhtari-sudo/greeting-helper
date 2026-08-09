@@ -34,6 +34,7 @@ type Props = {
   onPlayerView: (v: boolean) => void;
   showGrid: boolean;
   onShowGrid: (v: boolean) => void;
+  onOpenDiagnostics?: () => void;
 };
 
 export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => void }) {
@@ -85,6 +86,17 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
             </MenubarItem>
             <MenubarItem onSelect={() => props.onPlayerView(!props.playerView)}>
               {props.playerView ? "Leave player view" : "Player view"}
+            </MenubarItem>
+          </MenubarContent>
+        </MenubarMenu>
+        <MenubarMenu>
+          <MenubarTrigger className="h-8 px-3 text-xs">AI</MenubarTrigger>
+          <MenubarContent>
+            <MenubarItem onSelect={props.onOpenDiagnostics}>
+              AI Reasoning Diagnostics
+            </MenubarItem>
+            <MenubarItem onSelect={() => props.onOpenHelp("ai-assistant")}>
+              AI Help & Documentation
             </MenubarItem>
           </MenubarContent>
         </MenubarMenu>
