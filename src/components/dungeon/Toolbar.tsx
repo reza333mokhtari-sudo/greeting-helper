@@ -137,15 +137,33 @@ export function Toolbar(props: Props) {
 
         <Separator orientation={props.vertical ? "horizontal" : "vertical"} className={props.vertical ? "my-1 w-7 mx-auto" : "mx-1 h-7"} />
 
-        <Button variant="ghost" size="icon" className="size-9" aria-label="Zoom out" onClick={() => props.onZoom(-1)}>
-          <ZoomOut className="size-4" />
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="icon" className="size-9" aria-label="Zoom out" onClick={() => props.onZoom(-1)}>
+              <ZoomOut className="size-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side={props.vertical ? "left" : "top"} className="flex items-center gap-2">
+            <span>Zoom Out</span>
+            <span className="text-[10px] opacity-60 font-mono">(-)</span>
+          </TooltipContent>
+        </Tooltip>
+
         <span className={`text-center text-[10px] tabular-nums text-muted-foreground ${props.vertical ? "py-1" : "w-10"}`}>
           {Math.round(props.zoom * 100)}%
         </span>
-        <Button variant="ghost" size="icon" className="size-9" aria-label="Zoom in" onClick={() => props.onZoom(1)}>
-          <ZoomIn className="size-4" />
-        </Button>
+
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="icon" className="size-9" aria-label="Zoom in" onClick={() => props.onZoom(1)}>
+              <ZoomIn className="size-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side={props.vertical ? "left" : "top"} className="flex items-center gap-2">
+            <span>Zoom In</span>
+            <span className="text-[10px] opacity-60 font-mono">(+)</span>
+          </TooltipContent>
+        </Tooltip>
 
       </div>
     </TooltipProvider>

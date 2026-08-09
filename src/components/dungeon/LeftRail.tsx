@@ -5,19 +5,19 @@ import type { LucideIcon } from "lucide-react";
 
 export type PanelId = "settings" | "floors" | "layers" | "props" | "ai" | "fog" | "history" | "properties" | "diagnostics" | "help" | "graphics" | "cms" | "maps";
 
-const PANELS: { id: PanelId; label: string; icon: LucideIcon }[] = [
-  { id: "settings", label: "Tool & map settings", icon: Sliders },
-  { id: "graphics", label: "Graphics & camera", icon: Monitor },
-  { id: "maps", label: "My Maps", icon: MapIcon },
-  { id: "floors", label: "Floors & connections", icon: Building2 },
-  { id: "layers", label: "Layers", icon: Layers },
-  { id: "props", label: "Props & textures", icon: Image },
-  { id: "ai", label: "AI assistant", icon: Sparkles },
-  { id: "fog", label: "Fog of war", icon: CloudFog },
-  { id: "history", label: "History", icon: History },
-  { id: "properties", label: "Properties", icon: Info },
-  { id: "help", label: "Quick help", icon: HelpCircle },
-  { id: "diagnostics", label: "Performance diagnostics", icon: Activity },
+const PANELS: { id: PanelId; label: string; icon: LucideIcon; shortcut?: string }[] = [
+  { id: "settings", label: "Tool & map settings", icon: Sliders, shortcut: "Alt+S" },
+  { id: "graphics", label: "Graphics & camera", icon: Monitor, shortcut: "Alt+G" },
+  { id: "maps", label: "My Maps", icon: MapIcon, shortcut: "Alt+M" },
+  { id: "floors", label: "Floors & connections", icon: Building2, shortcut: "Alt+F" },
+  { id: "layers", label: "Layers", icon: Layers, shortcut: "Alt+L" },
+  { id: "props", label: "Props & textures", icon: Image, shortcut: "Alt+P" },
+  { id: "ai", label: "AI assistant", icon: Sparkles, shortcut: "Alt+A" },
+  { id: "fog", label: "Fog of war", icon: CloudFog, shortcut: "Alt+W" },
+  { id: "history", label: "History", icon: History, shortcut: "Alt+H" },
+  { id: "properties", label: "Properties", icon: Info, shortcut: "Alt+I" },
+  { id: "help", label: "Quick help", icon: HelpCircle, shortcut: "F1" },
+  { id: "diagnostics", label: "Performance diagnostics", icon: Activity, shortcut: "Alt+D" },
   { id: "cms", label: "CMS Pages", icon: FileText },
 ];
 
@@ -51,7 +51,10 @@ export function LeftRail({ active, onSelect, animationIntensity = 2 }: Props) {
                   <Icon className={`size-[18px] transition-all duration-500 ease-out group-hover:scale-110 group-hover:rotate-[5deg] group-active:scale-95 ${on ? "animate-in fade-in zoom-in duration-500 spin-in-6" : ""}`} />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent side="right">{p.label}</TooltipContent>
+              <TooltipContent side="right" className="flex items-center gap-2">
+                <span>{p.label}</span>
+                {p.shortcut && <span className="text-[10px] opacity-60 font-mono">({p.shortcut})</span>}
+              </TooltipContent>
             </Tooltip>
           );
         })}
