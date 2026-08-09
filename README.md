@@ -54,12 +54,10 @@ npm run desktop:build
 
 **Production Status**: 
 '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
+                                            
+                                            bun run build
 
-Create a README section with the exact local prerequisites (Rust, required Tauri deps) and troubleshooting for the "program not found" cargo metadata error.
+bun: The term 'bun' is not recognized as a name of a cmdlet, function, script file, or executable program.
 
-Configure a GitHub Actions workflow to install Rust and run `npm run tauri build` so production desktop builds succeed automatically.
-
-Implement a preflight check in the build script that fails with a clear message if `cargo` is not found, including install instructions.
-
-Add steps to install the Rust toolchain (cargo) and verify it with `cargo --version` before running `npm run tauri build`.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
 
