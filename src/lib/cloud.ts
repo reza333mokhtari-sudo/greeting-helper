@@ -32,8 +32,9 @@ export async function listMaps(): Promise<MapRow[]> {
 }
 
 export async function loadMap(id: string): Promise<{ name: string; doc: Doc }> {
-  const { data, error } = await supabase.from("maps").select("name,doc").eq("id", id).single();
+  const { data, error } = await supabase.from("maps").select("name,doc").eq("id", id).maybeSingle();
   if (error) throw error;
+  if (!data) throw new Error("Map not found");
   return { name: data.name as string, doc: data.doc as unknown as Doc };
 }
 

@@ -1671,6 +1671,7 @@ export function DungeonEditor() {
             staged={aiPreview}
             floorName={doc.floors.find((f) => f.id === doc.activeFloorId)?.name ?? "Ground floor"}
             onOpenHelp={openHelp}
+            onOpenDiagnostics={() => setLeftPanel("diagnostics")}
           />
         );
       case "fog":

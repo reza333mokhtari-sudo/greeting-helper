@@ -27,7 +27,7 @@ export function AuthDialog({ open, onOpenChange, reason }: Props) {
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: window.location.origin,
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       });
 
