@@ -236,9 +236,9 @@ export function DungeonEditor() {
     }
   });
   useHotkeys('r', () => setTool('rect'));
-  useHotkeys('b', () => setTool('path'));
+  useHotkeys('b', () => setTool('brush'));
   useHotkeys('p', () => setTool('poly'));
-  useHotkeys('e', () => setTool('erase'));
+  useHotkeys('e', () => setTool('eraseBrush'));
   useHotkeys('d', () => setTool('door'));
   useHotkeys('s', () => setTool('stairs'));
   useHotkeys('l', () => setTool('light'));

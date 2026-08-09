@@ -9,6 +9,7 @@ import { deleteAsset, listAssets, updateAsset, uploadAsset, type AssetRow } from
 import { preloadImages } from "@/lib/dungeon/assets";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
