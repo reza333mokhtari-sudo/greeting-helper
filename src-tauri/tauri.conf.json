@@ -1,65 +1,33 @@
 {
+  "productName": "DungeonScrawl",
+  "version": "0.1.0",
+  "identifier": "com.dungeonscrawl.app",
   "build": {
-    "beforeBuildCommand": "bun run build",
     "beforeDevCommand": "bun run dev",
-    "devPath": "http://localhost:8080",
-    "distDir": "../dist"
+    "beforeBuildCommand": "bun run build",
+    "devUrl": "http://localhost:8080",
+    "frontendDist": "../dist"
   },
-  "package": {
-    "productName": "DungeonScrawl",
-    "version": "0.1.0"
-  },
-  "tauri": {
-    "allowlist": {
-      "all": true
-    },
-    "bundle": {
-      "active": true,
-      "category": "DeveloperTool",
-      "copyright": "",
-      "deb": {
-        "depends": []
-      },
-      "externalBin": [],
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ],
-      "identifier": "com.dungeonscrawl.app",
-      "longDescription": "",
-      "macOS": {
-        "entitlements": null,
-        "exceptionDomain": "",
-        "frameworks": [],
-        "providerBundleIdentifier": null,
-        "signingIdentity": null
-      },
-      "resources": [],
-      "shortDescription": "",
-      "targets": "all",
-      "windows": {
-        "certificateThumbprint": null,
-        "digestAlgorithm": "sha256",
-        "timestampServer": ""
-      }
-    },
-    "security": {
-      "csp": null
-    },
-    "updater": {
-      "active": false
-    },
+  "app": {
     "windows": [
       {
-        "fullscreen": false,
+        "title": "Dungeon Scrawl",
+        "width": 1200,
         "height": 800,
         "resizable": true,
-        "title": "Dungeon Scrawl",
-        "width": 1200
+        "fullscreen": false
       }
+    ]
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
     ]
   }
 }
