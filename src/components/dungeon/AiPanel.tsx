@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Sparkles, Loader2, WifiOff, Cpu, Settings2, RotateCcw, Save, Maximize2, Minimize2, HelpCircle } from "lucide-react";
+import { Sparkles, Loader2, Maximize2, HelpCircle, Settings2, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 
 import { suggestMap, AI_ENGINES, SYSTEM_PROMPT, type AiSuggestion, type AiEngine } from "@/lib/ai.functions";
@@ -8,40 +8,7 @@ import type { Doc } from "@/lib/dungeon/model";
 import { useOnlineStatus } from "@/hooks/use-online-status";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { dialog } from "@/lib/dialog";
-
-type Mode = "rooms" | "encounter" | "hatching" | "refine";
-
-
-const MODES: { id: Mode; label: string; placeholder: string; chips: string[] }[] = [
-  {
-    id: "rooms",
-    label: "Suggest rooms",
-    placeholder: "e.g. A small crypt with 4 rooms and a secret vault",
-    chips: ["Small 6-room crypt", "Dungeon for level 3 party", "Wizard tower ground floor"],
-  },
-  {
-    id: "encounter",
-    label: "Encounters",
-    placeholder: "Level 3 party, undead theme, one trap and one social encounter",
-    chips: ["Level 3, undead", "Non-combat puzzle", "Boss fight finale"],
-  },
-  {
-    id: "hatching",
-    label: "Wall / hatching style",
-    placeholder: "Old hand-inked style, heavy hatching, rough walls",
-    chips: ["Hand-inked, heavy hatch", "Clean blueprint", "Weathered parchment"],
-  },
-  {
-    id: "refine",
-    label: "Refine this map",
-    placeholder: "Make the corridors tighter and add a secret vault",
-    chips: ["Add a secret vault", "Add doors and lighting", "Make it more symmetrical"],
-  },
-];
 
 /** Short text summary so the model can reason about the current map. */
 function summarise(doc: Doc): string {
