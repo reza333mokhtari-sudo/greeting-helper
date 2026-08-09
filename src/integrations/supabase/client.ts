@@ -31,12 +31,37 @@ function createSupabaseClient() {
   const SUPABASE_URL = import.meta.env['VITE_SUPABASE_URL'];
   const SUPABASE_PUBLISHABLE_KEY = import.meta.env['VITE_SUPABASE_PUBLISHABLE_KEY'];
 
+  // If environment variables are missing, we provide a dummy client that warns instead of crashing.
+  // This prevents the black screen / boot deadlock while preserving the security constraint.
   if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
-    const message = "Missing Supabase configuration. Please ensure VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY are set in your environment variables.";
-    console.error(`[Supabase] ${message}`);
+    console.warn(
+      "[Supabase] Missing configuration. App will run in limited local mode. " +
+      "Connect Supabase in Lovable Cloud to enable Auth and Cloud Sync."
+    );
     
-    // In development, we want to fail fast. In production, this will crash the app until fixed.
-    throw new Error(message);
+    // Return a proxy that fails gracefully on actual calls rather than on boot
+    return new Proxy({} as any, {
+      get(_, prop) {
+        if (prop === 'auth') {
+          return {
+            getSession: async () => ({ data: { session: null }, error: null }),
+            onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
+            getUser: async () => ({ data: { user: null }, error: null }),
+          };
+        }
+        if (prop === 'from') return () => ({
+          select: () => ({
+            order: () => ({
+              limit: () => Promise.resolve({ data: [], error: { message: 'Supabase not configured', code: 'CONFIG_ERROR' } })
+            })
+          }),
+          insert: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured', code: 'CONFIG_ERROR' } }),
+          update: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured', code: 'CONFIG_ERROR' } }),
+          delete: () => Promise.resolve({ data: null, error: { message: 'Supabase not configured', code: 'CONFIG_ERROR' } }),
+        });
+        return () => {};
+      }
+    });
   }
 
   return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {

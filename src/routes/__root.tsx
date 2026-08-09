@@ -47,14 +47,18 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
 
+  const isSupabaseError = error.message?.includes("Supabase configuration");
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          Something went wrong
+          {isSupabaseError ? "Configuration Required" : "Something went wrong"}
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          An unexpected error occurred on the server.
+          {isSupabaseError 
+            ? "Your project is not connected to a backend. Please connect Supabase in the Lovable editor to enable all features."
+            : "An unexpected error occurred. Please try refreshing the page."}
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
@@ -66,12 +70,14 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           >
             Try again
           </button>
-          <a
-            href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
-          >
-            Return to Editor
-          </a>
+          {!isSupabaseError && (
+            <a
+              href="/"
+              className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+            >
+              Return to Editor
+            </a>
+          )}
         </div>
       </div>
     </div>
