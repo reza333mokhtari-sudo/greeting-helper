@@ -13,12 +13,8 @@ export function initSentryServer() {
 
   Sentry.init({
     dsn,
-    integrations: [
-      nodeProfilingIntegration(),
-    ],
     // Performance Monitoring
     tracesSampleRate: 1.0,
-    profilesSampleRate: 1.0,
     environment: process.env['NODE_ENV'],
   });
 
