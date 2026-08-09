@@ -3,6 +3,7 @@ import { ImagePlus, Search, Star, Tag, Trash2, Wand2, Palette, Image as ImageIco
 import { toast } from "sonner";
 import { dialog } from "@/lib/dialog";
 import { useVirtualizer } from "@tanstack/react-virtual";
+import imageCompression from "browser-image-compression";
 
 import { supabase } from "@/integrations/supabase/client";
 import { deleteAsset, listAssets, updateAsset, uploadAsset, type AssetRow } from "@/lib/cloud";
@@ -71,7 +72,16 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
       let failed = 0;
       for (let i = 0; i < images.length; i++) {
         try {
-          await uploadAsset(images[i]!, "prop", license);
+          let fileToUpload = images[i]!;
+          // Compress if over 1MB
+          if (fileToUpload.size > 1024 * 1024) {
+            fileToUpload = await imageCompression(fileToUpload, {
+              maxSizeMB: 1,
+              maxWidthOrHeight: 2048,
+              useWebWorker: true
+            });
+          }
+          await uploadAsset(fileToUpload, "prop", license);
         } catch {
           failed++;
         }
