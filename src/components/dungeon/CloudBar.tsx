@@ -203,7 +203,30 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
 
   return (
     <div className="flex items-center gap-2">
-      {statusIndicator}
+      <TooltipProvider delayDuration={0}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className="flex items-center gap-1 group">
+              {statusIndicator}
+              <Button
+                size="icon"
+                variant="ghost"
+                className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  save();
+                }}
+                disabled={busy}
+              >
+                <RefreshCw className={`h-3 w-3 ${busy ? "animate-spin" : ""}`} />
+              </Button>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="bottom" className="text-[10px] px-2 py-1">
+            <p>Sync now</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
 
       <Input value={name} onChange={(e) => setName(e.target.value)} className="h-7 w-40 text-xs" placeholder="Map name" />
       <Button size="sm" className="h-7 text-xs" disabled={busy} onClick={save}>

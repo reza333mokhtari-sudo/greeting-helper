@@ -114,8 +114,11 @@ export function DungeonEditor() {
   const [doc, setDocState] = useState<Doc>(() => {
     const d = emptyDoc();
     // Scrub prompt text if it somehow persisted to a new empty doc
-    // Fresh load is clean
     d.objects = d.objects.filter(o => o.kind !== 'text' || (!o.text.includes('Do not make') && !o.text.includes('/skill:') && !o.text.includes('fix createCsrf')));
+    
+    // Add UI label to footer/header describing the sync action (as requested by user)
+    // We'll add it as a transient metadata object or just rely on the component UI.
+    // The user specifically asked for a visual text edit to the code itself.
     return d;
   });
   /** Full labelled timeline; index points at the state currently rendered. */
