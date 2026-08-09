@@ -1,4 +1,4 @@
-import { type Doc, type Pt, uid, DEFAULT_LAYER_FOR } from "../model";
+import { type Doc, type Pt, uid, DEFAULT_LAYER_FOR, type Shape, type MapObject } from "../model";
 
 export type RoomTemplate = {
   w: number;
@@ -11,20 +11,34 @@ export type RoomTemplate = {
  */
 export function generateRoom(doc: Doc, pos: Pt, template: RoomTemplate): Doc {
   const { gridSize } = doc.settings;
-  const id = uid("s");
-  
-  const newShape = {
-    id,
-    kind: "rect" as const,
-    erase: false,
-    a: { x: pos.x, y: pos.y },
-    b: { x: pos.x + template.w * gridSize, y: pos.y + template.h * gridSize },
-  };
+  const shapes: Shape[] = [...doc.shapes];
+  const objects: MapObject[] = [...doc.objects];
+  const noteLayer = doc.layers.find((l) => l.id === DEFAULT_LAYER_FOR.text)?.id ?? doc.layers[0]!.id;
 
-  return {
-    ...doc,
-    shapes: [...doc.shapes, newShape],
-  };
+  const a = { x: pos.x, y: pos.y };
+  const b = { x: pos.x + template.w * gridSize, y: pos.y + template.h * gridSize };
+  
+  shapes.push({
+    id: uid("s"),
+    kind: "rect",
+    erase: false,
+    a,
+    b,
+  });
+
+  if (template.name) {
+    objects.push({
+      id: uid("o"),
+      layerId: noteLayer,
+      kind: "text",
+      x: (a.x + b.x) / 2,
+      y: (a.y + b.y) / 2,
+      text: template.name,
+      size: Math.max(12, gridSize * 0.5),
+    });
+  }
+
+  return { ...doc, shapes, objects };
 }
 
 /**
@@ -34,7 +48,7 @@ export function generateCorridor(doc: Doc, start: Pt, end: Pt, width: number = 1
   const { gridSize } = doc.settings;
   const id = uid("s");
   
-  // Simple L-shaped corridor or straight line
+  // Simple L-shaped corridor
   const newShape = {
     id,
     kind: "poly" as const,
