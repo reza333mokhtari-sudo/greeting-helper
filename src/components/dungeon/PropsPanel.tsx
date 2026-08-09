@@ -346,12 +346,37 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
                               <ContextMenuItem onClick={() => onPlace(a.url, a.name)}>
                                 Place on Map
                               </ContextMenuItem>
-                              {/* ... (rest of context menu remains similar) */}
+                              <ContextMenuItem onClick={() => toggleFav(a)}>
+                                <Star className={`mr-2 size-3.5 ${a.favorite ? "fill-current" : ""}`} /> 
+                                {a.favorite ? "Unfavorite" : "Favorite"}
+                              </ContextMenuItem>
+                              <ContextMenuItem onClick={() => editTags(a)}>
+                                <Tag className="mr-2 size-3.5" /> Edit Tags
+                              </ContextMenuItem>
+                              <ContextMenuItem 
+                                className="text-destructive focus:text-destructive"
+                                onClick={async () => {
+                                  if (await dialog.confirm({
+                                    title: "Delete Prop",
+                                    message: `Delete "${a.name}"? This cannot be undone.`,
+                                    confirmText: "Delete",
+                                    variant: "danger"
+                                  })) {
+                                    await deleteAsset(a.id);
+                                    refresh();
+                                  }
+                                }}
+                              >
+                                <Trash2 className="mr-2 size-3.5" /> Delete
+                              </ContextMenuItem>
                             </ContextMenuContent>
                           </ContextMenu>
                           <div className="flex items-center justify-between px-1 pb-0.5">
                             <span className="block truncate text-[9px] text-muted-foreground">{a.name}</span>
                           </div>
+                          {a.favorite && (
+                            <Star className="absolute left-0.5 top-0.5 h-3 w-3 fill-current text-accent" />
+                          )}
                         </div>
                       ))}
                     </div>
@@ -359,43 +384,6 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
                 })}
               </div>
             </ScrollArea>
-                  <div className="absolute right-0.5 top-0.5 hidden flex-col gap-0.5 group-hover:flex">
-                    <button
-                      type="button"
-                      aria-label="Toggle favourite"
-                      className="rounded bg-background/85 p-0.5 text-accent"
-                      onClick={() => toggleFav(a)}
-                    >
-                      <Star className={`h-3 w-3 ${a.favorite ? "fill-current" : ""}`} />
-                    </button>
-                    <button type="button" aria-label="Edit tags" className="rounded bg-background/85 p-0.5" onClick={() => editTags(a)}>
-                      <Tag className="h-3 w-3" />
-                    </button>
-                    <button
-                      type="button"
-                      aria-label="Delete prop"
-                      className="rounded bg-background/85 p-0.5 text-destructive"
-                      onClick={async () => {
-                        if (await dialog.confirm({
-                          title: "Delete Prop",
-                          message: `Delete "${a.name}"? This cannot be undone.`,
-                          confirmText: "Delete",
-                          variant: "danger"
-                        })) {
-                          await deleteAsset(a.id);
-                          refresh();
-                        }
-                      }}
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </button>
-                  </div>
-                  {a.favorite && (
-                    <Star className="absolute left-0.5 top-0.5 h-3 w-3 fill-current text-accent group-hover:hidden" />
-                  )}
-                </div>
-              ))}
-            </div>
           )}
         </>
       )}
