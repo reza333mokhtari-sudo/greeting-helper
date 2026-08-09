@@ -72,7 +72,9 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
   }, [email, refresh]);
 
   const save = async () => {
-    if (!email) {
+    // Check auth status every save to ensure we aren't using a stale state
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
       // Manual save for local users
       setInternalSyncStatus("saving");
       try {
