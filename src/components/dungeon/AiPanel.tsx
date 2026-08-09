@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Sparkles, Loader2, WifiOff, Cpu, Settings2, RotateCcw, Save, Maximize2, Minimize2, HelpCircle } from "lucide-react";
+import { Sparkles, Loader2, Maximize2, HelpCircle, Settings2, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 
 import { suggestMap, AI_ENGINES, SYSTEM_PROMPT, type AiSuggestion, type AiEngine } from "@/lib/ai.functions";
@@ -8,40 +8,7 @@ import type { Doc } from "@/lib/dungeon/model";
 import { useOnlineStatus } from "@/hooks/use-online-status";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { dialog } from "@/lib/dialog";
-
-type Mode = "rooms" | "encounter" | "hatching" | "refine";
-
-
-const MODES: { id: Mode; label: string; placeholder: string; chips: string[] }[] = [
-  {
-    id: "rooms",
-    label: "Suggest rooms",
-    placeholder: "e.g. A small crypt with 4 rooms and a secret vault",
-    chips: ["Small 6-room crypt", "Dungeon for level 3 party", "Wizard tower ground floor"],
-  },
-  {
-    id: "encounter",
-    label: "Encounters",
-    placeholder: "Level 3 party, undead theme, one trap and one social encounter",
-    chips: ["Level 3, undead", "Non-combat puzzle", "Boss fight finale"],
-  },
-  {
-    id: "hatching",
-    label: "Wall / hatching style",
-    placeholder: "Old hand-inked style, heavy hatching, rough walls",
-    chips: ["Hand-inked, heavy hatch", "Clean blueprint", "Weathered parchment"],
-  },
-  {
-    id: "refine",
-    label: "Refine this map",
-    placeholder: "Make the corridors tighter and add a secret vault",
-    chips: ["Add a secret vault", "Add doors and lighting", "Make it more symmetrical"],
-  },
-];
 
 /** Short text summary so the model can reason about the current map. */
 function summarise(doc: Doc): string {
@@ -86,21 +53,15 @@ type Props = {
 };
 
 export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp }: Props) {
-
   const run = useServerFn(suggestMap);
   const online = useOnlineStatus();
-  const [mode, setMode] = useState<Mode>("rooms");
   const [engine, setEngine] = useState<AiEngine>("balanced");
-  const [fixedSize, setFixedSize] = useState(true);
   const [prompt, setPrompt] = useState("");
   const [busy, setBusy] = useState(false);
   const [showEditor, setShowEditor] = useState(false);
   const [customSystem, setCustomSystem] = useState(() => localStorage.getItem("ai-cartographer-system") || SYSTEM_PROMPT);
   const [result, setResult] = useState<AiSuggestion | null>(null);
   const [history, setHistory] = useState<Turn[]>([]);
-
-  const hasGeometry = (s: AiSuggestion) =>
-    s.rooms.length > 0 || s.corridors.length > 0 || s.objects.length > 0 || Object.keys(s.settings).length > 0;
 
   const ask = async (text?: string) => {
     const q = (text ?? prompt).trim();
@@ -117,39 +78,33 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
         data: {
           prompt: q,
           summary: summarise(doc),
-          mode,
           engine,
           gridSize: doc.settings.gridSize,
-           history: history.slice(-6),
+          history: history.slice(-6),
           customSystem: customSystem !== SYSTEM_PROMPT ? customSystem : undefined,
-          fixedSize,
         },
       });
       setResult(res);
-      if (hasGeometry(res)) {
+      if (res.rooms.length > 0 || res.corridors.length > 0 || res.objects.length > 0) {
         onPreview(res);
         toast.info("Preview staged — accept or reject it on the canvas.");
       }
       setHistory((h) => [...h.slice(-4), { role: "user", content: q }, { role: "assistant", content: res.notes || "(layout returned)" }]);
       setPrompt("");
-      // AI check: if the model returned raw canvas text that looks like a prompt instruction, remove it.
-      if (res.objects.some(o => o.kind === 'text' && (o.text?.includes('Do not make any') || o.text?.includes('/skill:')))) {
-        res.objects = res.objects.filter(o => o.kind !== 'text' || (!o.text?.includes('Do not make any') && !o.text?.includes('/skill:')));
-      }
     } catch (e) {
       const msg = e instanceof Error ? e.message : "AI request failed";
-      toast.error(
-        msg.includes("402")
-          ? "AI credits exhausted — add credits to keep generating."
-          : msg.includes("429")
-            ? "Too many AI requests, try again shortly."
-            : msg,
-      );
+      toast.error(msg);
     }
     setBusy(false);
   };
 
-  const active = MODES.find((m) => m.id === mode)!;
+  const SUGGESTED_CHIPS = [
+    "How do I zoom and pan?",
+    "Show me the Room tool",
+    "How do I place props?",
+    "Suggest a small 4-room crypt layout",
+    "Where is the eraser?",
+  ];
 
   return (
     <section className="flex h-full flex-col gap-3">
@@ -218,7 +173,7 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
                 Ask me how to use the editor, find props, or suggest a layout.
               </p>
               <div className="grid grid-cols-1 gap-1.5">
-                {active.chips.map((c) => (
+                {SUGGESTED_CHIPS.map((c) => (
                   <button
                     key={c}
                     onClick={() => {
@@ -251,7 +206,7 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
             <div className="space-y-2 rounded-lg border border-border/60 bg-card/60 p-2.5 animate-in fade-in zoom-in-95">
               {result.notes && <div className="text-[11px] leading-relaxed text-muted-foreground whitespace-pre-wrap">{result.notes}</div>}
               
-              {hasGeometry(result) && !staged && (
+              {(result.rooms.length > 0 || result.corridors.length > 0 || result.objects.length > 0) && !staged && (
                 <Button size="sm" variant="secondary" className="h-7 w-full gap-1.5 text-[10px]" onClick={() => onPreview(result)}>
                   <Maximize2 className="h-3 w-3" /> Preview suggestion on map
                 </Button>
