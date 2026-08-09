@@ -199,8 +199,8 @@ export function DungeonEditor() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => setIsLoggedIn(!!data.session));
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setIsLoggedIn(!!s));
+    supabase.auth.getSession().then(({ data }: any) => setIsLoggedIn(!!data.session));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e: any, s: any) => setIsLoggedIn(!!s));
     return () => sub.subscription.unsubscribe();
   }, []);
 

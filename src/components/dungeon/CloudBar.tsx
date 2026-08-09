@@ -42,8 +42,8 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
 
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => setEmail(data.session?.user.email ?? null));
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setEmail(s?.user.email ?? null));
+    supabase.auth.getSession().then(({ data }: any) => setEmail(data.session?.user.email ?? null));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e: any, s: any) => setEmail(s?.user.email ?? null));
     return () => sub.subscription.unsubscribe();
   }, []);
 
@@ -53,9 +53,9 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
       setIsAdmin(false);
       return;
     }
-    supabase.auth.getUser().then(({ data }) => {
+    supabase.auth.getUser().then(({ data }: any) => {
       if (!data.user) return;
-      supabase.rpc("has_role", { _user_id: data.user.id, _role: "admin" }).then(({ data: ok }) => setIsAdmin(!!ok));
+      supabase.rpc("has_role", { _user_id: data.user.id, _role: "admin" }).then(({ data: ok }: any) => setIsAdmin(!!ok));
     });
   }, [email]);
 
