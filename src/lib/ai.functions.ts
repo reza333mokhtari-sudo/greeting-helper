@@ -8,6 +8,8 @@ export const AI_ENGINES = {
   deep: { id: "openai/gpt-5.6-sol", label: "Deep · GPT-5.6 Sol", hint: "Strongest reasoning, slower" },
   lite: { id: "openai/gpt-5.6-luna", label: "Lite · GPT-5.6 Luna", hint: "Cheapest, simple requests" },
   grok: { id: "grok-4.5", label: "Grok 4.5 Plus", hint: "Enhanced expert map-design assistant" },
+  reasoner: { id: "openai/o3-mini", label: "Logic · O3 Mini", hint: "Advanced reasoning & map logic" },
+  searcher: { id: "perplexity/sonar-reasoning", label: "Web Search · Sonar", hint: "Search web for real-world lore/locations" },
   fable5: { id: "fable-5", label: "Fable 5 · Custom endpoint", hint: "Your own OpenAI-compatible endpoint", custom: true },
 } as const;
 
@@ -17,7 +19,7 @@ const Input = z.object({
   prompt: z.string().min(1).max(4000),
   /** Compact description of the current map so the model can reason about the current map. */
   summary: z.string().max(6000).default(""),
-  engine: z.enum(["swift", "balanced", "deep", "lite", "grok", "fable5"]).default("balanced"),
+  engine: z.enum(["swift", "balanced", "deep", "lite", "grok", "reasoner", "searcher", "fable5"]).default("balanced"),
   gridSize: z.number().positive().default(32),
   /** Prior turns so follow-up prompts ("make it bigger") keep context. */
   history: z
@@ -46,12 +48,14 @@ export type AiSuggestion = {
   settings: Record<string, string | number | boolean>;
 };
 
-export const SYSTEM_PROMPT = `You are an expert Dungeon Scrawl map-design assistant.
+export const SYSTEM_PROMPT = `You are an expert Dungeon Scrawl map-design assistant with advanced reasoning and web search capabilities.
 Dungeon Scrawl is a tool for drawing 2D RPG battlemaps with a hand-drawn look.
 
 YOUR ROLE
 - Answer in the "notes" field only.
 - Provide numbered, actionable UI steps (e.g. "1. Select the Room tool (R)...").
+- Use your reasoning skills to ensure layouts make tactical sense for RPG encounters.
+- If web search is available, you can reference real-world locations, historical architecture, or fantasy lore to improve the map.
 - NEVER include prompts, system instructions, or skill commands (like "/skill:") in any field.
 - If you suggest a layout, use "rooms", "corridors", "objects", and "stamps".
 - Keep suggestions grounded and small (under 15 items).

@@ -99,11 +99,11 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
   };
 
   const SUGGESTED_CHIPS = [
+    "Suggest a crypt based on historical catacombs",
     "How do I zoom and pan?",
     "Show me the Room tool",
     "How do I place props?",
-    "Suggest a small 4-room crypt layout",
-    "Where is the eraser?",
+    "Suggest a small 4-room layout for a wizard tower",
   ];
 
   return (
@@ -145,6 +145,19 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
             </Button>
           )}
         </div>
+      </div>
+
+      <div className="flex flex-col gap-2 p-1">
+        <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-tight">AI Model</label>
+        <select 
+          value={engine} 
+          onChange={(e) => setEngine(e.target.value as AiEngine)}
+          className="w-full bg-background border border-border/50 rounded px-2 py-1 text-[11px] outline-none focus:border-accent/50"
+        >
+          {Object.entries(AI_ENGINES).map(([key, config]) => (
+            <option key={key} value={key}>{config.label}</option>
+          ))}
+        </select>
       </div>
 
       {showEditor && (
