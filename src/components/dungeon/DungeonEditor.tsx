@@ -1999,9 +1999,11 @@ export function DungeonEditor() {
         onOpenChange={setHelpOpen} 
         initialSectionId={helpSection} 
       />
+      <AuthDialog open={authOpen} onOpenChange={setAuthOpen} reason={authReason} />
     </div>
   );
 }
+
 
 
 
