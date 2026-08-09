@@ -53,7 +53,6 @@ type Props = {
 };
 
 export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp }: Props) {
-
   const run = useServerFn(suggestMap);
   const online = useOnlineStatus();
   const [engine, setEngine] = useState<AiEngine>("balanced");
