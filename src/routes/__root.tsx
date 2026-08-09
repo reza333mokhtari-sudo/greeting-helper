@@ -118,9 +118,11 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <TooltipProvider delayDuration={200}>
-          <DialogProvider>{children}</DialogProvider>
-        </TooltipProvider>
+        <DesktopProvider>
+          <TooltipProvider delayDuration={200}>
+            <DialogProvider>{children}</DialogProvider>
+          </TooltipProvider>
+        </DesktopProvider>
         <Toaster position="top-center" richColors />
         <OfflineOverlay />
         <Scripts />
