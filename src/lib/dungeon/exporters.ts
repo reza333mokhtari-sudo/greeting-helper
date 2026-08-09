@@ -29,10 +29,10 @@ function maskBody(doc: Doc, stroke: number): string {
   return doc.shapes.map((s) => shapeGeom(s, stroke, s.erase ? "#000000" : "#ffffff")).join("");
 }
 
-function objectSvg(o: MapObject, doc: Doc): string {
+function objectSvg(o: MapObject, doc: Doc, extraScale: number = 1): string {
   const { wallColor, floorColor, inkColor } = doc.settings;
   const rot = o.kind === "door" || o.kind === "stairs" ? ` rotate(${n((o.angle * 180) / Math.PI)})` : "";
-  const open = `<g transform="translate(${n(o.x)} ${n(o.y)})${rot}">`;
+  const open = `<g transform="translate(${n(o.x)} ${n(o.y)})${rot} scale(${n(extraScale)})">`;
   const text = (t: string, y: number, size: number, fill: string, weight = 600) =>
     t
       ? `<text x="0" y="${n(y)}" font-family="${FONT}" font-size="${n(size)}" font-weight="${weight}" fill="${fill}" text-anchor="middle" dominant-baseline="middle">${esc(t)}</text>`
@@ -99,12 +99,13 @@ export function docToSvg(doc: Doc, pad = 60): string {
         : `<pattern id="grid" width="${n(s.gridSize)}" height="${n(s.gridSize)}" patternUnits="userSpaceOnUse"><circle cx="0" cy="0" r="1.6" fill="${s.gridColor}"/></pattern>`;
 
   const layerById = new Map(doc.layers.map((l) => [l.id, l]));
+  const globalObjScale = s.objectRenderScale || 1;
   const objs = objectsInDrawOrder(doc)
     .filter((o) => (layerById.get(o.layerId)?.visible ?? true) && o.kind !== "light")
     .map((o) => {
       const l = layerById.get(o.layerId);
       const op = l && l.opacity < 1 ? ` opacity="${n(l.opacity)}"` : "";
-      return `<g${op} data-layer="${esc(l?.name ?? "")}">${objectSvg(o, doc)}</g>`;
+      return `<g${op} data-layer="${esc(l?.name ?? "")}">${objectSvg(o, doc, globalObjScale)}</g>`;
     })
     .join("");
 
