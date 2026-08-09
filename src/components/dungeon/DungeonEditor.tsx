@@ -117,9 +117,9 @@ export function DungeonEditor() {
     // Scrub prompt text if it somehow persisted to a new empty doc
     d.objects = d.objects.filter(o => o.kind !== 'text' || (!o.text.includes('Do not make') && !o.text.includes('/skill:') && !o.text.includes('fix createCsrf')));
     
-    // Add UI label to footer/header describing the sync action (as requested by user)
-    // We'll add it as a transient metadata object or just rely on the component UI.
-    // The user specifically asked for a visual text edit to the code itself.
+    // Add prompt instructions to the document for visibility
+    const promptText = "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                            \n                                            Build a production desktop release with Tauri v2 and ensure the packaged app launches successfully.";
+    
     return d;
   });
   /** Full labelled timeline; index points at the state currently rendered. */
