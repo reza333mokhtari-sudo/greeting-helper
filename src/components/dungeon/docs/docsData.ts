@@ -119,6 +119,6 @@ The AI Assistant is designed to help you build maps faster.
 - **Preview**: If the AI suggests a layout, click **Preview** to see a ghost of the changes on your canvas.
 - **Grounding**: The AI is trained on this editor's tools. Ask "How do I pan?" or "What does the Poly tool do?" for instant answers.
 
-    **Production Status**: Stabilized web build. Use standard `npm run build` for production.`,
+**Production Status**: Stabilized web build. Use standard \`npm run build\` for production.`,
   },
 ];
