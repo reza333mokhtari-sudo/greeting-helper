@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Sparkles } from "lucide-react";
+import { Sparkles, AlertCircle, X } from "lucide-react";
 import { toast } from "sonner";
+import { useHotkeys } from "react-hotkeys-hook";
+import { useAutosave } from "@/hooks/use-autosave";
 
 import { Button } from "@/components/ui/button";
 import { dialog } from "@/lib/dialog";
@@ -186,6 +188,13 @@ export function DungeonEditor() {
   const [helpOpen, setHelpOpen] = useState(false);
   const [helpSection, setHelpSection] = useState<string | null>(null);
 
+  const { hasDraft, recoverDraft, discardDraft } = useAutosave(doc, (draft) => {
+    setDocState(draft);
+    setTimeline([{ doc: draft, label: "Recovered draft", at: Date.now() }]);
+    hIndexRef.current = 0;
+    setHIndex(0);
+  });
+
   const openHelp = useCallback((sectionId?: string) => {
     setHelpSection(sectionId || "quick-start");
     setHelpOpen(true);
@@ -217,9 +226,28 @@ export function DungeonEditor() {
     }
   }, [isLoggedIn]);
 
-
-
-
+  // Hotkeys
+  useHotkeys('ctrl+z, cmd+z', (e) => { e.preventDefault(); undo(); });
+  useHotkeys('ctrl+y, cmd+y, ctrl+shift+z, cmd+shift+z', (e) => { e.preventDefault(); redo(); });
+  useHotkeys('backspace, delete', () => {
+    if (selected.length) {
+      commit((d) => ({ ...d, objects: d.objects.filter(o => !selected.includes(o.id)) }), "Delete objects");
+      setSelected([]);
+    }
+  });
+  useHotkeys('r', () => setTool('rect'));
+  useHotkeys('b', () => setTool('brush'));
+  useHotkeys('p', () => setTool('poly'));
+  useHotkeys('e', () => setTool('eraseBrush'));
+  useHotkeys('d', () => setTool('door'));
+  useHotkeys('s', () => setTool('stairs'));
+  useHotkeys('l', () => setTool('light'));
+  useHotkeys('t', () => setTool('text'));
+  useHotkeys('v', () => setTool('select'));
+  useHotkeys('space', (e) => {
+    if (!e.repeat) setSpaceDown(true);
+  }, { keydown: true });
+  useHotkeys('space', () => setSpaceDown(false), { keyup: true });
   // Debounce rapid history pushes with the same label into a single snapshot.
   const pendingHistory = useRef<{ value: Doc; label: string } | null>(null);
   const historyTimer = useRef<number | null>(null);
@@ -1991,6 +2019,20 @@ export function DungeonEditor() {
         </div>
         
         <OnboardingOverlay />
+        
+        {hasDraft && (
+          <div className="fixed bottom-12 left-1/2 z-[100] -translate-x-1/2 animate-in fade-in slide-in-from-bottom-2">
+            <div className="flex items-center gap-3 rounded-full border border-accent/30 bg-background/95 px-4 py-2 shadow-lg backdrop-blur-md">
+              <AlertCircle className="h-4 w-4 text-accent" />
+              <span className="text-xs font-medium">Unsaved draft detected</span>
+              <div className="flex gap-2">
+                <Button size="sm" className="h-7 text-[10px]" onClick={recoverDraft}>Recover</Button>
+                <Button size="sm" variant="ghost" className="h-7 text-[10px]" onClick={discardDraft}>Discard</Button>
+              </div>
+              <Button size="icon" variant="ghost" className="h-6 w-6 ml-1" onClick={discardDraft}><X className="h-3 w-3" /></Button>
+            </div>
+          </div>
+        )}
       </div>
 
 

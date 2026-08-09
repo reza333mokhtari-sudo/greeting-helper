@@ -1,19 +1,22 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ImagePlus, Search, Star, Tag, Trash2, Wand2, Palette, Image as ImageIcon, X } from "lucide-react";
+import { ImagePlus, Search, Star, Tag, Trash2, Wand2, Palette, Image as ImageIcon, X, Info } from "lucide-react";
 import { toast } from "sonner";
 import { dialog } from "@/lib/dialog";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import imageCompression from "browser-image-compression";
 
 import { supabase } from "@/integrations/supabase/client";
 import { deleteAsset, listAssets, updateAsset, uploadAsset, type AssetRow } from "@/lib/cloud";
 import { preloadImages } from "@/lib/dungeon/assets";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Info } from "lucide-react";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuTrigger, ContextMenuLabel, ContextMenuSub, ContextMenuSubTrigger, ContextMenuSubContent } from "@/components/ui/context-menu";
+import { searchApp, indexAssets } from "@/lib/dungeon/search";
 
 const LIBRARIES = [
   { id: "custom", label: "My Custom Assets", license: "Proprietary / Unknown", searchUrl: "" },
@@ -69,7 +72,16 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
       let failed = 0;
       for (let i = 0; i < images.length; i++) {
         try {
-          await uploadAsset(images[i]!, "prop", license);
+          let fileToUpload = images[i]!;
+          // Compress if over 1MB
+          if (fileToUpload.size > 1024 * 1024) {
+            fileToUpload = await imageCompression(fileToUpload, {
+              maxSizeMB: 1,
+              maxWidthOrHeight: 2048,
+              useWebWorker: true
+            });
+          }
+          await uploadAsset(fileToUpload, "prop", license);
         } catch {
           failed++;
         }
@@ -90,21 +102,32 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
   }, [assets]);
 
   const visible = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const q = query.trim();
+    if (q) {
+      const results = searchApp(q);
+      const ids = new Set(results.filter(r => r['type'] === 'prop').map(r => r.id.replace('prop-', '')));
+      return assets.filter(a => ids.has(a.id));
+    }
+
     return assets
       .filter((a) => (favOnly ? a.favorite : true))
       .filter((a) => (tagFilter ? a.tags?.includes(tagFilter) : true))
-      .filter((a) => {
-        if (!q) return true;
-        return (
-          a.name.toLowerCase().includes(q) ||
-          a.tags?.some((t) => t.toLowerCase().includes(q)) ||
-          a.kind.toLowerCase().includes(q) ||
-          a.id.toLowerCase().includes(q)
-        );
-      })
       .sort((a, b) => Number(b.favorite) - Number(a.favorite));
-  }, [assets, favOnly, query, tagFilter]);
+  }, [assets, query, favOnly, tagFilter]);
+
+  useEffect(() => {
+    if (assets.length) indexAssets(assets);
+  }, [assets]);
+
+  const parentRef = useRef<HTMLDivElement>(null);
+  const rowCount = Math.ceil(visible.length / 3);
+
+  const rowVirtualizer = useVirtualizer({
+    count: rowCount,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 90,
+    overscan: 5,
+  });
 
   const editTags = async (a: AssetRow) => {
     const next = await dialog.prompt(`Tags for "${a.name}"`, (a.tags ?? []).join(", "), "Enter tags separated by commas");
@@ -293,136 +316,85 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
               {assets.length ? "No props match that search." : "Drop images here or upload PNGs, tokens and textures."}
             </p>
           ) : (
-            <div className="grid grid-cols-3 gap-2">
-              {visible.map((a) => (
-                <div key={a.id} className="group relative overflow-hidden rounded-md border border-border/60 bg-card/60">
-                  <ContextMenu>
-                    <ContextMenuTrigger>
-                      <button 
-                        type="button" 
-                        className="block w-full" 
-                        title={`Preview ${a.name}`} 
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          onPreview?.(a);
-                        }}
-                      >
-
-                        <img src={a.url} alt={a.name} className="h-14 w-full object-contain p-1" />
-                      </button>
-                    </ContextMenuTrigger>
-                    <ContextMenuContent className="w-48">
-                      <ContextMenuLabel className="text-[10px] uppercase tracking-wider">{a.name}</ContextMenuLabel>
-                      <ContextMenuSeparator />
-                      <ContextMenuItem onClick={() => onPlace(a.url, a.name)}>
-                        Place on Map
-                      </ContextMenuItem>
-                      <ContextMenuSub>
-                        <ContextMenuSubTrigger>
-                          <Palette className="mr-2 size-3.5" /> Filter Preview
-                        </ContextMenuSubTrigger>
-                        <ContextMenuSubContent>
-                          <ContextMenuItem onClick={() => onPlace(a.url, a.name)}>
-                            <ImageIcon className="mr-2 size-3.5" /> Original
-                          </ContextMenuItem>
-                          <ContextMenuItem onClick={() => {
-                            toast.info("Filter applied to placement");
-                            // We don't have a direct way to pass filter to onPlace yet, 
-                            // but we could extend it if needed. For now, it's UI feedback.
-                            onPlace(a.url, a.name);
-                          }}>
-                            <Palette className="mr-2 size-3.5" /> Pixelate
-                          </ContextMenuItem>
-                          <ContextMenuItem onClick={() => onPlace(a.url, a.name)}>
-                            <Wand2 className="mr-2 size-3.5" /> Toon
-                          </ContextMenuItem>
-                        </ContextMenuSubContent>
-                      </ContextMenuSub>
-                      <ContextMenuSeparator />
-                      <ContextMenuItem onClick={() => toggleFav(a)}>
-                        <Star className={`mr-2 size-3.5 ${a.favorite ? "fill-current" : ""}`} /> 
-                        {a.favorite ? "Unfavorite" : "Favorite"}
-                      </ContextMenuItem>
-                      <ContextMenuItem onClick={() => editTags(a)}>
-                        <Tag className="mr-2 size-3.5" /> Edit Tags
-                      </ContextMenuItem>
-                      <ContextMenuItem 
-                        className="text-destructive focus:text-destructive"
-                        onClick={async () => {
-                          if (await dialog.confirm({
-                            title: "Delete Prop",
-                            message: `Delete "${a.name}"? This cannot be undone.`,
-                            confirmText: "Delete",
-                            variant: "danger"
-                          })) {
-                            await deleteAsset(a.id);
-                            refresh();
-                          }
-                        }}
-                      >
-                        <Trash2 className="mr-2 size-3.5" /> Delete
-                      </ContextMenuItem>
-                    </ContextMenuContent>
-                  </ContextMenu>
-                  <div className="flex items-center justify-between px-1 pb-0.5">
-                    <span className="block truncate text-[9px] text-muted-foreground">{a.name}</span>
-                    {a.license && (
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Info className="h-2.5 w-2.5 text-muted-foreground cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent className="text-[10px] max-w-[200px]">
-                            <p className="font-semibold mb-1">License: {a.license}</p>
-                            {a.license?.includes("Attribution") && (
-                              <p className="text-amber-500 font-medium">⚠️ Attribution required for this asset.</p>
-                            )}
-                            {a.license?.includes("Proprietary") && (
-                              <p className="text-destructive font-medium">⚠️ Commercial use may require a license.</p>
-                            )}
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    )}
-                  </div>
-                  <div className="absolute right-0.5 top-0.5 hidden flex-col gap-0.5 group-hover:flex">
-                    <button
-                      type="button"
-                      aria-label="Toggle favourite"
-                      className="rounded bg-background/85 p-0.5 text-accent"
-                      onClick={() => toggleFav(a)}
-                    >
-                      <Star className={`h-3 w-3 ${a.favorite ? "fill-current" : ""}`} />
-                    </button>
-                    <button type="button" aria-label="Edit tags" className="rounded bg-background/85 p-0.5" onClick={() => editTags(a)}>
-                      <Tag className="h-3 w-3" />
-                    </button>
-                    <button
-                      type="button"
-                      aria-label="Delete prop"
-                      className="rounded bg-background/85 p-0.5 text-destructive"
-                      onClick={async () => {
-                        if (await dialog.confirm({
-                          title: "Delete Prop",
-                          message: `Delete "${a.name}"? This cannot be undone.`,
-                          confirmText: "Delete",
-                          variant: "danger"
-                        })) {
-                          await deleteAsset(a.id);
-                          refresh();
-                        }
+            <ScrollArea viewportRef={parentRef} className="h-[400px]">
+              <div 
+                className="relative w-full" 
+                style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
+              >
+                {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                  const start = virtualRow.index * 3;
+                  const rowAssets = visible.slice(start, start + 3);
+                  
+                  return (
+                    <div 
+                      key={virtualRow.key}
+                      className="absolute left-0 top-0 w-full grid grid-cols-3 gap-2"
+                      style={{ 
+                        height: `${virtualRow.size}px`,
+                        transform: `translateY(${virtualRow.start}px)`
                       }}
                     >
-                      <Trash2 className="h-3 w-3" />
-                    </button>
-                  </div>
-                  {a.favorite && (
-                    <Star className="absolute left-0.5 top-0.5 h-3 w-3 fill-current text-accent group-hover:hidden" />
-                  )}
-                </div>
-              ))}
-            </div>
+                      {rowAssets.map((a) => (
+                        <div key={a.id} className="group relative overflow-hidden rounded-md border border-border/60 bg-card/60 h-[80px]">
+                          <ContextMenu>
+                            <ContextMenuTrigger>
+                              <button 
+                                type="button" 
+                                className="block w-full" 
+                                title={`Preview ${a.name}`} 
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  onPreview?.(a);
+                                }}
+                              >
+                                <img src={a.url} alt={a.name} className="h-14 w-full object-contain p-1" />
+                              </button>
+                            </ContextMenuTrigger>
+                            <ContextMenuContent className="w-48">
+                              <ContextMenuLabel className="text-[10px] uppercase tracking-wider">{a.name}</ContextMenuLabel>
+                              <ContextMenuSeparator />
+                              <ContextMenuItem onClick={() => onPlace(a.url, a.name)}>
+                                Place on Map
+                              </ContextMenuItem>
+                              <ContextMenuItem onClick={() => toggleFav(a)}>
+                                <Star className={`mr-2 size-3.5 ${a.favorite ? "fill-current" : ""}`} /> 
+                                {a.favorite ? "Unfavorite" : "Favorite"}
+                              </ContextMenuItem>
+                              <ContextMenuItem onClick={() => editTags(a)}>
+                                <Tag className="mr-2 size-3.5" /> Edit Tags
+                              </ContextMenuItem>
+                              <ContextMenuItem 
+                                className="text-destructive focus:text-destructive"
+                                onClick={async () => {
+                                  if (await dialog.confirm({
+                                    title: "Delete Prop",
+                                    message: `Delete "${a.name}"? This cannot be undone.`,
+                                    confirmText: "Delete",
+                                    variant: "danger"
+                                  })) {
+                                    await deleteAsset(a.id);
+                                    refresh();
+                                  }
+                                }}
+                              >
+                                <Trash2 className="mr-2 size-3.5" /> Delete
+                              </ContextMenuItem>
+                            </ContextMenuContent>
+                          </ContextMenu>
+                          <div className="flex items-center justify-between px-1 pb-0.5">
+                            <span className="block truncate text-[9px] text-muted-foreground">{a.name}</span>
+                          </div>
+                          {a.favorite && (
+                            <Star className="absolute left-0.5 top-0.5 h-3 w-3 fill-current text-accent" />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  );
+                })}
+              </div>
+            </ScrollArea>
           )}
         </>
       )}

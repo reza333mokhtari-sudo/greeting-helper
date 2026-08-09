@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as MSlugRouteImport } from './routes/m.$slug'
 import { Route as PSlugRouteImport } from './routes/p.$slug'
+import { Route as ApiAiChatRouteImport } from './routes/api/ai/chat'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -46,6 +47,11 @@ const PSlugRoute = PSlugRouteImport.update({
   path: '/p/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAiChatRoute = ApiAiChatRouteImport.update({
+  id: '/api/ai/chat',
+  path: '/api/ai/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/m/$slug': typeof MSlugRoute
   '/p/$slug': typeof PSlugRoute
+  '/api/ai/chat': typeof ApiAiChatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/m/$slug': typeof MSlugRoute
   '/p/$slug': typeof PSlugRoute
+  '/api/ai/chat': typeof ApiAiChatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,13 +79,27 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/m/$slug': typeof MSlugRoute
   '/p/$slug': typeof PSlugRoute
+  '/api/ai/chat': typeof ApiAiChatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/admin' | '/auth' | '/reset-password' | '/m/$slug' | '/p/$slug'
+    | '/'
+    | '/admin'
+    | '/auth'
+    | '/reset-password'
+    | '/m/$slug'
+    | '/p/$slug'
+    | '/api/ai/chat'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/auth' | '/reset-password' | '/m/$slug' | '/p/$slug'
+  to:
+    | '/'
+    | '/admin'
+    | '/auth'
+    | '/reset-password'
+    | '/m/$slug'
+    | '/p/$slug'
+    | '/api/ai/chat'
   id:
     | '__root__'
     | '/'
@@ -86,6 +108,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/m/$slug'
     | '/p/$slug'
+    | '/api/ai/chat'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -95,6 +118,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   MSlugRoute: typeof MSlugRoute
   PSlugRoute: typeof PSlugRoute
+  ApiAiChatRoute: typeof ApiAiChatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -141,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/ai/chat': {
+      id: '/api/ai/chat'
+      path: '/api/ai/chat'
+      fullPath: '/api/ai/chat'
+      preLoaderRoute: typeof ApiAiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -151,6 +182,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   MSlugRoute: MSlugRoute,
   PSlugRoute: PSlugRoute,
+  ApiAiChatRoute: ApiAiChatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
