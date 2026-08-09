@@ -89,18 +89,13 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
 
   const run = useServerFn(suggestMap);
   const online = useOnlineStatus();
-  const [mode, setMode] = useState<Mode>("rooms");
   const [engine, setEngine] = useState<AiEngine>("balanced");
-  const [fixedSize, setFixedSize] = useState(true);
   const [prompt, setPrompt] = useState("");
   const [busy, setBusy] = useState(false);
   const [showEditor, setShowEditor] = useState(false);
   const [customSystem, setCustomSystem] = useState(() => localStorage.getItem("ai-cartographer-system") || SYSTEM_PROMPT);
   const [result, setResult] = useState<AiSuggestion | null>(null);
   const [history, setHistory] = useState<Turn[]>([]);
-
-  const hasGeometry = (s: AiSuggestion) =>
-    s.rooms.length > 0 || s.corridors.length > 0 || s.objects.length > 0 || Object.keys(s.settings).length > 0;
 
   const ask = async (text?: string) => {
     const q = (text ?? prompt).trim();
@@ -117,39 +112,33 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
         data: {
           prompt: q,
           summary: summarise(doc),
-          mode,
           engine,
           gridSize: doc.settings.gridSize,
-           history: history.slice(-6),
+          history: history.slice(-6),
           customSystem: customSystem !== SYSTEM_PROMPT ? customSystem : undefined,
-          fixedSize,
         },
       });
       setResult(res);
-      if (hasGeometry(res)) {
+      if (res.rooms.length > 0 || res.corridors.length > 0 || res.objects.length > 0) {
         onPreview(res);
         toast.info("Preview staged — accept or reject it on the canvas.");
       }
       setHistory((h) => [...h.slice(-4), { role: "user", content: q }, { role: "assistant", content: res.notes || "(layout returned)" }]);
       setPrompt("");
-      // AI check: if the model returned raw canvas text that looks like a prompt instruction, remove it.
-      if (res.objects.some(o => o.kind === 'text' && (o.text?.includes('Do not make any') || o.text?.includes('/skill:')))) {
-        res.objects = res.objects.filter(o => o.kind !== 'text' || (!o.text?.includes('Do not make any') && !o.text?.includes('/skill:')));
-      }
     } catch (e) {
       const msg = e instanceof Error ? e.message : "AI request failed";
-      toast.error(
-        msg.includes("402")
-          ? "AI credits exhausted — add credits to keep generating."
-          : msg.includes("429")
-            ? "Too many AI requests, try again shortly."
-            : msg,
-      );
+      toast.error(msg);
     }
     setBusy(false);
   };
 
-  const active = MODES.find((m) => m.id === mode)!;
+  const SUGGESTED_CHIPS = [
+    "How do I zoom and pan?",
+    "Show me the Room tool",
+    "How do I place props?",
+    "Suggest a small 4-room crypt layout",
+    "Where is the eraser?",
+  ];
 
   return (
     <section className="flex h-full flex-col gap-3">
@@ -218,7 +207,7 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
                 Ask me how to use the editor, find props, or suggest a layout.
               </p>
               <div className="grid grid-cols-1 gap-1.5">
-                {active.chips.map((c) => (
+                {SUGGESTED_CHIPS.map((c) => (
                   <button
                     key={c}
                     onClick={() => {
@@ -251,7 +240,7 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
             <div className="space-y-2 rounded-lg border border-border/60 bg-card/60 p-2.5 animate-in fade-in zoom-in-95">
               {result.notes && <div className="text-[11px] leading-relaxed text-muted-foreground whitespace-pre-wrap">{result.notes}</div>}
               
-              {hasGeometry(result) && !staged && (
+              {(result.rooms.length > 0 || result.corridors.length > 0 || result.objects.length > 0) && !staged && (
                 <Button size="sm" variant="secondary" className="h-7 w-full gap-1.5 text-[10px]" onClick={() => onPreview(result)}>
                   <Maximize2 className="h-3 w-3" /> Preview suggestion on map
                 </Button>
