@@ -97,18 +97,18 @@ export function Toolbar(props: Props) {
                   aria-label={t.label}
                   aria-pressed={active}
                   onClick={() => props.onTool(t.id)}
-                  className={active ? "size-9 shadow-[var(--shadow-arcane)]" : "size-9 text-foreground/70"}
+                  className={`size-9 group relative transition-all duration-300 ${active ? "shadow-[var(--shadow-arcane)] scale-110" : "text-foreground/70 hover:text-foreground hover:bg-muted"}`}
                 >
                   <svg
                     viewBox="0 0 24 24"
-                    className="size-[18px]"
+                    className={`size-[18px] animated-icon transition-transform duration-500 group-hover:scale-110 group-active:scale-95 ${active ? "animate-icon-pulse" : ""}`}
                     fill="none"
                     stroke="currentColor"
                     strokeWidth={1.7}
                     strokeLinejoin="round"
                     strokeLinecap="round"
                   >
-                    <path d={t.icon} />
+                    <path d={t.icon} className="transition-all duration-700 ease-in-out" />
                   </svg>
                 </Button>
               </TooltipTrigger>

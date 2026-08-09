@@ -193,3 +193,30 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+@keyframes icon-pulse {
+  0% { transform: scale(1); filter: drop-shadow(0 0 0px var(--primary)); }
+  50% { transform: scale(1.05); filter: drop-shadow(0 0 8px var(--primary)); }
+  100% { transform: scale(1); filter: drop-shadow(0 0 0px var(--primary)); }
+}
+
+.animate-icon-pulse {
+  animation: icon-pulse 2s infinite ease-in-out;
+}
+
+svg.animated-icon path,
+svg.animated-icon circle,
+svg.animated-icon rect {
+  transition: all 0.3s ease;
+}
+
+.group:hover svg.animated-icon path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 0;
+  animation: dash 1.5s ease-in-out;
+}
+
+@keyframes dash {
+  from { stroke-dashoffset: 100; }
+  to { stroke-dashoffset: 0; }
+}
