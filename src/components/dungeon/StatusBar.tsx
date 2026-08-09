@@ -50,6 +50,11 @@ export function StatusBar(props: Props) {
         <span className="tabular-nums">{statusLabel[saveStatus]}</span>
       </div>
       <span className="ml-1 truncate text-muted-foreground/70">{props.saved}</span>
+      <Separator orientation="vertical" className="h-4" />
+      <span className="flex items-center gap-1.5 text-[10px] text-muted-foreground/60" title="AI Memory is disabled for this session">
+        <span className="size-1 rounded-full bg-muted-foreground/40" />
+        Memory: Static
+      </span>
       <div className="ml-auto flex items-center gap-1">
         <Button variant="ghost" size="icon" className="size-6" aria-label="Zoom out" onClick={() => props.onZoom(-1)}>
           <ZoomOut className="size-3.5" />

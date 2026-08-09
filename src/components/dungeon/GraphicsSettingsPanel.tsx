@@ -150,13 +150,23 @@ export function GraphicsSettingsPanel({ settings: s, onChange }: Props) {
         </Button>
       </section>
 
+      <Separator className="opacity-50" />
+
       <div className="rounded-md bg-muted/30 p-2.5 text-[10px] leading-relaxed text-muted-foreground border border-border/40">
         <p className="font-medium text-foreground/80 mb-1 flex items-center gap-1.5">
           <Activity className="size-3" /> Tools Engineer Note
         </p>
-        Camera Mode interaction is now stabilized. Use the <span className="text-primary font-bold">View Cube</span> to orient the view. 
-        Main editing remains in a stable top-down 2D plane for maximum precision.
-        Use <kbd className="bg-muted px-1 rounded text-[9px]">Space+Drag</kbd> to pan the map.
+        <p className="mb-2">
+          Camera Mode interaction is now stabilized. Main editing remains in a stable top-down 2D plane for maximum precision.
+          Use <kbd className="bg-muted px-1 rounded text-[9px]">Space+Drag</kbd> to pan the map.
+        </p>
+        <Separator className="my-2 opacity-30" />
+        <p className="flex items-center gap-1.5 font-medium text-emerald-500/90">
+          <span className="size-1.5 rounded-full bg-emerald-500" /> Persistent Memory Disabled
+        </p>
+        <p className="mt-1 text-muted-foreground/80">
+          AI interactions and editor patterns are processed in real-time. No context is saved between sessions to ensure maximum privacy and project performance.
+        </p>
       </div>
     </section>
   );
