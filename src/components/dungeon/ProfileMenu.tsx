@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { User, Settings, HelpCircle, LifeBuoy, X, Send, Loader2, MessageSquare } from "lucide-react";
+import { User, Settings, HelpCircle, LifeBuoy, X, Send, Loader2, MessageSquare, LogOut } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -194,8 +194,11 @@ export function ProfileMenu() {
             </div>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-48">
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuContent align="end" className="w-56">
+          <DropdownMenuLabel className="flex flex-col">
+            <span>My Account</span>
+            {user && <span className="text-[10px] font-normal text-muted-foreground truncate">{user.email}</span>}
+          </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => setActiveDialog("settings")}>
             <Settings className="mr-2 h-4 w-4" /> Settings
@@ -209,7 +212,22 @@ export function ProfileMenu() {
           <DropdownMenuItem onClick={() => setActiveDialog("support")}>
             <LifeBuoy className="mr-2 h-4 w-4" /> Support
           </DropdownMenuItem>
+          {user && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem 
+                className="text-destructive focus:text-destructive"
+                onClick={() => {
+                  supabase.auth.signOut();
+                  toast.success("Signed out");
+                }}
+              >
+                <LogOut className="mr-2 h-4 w-4" /> Sign Out
+              </DropdownMenuItem>
+            </>
+          )}
         </DropdownMenuContent>
+
       </DropdownMenu>
 
       <Dialog open={!!activeDialog} onOpenChange={(o) => !o && setActiveDialog(null)}>
