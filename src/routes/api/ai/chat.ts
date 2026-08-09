@@ -21,7 +21,7 @@ export const Route = createFileRoute('/api/ai/chat')({
 
         // Perform RAG with mini-search
         const searchResults = searchApp(prompt).slice(0, 5);
-        const context = searchResults.map(r => `[${r.type}] ${r.title}: ${r.content}`).join('\n');
+        const context = searchResults.map(r => `[${r['type']}] ${r['title']}: ${r['content']}`).join('\n');
 
         const modelId = engine === 'fast' ? 'gpt-4o-mini' : 'gpt-4o'; // Map to actual models if needed
 
@@ -34,7 +34,7 @@ export const Route = createFileRoute('/api/ai/chat')({
           ],
         });
 
-        return result.toDataStreamResponse();
+        return result.toTextStreamResponse();
       }
     }
   }

@@ -1,9 +1,11 @@
-import { useState } from "react";
-import { useServerFn } from "@tanstack/react-start";
-import { Sparkles, Loader2, Maximize2, HelpCircle, Settings2, RotateCcw } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { useChat } from "@ai-sdk/react";
+import { Sparkles, Loader2, Maximize2, HelpCircle, Settings2, RotateCcw, Send } from "lucide-react";
 import { toast } from "sonner";
+import DOMPurify from "dompurify";
+import ReactMarkdown from "react-markdown";
 
-import { suggestMap, AI_ENGINES, SYSTEM_PROMPT, type AiSuggestion, type AiEngine } from "@/lib/ai.functions";
+import { AI_ENGINES, SYSTEM_PROMPT, type AiSuggestion, type AiEngine } from "@/lib/ai.functions";
 import type { Doc } from "@/lib/dungeon/model";
 import { useOnlineStatus } from "@/hooks/use-online-status";
 import { Button } from "@/components/ui/button";
@@ -53,49 +55,56 @@ type Props = {
 };
 
 export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp }: Props) {
-  const run = useServerFn(suggestMap);
   const online = useOnlineStatus();
   const [engine, setEngine] = useState<AiEngine>("balanced");
-  const [prompt, setPrompt] = useState("");
-  const [busy, setBusy] = useState(false);
   const [showEditor, setShowEditor] = useState(false);
   const [customSystem, setCustomSystem] = useState(() => localStorage.getItem("ai-cartographer-system") || SYSTEM_PROMPT);
   const [result, setResult] = useState<AiSuggestion | null>(null);
-  const [history, setHistory] = useState<Turn[]>([]);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  const ask = async (text?: string) => {
-    const q = (text ?? prompt).trim();
-    if (!q) return;
+  const { messages, input, handleInputChange, handleSubmit, isLoading, setMessages, append } = useChat({
+    api: '/api/ai/chat',
+    body: {
+      summary: summarise(doc),
+      engine,
+    },
+    onFinish: (message) => {
+      // Try to parse layout if it's hidden in the message or sent via metadata
+      // For now, we assume layout is requested separately if needed, 
+      // or we can parse JSON from the end of the message if the model is instructed to include it.
+      try {
+        const jsonMatch = message.content.match(/```json\n([\s\S]*?)\n```/);
+        if (jsonMatch && jsonMatch[1]) {
+          const parsed = JSON.parse(jsonMatch[1]) as AiSuggestion;
+          if (parsed.rooms || parsed.objects) {
+            setResult(parsed);
+            onPreview(parsed);
+            toast.info("Preview staged from message content");
+          }
+        }
+      } catch (e) {
+        console.warn("Failed to parse AI layout from message", e);
+      }
+    },
+    onError: (err) => {
+      toast.error(err.message || "AI request failed");
+    }
+  });
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
+
+  const ask = async (text: string) => {
     if (!online) {
-      toast.error("You are offline — the AI cartographer needs a connection.");
+      toast.error("You are offline");
       return;
     }
-    setBusy(true);
-    setResult(null);
     onPreview(null);
-    try {
-      const res = await run({
-        data: {
-          prompt: q,
-          summary: summarise(doc),
-          engine,
-          gridSize: doc.settings.gridSize,
-          history: history.slice(-6),
-          customSystem: customSystem !== SYSTEM_PROMPT ? customSystem : undefined,
-        },
-      });
-      setResult(res);
-      if (res.rooms.length > 0 || res.corridors.length > 0 || res.objects.length > 0) {
-        onPreview(res);
-        toast.info("Preview staged — accept or reject it on the canvas.");
-      }
-      setHistory((h) => [...h.slice(-4), { role: "user", content: q }, { role: "assistant", content: res.notes || "(layout returned)" }]);
-      setPrompt("");
-    } catch (e) {
-      const msg = e instanceof Error ? e.message : "AI request failed";
-      toast.error(msg);
-    }
-    setBusy(false);
+    setResult(null);
+    await append({ role: 'user', content: text });
   };
 
   const SUGGESTED_CHIPS = [
@@ -133,13 +142,17 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
           >
             <Settings2 className="h-3.5 w-3.5" />
           </Button>
-          {history.length > 0 && (
+          {messages.length > 0 && (
             <Button
               variant="ghost"
               size="icon"
               className="size-6 text-muted-foreground hover:text-destructive"
               title="Clear Chat"
-              onClick={() => setHistory([])}
+              onClick={() => {
+                setMessages([]);
+                setResult(null);
+                onPreview(null);
+              }}
             >
               <RotateCcw className="h-3.5 w-3.5" />
             </Button>
@@ -180,7 +193,7 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
 
       <ScrollArea className="flex-1 pr-3">
         <div className="space-y-3 py-1">
-          {history.length === 0 && (
+          {messages.length === 0 && (
             <div className="space-y-3">
               <p className="text-[11px] text-muted-foreground italic">
                 Ask me how to use the editor, find props, or suggest a layout.
@@ -189,10 +202,7 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
                 {SUGGESTED_CHIPS.map((c) => (
                   <button
                     key={c}
-                    onClick={() => {
-                      setPrompt(c);
-                      void ask(c);
-                    }}
+                    onClick={() => ask(c)}
                     className="flex items-center gap-2 rounded-md border border-border/50 bg-background/50 px-2.5 py-1.5 text-left text-[11px] text-muted-foreground transition-colors hover:border-accent/40 hover:bg-accent/5 hover:text-foreground"
                   >
                     <Sparkles className="h-3 w-3 text-accent/60" />
@@ -203,17 +213,26 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
             </div>
           )}
 
-          {history.map((t, i) => (
-            <div key={i} className={`flex flex-col gap-1 ${t.role === "user" ? "items-end" : "items-start"}`}>
+          {messages.map((m) => (
+            <div key={m.id} className={`flex flex-col gap-1 ${m.role === "user" ? "items-end" : "items-start"}`}>
               <div className={`max-w-[90%] rounded-lg px-2.5 py-2 text-[11px] leading-relaxed shadow-sm ${
-                t.role === "user" 
+                m.role === "user" 
                   ? "bg-primary text-primary-foreground" 
                   : "bg-muted/80 text-foreground border border-border/40"
               }`}>
-                {t.content}
+                <ReactMarkdown 
+                  className="prose prose-invert prose-xs max-w-none"
+                  components={{
+                    p: ({children}) => <p className="mb-2 last:mb-0">{children}</p>,
+                    code: ({children}) => <code className="bg-black/20 rounded px-1 font-mono text-[10px]">{children}</code>
+                  }}
+                >
+                  {DOMPurify.sanitize(m.content)}
+                </ReactMarkdown>
               </div>
             </div>
           ))}
+          <div ref={scrollRef} />
 
           {result && (
             <div className="space-y-2 rounded-lg border border-border/60 bg-card/60 p-2.5 animate-in fade-in zoom-in-95">
@@ -259,7 +278,7 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
               )}
             </div>
           )}
-          {busy && (
+          {isLoading && messages[messages.length - 1]?.role !== 'assistant' && (
             <div className="flex items-center gap-2 text-[10px] text-muted-foreground animate-pulse">
               <Loader2 className="h-3 w-3 animate-spin" /> Thinking...
             </div>
@@ -267,15 +286,16 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
         </div>
       </ScrollArea>
 
-      <div className="space-y-2 pt-2 border-t">
+      <form onSubmit={handleSubmit} className="space-y-2 pt-2 border-t">
         <div className="relative">
           <Textarea
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
+            value={input}
+            onChange={handleInputChange}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
-                void ask();
+                const form = e.currentTarget.form;
+                if (form) form.requestSubmit();
               }
             }}
             placeholder="Ask a question..."
@@ -284,17 +304,17 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
           />
           <Button 
             size="icon" 
+            type="submit"
             className="absolute right-1.5 top-1.5 size-7 rounded-md" 
-            disabled={busy || !prompt.trim() || !online} 
-            onClick={() => void ask()}
+            disabled={isLoading || !input.trim() || !online} 
           >
-            {busy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
+            {isLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
           </Button>
         </div>
         <p className="text-center text-[9px] text-muted-foreground">
           {!online ? "You are offline" : "Press Enter to send"}
         </p>
-      </div>
+      </form>
     </section>
   );
 }
