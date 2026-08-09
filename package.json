@@ -8,7 +8,7 @@
     "tauri": "tauri",
     "desktop": "tauri dev",
     "build": "vite build",
-    "desktop:build": "tauri build",
+    "desktop:build": "node scripts/preflight-build.js",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
