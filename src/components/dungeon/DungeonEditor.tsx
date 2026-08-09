@@ -1211,18 +1211,33 @@ export function DungeonEditor() {
                 kind: "door",
                 x: o.x * g,
                 y: o.y * g,
-                rot: 0,
+                angle: 0,
+                size: g,
                 variant: "door",
                 layerId: doorLayer,
+              });
+            } else if (o.kind === "text") {
+              objects.push({
+                id: uid("t"),
+                kind: "text",
+                x: o.x * g,
+                y: o.y * g,
+                layerId: noteLayer,
+                text: o.text || o.name || "Text",
+                size: 12,
               });
             } else {
               objects.push({
                 id: uid("o"),
-                kind: o.kind === "text" ? "text" : "npc",
+                kind: "npc",
                 x: o.x * g,
                 y: o.y * g,
-                layerId: o.kind === "text" ? noteLayer : propLayer,
-                ...(o.kind === "text" ? { text: o.text || o.name || "Text", size: 12 } : { name: o.name || o.kind, rot: 0 }),
+                layerId: propLayer,
+                name: o.name || o.kind,
+                r: g / 3,
+                color: "#ff0000",
+                label: (o.name || o.kind).slice(0, 1),
+                hostile: false,
               });
             }
           }
