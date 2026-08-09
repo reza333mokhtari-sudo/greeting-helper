@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { ProfileMenu } from "./ProfileMenu";
+import { useDesktop } from "@/hooks/use-desktop";
 import {
   Menubar,
   MenubarContent,
@@ -35,9 +36,13 @@ type Props = {
 };
 
 export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => void }) {
+  const { isDesktop } = useDesktop();
+  
   return (
     <header className="relative flex h-11 shrink-0 items-center gap-2 border-b border-border bg-sidebar px-2">
-      <span className="px-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-arcane">Scrawl</span>
+      <span className="px-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-arcane">
+        {isDesktop ? "Dungeon Scrawl Desktop" : "Scrawl"}
+      </span>
       <Menubar className="h-8 border-0 bg-transparent p-0 shadow-none">
 
         <MenubarMenu>
@@ -97,6 +102,12 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
             <MenubarItem disabled className="text-xs py-1">D / S — Door / Stairs</MenubarItem>
             <MenubarItem disabled className="text-xs py-1">E — Toggle Erase</MenubarItem>
             <MenubarItem disabled className="text-xs py-1">Space — Pan View</MenubarItem>
+            {isDesktop && (
+              <>
+                <MenubarSeparator />
+                <MenubarItem disabled className="text-xs py-1 opacity-70 italic">Desktop App v0.1.0</MenubarItem>
+              </>
+            )}
           </MenubarContent>
         </MenubarMenu>
       </Menubar>
