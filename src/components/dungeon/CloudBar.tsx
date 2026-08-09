@@ -72,22 +72,22 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
   const save = async () => {
     if (!email) {
       // Manual save for local users
-      setSyncStatus("saving");
+      setInternalSyncStatus("saving");
       try {
         localStorage.setItem("dungeon-scrawl-doc-v1", JSON.stringify(doc));
         setLocalLastSaved(Date.now());
-        setSyncStatus("synced");
-        setTimeout(() => setSyncStatus("idle"), 2000);
+        setInternalSyncStatus("synced");
+        setTimeout(() => setInternalSyncStatus("idle"), 2000);
         toast.success("Map saved locally");
       } catch (e) {
-        setSyncStatus("error");
+        setInternalSyncStatus("error");
         toast.error("Local save failed");
       }
       return;
     }
 
     setBusy(true);
-    setSyncStatus("saving");
+    setInternalSyncStatus("saving");
     try {
       if (current) {
         await updateMap(current.id, { name, doc, thumbnail_url: thumbnail() });
@@ -97,15 +97,16 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
         setCurrent(row);
         toast.success("Map saved to the cloud");
       }
-      setSyncStatus("synced");
-      setTimeout(() => setSyncStatus("idle"), 2000);
+      setInternalSyncStatus("synced");
+      setTimeout(() => setInternalSyncStatus("idle"), 2000);
       refresh();
     } catch (e) {
-      setSyncStatus("error");
+      setInternalSyncStatus("error");
       toast.error(e instanceof Error ? e.message : "Save failed");
     }
     setBusy(false);
   };
+
 
 
   const open_ = async (row: MapRow) => {
