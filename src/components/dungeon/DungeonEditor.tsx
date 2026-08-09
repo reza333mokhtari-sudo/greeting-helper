@@ -1758,6 +1758,7 @@ export function DungeonEditor() {
         showGrid={doc.settings.gridStyle !== "none"}
         onShowGrid={(v) => setSettings({ gridStyle: v ? "square" : "none" })}
         onOpenHelp={openHelp}
+        onOpenDiagnostics={() => setLeftPanel("diagnostics")}
         right={<CloudBar doc={syncActiveFloor(doc)} thumbnail={thumbnail} onLoadDoc={(d) => commit(migrateDoc(d))} onAuthRequired={() => requireAuth("Sign in to sync your maps to the cloud and access them from anywhere.", () => {})} saveStatus={saveStatus} />}
       />
 
