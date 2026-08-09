@@ -107,8 +107,10 @@ export type Settings = {
   fogScale: number;
   /** Graphics quality preset. */
   qualityPreset: "low" | "medium" | "high" | "ultra";
-  /** Performance & rendering toggles. */
+  /** Base render scale for the main viewport. */
   renderScale: number;
+  /** Individual object scaling factor (multiplier for all object scales). */
+  objectRenderScale: number;
   antiAliasing: boolean;
   maxTextureSize: number;
   maxDrawDistance: number;
@@ -260,6 +262,7 @@ export const DEFAULT_SETTINGS: Settings = {
   fogScale: 1,
   qualityPreset: "medium",
   renderScale: 1,
+  objectRenderScale: 1,
   antiAliasing: true,
   maxTextureSize: 2048,
   maxDrawDistance: 5000,
