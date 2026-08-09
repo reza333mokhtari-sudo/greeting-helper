@@ -95,7 +95,7 @@ function extractJson(text: string): string {
 }
 
 /** Automated QA check for AI suggestions. */
-function qaCheck(suggestion: AiSuggestion, fixedSize: boolean): AiSuggestion {
+function qaCheck(suggestion: AiSuggestion): AiSuggestion {
   // 1. Validate coordinates and bounds
   const MAX_COORD = 100; // Stay within reasonable bounds
   suggestion.rooms = suggestion.rooms.filter(r => 
@@ -107,15 +107,9 @@ function qaCheck(suggestion: AiSuggestion, fixedSize: boolean): AiSuggestion {
     let w = s.w ?? 15;
     let h = s.h ?? 15;
     
-    // Enforce size rules
-    if (fixedSize) {
-      w = 15;
-      h = 15;
-    } else {
-      // Keep within sane limits even if custom
-      w = Math.max(5, Math.min(100, w));
-      h = Math.max(5, Math.min(100, h));
-    }
+    // Keep within sane limits
+    w = Math.max(5, Math.min(100, w));
+    h = Math.max(5, Math.min(100, h));
 
     return { ...s, w, h };
   }).filter(s => {
@@ -136,7 +130,7 @@ function qaCheck(suggestion: AiSuggestion, fixedSize: boolean): AiSuggestion {
   return suggestion;
 }
 
-function parseJson(text: string, fixedSize: boolean): AiSuggestion {
+function parseJson(text: string): AiSuggestion {
   const raw = JSON.parse(extractJson(text)) as Partial<AiSuggestion>;
   const rooms = Array.isArray(raw.rooms) ? raw.rooms : [];
   const objects = Array.isArray(raw.objects) ? raw.objects : [];
@@ -187,7 +181,7 @@ function parseJson(text: string, fixedSize: boolean): AiSuggestion {
     settings: raw.settings && typeof raw.settings === "object" ? (raw.settings as Record<string, string | number | boolean>) : {},
   };
 
-  return qaCheck(suggestion, fixedSize);
+  return qaCheck(suggestion);
 }
 
 async function getAiModel(engineKey: AiEngine) {
@@ -216,10 +210,8 @@ export const suggestMap = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => Input.parse(input))
   .handler(async ({ data }): Promise<AiSuggestion> => {
     const userTurn = [
-      `Mode: ${data.mode}`,
       `Grid cell size: ${data.gridSize}px`,
       `Current map: ${data.summary || "(empty map)"}`,
-      `Strict 15x15 icon size: ${data.fixedSize ? "Yes" : "No"}`,
       "",
       `Request: ${data.prompt}`,
     ].join("\n");
@@ -267,7 +259,7 @@ export const suggestMap = createServerFn({ method: "POST" })
     let text = "";
     try {
       text = await runAttempt(data.engine);
-      return parseJson(text, data.fixedSize);
+      return parseJson(text);
     } catch (err) {
       console.warn(`Initial AI attempt failed with ${data.engine}, attempting fallback...`, err);
       
@@ -275,7 +267,7 @@ export const suggestMap = createServerFn({ method: "POST" })
       if (data.engine !== 'balanced') {
         try {
           text = await runAttempt('balanced', "The previous model failed. Please provide a reliable response now.");
-          return parseJson(text, data.fixedSize);
+          return parseJson(text);
         } catch (fallbackErr) {
           console.error("Fallback engine also failed", fallbackErr);
         }
@@ -287,7 +279,7 @@ export const suggestMap = createServerFn({ method: "POST" })
           // Repair attempt with original engine or balanced if that's where we are
           const repairEngine = data.engine === 'balanced' ? 'balanced' : 'swift';
           text = await runAttempt(repairEngine, "Your previous reply was not valid JSON. Reply again with ONLY the JSON object.");
-          return parseJson(text, data.fixedSize);
+          return parseJson(text);
         } catch {
           // Final fallback
           return { notes: text.slice(0, 800), rooms: [], corridors: [], objects: [], stamps: [], encounters: [], settings: {} };
