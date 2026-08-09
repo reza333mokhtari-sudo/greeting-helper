@@ -200,23 +200,59 @@
   100% { transform: scale(1); filter: drop-shadow(0 0 0px var(--primary)); }
 }
 
-.animate-icon-pulse {
-  animation: icon-pulse 2s infinite ease-in-out;
+@keyframes dash {
+  from { stroke-dashoffset: 100; }
+  to { stroke-dashoffset: 0; }
 }
 
+/* Base states */
 svg.animated-icon path,
 svg.animated-icon circle,
 svg.animated-icon rect {
   transition: all 0.3s ease;
+  stroke: currentColor;
 }
 
-.group:hover svg.animated-icon path {
+/* Full Intensity (2) */
+[data-animation="2"] .animate-icon-pulse {
+  animation: icon-pulse 2s infinite ease-in-out;
+}
+[data-animation="2"] .group:hover svg.animated-icon path {
   stroke-dasharray: 100;
   stroke-dashoffset: 0;
   animation: dash 1.5s ease-in-out;
 }
 
-@keyframes dash {
-  from { stroke-dashoffset: 100; }
-  to { stroke-dashoffset: 0; }
+/* Subtle Intensity (1) */
+[data-animation="1"] .animate-icon-pulse {
+  animation: icon-pulse 4s infinite ease-in-out;
+  filter: none;
+}
+[data-animation="1"] .group:hover svg.animated-icon {
+  transform: scale(1.05);
+}
+
+/* Off (0) */
+[data-animation="0"] .animate-icon-pulse {
+  animation: none;
+  filter: none;
+}
+[data-animation="0"] .group:hover svg.animated-icon path {
+  animation: none;
+}
+
+/* High Contrast & Accessibility */
+.group:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.group:hover svg.animated-icon,
+.group:focus-visible svg.animated-icon {
+  color: var(--primary);
+}
+
+.dark .group:hover svg.animated-icon,
+.dark .group:focus-visible svg.animated-icon {
+  color: var(--gold);
 }
