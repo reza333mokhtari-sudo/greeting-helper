@@ -23,8 +23,10 @@ These are required for database access, authentication, and cloud syncing.
 - `SUPABASE_PUBLISHABLE_KEY`: (Same as VITE_SUPABASE_PUBLISHABLE_KEY)
 - `SUPABASE_SERVICE_ROLE_KEY`: **CRITICAL** - Required for server functions to bypass RLS for admin tasks. Found in your Lovable Cloud / Supabase settings.
 
-### AI Assistant (Lovable AI Gateway)
+### AI Assistant & Error Logging (AI Gateway / Sentry)
 - `LOVABLE_API_KEY`: Required for AI Cartographer and Grok/O3 integration.
+- `VITE_SENTRY_DSN`: Required for client-side error tracking.
+- `SENTRY_DSN`: Required for server-side error tracking (Edge/Serverless).
 
 ## 3. Deployment Troubleshooting
 
