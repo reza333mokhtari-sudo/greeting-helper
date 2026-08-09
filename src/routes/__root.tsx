@@ -15,6 +15,12 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { DialogProvider } from "@/components/ui/DialogProvider";
 import { OfflineOverlay } from "@/components/OfflineOverlay";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { initSentry } from "../lib/sentry";
+
+// Initialize Sentry for client-side error tracking
+if (typeof window !== "undefined") {
+  initSentry();
+}
 
 function NotFoundComponent() {
   return (
