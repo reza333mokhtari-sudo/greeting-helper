@@ -43,16 +43,32 @@ export async function saveMapToCloud(doc: Doc, name: string) {
   if (!session) throw new Error("Not logged in");
   
   const { data, error } = await supabase
-    .from('maps' as any) // Assuming a maps table exists or will be created
+    .from('maps')
     .upsert({
       name,
-      content: doc,
+      doc: doc as any,
       user_id: session.user.id,
       updated_at: new Date().toISOString()
-    } as any)
+    })
     .select()
     .single();
     
-  if (error) throw error;
+  if (error) {
+    console.error("Cloud save error:", error);
+    throw error;
+  }
+  return data;
+}
+
+export async function listCloudMaps() {
+  const { data, error } = await supabase
+    .from('maps')
+    .select('id, name, updated_at, is_public')
+    .order('updated_at', { ascending: false });
+    
+  if (error) {
+    console.error("Cloud list error:", error);
+    throw error;
+  }
   return data;
 }
