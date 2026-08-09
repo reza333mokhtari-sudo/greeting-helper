@@ -1,6 +1,6 @@
 import MiniSearch from 'minisearch';
 import { DOCS_DATA } from '@/components/dungeon/docs/docsData';
-import { ASSETS_REGISTRY } from './assets';
+import { type AssetRow } from '@/lib/cloud';
 
 export interface SearchResult {
   id: string;
@@ -22,9 +22,7 @@ const miniSearch = new MiniSearch({
 
 let isIndexed = false;
 
-export function ensureIndexed() {
-  if (isIndexed) return;
-
+export function indexAssets(assets: AssetRow[]) {
   const documents: SearchResult[] = [
     ...DOCS_DATA.map(doc => ({
       id: `doc-${doc.id}`,
@@ -33,17 +31,24 @@ export function ensureIndexed() {
       content: doc.content,
       metadata: { sectionId: doc.id }
     })),
-    ...Object.entries(ASSETS_REGISTRY).map(([id, asset]) => ({
-      id: `prop-${id}`,
+    ...assets.map((asset) => ({
+      id: `prop-${asset.id}`,
       type: 'prop' as const,
       title: asset.name,
-      content: `${asset.category} ${asset.tags?.join(' ') || ''}`,
-      metadata: { assetId: id, category: asset.category, url: asset.url }
+      content: `${asset.kind} ${asset.tags?.join(' ') || ''}`,
+      metadata: { assetId: asset.id, category: asset.kind, url: asset.url }
     }))
   ];
 
+  miniSearch.removeAll();
   miniSearch.addAll(documents);
   isIndexed = true;
+}
+
+export function ensureIndexed() {
+  if (isIndexed) return;
+  // Default to just docs if no assets provided yet
+  indexAssets([]);
 }
 
 export function searchApp(query: string) {
