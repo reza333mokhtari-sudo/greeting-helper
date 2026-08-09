@@ -1,43 +1,47 @@
-# Deployment & Debugging Guide
+# Vercel Deployment & Debugging Guide
 
-The build succeeded locally. If your Vercel deployment is failing, it is likely due to missing environment variables or runtime constraints.
+This project is built using **TanStack Start v1** and is optimized for deployment on **Vercel** using the **Edge Runtime**.
 
-## 1. Required Environment Variables
+## 1. Vercel Project Configuration
 
-You must configure these variables in your Vercel project settings (Settings > Environment Variables).
+When importing your repository to Vercel, use these settings:
 
-### Backend (Lovable Cloud / Supabase)
-These are mandatory for database, auth, and cloud sync features.
-- `VITE_SUPABASE_URL`: The URL of your project.
-- `VITE_SUPABASE_PUBLISHABLE_KEY`: The anon/public key.
-- `SUPABASE_URL`: (Server-side) Same as above.
-- `SUPABASE_PUBLISHABLE_KEY`: (Server-side) Same as above.
-- `SUPABASE_SERVICE_ROLE_KEY`: **CRITICAL** - This is required for admin server functions.
+- **Framework Preset**: `Other` (TanStack Start is auto-detected by Vite, but select "Other" if prompt fails)
+- **Build Command**: `npm run build`
+- **Output Directory**: `.output`
+- **Install Command**: `npm install`
+
+## 2. Required Environment Variables
+
+Configure these in the Vercel Dashboard (**Settings > Environment Variables**).
+
+### Lovable Cloud (Supabase) Integration
+These are required for database access, authentication, and cloud syncing.
+- `VITE_SUPABASE_URL`: `https://wliwiswcollinbaomzqr.supabase.co`
+- `VITE_SUPABASE_PUBLISHABLE_KEY`: `sb_publishable_RgebDk1weJQL8DCgUNttxQ_FWT2p2rW`
+- `SUPABASE_URL`: (Same as VITE_SUPABASE_URL)
+- `SUPABASE_PUBLISHABLE_KEY`: (Same as VITE_SUPABASE_PUBLISHABLE_KEY)
+- `SUPABASE_SERVICE_ROLE_KEY`: **CRITICAL** - Required for server functions to bypass RLS for admin tasks. Found in your Lovable Cloud / Supabase settings.
 
 ### AI Assistant (Lovable AI Gateway)
-- `LOVABLE_API_KEY`: Required for the AI cartography features.
+- `LOVABLE_API_KEY`: Required for AI Cartographer and Grok/O3 integration.
 
-## 2. Server Runtime Limits
+## 3. Deployment Troubleshooting
 
-This app uses TanStack Start, which runs on the Edge/Serverless runtime.
-- **Memory**: Drawing complex maps might hit Vercel's default memory limits on free tiers.
-- **Execution Time**: AI generation tasks can take 10-30 seconds. Ensure your Vercel function timeout is set high enough (Pro plan may be needed for very long generations).
+### Black Screen / Hydration Error
+- **Cause**: TanStack Start SSR fails if environment variables are missing at build time.
+- **Fix**: Ensure all `VITE_` variables are set in Vercel **before** triggering a new deployment.
 
-## 3. Hydration Deadlocks
+### Server Function 404/500
+- **Cause**: Incorrect Nitro preset or missing `SUPABASE_SERVICE_ROLE_KEY`.
+- **Fix**: The build automatically targets the correct runtime. Check the "Functions" tab in Vercel for specific runtime logs.
 
-If you see a black screen or "Something went wrong" after deployment:
-1. **Check Browser Console**: Look for `Supabase configuration missing` warnings.
-2. **SSR vs Client**: The editor uses browser-only Canvas APIs. We have wrapped these in safety checks, but if a third-party library is imported at the top level and expects `window` to exist, the build will fail or crash during SSR.
+### AI Timeout
+- **Execution Time**: AI generation can exceed 10s.
+- **Fix**: If you encounter timeouts, increase the "Function Max Duration" in `vercel.json` or Vercel settings (requires Pro plan for >10s).
 
-## 4. Troubleshooting Steps
-
-1. **Verify Vercel Logs**: Go to your Vercel Dashboard > Deployments > [Latest] > Logs.
-2. **Look for `[Supabase] Missing configuration`**: This means your environment variables aren't being picked up.
-3. **Look for `[unenv] X is not implemented`**: This happens if a package tries to use Node.js-only features (like `fs` or `child_process`) in the Edge runtime.
-
-## 5. Local Reproduction
-Run this command to simulate a production build before pushing:
+## 4. Local Production Test
+Always run this before pushing to verify the build is stable:
 ```bash
-npm run build
+npm run build && npm run preview
 ```
-If this fails, the error message will pinpoint the file and line number.
