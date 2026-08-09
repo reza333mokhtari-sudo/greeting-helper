@@ -15,6 +15,12 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { DialogProvider } from "@/components/ui/DialogProvider";
 import { OfflineOverlay } from "@/components/OfflineOverlay";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { initSentry } from "../lib/sentry";
+
+// Initialize Sentry for client-side error tracking
+if (typeof window !== "undefined") {
+  initSentry();
+}
 
 function NotFoundComponent() {
   return (
@@ -91,11 +97,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Dungeon Scrawl Map Maker" },
-      { name: "description", content: "A professional 2D dungeon map maker for RPGs." },
+      { title: "Dungeon Scrawl Map Maker - RPG Dungeon Editor" },
+      { name: "description", content: "A professional 2D dungeon map maker for RPGs. Design, generate, and export high-quality dungeon maps with AI assistance." },
       { name: "author", content: "Lovable" },
       { property: "og:title", content: "Dungeon Scrawl Map Maker" },
-      { property: "og:description", content: "A professional 2D dungeon map maker for RPGs." },
+      { property: "og:description", content: "Design and generate professional RPG dungeon maps with ease." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
