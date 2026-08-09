@@ -15,9 +15,8 @@ export type AiEngine = keyof typeof AI_ENGINES;
 
 const Input = z.object({
   prompt: z.string().min(1).max(4000),
-  /** Compact description of the current map so the model can refine it. */
+  /** Compact description of the current map so the model can reason about the current map. */
   summary: z.string().max(6000).default(""),
-  mode: z.enum(["rooms", "encounter", "hatching", "refine"]).default("rooms"),
   engine: z.enum(["swift", "balanced", "deep", "lite", "grok", "fable5"]).default("balanced"),
   gridSize: z.number().positive().default(32),
   /** Prior turns so follow-up prompts ("make it bigger") keep context. */
@@ -26,8 +25,6 @@ const Input = z.object({
     .max(8)
     .default([]),
   customSystem: z.string().optional(),
-  /** If true, enforce a strict 15x15 unit size for all stamps. */
-  fixedSize: z.boolean().default(true),
 });
 
 
