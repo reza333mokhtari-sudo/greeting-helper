@@ -48,8 +48,8 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
   }, []);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => setSignedIn(!!data.session));
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setSignedIn(!!s));
+    supabase.auth.getSession().then(({ data }: any) => setSignedIn(!!data.session));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e: any, s: any) => setSignedIn(!!s));
     return () => sub.subscription.unsubscribe();
   }, []);
 

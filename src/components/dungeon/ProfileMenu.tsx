@@ -25,7 +25,7 @@ export function ProfileMenu() {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    supabase.auth.getUser().then(({ data }: any) => setUser(data.user));
   }, []);
 
   const sendTicket = async () => {
