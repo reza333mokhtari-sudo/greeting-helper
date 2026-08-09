@@ -62,16 +62,14 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
   const [result, setResult] = useState<AiSuggestion | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading, setMessages, append } = useChat({
-    api: '/api/ai/chat',
+  const [inputValue, setInputValue] = useState("");
+  const { messages, isLoading, setMessages, append } = useChat({
     body: {
       summary: summarise(doc),
       engine,
     },
     onFinish: (message) => {
-      // Try to parse layout if it's hidden in the message or sent via metadata
-      // For now, we assume layout is requested separately if needed, 
-      // or we can parse JSON from the end of the message if the model is instructed to include it.
+      // Try to parse layout if it's hidden in the message
       try {
         const jsonMatch = message.content.match(/```json\n([\s\S]*?)\n```/);
         if (jsonMatch && jsonMatch[1]) {
@@ -91,15 +89,19 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
     }
   });
 
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [messages]);
+  const onSubmit = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    const q = inputValue.trim();
+    if (!q || !online || isLoading) return;
+    setInputValue("");
+    onPreview(null);
+    setResult(null);
+    await append({ role: 'user', content: q });
+  };
 
   const ask = async (text: string) => {
-    if (!online) {
-      toast.error("You are offline");
+    if (!online || isLoading) {
+      toast.error("AI is busy or you are offline");
       return;
     }
     onPreview(null);
@@ -220,15 +222,16 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
                   ? "bg-primary text-primary-foreground" 
                   : "bg-muted/80 text-foreground border border-border/40"
               }`}>
-                <ReactMarkdown 
-                  className="prose prose-invert prose-xs max-w-none"
-                  components={{
-                    p: ({children}) => <p className="mb-2 last:mb-0">{children}</p>,
-                    code: ({children}) => <code className="bg-black/20 rounded px-1 font-mono text-[10px]">{children}</code>
-                  }}
-                >
-                  {DOMPurify.sanitize(m.content)}
-                </ReactMarkdown>
+                <div className="prose prose-invert prose-xs max-w-none">
+                  <ReactMarkdown 
+                    components={{
+                      p: ({children}) => <p className="mb-2 last:mb-0">{children}</p>,
+                      code: ({children}) => <code className="bg-black/20 rounded px-1 font-mono text-[10px]">{children}</code>
+                    }}
+                  >
+                    {DOMPurify.sanitize(m.content)}
+                  </ReactMarkdown>
+                </div>
               </div>
             </div>
           ))}
@@ -286,16 +289,15 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
         </div>
       </ScrollArea>
 
-      <form onSubmit={handleSubmit} className="space-y-2 pt-2 border-t">
+      <form onSubmit={onSubmit} className="space-y-2 pt-2 border-t">
         <div className="relative">
           <Textarea
-            value={input}
-            onChange={handleInputChange}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
-                const form = e.currentTarget.form;
-                if (form) form.requestSubmit();
+                void onSubmit();
               }
             }}
             placeholder="Ask a question..."
