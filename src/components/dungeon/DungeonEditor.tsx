@@ -1714,6 +1714,8 @@ export function DungeonEditor() {
             }}
           />
         );
+      case "generator":
+        return <GeneratorPanel doc={doc} onCommit={commit} />;
       default:
         return null;
     }
