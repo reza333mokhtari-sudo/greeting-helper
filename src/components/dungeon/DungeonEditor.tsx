@@ -102,6 +102,8 @@ type Drag =
 
 
 export function DungeonEditor() {
+  const online = useOnlineStatus();
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
 
