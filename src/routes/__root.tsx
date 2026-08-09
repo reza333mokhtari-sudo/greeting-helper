@@ -15,7 +15,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { DialogProvider } from "@/components/ui/DialogProvider";
 import { OfflineOverlay } from "@/components/OfflineOverlay";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { DesktopProvider } from "@/hooks/use-desktop";
+
 
 
 function NotFoundComponent() {
@@ -124,11 +124,9 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <DesktopProvider>
-          <TooltipProvider delayDuration={200}>
-            <DialogProvider>{children}</DialogProvider>
-          </TooltipProvider>
-        </DesktopProvider>
+        <TooltipProvider delayDuration={200}>
+          <DialogProvider>{children}</DialogProvider>
+        </TooltipProvider>
         <Toaster position="top-center" richColors />
         <OfflineOverlay />
         <Scripts />
