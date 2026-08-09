@@ -27,7 +27,7 @@ export function AuthDialog({ open, onOpenChange, reason }: Props) {
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: `https://greeting-helper.vercel.app/auth/callback`,
         },
       });
 
