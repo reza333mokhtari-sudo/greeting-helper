@@ -195,8 +195,6 @@ export function DungeonEditor() {
     setHIndex(0);
   });
 
-  const [aiDiagnosticsOpen, setAiDiagnosticsOpen] = useState(false);
-
   const openHelp = useCallback((sectionId?: string) => {
     setHelpSection(sectionId || "quick-start");
     setHelpOpen(true);
