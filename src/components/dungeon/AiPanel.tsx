@@ -47,9 +47,10 @@ type Props = {
   staged: AiSuggestion | null;
   floorName?: string;
   onOpenHelp?: (sectionId?: string) => void;
+  onOpenDiagnostics?: () => void;
 };
 
-export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp }: Props) {
+export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp, onOpenDiagnostics }: Props) {
   const online = useOnlineStatus();
   const [engine, setEngine] = useState<AiEngine>("balanced");
   const [showEditor, setShowEditor] = useState(false);
@@ -153,6 +154,17 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
           <Sparkles className="h-3.5 w-3.5 text-accent" /> AI Assistant
         </h2>
         <div className="flex gap-1">
+          {onOpenDiagnostics && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-6 text-muted-foreground hover:text-accent"
+              onClick={onOpenDiagnostics}
+              title="Diagnostics"
+            >
+              <Settings2 className="h-3.5 w-3.5" />
+            </Button>
+          )}
           {onOpenHelp && (
             <Button
               variant="ghost"
