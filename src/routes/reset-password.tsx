@@ -32,8 +32,8 @@ function ResetPasswordPage() {
   useEffect(() => {
     // Supabase delivers a recovery session via the URL hash before redirecting here.
     const isRecovery = window.location.hash.includes("type=recovery");
-    supabase.auth.getSession().then(({ data }) => setReady(isRecovery || !!data.session));
-    const { data: sub } = supabase.auth.onAuthStateChange((event) => {
+    supabase.auth.getSession().then(({ data }: any) => setReady(isRecovery || !!data.session));
+    const { data: sub } = supabase.auth.onAuthStateChange((event: any) => {
       if (event === "PASSWORD_RECOVERY" || event === "SIGNED_IN") setReady(true);
     });
     return () => sub.subscription.unsubscribe();
