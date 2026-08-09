@@ -19,7 +19,7 @@ import { initSentry } from "../lib/sentry";
 
 // Initialize Sentry for client-side error tracking
 if (typeof window !== "undefined") {
-  initSentry();
+  initSentry().catch(console.error);
 }
 
 function NotFoundComponent() {

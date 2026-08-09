@@ -1,4 +1,4 @@
-import * as Sentry from "@sentry/react";
+import { captureClientException } from "./sentry";
 
 type LovableErrorOptions = {
   mechanism?: "manual" | "onerror" | "unhandledrejection" | "react_error_boundary";
@@ -27,7 +27,7 @@ declare global {
 
 export function reportLovableError(error: unknown, context: Record<string, unknown> = {}) {
   // Capture in Sentry
-  Sentry.captureException(error, {
+  captureClientException(error, {
     extra: context,
     tags: {
       route: typeof window !== "undefined" ? window.location.pathname : "unknown",
