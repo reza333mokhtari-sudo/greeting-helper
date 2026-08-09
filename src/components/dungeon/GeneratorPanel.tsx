@@ -9,17 +9,27 @@ import { toast } from "sonner";
 
 type Props = {
   doc: Doc;
+  view: { x: number; y: number; scale: number };
   onCommit: (next: Doc, label: string) => void;
 };
 
-export function GeneratorPanel({ doc, onCommit }: Props) {
+export function GeneratorPanel({ doc, view, onCommit }: Props) {
   const [w, setW] = useState(5);
   const [h, setH] = useState(5);
   const [name, setName] = useState("New Room");
 
   const handleAddRoom = () => {
-    // Generate at center of current view or 0,0 for now
-    const pos: Pt = { x: 0, y: 0 };
+    // Generate at the center of the current viewport
+    const { gridSize } = doc.settings;
+    const worldX = (-view.x + window.innerWidth / 2) / view.scale;
+    const worldY = (-view.y + window.innerHeight / 2) / view.scale;
+    
+    // Snap to grid
+    const pos: Pt = { 
+      x: Math.round(worldX / gridSize) * gridSize, 
+      y: Math.round(worldY / gridSize) * gridSize 
+    };
+
     const next = generateRoom(doc, pos, { w, h, name });
     onCommit(next, `Generate Room: ${name}`);
     toast.success(`Generated ${name} (${w}x${h})`);
