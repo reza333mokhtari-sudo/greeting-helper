@@ -122,6 +122,17 @@ The AI Assistant is designed to help you build maps faster.
 **Production Status**: 
 '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
 
-Build a production desktop release with Tauri v2 and ensure the packaged app launches successfully.`,
+npm run tauri build
+
+> tauri
+
+> tauri build
+
+failed to run 'cargo metadata' command to get workspace directory: failed to run command cargo metadata --no-deps --format-version 1: program not found
+
+       Error failed to run 'cargo metadata' command to get workspace directory: failed to run command cargo metadata --no-deps --format-version 1: program not found
+
+
+can you fix ?`,
   },
 ];
