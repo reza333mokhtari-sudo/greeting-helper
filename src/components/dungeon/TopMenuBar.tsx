@@ -102,6 +102,12 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
             <MenubarItem disabled className="text-xs py-1">D / S — Door / Stairs</MenubarItem>
             <MenubarItem disabled className="text-xs py-1">E — Toggle Erase</MenubarItem>
             <MenubarItem disabled className="text-xs py-1">Space — Pan View</MenubarItem>
+            {isDesktop && (
+              <>
+                <MenubarSeparator />
+                <MenubarItem disabled className="text-xs py-1 opacity-70 italic">Desktop App v0.1.0</MenubarItem>
+              </>
+            )}
           </MenubarContent>
         </MenubarMenu>
       </Menubar>
