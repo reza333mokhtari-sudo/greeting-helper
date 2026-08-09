@@ -150,9 +150,9 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
     switch (syncStatus) {
       case "saving":
         content = (
-          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-500 text-[10px] font-medium animate-pulse">
+          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-500 text-[10px] font-medium">
             <RefreshCw className="h-3 w-3 animate-spin" />
-            Saving...
+            <span>Saving to cloud...</span>
           </div>
         );
         break;
@@ -160,7 +160,7 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
         content = (
           <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-green-500/10 text-green-500 text-[10px] font-medium">
             <CheckCircle2 className="h-3 w-3" />
-            Synced
+            <span>All changes saved</span>
           </div>
         );
         break;
@@ -168,7 +168,7 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
         content = (
           <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-destructive/10 text-destructive text-[10px] font-medium">
             <AlertCircle className="h-3 w-3" />
-            Error
+            <span>Sync error</span>
           </div>
         );
         break;
@@ -176,7 +176,7 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
         content = (
           <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-muted text-muted-foreground text-[10px] font-medium opacity-60">
             <div className="h-1.5 w-1.5 rounded-full bg-muted-foreground/40" />
-            {email ? "Cloud" : "Local"}
+            <span>{email ? "Cloud Ready" : "Local Only"}</span>
           </div>
         );
     }
@@ -185,15 +185,18 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
       <TooltipProvider delayDuration={0}>
         <Tooltip>
           <TooltipTrigger asChild>
-            <button className="cursor-default focus:outline-none">{content}</button>
+            <button className="cursor-default focus:outline-none hover:bg-muted/50 rounded-full transition-colors">
+              {content}
+            </button>
           </TooltipTrigger>
           <TooltipContent side="bottom" className="text-[10px] px-2 py-1">
-            <p>{email ? "Cloud synchronization active" : "Saving maps to browser storage"}</p>
+            <p>{email ? "Cloud synchronization is active" : "Saving maps to browser storage"}</p>
             {localLastSaved && (
               <p className="text-muted-foreground mt-0.5">
                 Last saved: {new Date(localLastSaved).toLocaleTimeString()}
               </p>
             )}
+            {syncStatus === "saving" && <p className="text-blue-500 animate-pulse mt-0.5">Uploading data...</p>}
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
