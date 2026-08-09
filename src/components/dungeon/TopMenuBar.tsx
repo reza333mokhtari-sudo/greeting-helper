@@ -92,7 +92,7 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
         <MenubarMenu>
           <MenubarTrigger className="h-8 px-3 text-xs">AI</MenubarTrigger>
           <MenubarContent>
-            <MenubarItem onSelect={props.onOpenDiagnostics}>
+            <MenubarItem onSelect={props.onOpenDiagnostics ?? (() => {})}>
               AI Reasoning Diagnostics
             </MenubarItem>
             <MenubarItem onSelect={() => props.onOpenHelp("ai-assistant")}>
