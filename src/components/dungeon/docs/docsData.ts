@@ -121,18 +121,11 @@ The AI Assistant is designed to help you build maps faster.
 
 **Production Status**: 
 '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
+                                            
+                                            bun run build
 
-npm run tauri build
+bun: The term 'bun' is not recognized as a name of a cmdlet, function, script file, or executable program.
 
-> tauri
-
-> tauri build
-
-failed to run 'cargo metadata' command to get workspace directory: failed to run command cargo metadata --no-deps --format-version 1: program not found
-
-       Error failed to run 'cargo metadata' command to get workspace directory: failed to run command cargo metadata --no-deps --format-version 1: program not found
-
-
-can you fix ?`,
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.`,
   },
 ];
