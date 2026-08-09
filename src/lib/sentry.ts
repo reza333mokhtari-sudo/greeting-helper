@@ -8,7 +8,7 @@ export function initSentry() {
   if (typeof window === "undefined") return;
 
   // We only initialize if a DSN is provided via env
-  const dsn = import.meta.env.VITE_SENTRY_DSN;
+  const dsn = import.meta.env['VITE_SENTRY_DSN'];
   if (!dsn) {
     console.log("[Sentry] Skipping browser initialization (VITE_SENTRY_DSN not set)");
     return;

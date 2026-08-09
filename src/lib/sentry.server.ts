@@ -6,7 +6,7 @@ import { nodeProfilingIntegration } from "@sentry/profiling-node";
  * Note: Profiling might not be available in Edge runtimes.
  */
 export function initSentryServer() {
-  const dsn = process.env.SENTRY_DSN || process.env.VITE_SENTRY_DSN;
+  const dsn = process.env['SENTRY_DSN'] || process.env['VITE_SENTRY_DSN'];
   
   if (!dsn) {
     console.log("[Sentry] Skipping server initialization (SENTRY_DSN not set)");
@@ -21,7 +21,7 @@ export function initSentryServer() {
     // Performance Monitoring
     tracesSampleRate: 1.0,
     profilesSampleRate: 1.0,
-    environment: process.env.NODE_ENV,
+    environment: process.env['NODE_ENV'],
   });
 
   console.log("[Sentry] Server SDK initialized");
