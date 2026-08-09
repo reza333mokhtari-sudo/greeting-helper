@@ -11,7 +11,7 @@ export function DesktopProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Tauri sets __TAURI_METADATA__ or other window properties
-    if (typeof window !== "undefined" && (window as any).__TAURI_METADATA__) {
+    if (typeof window !== "undefined" && ((window as any).__TAURI_METADATA__ || (window as any).__TAURI_INTERNALS__)) {
       setIsDesktop(true);
     }
   }, []);
