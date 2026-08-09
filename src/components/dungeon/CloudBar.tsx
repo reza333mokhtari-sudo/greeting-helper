@@ -13,7 +13,9 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ShareDialog } from "./ShareDialog";
+
 
 type Props = {
   doc: Doc;
@@ -144,37 +146,60 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
 
 
   const statusIndicator = useMemo(() => {
+    let content;
     switch (syncStatus) {
       case "saving":
-        return (
+        content = (
           <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-500 text-[10px] font-medium animate-pulse">
             <RefreshCw className="h-3 w-3 animate-spin" />
             Saving...
           </div>
         );
+        break;
       case "synced":
-        return (
+        content = (
           <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-green-500/10 text-green-500 text-[10px] font-medium">
             <CheckCircle2 className="h-3 w-3" />
             Synced
           </div>
         );
+        break;
       case "error":
-        return (
+        content = (
           <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-destructive/10 text-destructive text-[10px] font-medium">
             <AlertCircle className="h-3 w-3" />
             Error
           </div>
         );
+        break;
       default:
-        return (
+        content = (
           <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-muted text-muted-foreground text-[10px] font-medium opacity-60">
             <div className="h-1.5 w-1.5 rounded-full bg-muted-foreground/40" />
             {email ? "Cloud" : "Local"}
           </div>
         );
     }
-  }, [syncStatus, email]);
+
+    return (
+      <TooltipProvider delayDuration={0}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button className="cursor-default focus:outline-none">{content}</button>
+          </TooltipTrigger>
+          <TooltipContent side="bottom" className="text-[10px] px-2 py-1">
+            <p>{email ? "Cloud synchronization active" : "Saving maps to browser storage"}</p>
+            {localLastSaved && (
+              <p className="text-muted-foreground mt-0.5">
+                Last saved: {new Date(localLastSaved).toLocaleTimeString()}
+              </p>
+            )}
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  }, [syncStatus, email, localLastSaved]);
+
 
   return (
     <div className="flex items-center gap-2">
