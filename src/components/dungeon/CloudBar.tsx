@@ -18,9 +18,11 @@ type Props = {
   doc: Doc;
   thumbnail: () => string | null;
   onLoadDoc: (doc: Doc) => void;
+  onAuthRequired?: () => void;
 };
 
-export function CloudBar({ doc, thumbnail, onLoadDoc }: Props) {
+export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired }: Props) {
+
   const [email, setEmail] = useState<string | null>(null);
   const [maps, setMaps] = useState<MapRow[]>([]);
   const [open, setOpen] = useState(false);
@@ -100,13 +102,17 @@ export function CloudBar({ doc, thumbnail, onLoadDoc }: Props) {
 
   if (!email) {
     return (
-      <Button asChild size="sm" variant="outline" className="h-7 text-xs">
-        <Link to="/auth" search={{ next: "/" }}>
-          <Cloud className="mr-1 h-3.5 w-3.5" /> Sign in to save
-        </Link>
+      <Button 
+        size="sm" 
+        variant="outline" 
+        className="h-7 text-xs"
+        onClick={onAuthRequired}
+      >
+        <Cloud className="mr-1 h-3.5 w-3.5" /> Sign in to save
       </Button>
     );
   }
+
 
   return (
     <div className="flex items-center gap-2">

@@ -25,9 +25,19 @@ type Props = {
   active: PanelId | null;
   onSelect: (id: PanelId) => void;
   animationIntensity?: number;
+  isLoggedIn?: boolean;
+  onAuthRequired?: (reason: string) => void;
 };
 
-export function LeftRail({ active, onSelect, animationIntensity = 2 }: Props) {
+export function LeftRail({ active, onSelect, animationIntensity = 2, isLoggedIn, onAuthRequired }: Props) {
+  const handleSelect = (p: typeof PANELS[0]) => {
+    if (!isLoggedIn && (p.id === "ai" || p.id === "props" || p.id === "maps")) {
+      onAuthRequired?.(`Sign in to access ${p.label}.`);
+      return;
+    }
+    onSelect(p.id);
+  };
+
   return (
     <TooltipProvider delayDuration={200}>
       <nav 
@@ -45,9 +55,10 @@ export function LeftRail({ active, onSelect, animationIntensity = 2 }: Props) {
                   size="icon"
                   aria-label={p.label}
                   aria-pressed={on}
-                  onClick={() => onSelect(p.id)}
-                  className={`size-9 group transition-all duration-300 ${on ? "text-primary bg-primary/10 shadow-[0_0_15px_rgba(var(--primary),0.2)]" : "text-foreground/60 hover:text-foreground hover:bg-muted"}`}
+                  onClick={() => handleSelect(p)}
+                  className={`size-9 group transition-all duration-300 ${on ? "text-primary bg-primary/10 shadow-[0_0_15px_rgba(var(--primary),0.2)]" : "text-foreground/60 hover:text-foreground hover:bg-muted"} ${!isLoggedIn && (p.id === "ai" || p.id === "props" || p.id === "maps") ? "opacity-50" : ""}`}
                 >
+
                   <Icon className={`size-[18px] transition-all duration-500 ease-out group-hover:scale-110 group-hover:rotate-[5deg] group-active:scale-95 ${on ? "animate-in fade-in zoom-in duration-500 spin-in-6" : ""}`} />
                 </Button>
               </TooltipTrigger>

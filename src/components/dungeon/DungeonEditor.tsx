@@ -80,6 +80,10 @@ import { Minimap } from "./Minimap";
 import { PropPreviewModal } from "../props/PropPreviewModal";
 import { HelpCenter } from "./docs/HelpCenter";
 import { HelpButton } from "./docs/HelpButton";
+import { AuthDialog } from "./AuthDialog";
+import { saveMapLocally } from "@/lib/dungeon/storage";
+import { supabase } from "@/integrations/supabase/client";
+
 
 
 
@@ -185,6 +189,33 @@ export function DungeonEditor() {
     setHelpSection(sectionId || "quick-start");
     setHelpOpen(true);
   }, []);
+
+  const [authOpen, setAuthOpen] = useState(false);
+  const [authReason, setAuthReason] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setIsLoggedIn(!!data.session));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setIsLoggedIn(!!s));
+    return () => sub.subscription.unsubscribe();
+  }, []);
+
+  const requireAuth = useCallback((reason: string, action: () => void) => {
+    if (isLoggedIn) {
+      action();
+    } else {
+      setAuthReason(reason);
+      setAuthOpen(true);
+      toast.info("Authentication Required", {
+        description: reason,
+        action: {
+          label: "Login",
+          onClick: () => setAuthOpen(true)
+        }
+      });
+    }
+  }, [isLoggedIn]);
+
 
 
 
@@ -319,7 +350,10 @@ export function DungeonEditor() {
         setSaveMs(performance.now() - t0);
         setSavedAt(Date.now());
         setSaveStatus("saved");
+        // Also save to "Local DB" simulated in localStorage
+        saveMapLocally(doc, "Last Session").catch(console.error);
       } catch {
+
         setSaveStatus("error");
       }
     }, 400);
@@ -1676,7 +1710,7 @@ export function DungeonEditor() {
         showGrid={doc.settings.gridStyle !== "none"}
         onShowGrid={(v) => setSettings({ gridStyle: v ? "square" : "none" })}
         onOpenHelp={openHelp}
-        right={<CloudBar doc={syncActiveFloor(doc)} thumbnail={thumbnail} onLoadDoc={(d) => commit(migrateDoc(d))} />}
+        right={<CloudBar doc={syncActiveFloor(doc)} thumbnail={thumbnail} onLoadDoc={(d) => commit(migrateDoc(d))} onAuthRequired={() => requireAuth("Sign in to sync your maps to the cloud and access them from anywhere.", () => {})} />}
       />
 
       <input
@@ -1696,7 +1730,13 @@ export function DungeonEditor() {
           active={leftPanel} 
           onSelect={(id) => setLeftPanel((cur) => (cur === id ? null : id))} 
           animationIntensity={doc.settings.animationIntensity}
+          isLoggedIn={isLoggedIn}
+          onAuthRequired={(reason) => {
+            setAuthReason(reason);
+            setAuthOpen(true);
+          }}
         />
+
 
         {leftPanel && (
           <aside 
@@ -1959,9 +1999,11 @@ export function DungeonEditor() {
         onOpenChange={setHelpOpen} 
         initialSectionId={helpSection} 
       />
+      <AuthDialog open={authOpen} onOpenChange={setAuthOpen} reason={authReason} />
     </div>
   );
 }
+
 
 
 
