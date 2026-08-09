@@ -42,9 +42,9 @@ export function LeftRail({ active, onSelect }: Props) {
                   aria-label={p.label}
                   aria-pressed={on}
                   onClick={() => onSelect(p.id)}
-                  className={on ? "size-9 text-primary" : "size-9 text-foreground/60"}
+                  className={`size-9 group transition-all duration-300 ${on ? "text-primary bg-primary/10 shadow-[0_0_15px_rgba(var(--primary),0.2)]" : "text-foreground/60 hover:text-foreground hover:bg-muted"}`}
                 >
-                  <Icon className="size-[18px]" />
+                  <Icon className={`size-[18px] transition-all duration-500 ease-out group-hover:scale-110 group-hover:rotate-[5deg] group-active:scale-95 ${on ? "animate-in fade-in zoom-in duration-500 spin-in-6" : ""}`} />
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="right">{p.label}</TooltipContent>
