@@ -179,53 +179,55 @@ export function LayersPanel(p: Props) {
                 </Badge>
               </div>
 
-              <div className="mt-1 flex items-center gap-1">
-                <Slider
-                  value={[Math.round(l.opacity * 100)]}
-                  min={10}
-                  max={100}
-                  onValueChange={([v]) => p.onUpdateLayer(l.id, { opacity: (v ?? 100) / 100 })}
-                  onClick={(e) => e.stopPropagation()}
-                  className="mx-1 flex-1"
-                  aria-label="Layer opacity"
-                />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="size-6"
-                  aria-label="Move layer up"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    p.onMoveLayer(l.id, 1);
-                  }}
-                >
-                  <ChevronUp className="size-3.5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="size-6"
-                  aria-label="Move layer down"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    p.onMoveLayer(l.id, -1);
-                  }}
-                >
-                  <ChevronDown className="size-3.5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="size-6 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                  aria-label="Delete layer"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    p.onDeleteLayer(l.id);
-                  }}
-                >
-                  <X className="size-3.5" />
-                </Button>
-              </div>
+              {!p.compact && (
+                <div className="mt-1 flex items-center gap-1">
+                  <Slider
+                    value={[Math.round(l.opacity * 100)]}
+                    min={10}
+                    max={100}
+                    onValueChange={([v]) => p.onUpdateLayer(l.id, { opacity: (v ?? 100) / 100 })}
+                    onClick={(e) => e.stopPropagation()}
+                    className="mx-1 flex-1"
+                    aria-label="Layer opacity"
+                  />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-6"
+                    aria-label="Move layer up"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      p.onMoveLayer(l.id, 1);
+                    }}
+                  >
+                    <ChevronUp className="size-3.5" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-6"
+                    aria-label="Move layer down"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      p.onMoveLayer(l.id, -1);
+                    }}
+                  >
+                    <ChevronDown className="size-3.5" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-6 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                    aria-label="Delete layer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      p.onDeleteLayer(l.id);
+                    }}
+                  >
+                    <X className="size-3.5" />
+                  </Button>
+                </div>
+              )}
 
               {active && objs.length > 0 && (
                 <ScrollArea className="mt-1 max-h-40 border border-border/30 rounded bg-muted/10 p-1">
