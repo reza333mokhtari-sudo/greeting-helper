@@ -5,13 +5,16 @@ import { SYSTEM_PROMPT } from '@/lib/ai.functions';
 import { searchApp } from '@/lib/dungeon/search';
 
 // Create the model using Lovable AI Gateway by default
-const lovable = createOpenAICompatible({
-  name: 'lovable',
-  baseURL: 'https://api.lovable.ai/v1',
-  headers: {
-    Authorization: `Bearer ${process.env['LOVABLE_API_KEY']}`,
-  },
-});
+const getLovable = () => {
+  const apiKey = process.env['LOVABLE_API_KEY'];
+  return createOpenAICompatible({
+    name: 'lovable',
+    baseURL: 'https://api.lovable.ai/v1',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+    },
+  });
+};
 
 export const Route = createFileRoute('/api/ai/chat')({
   server: {
@@ -50,6 +53,8 @@ ${context}
 
 MAP STATE:
 ${summary}`;
+
+        const lovable = getLovable();
 
         try {
           const result = await streamText({
