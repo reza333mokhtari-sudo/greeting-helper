@@ -122,7 +122,6 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
       </div>
 
       <div className="ml-auto flex items-center gap-3">
-        <HealthCheckIndicator />
         <ProfileMenu />
       </div>
     </header>
