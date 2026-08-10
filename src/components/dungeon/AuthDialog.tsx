@@ -23,8 +23,8 @@ export function AuthDialog({ open, onOpenChange, reason }: Props) {
 
   useEffect(() => {
     if (open) {
-      const url = import.meta.env.VITE_SUPABASE_URL;
-      const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+      const url = import.meta.env['VITE_SUPABASE_URL'];
+      const key = import.meta.env['VITE_SUPABASE_PUBLISHABLE_KEY'];
       if (!url || !key) {
         setConfigError("Supabase is not configured on this deployment. Set VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY in Vercel, then redeploy.");
       } else {
