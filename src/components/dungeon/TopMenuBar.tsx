@@ -34,6 +34,7 @@ type Props = {
   showGrid: boolean;
   onShowGrid: (v: boolean) => void;
   onOpenDiagnostics?: () => void;
+  onAuthRequired?: (reason: string) => void;
 };
 
 export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => void }) {
@@ -122,7 +123,7 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
       </div>
 
       <div className="ml-auto flex items-center gap-3">
-        <ProfileMenu />
+        <ProfileMenu onAuthRequired={props.onAuthRequired} />
       </div>
     </header>
   );
