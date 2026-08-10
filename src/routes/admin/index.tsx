@@ -33,6 +33,7 @@ import { EntityForm } from "@/components/admin/EntityForm";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { dialog } from "@/lib/dialog";
 import { useServerFn } from "@tanstack/react-start";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/admin/")({
   ssr: false,
@@ -78,11 +79,13 @@ function AdminConsole() {
     setLoading(true);
     try {
       const res = await fetchTable({
-        table: activeTable,
-        page,
-        pageSize,
-        sort: sort || undefined,
-        search: search || undefined
+        data: {
+          table: activeTable,
+          page,
+          pageSize,
+          sort: sort || undefined,
+          search: search || undefined
+        }
       });
       setRows(res.rows || []);
       setCount(res.count || 0);
@@ -141,7 +144,7 @@ function AdminConsole() {
 
     if (confirmed) {
       try {
-        await deleteFromTable({ table: activeTable, ids });
+        await deleteFromTable({ data: { table: activeTable, ids } });
         toast.success("Records deleted successfully");
         loadData();
       } catch (e: any) {
@@ -153,7 +156,7 @@ function AdminConsole() {
   const handleUpdate = async (data: any) => {
     if (!activeTable || !editingRow) return;
     try {
-      await updateTable({ table: activeTable, id: editingRow.id, payload: data });
+      await updateTable({ data: { table: activeTable, id: editingRow.id, payload: data } });
       toast.success("Record updated successfully");
       setEditingRow(null);
       loadData();
