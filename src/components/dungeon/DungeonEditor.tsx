@@ -152,7 +152,7 @@ export function DungeonEditor() {
   const [activeLayer, setActiveLayer] = useState<string>(() => emptyDoc().layers[0]!.id);
   const [fogMode, setFogMode] = useState<FogMode>("brush");
   const [fogBrush, setFogBrush] = useState(96);
-  const [leftPanel, setLeftPanel] = useState<PanelId | null>("layers");
+  const [leftPanel, setLeftPanel] = useState<PanelId | null>("settings");
   const [sidebarWidth, setSidebarWidth] = useState(320);
   const [isResizing, setIsResizing] = useState(false);
   const [savedAt, setSavedAt] = useState<number | null>(null);
@@ -245,6 +245,7 @@ export function DungeonEditor() {
   useHotkeys('l', () => setTool('light'));
   useHotkeys('t', () => setTool('text'));
   useHotkeys('v', () => setTool('select'));
+  useHotkeys('l', () => setLeftPanel('floors')); // Changed from Layers to Floors as a sensible default
   useHotkeys('k', () => setLeftPanel('asset-library'));
   useHotkeys('space', (e) => {
     if (!e.repeat) setSpaceDown(true);
