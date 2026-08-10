@@ -61,6 +61,7 @@ interface AdminDataTableProps {
   onDelete?: (ids: string[]) => void;
   onView?: (row: any) => void;
   tableName: string;
+  onExport?: () => void;
 }
 
 export function AdminDataTable({
@@ -79,7 +80,8 @@ export function AdminDataTable({
   onEdit,
   onDelete,
   onView,
-  tableName
+  tableName,
+  onExport
 }: AdminDataTableProps) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [visibleColumns, setVisibleColumns] = useState<string[]>(columns.map(c => c.key));
@@ -188,7 +190,7 @@ export function AdminDataTable({
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button variant="outline" size="sm" onClick={exportToCsv}>
+          <Button variant="outline" size="sm" onClick={onExport || exportToCsv}>
             <Download className="mr-2 h-4 w-4" />
             Export
           </Button>
