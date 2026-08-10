@@ -184,10 +184,11 @@ export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc
   ctx.lineJoin = "round";
   ctx.lineCap = "butt";
 
-  if (o.kind === "image" && (o.rx || o.ry)) {
-    const rx = o.rx || 0;
-    const ry = o.ry || rx;
+  if (o.kind === "image" && (o.rx !== undefined || o.ry !== undefined)) {
+    const rx = o.rx ?? 0;
+    const ry = o.ry ?? 0;
     ctx.beginPath();
+    // Simplified roundRect mapping for now to ensure it works correctly with our data model
     ctx.roundRect(-o.w / 2, -o.h / 2, o.w, o.h, [rx, ry, ry, rx]);
     ctx.clip();
   }
