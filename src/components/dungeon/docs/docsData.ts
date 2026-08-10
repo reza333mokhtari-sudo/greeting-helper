@@ -122,7 +122,7 @@ The AI Assistant is designed to help you build maps faster.
 **Production Status**: Stabilized web build. Use standard \`npm run build\` for production. To debug Vercel deployment errors, check \`DEPLOYMENT.md\` in the project root for a full guide on environment variables and runtime constraints.
 
 '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
-
-I have approved the plan`,
+                                            
+                                            I have approved the plan`,
   },
 ];
