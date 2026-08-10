@@ -177,8 +177,9 @@ export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc
 
   ctx.translate(o.x, o.y);
   ctx.scale(extraScale, extraScale);
+  const rotation = o.rz ?? (o as any).angle ?? 0;
   if (o.kind === "door" || o.kind === "stairs" || o.kind === "image") {
-    ctx.rotate(o.rz ?? (o as any).angle ?? 0);
+    ctx.rotate(rotation);
   }
   ctx.lineJoin = "round";
   ctx.lineCap = "butt";
@@ -248,6 +249,7 @@ export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc
     ctx.fillStyle = o.color;
     ctx.strokeStyle = o.hostile ? "#2b0b0b" : "#0b1b2b";
     ctx.lineWidth = Math.max(1.5, o.r * 0.14);
+    ctx.rotate(-rotation); // Counter-rotate so labels stay upright
     ctx.beginPath();
     ctx.arc(0, 0, o.r, 0, Math.PI * 2);
     ctx.fill();
@@ -266,6 +268,7 @@ export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc
     ctx.fillStyle = o.color;
     ctx.strokeStyle = inkColor;
     ctx.lineWidth = Math.max(1.2, s * 0.08);
+    ctx.rotate(-rotation);
     ctx.beginPath();
     ctx.moveTo(0, -s / 2);
     ctx.lineTo(s / 2, 0);
