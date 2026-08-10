@@ -1661,22 +1661,7 @@ export function DungeonEditor() {
           />
         );
       case "layers":
-        return (
-          <LayersPanel
-            doc={doc}
-            activeLayer={activeLayer}
-            onActiveLayer={setActiveLayer}
-            onUpdateLayer={updateLayer}
-            onMoveLayer={moveLayer}
-            onReorderLayer={reorderLayer}
-            onAddLayer={addLayer}
-            onDeleteLayer={deleteLayer}
-            selected={selected}
-            onSelect={setSelected}
-            onUpdateObject={updateObject}
-            onDeleteObject={deleteObject}
-          />
-        );
+        return null; // Removed duplicated side panel content
       case "props":
         return <PropsPanel onPlace={placeImage} onPreview={(p) => setPreviewProp(p)} />;
       case "asset-library":
@@ -1734,27 +1719,7 @@ export function DungeonEditor() {
           />
         );
       case "properties":
-        return (
-          <PropertiesPanel 
-            doc={doc} 
-            object={selectedObject} 
-            onChange={(id, patch) => {
-              if ((patch as any).preview) {
-                const o = doc.objects.find(obj => obj.id === id);
-                if (o && o.kind === "image") {
-                  setPreviewProp({ id: o.id, url: o.url, name: o.name || "Prop", license: (o as any).license });
-                }
-                return;
-              }
-              if (selected.length > 1) {
-                updateSelectedObjects(patch);
-              } else {
-                updateObject(id, patch);
-              }
-            }} 
-            onDelete={deleteSelected} 
-          />
-        );
+        return null; // Removed duplicated side panel content
       case "graphics":
         return <GraphicsSettingsPanel settings={doc.settings} onChange={setSettings} />;
       case "help":
