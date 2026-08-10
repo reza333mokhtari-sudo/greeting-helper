@@ -50,7 +50,7 @@ type Props = {
   onOpenDiagnostics?: () => void;
 };
 
-export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp, onOpenDiagnostics }: Props) {
+export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp, onOpenDiagnostics, isLoggedIn, onAuthRequired }: Props & { isLoggedIn?: boolean; onAuthRequired?: (reason: string) => void }) {
   const online = useOnlineStatus();
   const [engine, setEngine] = useState<AiEngine>("balanced");
   const [showEditor, setShowEditor] = useState(false);
@@ -402,7 +402,7 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
             size="icon" 
             type={isLoading ? "button" : "submit"}
             className={`absolute right-1.5 top-1.5 size-7 rounded-md transition-all ${isLoading ? "bg-destructive hover:bg-destructive/80" : ""}`} 
-            disabled={(!isLoading && (!inputValue.trim() || !online))}
+            disabled={(!isLoading && (!inputValue.trim() || !online || !isLoggedIn))}
             onClick={isLoading ? stopLoading : undefined}
             title={isLoading ? "Stop generating" : "Send message"}
           >
@@ -410,7 +410,7 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
           </Button>
         </div>
         <p className="text-center text-[9px] text-muted-foreground">
-          {!online ? "You are offline" : "Press Enter to send"}
+          {!online ? "You are offline" : !isLoggedIn ? "Please sign in to chat" : "Press Enter to send"}
         </p>
       </form>
     </section>
