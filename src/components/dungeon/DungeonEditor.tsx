@@ -245,6 +245,7 @@ export function DungeonEditor() {
   useHotkeys('l', () => setTool('light'));
   useHotkeys('t', () => setTool('text'));
   useHotkeys('v', () => setTool('select'));
+  useHotkeys('k', () => setLeftPanel('asset-library'));
   useHotkeys('space', (e) => {
     if (!e.repeat) setSpaceDown(true);
   }, { keydown: true });
