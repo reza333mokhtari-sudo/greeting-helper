@@ -181,6 +181,14 @@ export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc
   ctx.lineJoin = "round";
   ctx.lineCap = "butt";
 
+  if (o.kind === "image" && (o.rx || o.ry)) {
+    const rx = o.rx || 0;
+    const ry = o.ry || rx;
+    ctx.beginPath();
+    ctx.roundRect(-o.w / 2, -o.h / 2, o.w, o.h, [rx, ry, ry, rx]);
+    ctx.clip();
+  }
+
   if (o.kind === "door") {
     const s = o.size;
     const t = Math.max(6, doc.settings.wallThickness * 1.6);

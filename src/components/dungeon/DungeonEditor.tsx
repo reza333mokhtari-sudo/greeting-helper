@@ -15,6 +15,7 @@ import { SidePanel } from "./SidePanel";
 import { Toolbar, TOOLS, type ToolId } from "./Toolbar";
 import { GraphicsSettingsPanel } from "./GraphicsSettingsPanel";
 import { AiPanel } from "./AiPanel";
+import { AssetLibraryPanel } from "./AssetLibraryPanel";
 import { GeneratorPanel } from "./GeneratorPanel";
 import { FogPanel, type FogMode } from "./FogPanel";
 import { FloorsPanel } from "./FloorsPanel";
@@ -244,6 +245,7 @@ export function DungeonEditor() {
   useHotkeys('l', () => setTool('light'));
   useHotkeys('t', () => setTool('text'));
   useHotkeys('v', () => setTool('select'));
+  useHotkeys('k', () => setLeftPanel('asset-library'));
   useHotkeys('space', (e) => {
     if (!e.repeat) setSpaceDown(true);
   }, { keydown: true });
@@ -1400,6 +1402,17 @@ export function DungeonEditor() {
     [commit],
   );
 
+  const updateSelectedObjects = useCallback(
+    (patch: Partial<MapObject>) => {
+      if (!selected.length) return;
+      commit((d) => ({
+        ...d,
+        objects: d.objects.map((o) => (selected.includes(o.id) ? ({ ...o, ...patch } as MapObject) : o)),
+      }), "Update selected");
+    },
+    [commit, selected],
+  );
+
   const deleteObject = useCallback((id: string) => {
     commit((d) => ({
       ...d,
@@ -1662,6 +1675,8 @@ export function DungeonEditor() {
         );
       case "props":
         return <PropsPanel onPlace={placeImage} onPreview={(p) => setPreviewProp(p)} />;
+      case "asset-library":
+        return <AssetLibraryPanel onPlace={placeImage} />;
       case "ai":
         return (
           <AiPanel
@@ -1722,7 +1737,11 @@ export function DungeonEditor() {
                 }
                 return;
               }
-              updateObject(id, patch);
+              if (selected.length > 1) {
+                updateSelectedObjects(patch);
+              } else {
+                updateObject(id, patch);
+              }
             }} 
             onDelete={deleteSelected} 
           />

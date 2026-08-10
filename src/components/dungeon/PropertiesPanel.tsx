@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, X, Trash2, Crown, Maximize2, Upload, Box, Image as ImageIcon } from "lucide-react";
+import { Plus, X, Trash2, Crown, Maximize2, Upload, Box, Image as ImageIcon, Link2 } from "lucide-react";
 
 type Props = {
   doc: Doc;
@@ -91,11 +91,6 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
           </Badge>
         </h2>
         <div className="flex items-center gap-1">
-          {(o as any).pro && (
-            <Badge variant="secondary" className="h-4 gap-1 px-1.5 text-[8px] font-bold uppercase tracking-wider text-primary bg-primary/10 border-none">
-              <Crown className="size-2" /> Pro
-            </Badge>
-          )}
           <Button
             variant="ghost"
             size="icon"
@@ -199,7 +194,6 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
                 <div className="text-center">
                   <ImageIcon className="mx-auto size-6 text-muted-foreground/40" />
                   <p className="mt-1 text-[9px] text-muted-foreground">Drop Image here</p>
-                  <p className="text-[8px] text-muted-foreground/60">from PC or Props Panel</p>
                 </div>
               </div>
             </div>
@@ -234,16 +228,9 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
                 onChange={(e) => patch({ angle: (Number(e.target.value) * Math.PI) / 180 } as Partial<MapObject>)}
               />
             </Row>
-            <div className="flex gap-2 py-1">
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full text-xs"
-                onClick={() => (onChange as any)(o.id, { preview: true })}
-              >
-                <Maximize2 className="mr-2 size-3" /> View Fullscreen
-              </Button>
-            </div>
+            <Row label="Corner Radius">
+                <NumSlider value={o.rx ?? 0} min={0} max={100} onChange={(v) => patch({ rx: v, ry: v } as Partial<MapObject>)} />
+            </Row>
           </div>
         </>
       )}

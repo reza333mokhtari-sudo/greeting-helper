@@ -1,0 +1,156 @@
+{
+  "id": "soulslike-core",
+  "name": "Soulslike Core Pack",
+  "version": "1.0.0",
+  "grid": 64,
+  "categories": ["weapons", "armor", "items", "enemies", "bosses", "architecture", "terrain", "nature", "props", "markers", "fx"],
+  "assets": [
+    {
+      "id": "ter_stone_floor",
+      "name": "Stone Floor",
+      "category": "terrain",
+      "type": "tile",
+      "src": "/assets/soulslike/terrain/stone-floor.png",
+      "tags": ["stone", "floor", "dungeon"],
+      "size": { "w": 64, "h": 64 },
+      "snap": true
+    },
+    {
+      "id": "ter_cracked_stone",
+      "name": "Cracked Stone",
+      "category": "terrain",
+      "type": "tile",
+      "src": "/assets/soulslike/terrain/cracked-stone.png",
+      "tags": ["stone", "cracked", "floor"],
+      "size": { "w": 64, "h": 64 },
+      "snap": true
+    },
+    {
+      "id": "arch_wall_stone",
+      "name": "Stone Wall",
+      "category": "architecture",
+      "type": "prop",
+      "src": "/assets/soulslike/architecture/wall-stone.png",
+      "tags": ["wall", "stone"],
+      "size": { "w": 64, "h": 128 }
+    },
+    {
+      "id": "arch_wall_broken_01",
+      "name": "Broken Wall 01",
+      "category": "architecture",
+      "type": "prop",
+      "src": "/assets/soulslike/architecture/wall-broken-01.png",
+      "tags": ["wall", "broken", "ruin"],
+      "size": { "w": 128, "h": 128 },
+      "variants": ["arch_wall_broken_02", "arch_wall_ruined_corner"]
+    },
+    {
+      "id": "arch_wall_broken_02",
+      "name": "Broken Wall 02",
+      "category": "architecture",
+      "type": "prop",
+      "src": "/assets/soulslike/architecture/wall-broken-02.png",
+      "tags": ["wall", "broken", "ruin"],
+      "size": { "w": 128, "h": 128 }
+    },
+    {
+      "id": "arch_wall_ruined_corner",
+      "name": "Ruined Corner",
+      "category": "architecture",
+      "type": "prop",
+      "src": "/assets/soulslike/architecture/wall-ruined-corner.png",
+      "tags": ["wall", "ruin", "corner"],
+      "size": { "w": 128, "h": 128 }
+    },
+    {
+      "id": "arch_cliff_edge",
+      "name": "Cliff Edge",
+      "category": "architecture",
+      "type": "prop",
+      "src": "/assets/soulslike/architecture/cliff-edge.png",
+      "tags": ["cliff", "valley", "ravine", "edge"],
+      "size": { "w": 128, "h": 128 }
+    },
+    {
+      "id": "arch_ravine_edge",
+      "name": "Ravine Edge",
+      "category": "architecture",
+      "type": "prop",
+      "src": "/assets/soulslike/architecture/ravine-edge.png",
+      "tags": ["ravine", "edge", "cliff"],
+      "size": { "w": 128, "h": 128 }
+    },
+    {
+      "id": "item_flask",
+      "name": "Flask",
+      "category": "items",
+      "type": "icon",
+      "src": "/assets/soulslike/items/flask.png",
+      "tags": ["loot", "heal", "consumable"],
+      "size": { "w": 64, "h": 64 }
+    },
+    {
+      "id": "item_key",
+      "name": "Key",
+      "category": "items",
+      "type": "icon",
+      "src": "/assets/soulslike/items/key.png",
+      "tags": ["item", "key", "locked"],
+      "size": { "w": 64, "h": 64 }
+    },
+    {
+      "id": "token_skeleton",
+      "name": "Skeleton",
+      "category": "enemies",
+      "type": "token",
+      "src": "/assets/soulslike/enemies/skeleton.png",
+      "tags": ["enemy", "undead", "token"],
+      "size": { "w": 64, "h": 64 }
+    },
+    {
+      "id": "token_knight",
+      "name": "Knight",
+      "category": "enemies",
+      "type": "token",
+      "src": "/assets/soulslike/enemies/knight.png",
+      "tags": ["enemy", "knight", "token"],
+      "size": { "w": 64, "h": 64 }
+    },
+    {
+      "id": "marker_checkpoint",
+      "name": "Checkpoint",
+      "category": "markers",
+      "type": "marker",
+      "src": "/assets/soulslike/markers/checkpoint.png",
+      "tags": ["bonfire", "checkpoint", "save"],
+      "size": { "w": 64, "h": 64 }
+    },
+    {
+      "id": "prop_chest",
+      "name": "Chest",
+      "category": "props",
+      "type": "prop",
+      "src": "/assets/soulslike/props/chest.png",
+      "tags": ["loot", "chest", "furniture"],
+      "size": { "w": 64, "h": 64 }
+    },
+    {
+      "id": "prop_bones",
+      "name": "Bones",
+      "category": "props",
+      "type": "prop",
+      "src": "/assets/soulslike/props/bones.png",
+      "tags": ["bones", "remains", "flavor"],
+      "size": { "w": 64, "h": 64 }
+    },
+    {
+      "id": "fx_blood_stain",
+      "name": "Blood Stain",
+      "category": "fx",
+      "type": "prop",
+      "src": "/assets/soulslike/fx/blood-stain.png",
+      "tags": ["blood", "death", "fx"],
+      "size": { "w": 128, "h": 128 }
+    }
+  ]
+}
