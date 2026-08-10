@@ -123,6 +123,8 @@ The AI Assistant is designed to help you build maps faster.
 
 '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
 
+hey lovable thank's to you
+
 SKILLS
 - Principal full-stack engineer (enterprise admin consoles)
 - Supabase (Postgres + Auth + Storage + RLS + RPC)
