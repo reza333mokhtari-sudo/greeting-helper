@@ -123,9 +123,7 @@ The AI Assistant is designed to help you build maps faster.
 
 '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
 
-did you think about MAYA AUTODEST app for PC?
-
-there is possible some future for Scrawl add ?
+Implement Maya/Autodesk-inspired modeling tools for PC, such as transform gizmos, snapping, and hierarchical scene editing.
 
 SKILLS
 - Principal full-stack engineer (enterprise admin consoles)
