@@ -351,9 +351,18 @@ export function ProfileMenu({ onAuthRequired }: { onAuthRequired?: (reason: stri
           </div>
 
           <DropdownMenuSeparator className="mx-1" />
-          <DropdownMenuItem onClick={() => setActiveDialog("settings")} className="text-xs font-medium cursor-pointer py-2">
-            <Settings className="mr-2 h-4 w-4 opacity-70" /> User Settings
-          </DropdownMenuItem>
+          {user ? (
+            <DropdownMenuItem onClick={() => setActiveDialog("settings")} className="text-xs font-medium cursor-pointer py-2">
+              <Settings className="mr-2 h-4 w-4 opacity-70" /> User Settings
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem 
+              onClick={() => onAuthRequired?.("Sign in to access your account settings and cloud storage.")} 
+              className="text-xs font-bold text-primary cursor-pointer py-2"
+            >
+              <Key className="mr-2 h-4 w-4 opacity-70" /> Sign In
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem onClick={() => setActiveDialog("help")} className="text-xs font-medium cursor-pointer py-2">
             <HelpCircle className="mr-2 h-4 w-4 opacity-70" /> Help Center
           </DropdownMenuItem>
