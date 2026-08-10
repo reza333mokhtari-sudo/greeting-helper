@@ -123,43 +123,65 @@ The AI Assistant is designed to help you build maps faster.
 
 '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
                                             
-                                            supbase رو اپدیت کن
+SKILLS
+- Supabase Auth debugging
+- TypeScript UX error handling
 
-در داشبورد Supabase باید این‌ها درست باشد:
+GOAL
+Improve Auth so users and developers see precise, actionable errors instead of generic failures.
 
-تنظیم
+CONTEXT
+Auth uses supabase.auth.signInWithOtp (magic link) in AuthDialog.
+Redirect: https://greeting-helper.vercel.app/auth/callback
+Client reads: VITE_SUPABASE_URL + VITE_SUPABASE_PUBLISHABLE_KEY
+If env missing, client falls back to limited local mode.
 
-مقدار لازم
+REQUIREMENTS
 
-Site URL
+1) Detect configuration problems early
+Before calling signInWithOtp, check:
+- VITE_SUPABASE_URL present
+- VITE_SUPABASE_PUBLISHABLE_KEY present
+If missing, show:
+"Supabase is not configured on this deployment. Set VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY in Vercel, then redeploy."
 
-https://greeting-helper.vercel.app
+2) Map Supabase errors to clear Persian/English messages
+In AuthDialog and auth/callback, parse error.message / error.status / error.code and show specific UI text:
 
-Redirect URLs
+- invalid email → "ایمیل نامعتبر است"
+- rate limit / over_email_send_rate_limit → "تعداد درخواست زیاد است. چند دقیقه بعد دوباره تلاش کنید"
+- redirect_uri / redirect not allowed → "Redirect URL در Supabase ثبت نشده. https://greeting-helper.vercel.app/auth/callback را اضافه کنید"
+- email provider disabled → "ورود با ایمیل در Supabase غیرفعال است"
+- user banned → "این حساب مسدود شده است"
+- network/fetch failed → "اتصال به سرور Auth برقرار نشد. اینترنت و URL پروژه را چک کنید"
+- invalid/expired magic link → "لینک منقضی یا نامعتبر است. دوباره Magic Link بفرستید"
+- session missing after callback → "نشست ساخته نشد. Redirect URL و Site URL را در Supabase بررسی کنید"
+- default → show real error.message (safe, no secrets)
 
-https://greeting-helper.vercel.app/auth/callback
+3) Show error in UI, not only toast
+- Inline error under the email field
+- Keep toast for quick feedback
+- Include a small “Details” line with technical message for debugging
 
-Email Auth / Magic Link
+4) Improve callback route \`/auth/callback\`
+- Detect hash/query errors from Supabase (error, error_description)
+- Show exact failure reason on page
+- On success: confirm session with getSession()/getUser()
+- If no session: show precise recovery steps
+- Then redirect home
 
-فعال باشد
+5) Logging (safe)
+- console.error with code/status/message only
+- never log keys/tokens
 
-ارسال ایمیل
+6) Do not change auth method yet
+Keep magic link flow.
+Only improve diagnostics and user-facing precision.
 
-SMTP یا سرویس ایمیل Supabase سالم باشد
-
-
-وقتی callback میشه برگرده باز به این سایت 
-https://greeting-helper.vercel.app
-
-getSession (هر 24 ساعت یکبار logout بشه)
-
-در Supabase → Authentication → URL Configuration
-
-text
-
-Site URL: https://greeting-helper.vercel.app
-Redirect URLs: https://greeting-helper.vercel.app/**
-و مخصوصاً:
-https://greeting-helper.vercel.app/auth/callback`,
+DELIVERABLES
+- Updated AuthDialog error handling
+- Updated auth/callback error handling
+- Shared helper like mapAuthError(error) if useful
+- Test checklist for: missing env, bad email, rate limit, bad redirect, expired link`,
   },
 ];
