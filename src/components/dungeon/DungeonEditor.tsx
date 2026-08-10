@@ -2049,6 +2049,69 @@ export function DungeonEditor() {
             />
           </ScrollArea>
         </div>
+
+        {/* PC Editor Side Panel (Hierarchy & Properties) */}
+        <aside className="hidden w-80 shrink-0 flex-col border-l border-border bg-sidebar lg:flex overflow-visible relative">
+          <ScrollArea className="flex-1 min-h-0">
+            <div className="flex flex-col gap-6 p-4">
+              <div>
+                <h3 className="mb-2 px-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Scene Hierarchy</h3>
+                <div className="rounded-md border bg-background/50">
+                  <LayersPanel
+                    doc={doc}
+                    activeLayer={activeLayer}
+                    onActiveLayer={setActiveLayer}
+                    onUpdateLayer={updateLayer}
+                    onMoveLayer={moveLayer}
+                    onReorderLayer={reorderLayer}
+                    onAddLayer={addLayer}
+                    onDeleteLayer={deleteLayer}
+                    selected={selected}
+                    onSelect={setSelected}
+                    onUpdateObject={updateObject}
+                    onDeleteObject={deleteObject}
+                    compact
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <h3 className="mb-2 px-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Properties Inspector</h3>
+                <div className="rounded-md border bg-background/50 p-1">
+                  <PropertiesPanel 
+                    doc={doc} 
+                    object={selectedObject} 
+                    onChange={(id, patch) => {
+                      if ((patch as any).preview) {
+                        const o = doc.objects.find(obj => obj.id === id);
+                        if (o && o.kind === "image") {
+                          setPreviewProp({ id: o.id, url: o.url, name: o.name || "Prop", license: (o as any).license });
+                        }
+                        return;
+                      }
+                      if (selected.length > 1) {
+                        updateSelectedObjects(patch);
+                      } else {
+                        updateObject(id, patch);
+                      }
+                    }} 
+                    onDelete={deleteSelected} 
+                  />
+                </div>
+              </div>
+
+              <div>
+                <h3 className="mb-2 px-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Viewport Controls</h3>
+                <div className="grid grid-cols-2 gap-2">
+                  <Button variant="outline" size="sm" className="h-8 text-[10px] uppercase font-bold" onClick={fit}>Fit View</Button>
+                  <Button variant="outline" size="sm" className="h-8 text-[10px] uppercase font-bold" onClick={() => zoomTo({x: 0, y: 0})}>Center</Button>
+                  <Button variant="outline" size="sm" className={`h-8 text-[10px] uppercase font-bold ${doc.settings.gridStyle !== 'none' ? 'bg-primary/10' : ''}`} onClick={() => setSettings({ gridStyle: doc.settings.gridStyle === 'none' ? 'square' : 'none' })}>Grid</Button>
+                  <Button variant="outline" size="sm" className={`h-8 text-[10px] uppercase font-bold ${doc.settings.playerView ? 'bg-primary/10' : ''}`} onClick={() => setSettings({ playerView: !doc.settings.playerView })}>Player</Button>
+                </div>
+              </div>
+            </div>
+          </ScrollArea>
+        </aside>
         
         <OnboardingOverlay />
         
