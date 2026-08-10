@@ -177,14 +177,18 @@ export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc
 
   ctx.translate(o.x, o.y);
   ctx.scale(extraScale, extraScale);
-  if (o.kind === "door" || o.kind === "stairs" || o.kind === "image") ctx.rotate(o.angle);
+  const rotation = o.rz ?? (o as any).angle ?? 0;
+  if (o.kind === "door" || o.kind === "stairs" || o.kind === "image" || o.kind === "npc" || o.kind === "item") {
+    ctx.rotate(rotation);
+  }
   ctx.lineJoin = "round";
   ctx.lineCap = "butt";
 
-  if (o.kind === "image" && (o.rx || o.ry)) {
-    const rx = o.rx || 0;
-    const ry = o.ry || rx;
+  if (o.kind === "image" && (o.rx !== undefined || o.ry !== undefined)) {
+    const rx = o.rx ?? 0;
+    const ry = o.ry ?? 0;
     ctx.beginPath();
+    // Simplified roundRect mapping for now to ensure it works correctly with our data model
     ctx.roundRect(-o.w / 2, -o.h / 2, o.w, o.h, [rx, ry, ry, rx]);
     ctx.clip();
   }
@@ -246,6 +250,7 @@ export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc
     ctx.fillStyle = o.color;
     ctx.strokeStyle = o.hostile ? "#2b0b0b" : "#0b1b2b";
     ctx.lineWidth = Math.max(1.5, o.r * 0.14);
+    ctx.rotate(-rotation); // Counter-rotate so labels stay upright
     ctx.beginPath();
     ctx.arc(0, 0, o.r, 0, Math.PI * 2);
     ctx.fill();
@@ -264,6 +269,7 @@ export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc
     ctx.fillStyle = o.color;
     ctx.strokeStyle = inkColor;
     ctx.lineWidth = Math.max(1.2, s * 0.08);
+    ctx.rotate(-rotation);
     ctx.beginPath();
     ctx.moveTo(0, -s / 2);
     ctx.lineTo(s / 2, 0);

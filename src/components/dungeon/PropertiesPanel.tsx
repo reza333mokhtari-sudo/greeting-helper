@@ -224,12 +224,31 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
               <Input
                 type="number"
                 className={numInput}
-                value={Math.round((o.angle * 180) / Math.PI)}
-                onChange={(e) => patch({ angle: (Number(e.target.value) * Math.PI) / 180 } as Partial<MapObject>)}
+                value={Math.round((o.rz ?? 0) * 180 / Math.PI)}
+                onChange={(e) => patch({ rz: (Number(e.target.value) * Math.PI) / 180 } as Partial<MapObject>)}
               />
             </Row>
             <Row label="Corner Radius">
-                <NumSlider value={o.rx ?? 0} min={0} max={100} onChange={(v) => patch({ rx: v, ry: v } as Partial<MapObject>)} />
+                <div className="grid grid-cols-2 gap-2 w-32">
+                  <div className="flex flex-col gap-1">
+                    <span className="text-[8px] text-muted-foreground">Top-Left</span>
+                    <Input 
+                      type="number" 
+                      className="h-6 text-[10px]" 
+                      value={o.rx ?? 0} 
+                      onChange={(e) => patch({ rx: Number(e.target.value) } as Partial<MapObject>)} 
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-[8px] text-muted-foreground">Top-Right</span>
+                    <Input 
+                      type="number" 
+                      className="h-6 text-[10px]" 
+                      value={o.ry ?? 0} 
+                      onChange={(e) => patch({ ry: Number(e.target.value) } as Partial<MapObject>)} 
+                    />
+                  </div>
+                </div>
             </Row>
           </div>
         </>
