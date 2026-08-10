@@ -1860,7 +1860,7 @@ export function DungeonEditor() {
 
         {leftPanel && (
           <aside 
-            className="relative flex h-full shrink-0 flex-col border-r border-border bg-sidebar overflow-visible"
+            className="relative flex h-full shrink-0 flex-col border-r border-border bg-sidebar overflow-visible z-20"
             style={{ width: `${sidebarWidth}px` }}
             data-animation={doc.settings.animationIntensity}
           >
