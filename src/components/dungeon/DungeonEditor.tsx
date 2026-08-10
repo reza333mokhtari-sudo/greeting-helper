@@ -1690,6 +1690,11 @@ export function DungeonEditor() {
             floorName={doc.floors.find((f) => f.id === doc.activeFloorId)?.name ?? "Ground floor"}
             onOpenHelp={openHelp}
             onOpenDiagnostics={() => setLeftPanel("diagnostics")}
+            isLoggedIn={isLoggedIn}
+            onAuthRequired={(reason) => {
+              setAuthReason(reason);
+              setAuthOpen(true);
+            }}
           />
         );
       case "fog":

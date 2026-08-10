@@ -50,7 +50,7 @@ type Props = {
   onOpenDiagnostics?: () => void;
 };
 
-export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp, onOpenDiagnostics }: Props) {
+export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp, onOpenDiagnostics, isLoggedIn, onAuthRequired }: Props & { isLoggedIn?: boolean; onAuthRequired?: (reason: string) => void }) {
   const online = useOnlineStatus();
   const [engine, setEngine] = useState<AiEngine>("balanced");
   const [showEditor, setShowEditor] = useState(false);
@@ -61,12 +61,21 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages]);
+
+  const stopLoading = useCallback(() => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+    setIsLoading(false);
+  }, []);
 
   const ask = async (text: string) => {
     if (!online || isLoading) return;
@@ -77,19 +86,45 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
     setResult(null);
     onPreview(null);
 
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
+
+    // 30s timeout
+    const timeoutId = setTimeout(() => {
+      if (abortControllerRef.current === abortController) {
+        abortController.abort("Timeout");
+        toast.error("AI Request timed out after 30 seconds.");
+      }
+    }, 30000);
+
     try {
       const response = await fetch('/api/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        signal: abortController.signal,
         body: JSON.stringify({
           prompt: text,
           history: messages.map(m => ({ role: m.role, content: m.content })),
           summary: summarise(doc),
           engine,
+          customSystem,
         }),
       });
 
-      if (!response.ok) throw new Error('Chat request failed');
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        let errorMessage = 'Chat request failed';
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch (e) {
+          // Fallback to text if JSON fails
+          const text = await response.text();
+          if (text) errorMessage = text;
+        }
+        throw new Error(errorMessage);
+      }
 
       const reader = response.body?.getReader();
       if (!reader) throw new Error('No reader available');
@@ -100,14 +135,24 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
       setMessages(prev => [...prev, { id: assistantId, role: 'assistant', content: "" }]);
 
       const decoder = new TextDecoder();
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        
-        const chunk = decoder.decode(value, { stream: true });
-        assistantContent += chunk;
-        
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          
+          const chunk = decoder.decode(value, { stream: true });
+          assistantContent += chunk;
+          
+          setMessages(prev => prev.map(m => m.id === assistantId ? { ...m, content: assistantContent } : m));
+        }
+      } catch (streamErr: any) {
+        if (streamErr.name === 'AbortError') {
+          assistantContent += "\n\n*(AI Interrupted)*";
+        } else {
+          assistantContent += `\n\n*(Stream error: ${streamErr.message})*`;
+        }
         setMessages(prev => prev.map(m => m.id === assistantId ? { ...m, content: assistantContent } : m));
+        throw streamErr;
       }
 
       // Final processing for JSON layout
@@ -122,10 +167,18 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
         console.warn("No layout found in response");
       }
 
-    } catch (err) {
-      toast.error("AI Assistant is currently unavailable.");
-      console.error(err);
+    } catch (err: any) {
+      if (err.name === 'AbortError') {
+        console.log("Request aborted");
+      } else {
+        toast.error(`AI Assistant Error: ${err.message}`);
+        console.error(err);
+      }
     } finally {
+      clearTimeout(timeoutId);
+      if (abortControllerRef.current === abortController) {
+        abortControllerRef.current = null;
+      }
       setIsLoading(false);
     }
   };
@@ -347,15 +400,17 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
           />
           <Button 
             size="icon" 
-            type="submit"
-            className="absolute right-1.5 top-1.5 size-7 rounded-md" 
-            disabled={isLoading || !inputValue.trim() || !online} 
+            type={isLoading ? "button" : "submit"}
+            className={`absolute right-1.5 top-1.5 size-7 rounded-md transition-all ${isLoading ? "bg-destructive hover:bg-destructive/80" : ""}`} 
+            disabled={(!isLoading && (!inputValue.trim() || !online || !isLoggedIn))}
+            onClick={isLoading ? stopLoading : undefined}
+            title={isLoading ? "Stop generating" : "Send message"}
           >
-            {isLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
+            {isLoading ? <span className="flex items-center justify-center relative"><Loader2 className="h-3.5 w-3.5 animate-spin absolute opacity-20" /><span className="h-2 w-2 bg-white rounded-sm" /></span> : <Send className="h-3.5 w-3.5" />}
           </Button>
         </div>
         <p className="text-center text-[9px] text-muted-foreground">
-          {!online ? "You are offline" : "Press Enter to send"}
+          {!online ? "You are offline" : !isLoggedIn ? "Please sign in to chat" : "Press Enter to send"}
         </p>
       </form>
     </section>
