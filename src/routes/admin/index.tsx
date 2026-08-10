@@ -113,6 +113,26 @@ function AdminConsole() {
     loadData();
   }, [loadData]);
 
+  const handleExport = () => {
+    if (!rows.length) return;
+    const headers = Object.keys(rows[0]).join(",");
+    const csv = rows.map(row => 
+      Object.values(row).map(val => 
+        typeof val === 'object' ? `"${JSON.stringify(val).replace(/"/g, '""')}"` : `"${val}"`
+      ).join(",")
+    ).join("\n");
+    
+    const blob = new Blob([`${headers}\n${csv}`], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.setAttribute('hidden', '');
+    a.setAttribute('href', url);
+    a.setAttribute('download', `${activeTable}_export_${new Date().toISOString()}.csv`);
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
   if (state === "loading") return null;
 
   if (state === "denied") {
@@ -321,6 +341,7 @@ function AdminConsole() {
                     onView={setSelectedRow}
                     onEdit={setEditingRow}
                     onDelete={handleDelete}
+                    onExport={handleExport}
                   />
                 )}
               </div>
