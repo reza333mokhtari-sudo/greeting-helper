@@ -100,7 +100,6 @@ export function ProfileMenu() {
   };
 
   const dialogs = {
-  const dialogs = {
     settings: { 
       title: "Account Management", 
       desc: "Comprehensive control center for your professional identity and security.",
