@@ -22,6 +22,7 @@ type Props = {
   onSelect: (ids: string[]) => void;
   onUpdateObject?: (id: string, patch: any) => void;
   onDeleteObject?: (id: string) => void;
+  compact?: boolean;
 };
 
 function countOn(objects: MapObject[], id: string) {
