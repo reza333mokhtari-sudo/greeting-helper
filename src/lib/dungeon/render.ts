@@ -178,7 +178,7 @@ export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc
   ctx.translate(o.x, o.y);
   ctx.scale(extraScale, extraScale);
   const rotation = o.rz ?? (o as any).angle ?? 0;
-  if (o.kind === "door" || o.kind === "stairs" || o.kind === "image") {
+  if (o.kind === "door" || o.kind === "stairs" || o.kind === "image" || o.kind === "npc" || o.kind === "item") {
     ctx.rotate(rotation);
   }
   ctx.lineJoin = "round";

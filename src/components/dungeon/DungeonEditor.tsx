@@ -999,7 +999,7 @@ export function DungeonEditor() {
       commit((d) => ({
         ...d,
         objects: d.objects.map((o) =>
-          selected.includes(o.id) && (o.kind === "door" || o.kind === "stairs") ? { ...o, angle: o.angle + delta } : o,
+          selected.includes(o.id) ? { ...o, rz: (o.rz ?? (o as any).angle ?? 0) + delta } : o,
         ),
       }));
     },
@@ -1509,6 +1509,9 @@ export function DungeonEditor() {
     (toFront: boolean) => {
       if (!selected.length) return;
       commit((d) => {
+        // Group by layer first, as reordering across layers breaks the mental model
+        // However, the user specifically mentioned "when click bring top down this equation would be change"
+        // so we reorder within the global list while keeping layer consistency if possible.
         const move = <T extends { id: string }>(arr: T[]) => {
           const picked = arr.filter((x) => selected.includes(x.id));
           if (!picked.length) return arr;
