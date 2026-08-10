@@ -17,17 +17,26 @@ export const Route = createFileRoute('/api/ai/chat')({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const { prompt, history, summary, engine = 'balanced' } = await request.json();
+        const apiKey = process.env['LOVABLE_API_KEY'];
+        if (!apiKey) {
+          return new Response(JSON.stringify({ 
+            error: 'Lovable API Key is missing. Please configure it in your environment secrets.' 
+          }), { 
+            status: 503,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+
+        const { prompt, history, summary, engine = 'balanced', customSystem } = await request.json();
 
         // Perform RAG with mini-search
         const searchResults = searchApp(prompt).slice(0, 5);
         const context = searchResults.map(r => `[${r['type']}] ${r['title']}: ${r['content']}`).join('\n');
 
-        const modelId = engine === 'fast' ? 'gpt-4o-mini' : 'gpt-4o'; // Map to actual models if needed
+        // Map engines to stable gateway model IDs
+        const modelId = engine === 'fast' ? 'gpt-4o-mini' : 'gpt-4o';
 
-        const result = await streamText({
-          model: lovable(modelId),
-          system: `${SYSTEM_PROMPT}
+        const finalSystemPrompt = `${customSystem || SYSTEM_PROMPT}
 
 SECURITY INSTRUCTION:
 - You are an AI assistant for a Dungeon Editor.
@@ -40,14 +49,28 @@ APP CONTEXT (RAG):
 ${context}
 
 MAP STATE:
-${summary}`,
-          messages: [
-            ...history,
-            { role: 'user', content: prompt }
-          ],
-        });
+${summary}`;
 
-        return result.toTextStreamResponse();
+        try {
+          const result = await streamText({
+            model: lovable(modelId),
+            system: finalSystemPrompt,
+            messages: [
+              ...history,
+              { role: 'user', content: prompt }
+            ],
+          });
+
+          return result.toTextStreamResponse();
+        } catch (error: any) {
+          console.error('AI Stream Error:', error);
+          return new Response(JSON.stringify({ 
+            error: error.message || 'An error occurred while connecting to the AI gateway.' 
+          }), { 
+            status: 500,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
       }
     }
   }
