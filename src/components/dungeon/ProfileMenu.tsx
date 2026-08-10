@@ -21,6 +21,7 @@ import {
   Bell,
   Fingerprint
 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import {
   DropdownMenu,
   DropdownMenuContent,
