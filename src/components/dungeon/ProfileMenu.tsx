@@ -1,5 +1,26 @@
 import { useState, useEffect } from "react";
-import { User, Settings, HelpCircle, LifeBuoy, X, Send, Loader2, MessageSquare, LogOut } from "lucide-react";
+import { 
+  User, 
+  Settings, 
+  HelpCircle, 
+  LifeBuoy, 
+  X, 
+  Send, 
+  Loader2, 
+  MessageSquare, 
+  LogOut,
+  ShieldCheck,
+  Database,
+  Key,
+  Smartphone,
+  Mail,
+  UserCheck,
+  History,
+  Trash2,
+  AlertCircle,
+  Bell,
+  Fingerprint
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,8 +35,14 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Separator } from "@/components/ui/separator";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
+import { checkHealth } from "@/lib/health.functions";
 
 export function ProfileMenu() {
   const [activeDialog, setActiveDialog] = useState<"settings" | "help" | "faq" | "support" | null>(null);
