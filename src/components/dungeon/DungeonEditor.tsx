@@ -2144,7 +2144,32 @@ export function DungeonEditor() {
         onFit={fit}
       />
 
-      <div className="absolute top-4 right-4 z-30 flex flex-col items-end gap-2">
+      <div className="absolute top-20 right-84 z-30 flex flex-col items-end gap-2 hidden lg:flex">
+        <Minimap 
+          doc={doc} 
+          view={view} 
+          initialPos={minimapPos}
+          onPositionChange={(pos) => {
+            setMinimapPos(pos);
+            localStorage.setItem("minimap-pos", JSON.stringify(pos));
+          }}
+          onNavigate={(pt) => setView((v) => ({ ...v, x: -pt.x + (wrapRef.current?.clientWidth ?? 0) / 2 / v.scale, y: -pt.y + (wrapRef.current?.clientHeight ?? 0) / 2 / v.scale }))} 
+        />
+        <div className="flex flex-col gap-2">
+          <HelpButton 
+            onClick={() => openHelp("navigation")} 
+            label="Navigation"
+          />
+          {doc.settings.cameraMode && (
+            <div className="flex flex-col gap-1 rounded-md border bg-background/95 p-1 shadow-md backdrop-blur-sm">
+              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => zoomBy(1)}><Plus className="h-3 w-3" /></Button>
+              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => zoomBy(-1)}><X className="h-3 w-3" /></Button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="absolute top-4 right-4 z-30 flex flex-col items-end gap-2 lg:hidden">
         <Minimap 
           doc={doc} 
           view={view} 
