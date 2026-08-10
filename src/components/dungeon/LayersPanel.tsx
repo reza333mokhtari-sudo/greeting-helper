@@ -46,21 +46,23 @@ export function LayersPanel(p: Props) {
 
   return (
     <TooltipProvider delayDuration={250}>
-    <section>
-      <div className="mb-4 flex items-center justify-between">
-        <div className="space-y-0.5">
-          <h2 className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_8px_var(--primary)]" />
-            Layer Stack
-          </h2>
-          <p className="text-[9px] text-muted-foreground">Order determines visibility</p>
+    <section className={p.compact ? "space-y-2" : ""}>
+      {!p.compact && (
+        <div className="mb-4 flex items-center justify-between">
+          <div className="space-y-0.5">
+            <h2 className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_8px_var(--primary)]" />
+              Layer Stack
+            </h2>
+            <p className="text-[9px] text-muted-foreground">Order determines visibility</p>
+          </div>
+          <Hint label="Add layer">
+            <Button variant="outline" size="icon" className="size-7 rounded-full border-primary/20 bg-primary/5 hover:bg-primary/10" onClick={p.onAddLayer} aria-label="Add layer">
+              <Plus className="size-4 text-primary" />
+            </Button>
+          </Hint>
         </div>
-        <Hint label="Add layer">
-          <Button variant="outline" size="icon" className="size-7 rounded-full border-primary/20 bg-primary/5 hover:bg-primary/10" onClick={p.onAddLayer} aria-label="Add layer">
-            <Plus className="size-4 text-primary" />
-          </Button>
-        </Hint>
-      </div>
+      )}
 
       <ul className="flex flex-col gap-1.5">
         {layers.map((l) => {
