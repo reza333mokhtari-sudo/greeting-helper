@@ -1845,7 +1845,7 @@ export function DungeonEditor() {
         }}
       />
 
-      <div className="flex min-h-0 flex-1">
+      <div className="flex min-h-0 flex-1 lg:flex-row flex-col">
         <LeftRail 
           active={leftPanel} 
           onSelect={(id) => setLeftPanel((cur) => (cur === id ? null : id))} 
