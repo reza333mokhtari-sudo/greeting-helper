@@ -139,12 +139,11 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
     }
   };
 
-  const SUGGESTED_CHIPS = [
-    "Suggest a crypt based on historical catacombs",
-    "How do I zoom and pan?",
-    "Show me the Room tool",
-    "How do I place props?",
-    "Suggest a layout for a wizard tower",
+  const COMMAND_PRESETS = [
+    { label: "Suggest Layout", prompt: "Suggest a layout for a small wizard's tower with a library and laboratory.", icon: <Sparkles className="h-3 w-3" /> },
+    { label: "Find Props", prompt: "I need some spooky props like skulls and candles. What should I search for?", icon: <HelpCircle className="h-3 w-3" /> },
+    { label: "Help: Pan/Zoom", prompt: "How do I move around and zoom in the editor?", icon: <Maximize2 className="h-3 w-3" /> },
+    { label: "Historical Crypt", prompt: "Suggest a crypt layout based on historical catacombs.", icon: <Sparkles className="h-3 w-3" /> },
   ];
 
   return (
@@ -241,15 +240,20 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
               <p className="text-[11px] text-muted-foreground italic">
                 Ask me how to use the editor, find props, or suggest a layout.
               </p>
-              <div className="grid grid-cols-1 gap-1.5">
-                {SUGGESTED_CHIPS.map((c) => (
+              <div className="grid grid-cols-2 gap-1.5">
+                {COMMAND_PRESETS.map((c) => (
                   <button
-                    key={c}
-                    onClick={() => ask(c)}
-                    className="flex items-center gap-2 rounded-md border border-border/50 bg-background/50 px-2.5 py-1.5 text-left text-[11px] text-muted-foreground transition-colors hover:border-accent/40 hover:bg-accent/5 hover:text-foreground"
+                    key={c.label}
+                    onClick={() => ask(c.prompt)}
+                    className="flex flex-col items-start gap-1 rounded-md border border-border/50 bg-background/50 p-2 text-left transition-colors hover:border-accent/40 hover:bg-accent/5"
                   >
-                    <Sparkles className="h-3 w-3 text-accent/60" />
-                    {c}
+                    <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-accent/70">
+                      {c.icon}
+                      {c.label}
+                    </div>
+                    <div className="text-[10px] text-muted-foreground line-clamp-2 leading-tight">
+                      {c.prompt}
+                    </div>
                   </button>
                 ))}
               </div>
