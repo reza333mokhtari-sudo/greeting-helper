@@ -1402,6 +1402,18 @@ export function DungeonEditor() {
     [commit],
   );
 
+  const updateSelectedObjects = useCallback(
+    (patch: Partial<MapObject>) => {
+      if (!selected.length) return;
+      commit((d) => ({
+        ...d,
+        objects: d.objects.map((o) => (selected.includes(o.id) ? ({ ...o, ...patch } as MapObject) : o)),
+      }), "Update selected");
+    },
+    [commit, selected],
+  );
+  );
+
   const deleteObject = useCallback((id: string) => {
     commit((d) => ({
       ...d,
