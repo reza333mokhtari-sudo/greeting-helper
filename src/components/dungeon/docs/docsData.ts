@@ -123,7 +123,7 @@ The AI Assistant is designed to help you build maps faster.
 
 '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
 
-Draft a cross-platform roadmap comparing mobile and PC feature parity and listing what to build first for Scrawl.
+Create a plan for a PC version of Dungeon Scrawl, including core features, system requirements, and a phased rollout.
 
 SKILLS
 - Principal full-stack engineer (enterprise admin consoles)
