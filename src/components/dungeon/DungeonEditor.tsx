@@ -1663,6 +1663,8 @@ export function DungeonEditor() {
         );
       case "props":
         return <PropsPanel onPlace={placeImage} onPreview={(p) => setPreviewProp(p)} />;
+      case "asset-library":
+        return <AssetLibraryPanel onPlace={placeImage} />;
       case "ai":
         return (
           <AiPanel
