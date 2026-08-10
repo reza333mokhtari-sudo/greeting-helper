@@ -123,7 +123,11 @@ The AI Assistant is designed to help you build maps faster.
 
 '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
 
-Create a plan for a PC version of Dungeon Scrawl, including core features, system requirements, and a phased rollout.
+Design and build a PC-specific editor UI layout for Dungeon Scrawl with panels for hierarchy, properties, and viewport controls.
+
+also add ADMIN site when admin logged in
+
+add go to admin page
 
 SKILLS
 - Principal full-stack engineer (enterprise admin consoles)
