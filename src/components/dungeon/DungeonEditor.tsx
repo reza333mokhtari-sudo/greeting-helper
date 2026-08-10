@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Sparkles, AlertCircle, X } from "lucide-react";
+import { Sparkles, AlertCircle, X, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { useHotkeys } from "react-hotkeys-hook";
 import { useAutosave } from "@/hooks/use-autosave";
@@ -1845,7 +1845,7 @@ export function DungeonEditor() {
         }}
       />
 
-      <div className="flex min-h-0 flex-1">
+      <div className="flex min-h-0 flex-1 lg:flex-row flex-col">
         <LeftRail 
           active={leftPanel} 
           onSelect={(id) => setLeftPanel((cur) => (cur === id ? null : id))} 
@@ -1860,7 +1860,7 @@ export function DungeonEditor() {
 
         {leftPanel && (
           <aside 
-            className="relative flex h-full shrink-0 flex-col border-r border-border bg-sidebar overflow-visible"
+            className="relative flex h-full shrink-0 flex-col border-r border-border bg-sidebar overflow-visible z-20"
             style={{ width: `${sidebarWidth}px` }}
             data-animation={doc.settings.animationIntensity}
           >
@@ -1871,7 +1871,7 @@ export function DungeonEditor() {
             </ScrollArea>
             <div
               onMouseDown={handleResizeMouseDown}
-              className={`resize-handle ${isResizing ? "is-resizing" : ""}`}
+              className={`resize-handle ${isResizing ? "is-resizing" : ""} z-30`}
             />
           </aside>
         )}
@@ -2049,6 +2049,69 @@ export function DungeonEditor() {
             />
           </ScrollArea>
         </div>
+
+        {/* PC Editor Side Panel (Hierarchy & Properties) */}
+        <aside className="hidden w-80 shrink-0 flex-col border-l border-border bg-sidebar lg:flex overflow-visible relative z-20">
+          <ScrollArea className="flex-1 min-h-0">
+            <div className="flex flex-col gap-6 p-4">
+              <div>
+                <h3 className="mb-2 px-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Scene Hierarchy</h3>
+                <div className="rounded-md border bg-background/50">
+                  <LayersPanel
+                    doc={doc}
+                    activeLayer={activeLayer}
+                    onActiveLayer={setActiveLayer}
+                    onUpdateLayer={updateLayer}
+                    onMoveLayer={moveLayer}
+                    onReorderLayer={reorderLayer}
+                    onAddLayer={addLayer}
+                    onDeleteLayer={deleteLayer}
+                    selected={selected}
+                    onSelect={setSelected}
+                    onUpdateObject={updateObject}
+                    onDeleteObject={deleteObject}
+                    compact
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <h3 className="mb-2 px-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Properties Inspector</h3>
+                <div className="rounded-md border bg-background/50 p-1">
+                  <PropertiesPanel 
+                    doc={doc} 
+                    object={selectedObject} 
+                    onChange={(id, patch) => {
+                      if ((patch as any).preview) {
+                        const o = doc.objects.find(obj => obj.id === id);
+                        if (o && o.kind === "image") {
+                          setPreviewProp({ id: o.id, url: o.url, name: o.name || "Prop", license: (o as any).license });
+                        }
+                        return;
+                      }
+                      if (selected.length > 1) {
+                        updateSelectedObjects(patch);
+                      } else {
+                        updateObject(id, patch);
+                      }
+                    }} 
+                    onDelete={deleteSelected} 
+                  />
+                </div>
+              </div>
+
+              <div>
+                <h3 className="mb-2 px-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Viewport Controls</h3>
+                <div className="grid grid-cols-2 gap-2">
+                  <Button variant="outline" size="sm" className="h-8 text-[10px] uppercase font-bold" onClick={fit}>Fit View</Button>
+                  <Button variant="outline" size="sm" className="h-8 text-[10px] uppercase font-bold" onClick={() => zoomTo({x: 0, y: 0})}>Center</Button>
+                  <Button variant="outline" size="sm" className={`h-8 text-[10px] uppercase font-bold ${doc.settings.gridStyle !== 'none' ? 'bg-primary/10' : ''}`} onClick={() => setSettings({ gridStyle: doc.settings.gridStyle === 'none' ? 'square' : 'none' })}>Grid</Button>
+                  <Button variant="outline" size="sm" className={`h-8 text-[10px] uppercase font-bold ${doc.settings.playerView ? 'bg-primary/10' : ''}`} onClick={() => setSettings({ playerView: !doc.settings.playerView })}>Player</Button>
+                </div>
+              </div>
+            </div>
+          </ScrollArea>
+        </aside>
         
         <OnboardingOverlay />
         
@@ -2081,7 +2144,32 @@ export function DungeonEditor() {
         onFit={fit}
       />
 
-      <div className="absolute top-4 right-4 z-30 flex flex-col items-end gap-2">
+      <div className="absolute top-20 right-84 z-30 flex flex-col items-end gap-2 hidden lg:flex">
+        <Minimap 
+          doc={doc} 
+          view={view} 
+          initialPos={minimapPos}
+          onPositionChange={(pos) => {
+            setMinimapPos(pos);
+            localStorage.setItem("minimap-pos", JSON.stringify(pos));
+          }}
+          onNavigate={(pt) => setView((v) => ({ ...v, x: -pt.x + (wrapRef.current?.clientWidth ?? 0) / 2 / v.scale, y: -pt.y + (wrapRef.current?.clientHeight ?? 0) / 2 / v.scale }))} 
+        />
+        <div className="flex flex-col gap-2">
+          <HelpButton 
+            onClick={() => openHelp("navigation")} 
+            label="Navigation"
+          />
+          {doc.settings.cameraMode && (
+            <div className="flex flex-col gap-1 rounded-md border bg-background/95 p-1 shadow-md backdrop-blur-sm">
+              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => zoomBy(1)}><Plus className="h-3 w-3" /></Button>
+              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => zoomBy(-1)}><X className="h-3 w-3" /></Button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="absolute top-4 right-4 z-30 flex flex-col items-end gap-2 lg:hidden">
         <Minimap 
           doc={doc} 
           view={view} 

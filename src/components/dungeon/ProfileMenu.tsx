@@ -21,6 +21,7 @@ import {
   Bell,
   Fingerprint
 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -373,18 +374,31 @@ export function ProfileMenu({ onAuthRequired }: { onAuthRequired?: ((reason: str
             <LifeBuoy className="mr-2 h-4 w-4 opacity-70" /> Admin Support
           </DropdownMenuItem>
           {user && (
-            <>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem 
-                className="text-destructive focus:text-destructive"
-                onClick={() => {
-                  supabase.auth.signOut();
-                  toast.success("Signed out");
-                }}
-              >
-                <LogOut className="mr-2 h-4 w-4" /> Sign Out
-              </DropdownMenuItem>
-            </>
+            <DropdownMenuItem asChild className="text-xs font-bold text-blue-500 cursor-pointer py-2">
+              <Link to="/admin">
+                <ShieldCheck className="mr-2 h-4 w-4 opacity-70" /> Control Center
+              </Link>
+            </DropdownMenuItem>
+          )}
+
+          <DropdownMenuSeparator className="mx-1" />
+          {user ? (
+            <DropdownMenuItem 
+              className="text-xs font-medium text-destructive cursor-pointer py-2"
+              onClick={async () => {
+                await supabase.auth.signOut();
+                toast.success("Signed out");
+              }}
+            >
+              <LogOut className="mr-2 h-4 w-4 opacity-70" /> Sign Out
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem 
+              className="text-[10px] font-bold uppercase text-muted-foreground/40 disabled cursor-default py-2 justify-center"
+              disabled
+            >
+              Guest Session
+            </DropdownMenuItem>
           )}
         </DropdownMenuContent>
 

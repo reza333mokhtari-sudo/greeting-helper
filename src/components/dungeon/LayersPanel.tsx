@@ -22,6 +22,7 @@ type Props = {
   onSelect: (ids: string[]) => void;
   onUpdateObject?: (id: string, patch: any) => void;
   onDeleteObject?: (id: string) => void;
+  compact?: boolean;
 };
 
 function countOn(objects: MapObject[], id: string) {
@@ -45,21 +46,23 @@ export function LayersPanel(p: Props) {
 
   return (
     <TooltipProvider delayDuration={250}>
-    <section>
-      <div className="mb-4 flex items-center justify-between">
-        <div className="space-y-0.5">
-          <h2 className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_8px_var(--primary)]" />
-            Layer Stack
-          </h2>
-          <p className="text-[9px] text-muted-foreground">Order determines visibility</p>
+    <section className={p.compact ? "space-y-2" : ""}>
+      {!p.compact && (
+        <div className="mb-4 flex items-center justify-between">
+          <div className="space-y-0.5">
+            <h2 className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_8px_var(--primary)]" />
+              Layer Stack
+            </h2>
+            <p className="text-[9px] text-muted-foreground">Order determines visibility</p>
+          </div>
+          <Hint label="Add layer">
+            <Button variant="outline" size="icon" className="size-7 rounded-full border-primary/20 bg-primary/5 hover:bg-primary/10" onClick={p.onAddLayer} aria-label="Add layer">
+              <Plus className="size-4 text-primary" />
+            </Button>
+          </Hint>
         </div>
-        <Hint label="Add layer">
-          <Button variant="outline" size="icon" className="size-7 rounded-full border-primary/20 bg-primary/5 hover:bg-primary/10" onClick={p.onAddLayer} aria-label="Add layer">
-            <Plus className="size-4 text-primary" />
-          </Button>
-        </Hint>
-      </div>
+      )}
 
       <ul className="flex flex-col gap-1.5">
         {layers.map((l) => {
@@ -176,53 +179,55 @@ export function LayersPanel(p: Props) {
                 </Badge>
               </div>
 
-              <div className="mt-1 flex items-center gap-1">
-                <Slider
-                  value={[Math.round(l.opacity * 100)]}
-                  min={10}
-                  max={100}
-                  onValueChange={([v]) => p.onUpdateLayer(l.id, { opacity: (v ?? 100) / 100 })}
-                  onClick={(e) => e.stopPropagation()}
-                  className="mx-1 flex-1"
-                  aria-label="Layer opacity"
-                />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="size-6"
-                  aria-label="Move layer up"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    p.onMoveLayer(l.id, 1);
-                  }}
-                >
-                  <ChevronUp className="size-3.5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="size-6"
-                  aria-label="Move layer down"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    p.onMoveLayer(l.id, -1);
-                  }}
-                >
-                  <ChevronDown className="size-3.5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="size-6 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                  aria-label="Delete layer"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    p.onDeleteLayer(l.id);
-                  }}
-                >
-                  <X className="size-3.5" />
-                </Button>
-              </div>
+              {!p.compact && (
+                <div className="mt-1 flex items-center gap-1">
+                  <Slider
+                    value={[Math.round(l.opacity * 100)]}
+                    min={10}
+                    max={100}
+                    onValueChange={([v]) => p.onUpdateLayer(l.id, { opacity: (v ?? 100) / 100 })}
+                    onClick={(e) => e.stopPropagation()}
+                    className="mx-1 flex-1"
+                    aria-label="Layer opacity"
+                  />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-6"
+                    aria-label="Move layer up"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      p.onMoveLayer(l.id, 1);
+                    }}
+                  >
+                    <ChevronUp className="size-3.5" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-6"
+                    aria-label="Move layer down"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      p.onMoveLayer(l.id, -1);
+                    }}
+                  >
+                    <ChevronDown className="size-3.5" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-6 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                    aria-label="Delete layer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      p.onDeleteLayer(l.id);
+                    }}
+                  >
+                    <X className="size-3.5" />
+                  </Button>
+                </div>
+              )}
 
               {active && objs.length > 0 && (
                 <ScrollArea className="mt-1 max-h-40 border border-border/30 rounded bg-muted/10 p-1">
