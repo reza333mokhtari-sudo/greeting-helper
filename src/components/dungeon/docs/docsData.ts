@@ -123,10 +123,43 @@ The AI Assistant is designed to help you build maps faster.
 
 '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
                                             
-                                            Implement a set of command presets so users can trigger common actions with one click.
+                                            supbase رو اپدیت کن
+
+در داشبورد Supabase باید این‌ها درست باشد:
+
+تنظیم
+
+مقدار لازم
+
+Site URL
+
+https://greeting-helper.vercel.app
+
+Redirect URLs
+
+https://greeting-helper.vercel.app/auth/callback
+
+Email Auth / Magic Link
+
+فعال باشد
+
+ارسال ایمیل
+
+SMTP یا سرویس ایمیل Supabase سالم باشد
 
 
+وقتی callback میشه برگرده باز به این سایت 
+https://greeting-helper.vercel.app
 
-Implement the main AI Assistant chat UI that follows the approved command-instruction behavior.`,
+getSession (هر 24 ساعت یکبار logout بشه)
+
+در Supabase → Authentication → URL Configuration
+
+text
+
+Site URL: https://greeting-helper.vercel.app
+Redirect URLs: https://greeting-helper.vercel.app/**
+و مخصوصاً:
+https://greeting-helper.vercel.app/auth/callback`,
   },
 ];
