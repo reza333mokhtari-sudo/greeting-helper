@@ -1737,7 +1737,11 @@ export function DungeonEditor() {
                 }
                 return;
               }
-              updateObject(id, patch);
+              if (selected.length > 1) {
+                updateSelectedObjects(patch);
+              } else {
+                updateObject(id, patch);
+              }
             }} 
             onDelete={deleteSelected} 
           />
