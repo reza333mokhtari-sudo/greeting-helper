@@ -123,7 +123,9 @@ The AI Assistant is designed to help you build maps faster.
 
 '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
 
-hey lovable thank's to you
+did you think about MAYA AUTODEST app for PC?
+
+there is possible some future for Scrawl add ?
 
 SKILLS
 - Principal full-stack engineer (enterprise admin consoles)
