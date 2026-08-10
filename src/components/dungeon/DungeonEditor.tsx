@@ -1412,7 +1412,6 @@ export function DungeonEditor() {
     },
     [commit, selected],
   );
-  );
 
   const deleteObject = useCallback((id: string) => {
     commit((d) => ({
