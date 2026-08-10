@@ -177,7 +177,9 @@ export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc
 
   ctx.translate(o.x, o.y);
   ctx.scale(extraScale, extraScale);
-  if (o.kind === "door" || o.kind === "stairs" || o.kind === "image") ctx.rotate(o.angle);
+  if (o.kind === "door" || o.kind === "stairs" || o.kind === "image") {
+    ctx.rotate(o.rz ?? (o as any).angle ?? 0);
+  }
   ctx.lineJoin = "round";
   ctx.lineCap = "butt";
 
