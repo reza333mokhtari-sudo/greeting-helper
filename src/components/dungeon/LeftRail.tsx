@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Sliders, Layers, Image, Sparkles, CloudFog, History, Info, Activity, Building2, HelpCircle, Monitor, FileText, Map as MapIcon, Wand2 } from "lucide-react";
+import { Sliders, Layers, Image, Sparkles, CloudFog, History, Info, Activity, Building2, HelpCircle, Monitor, FileText, Map as MapIcon, Wand2, Package } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-export type PanelId = "settings" | "floors" | "layers" | "props" | "ai" | "fog" | "history" | "properties" | "diagnostics" | "help" | "graphics" | "cms" | "maps" | "generator";
+export type PanelId = "settings" | "floors" | "layers" | "props" | "asset-library" | "ai" | "fog" | "history" | "properties" | "diagnostics" | "help" | "graphics" | "cms" | "maps" | "generator";
 
 const PANELS: { id: PanelId; label: string; icon: LucideIcon; shortcut?: string }[] = [
   { id: "settings", label: "Tool & map settings", icon: Sliders, shortcut: "Alt+S" },
@@ -12,7 +12,8 @@ const PANELS: { id: PanelId; label: string; icon: LucideIcon; shortcut?: string 
   { id: "generator", label: "Procedural Generator", icon: Wand2, shortcut: "Alt+G" },
   { id: "floors", label: "Floors & connections", icon: Building2, shortcut: "Alt+F" },
   { id: "layers", label: "Layers", icon: Layers, shortcut: "Alt+L" },
-  { id: "props", label: "Props & textures", icon: Image, shortcut: "Alt+P" },
+  { id: "props", label: "My Props & textures", icon: Image, shortcut: "Alt+P" },
+  { id: "asset-library", label: "Soulslike Asset Library", icon: Package, shortcut: "Alt+K" },
   { id: "ai", label: "AI assistant", icon: Sparkles, shortcut: "Alt+A" },
   { id: "fog", label: "Fog of war", icon: CloudFog, shortcut: "Alt+W" },
   { id: "history", label: "History", icon: History, shortcut: "Alt+H" },
