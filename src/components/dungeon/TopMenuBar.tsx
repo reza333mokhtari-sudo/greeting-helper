@@ -38,7 +38,7 @@ type Props = {
 
 export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => void }) {
   return (
-    <header className="relative flex h-11 shrink-0 items-center gap-2 border-b border-border bg-sidebar px-2">
+    <header className="relative flex h-14 shrink-0 items-center gap-2 border-b border-border bg-sidebar px-3">
       <span className="px-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-arcane">
         Scrawl
       </span>
@@ -122,7 +122,6 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
       </div>
 
       <div className="ml-auto flex items-center gap-3">
-        <HealthCheckIndicator />
         <ProfileMenu />
       </div>
     </header>
