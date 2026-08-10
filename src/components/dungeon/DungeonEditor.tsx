@@ -1871,7 +1871,7 @@ export function DungeonEditor() {
             </ScrollArea>
             <div
               onMouseDown={handleResizeMouseDown}
-              className={`resize-handle ${isResizing ? "is-resizing" : ""}`}
+              className={`resize-handle ${isResizing ? "is-resizing" : ""} z-30`}
             />
           </aside>
         )}
