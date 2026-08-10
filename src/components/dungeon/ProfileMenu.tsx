@@ -43,6 +43,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
 import { checkHealth } from "@/lib/health.functions";
+import { Badge } from "@/components/ui/badge";
 
 export function ProfileMenu() {
   const [activeDialog, setActiveDialog] = useState<"settings" | "help" | "faq" | "support" | null>(null);
