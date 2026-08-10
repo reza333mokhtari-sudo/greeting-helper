@@ -1,6 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { Database } from "@/integrations/supabase/types";
+
+type PublicTable = keyof Database["public"]["Tables"];
 
 /**
  * Checks if a user has the admin role securely on the server.
@@ -27,24 +30,19 @@ export const checkAdminAccess = createServerFn({ method: "GET" })
 
 /**
  * Lists all manageable tables from the public schema.
- * This uses a server-side admin client to discover the schema if possible,
- * but primarily relies on a registry for safety.
  */
 export const getAdminSchema = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
-    // Verify admin first
     await checkAdminAccess();
 
-    // In a real Supabase environment, we might query information_schema.tables
-    // but for now we'll return a robust registry of known tables in this project.
     return {
       tables: [
         {
           name: "profiles",
           pk: "id",
-          columns: ["id", "email", "display_name", "avatar_url", "created_at"],
+          columns: ["id", "display_name", "avatar_url", "created_at"],
           editable: ["display_name", "avatar_url"],
-          deletable: false, // Profiles are tied to auth.users
+          deletable: false,
         },
         {
           name: "maps",
@@ -94,8 +92,6 @@ export const getAdminSchema = createServerFn({ method: "GET" })
 
 /**
  * Generic CRUD operations for admin.
- * Uses supabaseAdmin to bypass RLS for administrative tasks where necessary,
- * but only after strict admin verification.
  */
 export const adminTableQuery = createServerFn({ method: "POST" })
   .inputValidator((d) => z.object({
@@ -109,20 +105,17 @@ export const adminTableQuery = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await checkAdminAccess();
 
-    let query = supabaseAdmin.from(data.table).select("*", { count: "exact" });
+    const table = data.table as PublicTable;
+    let query = (supabaseAdmin.from(table) as any).select("*", { count: "exact" });
 
-    // Handle search (simple ilike on common fields for now)
     if (data.search) {
-      // In a real app, we'd look up searchable columns from registry
-      query = query.or(`name.ilike.%${data.search}%,email.ilike.%${data.search}%,title.ilike.%${data.search}%,subject.ilike.%${data.search}%`);
+      query = query.or(`name.ilike.%${data.search}%,title.ilike.%${data.search}%,subject.ilike.%${data.search}%`);
     }
 
-    // Handle pagination
     const from = data.page * data.pageSize;
     const to = from + data.pageSize - 1;
     query = query.range(from, to);
 
-    // Handle sort
     if (data.sort) {
       query = query.order(data.sort.column, { ascending: data.sort.ascending });
     } else {
@@ -145,8 +138,10 @@ export const adminTableUpdate = createServerFn({ method: "POST" })
     const { userId } = context as any;
     await checkAdminAccess();
 
+    const table = data.table as PublicTable;
+
     // Log the action
-    await supabaseAdmin.from("admin_audit_logs").insert({
+    await (supabaseAdmin.from("admin_audit_logs") as any).insert({
       admin_id: userId,
       action: "UPDATE",
       table_name: data.table,
@@ -154,8 +149,7 @@ export const adminTableUpdate = createServerFn({ method: "POST" })
       payload: data.payload,
     });
 
-    const { data: updated, error } = await supabaseAdmin
-      .from(data.table)
+    const { data: updated, error } = await (supabaseAdmin.from(table) as any)
       .update(data.payload)
       .eq("id", data.id)
       .select()
@@ -174,8 +168,10 @@ export const adminTableDelete = createServerFn({ method: "POST" })
     const { userId } = context as any;
     await checkAdminAccess();
 
+    const table = data.table as PublicTable;
+
     // Log the action
-    await supabaseAdmin.from("admin_audit_logs").insert({
+    await (supabaseAdmin.from("admin_audit_logs") as any).insert({
       admin_id: userId,
       action: "DELETE",
       table_name: data.table,
@@ -183,8 +179,7 @@ export const adminTableDelete = createServerFn({ method: "POST" })
       payload: { ids: data.ids },
     });
 
-    const { error } = await supabaseAdmin
-      .from(data.table)
+    const { error } = await (supabaseAdmin.from(table) as any)
       .delete()
       .in("id", data.ids);
 
