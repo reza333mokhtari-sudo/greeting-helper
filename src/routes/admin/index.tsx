@@ -34,7 +34,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { dialog } from "@/lib/dialog";
 import { useServerFn } from "@tanstack/react-start";
 
-export const Route = createFileRoute("/admin")({
+export const Route = createFileRoute("/admin/")({
   ssr: false,
   head: () => ({
     meta: [
