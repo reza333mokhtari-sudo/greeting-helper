@@ -2051,7 +2051,7 @@ export function DungeonEditor() {
         </div>
 
         {/* PC Editor Side Panel (Hierarchy & Properties) */}
-        <aside className="hidden w-80 shrink-0 flex-col border-l border-border bg-sidebar lg:flex overflow-visible relative">
+        <aside className="hidden w-80 shrink-0 flex-col border-l border-border bg-sidebar lg:flex overflow-visible relative z-20">
           <ScrollArea className="flex-1 min-h-0">
             <div className="flex flex-col gap-6 p-4">
               <div>
