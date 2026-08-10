@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Sparkles, AlertCircle, X } from "lucide-react";
+import { Sparkles, AlertCircle, X, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { useHotkeys } from "react-hotkeys-hook";
 import { useAutosave } from "@/hooks/use-autosave";
