@@ -70,7 +70,17 @@ export function ProfileMenu({ onAuthRequired }: { onAuthRequired?: ((reason: str
   };
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }: any) => setUser(data.user));
+    supabase.auth.getUser().then(({ data }: any) => {
+      setUser(data.user);
+      if (data.user) {
+        supabase.rpc("has_role", { _user_id: data.user.id, _role: "admin" })
+          .then(({ data: ok }: any) => {
+            (window as any)._isAdmin = !!ok;
+            // Force re-render if needed by adding a local state
+            setAuthStatus(prev => prev); 
+          });
+      }
+    });
     performCheck();
   }, []);
 
