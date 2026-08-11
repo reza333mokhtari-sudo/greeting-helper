@@ -254,7 +254,7 @@ export function DungeonEditor() {
   // Debounce rapid history pushes with the same label into a single snapshot.
   const pendingHistory = useRef<{ value: Doc; label: string } | null>(null);
   const historyTimer = useRef<number | null>(null);
-  const HISTORY_DEBOUNCE_MS = 250;
+  const HISTORY_DEBOUNCE_MS = 800; // Increased to 800ms for better batching of rapid edits
 
 
 
