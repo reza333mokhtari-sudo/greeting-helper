@@ -119,7 +119,7 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
 
       <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs font-medium text-foreground/80">
         {props.title}
-        {props.dirty ? <span className="ml-2 text-[10px] text-muted-foreground">Unsaved changes</span> : null}
+        {props.dirty ? <span className="ml-2 text-[10px] text-amber-500 animate-pulse font-bold">● Saving…</span> : null}
       </div>
 
       <div className="ml-auto flex items-center gap-3">

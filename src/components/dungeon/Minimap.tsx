@@ -20,16 +20,17 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
   const isDraggingMap = useRef(false);
 
   const [minimapZoom, setMinimapZoom] = useEffectState(1.0);
-  const size = 160;
+  const width = typeof window !== 'undefined' && window.innerWidth < 640 ? 140 : 220;
+  const height = typeof window !== 'undefined' && window.innerWidth < 640 ? 120 : 180;
   const dpr = typeof window !== "undefined" ? Math.min(window.devicePixelRatio || 1, 2) : 1;
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    canvas.width = size * dpr;
-    canvas.height = size * dpr;
-    canvas.style.width = `${size}px`;
-    canvas.style.height = `${size}px`;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
@@ -41,13 +42,13 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
     const y2 = bounds.y2 + pad;
     const bw = Math.max(1, x2 - x1);
     const bh = Math.max(1, y2 - y1);
-    const scale = Math.min(size / bw, size / bh) * minimapZoom;
-    const ox = (size - bw * scale) / 2 - x1 * scale;
-    const oy = (size - bh * scale) / 2 - y1 * scale;
+    const scale = Math.min(width / bw, height / bh) * minimapZoom;
+    const ox = (width - bw * scale) / 2 - x1 * scale;
+    const oy = (height - bh * scale) / 2 - y1 * scale;
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.fillStyle = doc.settings.bgColor;
-    ctx.fillRect(0, 0, size * dpr, size * dpr);
+    ctx.fillRect(0, 0, width * dpr, height * dpr);
     ctx.setTransform(scale * dpr, 0, 0, scale * dpr, ox * dpr, oy * dpr);
 
     // Floor shapes
@@ -110,8 +111,8 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
   const toWorld = (clientX: number, clientY: number): Pt => {
     const rect = canvasRef.current?.getBoundingClientRect();
     if (!rect) return { x: 0, y: 0 };
-    const px = (clientX - rect.left) / size;
-    const py = (clientY - rect.top) / size;
+    const px = (clientX - rect.left) / width;
+    const py = (clientY - rect.top) / height;
     const bounds = docBounds(doc) ?? { x1: 0, y1: 0, x2: 400, y2: 300 };
     const pad = Math.max(40, (bounds.x2 - bounds.x1) * 0.1, (bounds.y2 - bounds.y1) * 0.1);
     const x1 = bounds.x1 - pad;
@@ -120,10 +121,10 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
     const y2 = bounds.y2 + pad;
     const bw = Math.max(1, x2 - x1);
     const bh = Math.max(1, y2 - y1);
-    const scale = Math.min(size / bw, size / bh) * minimapZoom;
-    const ox = (size - bw * scale) / 2 - x1 * scale;
-    const oy = (size - bh * scale) / 2 - y1 * scale;
-    return { x: (px * size - ox) / scale, y: (py * size - oy) / scale };
+    const scale = Math.min(width / bw, height / bh) * minimapZoom;
+    const ox = (width - bw * scale) / 2 - x1 * scale;
+    const oy = (height - bh * scale) / 2 - y1 * scale;
+    return { x: (px * width - ox) / scale, y: (py * height - oy) / scale };
   };
 
   const handlePointer = (e: React.PointerEvent) => {
@@ -171,12 +172,12 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
   return (
     <div
       ref={wrapRef}
-      className="pointer-events-auto absolute z-20 overflow-hidden rounded-lg border border-border/60 bg-card/80 shadow-lg backdrop-blur sm:w-[160px] sm:h-[160px] w-[120px] h-[120px]"
+      className="pointer-events-auto absolute z-20 overflow-hidden rounded-lg border border-border/60 bg-card/80 shadow-lg backdrop-blur sm:w-[220px] sm:h-[180px] w-[140px] h-[120px]"
       style={{ 
         right: pos.x, 
         top: pos.y,
-        width: typeof window !== 'undefined' && window.innerWidth < 640 ? 120 : 160,
-        height: typeof window !== 'undefined' && window.innerWidth < 640 ? 120 : 160
+        width: typeof window !== 'undefined' && window.innerWidth < 640 ? 140 : 220,
+        height: typeof window !== 'undefined' && window.innerWidth < 640 ? 120 : 180
       }}
       onPointerDown={handlePointer}
       onPointerMove={handlePointer}
