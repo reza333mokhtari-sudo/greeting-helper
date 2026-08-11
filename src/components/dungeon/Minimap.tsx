@@ -20,16 +20,17 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
   const isDraggingMap = useRef(false);
 
   const [minimapZoom, setMinimapZoom] = useEffectState(1.0);
-  const size = 160;
+  const width = typeof window !== 'undefined' && window.innerWidth < 640 ? 140 : 220;
+  const height = typeof window !== 'undefined' && window.innerWidth < 640 ? 120 : 180;
   const dpr = typeof window !== "undefined" ? Math.min(window.devicePixelRatio || 1, 2) : 1;
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    canvas.width = size * dpr;
-    canvas.height = size * dpr;
-    canvas.style.width = `${size}px`;
-    canvas.style.height = `${size}px`;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
@@ -41,13 +42,13 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
     const y2 = bounds.y2 + pad;
     const bw = Math.max(1, x2 - x1);
     const bh = Math.max(1, y2 - y1);
-    const scale = Math.min(size / bw, size / bh) * minimapZoom;
-    const ox = (size - bw * scale) / 2 - x1 * scale;
-    const oy = (size - bh * scale) / 2 - y1 * scale;
+    const scale = Math.min(width / bw, height / bh) * minimapZoom;
+    const ox = (width - bw * scale) / 2 - x1 * scale;
+    const oy = (height - bh * scale) / 2 - y1 * scale;
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.fillStyle = doc.settings.bgColor;
-    ctx.fillRect(0, 0, size * dpr, size * dpr);
+    ctx.fillRect(0, 0, width * dpr, height * dpr);
     ctx.setTransform(scale * dpr, 0, 0, scale * dpr, ox * dpr, oy * dpr);
 
     // Floor shapes
@@ -120,10 +121,10 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
     const y2 = bounds.y2 + pad;
     const bw = Math.max(1, x2 - x1);
     const bh = Math.max(1, y2 - y1);
-    const scale = Math.min(size / bw, size / bh) * minimapZoom;
-    const ox = (size - bw * scale) / 2 - x1 * scale;
-    const oy = (size - bh * scale) / 2 - y1 * scale;
-    return { x: (px * size - ox) / scale, y: (py * size - oy) / scale };
+    const scale = Math.min(width / bw, height / bh) * minimapZoom;
+    const ox = (width - bw * scale) / 2 - x1 * scale;
+    const oy = (height - bh * scale) / 2 - y1 * scale;
+    return { x: (px * width - ox) / scale, y: (py * height - oy) / scale };
   };
 
   const handlePointer = (e: React.PointerEvent) => {
