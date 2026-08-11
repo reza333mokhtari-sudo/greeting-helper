@@ -1661,7 +1661,25 @@ export function DungeonEditor() {
           />
         );
       case "layers":
-        return null; // Removed duplicated side panel content
+        return (
+          <div className="space-y-4">
+             <h3 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Scene Hierarchy</h3>
+             <LayersPanel
+                doc={doc}
+                activeLayer={activeLayer}
+                onActiveLayer={setActiveLayer}
+                onUpdateLayer={updateLayer}
+                onMoveLayer={moveLayer}
+                onReorderLayer={reorderLayer}
+                onAddLayer={addLayer}
+                onDeleteLayer={deleteLayer}
+                selected={selected}
+                onSelect={setSelected}
+                onUpdateObject={updateObject}
+                onDeleteObject={deleteObject}
+              />
+          </div>
+        );
       case "props":
         return <PropsPanel onPlace={placeImage} onPreview={(p) => setPreviewProp(p)} />;
       case "asset-library":
@@ -1719,7 +1737,30 @@ export function DungeonEditor() {
           />
         );
       case "properties":
-        return null; // Removed duplicated side panel content
+        return (
+          <div className="space-y-4">
+            <h3 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Properties Inspector</h3>
+            <PropertiesPanel 
+              doc={doc} 
+              object={selectedObject} 
+              onChange={(id, patch) => {
+                if ((patch as any).preview) {
+                  const o = doc.objects.find(obj => obj.id === id);
+                  if (o && o.kind === "image") {
+                    setPreviewProp({ id: o.id, url: o.url, name: o.name || "Prop", license: (o as any).license });
+                  }
+                  return;
+                }
+                if (selected.length > 1) {
+                  updateSelectedObjects(patch);
+                } else {
+                  updateObject(id, patch);
+                }
+              }} 
+              onDelete={deleteSelected} 
+            />
+          </div>
+        );
       case "graphics":
         return <GraphicsSettingsPanel settings={doc.settings} onChange={setSettings} />;
       case "help":

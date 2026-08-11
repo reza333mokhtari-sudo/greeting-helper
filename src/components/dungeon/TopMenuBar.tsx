@@ -123,6 +123,7 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
       </div>
 
       <div className="ml-auto flex items-center gap-3">
+        {props.right}
         <ProfileMenu onAuthRequired={props.onAuthRequired} />
       </div>
     </header>
