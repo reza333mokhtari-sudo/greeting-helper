@@ -9,6 +9,7 @@ type PublicTable = keyof Database["public"]["Tables"];
  * Checks if a user has the admin role securely on the server.
  */
 export const checkAdminAccess = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const { supabase, userId } = context as any;
     
