@@ -99,10 +99,14 @@ function AdminConsole() {
   useEffect(() => {
     (async () => {
       try {
-        await checkAccess();
-        const s = await fetchSchema();
-        setSchema(s);
-        setState("ok");
+        const { isAdmin } = await checkAccess();
+        if (isAdmin) {
+          const s = await fetchSchema();
+          setSchema(s);
+          setState("ok");
+        } else {
+          setState("denied");
+        }
       } catch (e) {
         setState("denied");
       }
