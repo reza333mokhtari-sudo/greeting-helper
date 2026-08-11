@@ -171,12 +171,12 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
   return (
     <div
       ref={wrapRef}
-      className="pointer-events-auto absolute z-20 overflow-hidden rounded-lg border border-border/60 bg-card/80 shadow-lg backdrop-blur sm:w-[160px] sm:h-[160px] w-[120px] h-[120px]"
+      className="pointer-events-auto absolute z-20 overflow-hidden rounded-lg border border-border/60 bg-card/80 shadow-lg backdrop-blur sm:w-[220px] sm:h-[180px] w-[140px] h-[120px]"
       style={{ 
         right: pos.x, 
         top: pos.y,
-        width: typeof window !== 'undefined' && window.innerWidth < 640 ? 120 : 160,
-        height: typeof window !== 'undefined' && window.innerWidth < 640 ? 120 : 160
+        width: typeof window !== 'undefined' && window.innerWidth < 640 ? 140 : 220,
+        height: typeof window !== 'undefined' && window.innerWidth < 640 ? 120 : 180
       }}
       onPointerDown={handlePointer}
       onPointerMove={handlePointer}
