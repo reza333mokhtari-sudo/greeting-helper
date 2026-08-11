@@ -1661,7 +1661,25 @@ export function DungeonEditor() {
           />
         );
       case "layers":
-        return null; // Removed duplicated side panel content
+        return (
+          <div className="space-y-4">
+             <h3 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Scene Hierarchy</h3>
+             <LayersPanel
+                doc={doc}
+                activeLayer={activeLayer}
+                onActiveLayer={setActiveLayer}
+                onUpdateLayer={updateLayer}
+                onMoveLayer={moveLayer}
+                onReorderLayer={reorderLayer}
+                onAddLayer={addLayer}
+                onDeleteLayer={deleteLayer}
+                selected={selected}
+                onSelect={setSelected}
+                onUpdateObject={updateObject}
+                onDeleteObject={deleteObject}
+              />
+          </div>
+        );
       case "props":
         return <PropsPanel onPlace={placeImage} onPreview={(p) => setPreviewProp(p)} />;
       case "asset-library":
@@ -1719,7 +1737,30 @@ export function DungeonEditor() {
           />
         );
       case "properties":
-        return null; // Removed duplicated side panel content
+        return (
+          <div className="space-y-4">
+            <h3 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Properties Inspector</h3>
+            <PropertiesPanel 
+              doc={doc} 
+              object={selectedObject} 
+              onChange={(id, patch) => {
+                if ((patch as any).preview) {
+                  const o = doc.objects.find(obj => obj.id === id);
+                  if (o && o.kind === "image") {
+                    setPreviewProp({ id: o.id, url: o.url, name: o.name || "Prop", license: (o as any).license });
+                  }
+                  return;
+                }
+                if (selected.length > 1) {
+                  updateSelectedObjects(patch);
+                } else {
+                  updateObject(id, patch);
+                }
+              }} 
+              onDelete={deleteSelected} 
+            />
+          </div>
+        );
       case "graphics":
         return <GraphicsSettingsPanel settings={doc.settings} onChange={setSettings} />;
       case "help":
@@ -1811,42 +1852,8 @@ export function DungeonEditor() {
         }}
       />
 
-      <TopMenuBar
-        title={doc.activeFloorId ? doc.floors.find(f => f.id === doc.activeFloorId)?.name || "Untitled Map" : "Untitled Map"}
-        dirty={saveStatus === "saving"}
-        canUndo={hIndex > 0}
-        canRedo={hIndex < timeline.length - 1}
-        onUndo={undo}
-        onRedo={redo}
-        onDelete={deleteSelected}
-        onNew={() => {
-          if (confirm("Create new map? All unsaved changes will be lost.")) {
-            commit(emptyDoc(), "New map");
-            setSelected([]);
-          }
-        }}
-        onImport={() => importRef.current?.click()}
-        onExportPng={() => toast.info("Exporting PNG...")}
-        onExportSvg={() => exportSvgFile(doc)}
-        onExportPdf={() => exportPdfFile(doc)}
-        onExportJson={() => {
-          const blob = new Blob([JSON.stringify(doc)], { type: "application/json" });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = "map.ds";
-          a.click();
-        }}
-        onFit={fit}
-        onZoomIn={() => zoomBy(1)}
-        onZoomOut={() => zoomBy(-1)}
-        playerView={doc.settings.playerView}
-        onPlayerView={(v) => setSettings({ playerView: v })}
-        showGrid={doc.settings.gridStyle !== "none"}
-        onShowGrid={(v) => setSettings({ gridStyle: v ? "square" : "none" })}
-        onOpenHelp={openHelp}
-        onAuthRequired={(reason: string) => requireAuth(reason, () => {})}
-      />
+      {/* Primary menu bar is above, this second one was a duplicate */}
+
 
       <div className="flex min-h-0 flex-1 lg:flex-row flex-col">
         <LeftRail 
