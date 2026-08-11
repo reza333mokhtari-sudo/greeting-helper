@@ -137,6 +137,10 @@ function AdminConsole() {
     document.body.removeChild(a);
   };
 
+  const handleExit = () => {
+    navigate({ to: "/" });
+  };
+
   if (state === "loading") return null;
 
   if (state === "denied") {
@@ -147,12 +151,17 @@ function AdminConsole() {
           <h1 className="text-3xl font-bold tracking-tight">Access Forbidden</h1>
           <p className="max-w-md text-slate-400">
             This workstation is restricted to Authorized Administrators only. 
-            Security violation has been logged.
+            Please sign in with an admin account or contact support.
           </p>
         </div>
-        <Button asChild variant="outline" className="border-slate-800 hover:bg-slate-900 text-slate-300">
-          <Link to="/">Exit System</Link>
-        </Button>
+        <div className="flex gap-4">
+          <Button onClick={handleExit} variant="outline" className="border-slate-800 hover:bg-slate-900 text-slate-300">
+            Exit System
+          </Button>
+          <Button onClick={() => navigate({ to: "/" })} variant="default" className="bg-blue-600 hover:bg-blue-700">
+            Return Home
+          </Button>
+        </div>
       </main>
     );
   }
