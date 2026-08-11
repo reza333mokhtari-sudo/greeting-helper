@@ -1811,6 +1811,43 @@ export function DungeonEditor() {
         }}
       />
 
+      <TopMenuBar
+        title={doc.activeFloorId ? doc.floors.find(f => f.id === doc.activeFloorId)?.name || "Untitled Map" : "Untitled Map"}
+        dirty={saveStatus === "saving"}
+        canUndo={hIndex > 0}
+        canRedo={hIndex < timeline.length - 1}
+        onUndo={undo}
+        onRedo={redo}
+        onDelete={deleteSelected}
+        onNew={() => {
+          if (confirm("Create new map? All unsaved changes will be lost.")) {
+            commit(emptyDoc(), "New map");
+            setSelected([]);
+          }
+        }}
+        onImport={() => importRef.current?.click()}
+        onExportPng={() => toast.info("Exporting PNG...")}
+        onExportSvg={() => exportSvgFile(doc)}
+        onExportPdf={() => exportPdfFile(doc)}
+        onExportJson={() => {
+          const blob = new Blob([JSON.stringify(doc)], { type: "application/json" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "map.ds";
+          a.click();
+        }}
+        onFit={fit}
+        onZoomIn={() => zoomBy(1)}
+        onZoomOut={() => zoomBy(-1)}
+        playerView={doc.settings.playerView}
+        onPlayerView={(v) => setSettings({ playerView: v })}
+        showGrid={doc.settings.gridStyle !== "none"}
+        onShowGrid={(v) => setSettings({ gridStyle: v ? "square" : "none" })}
+        onOpenHelp={openHelp}
+        onAuthRequired={requireAuth}
+      />
+
       <div className="flex min-h-0 flex-1 lg:flex-row flex-col">
         <LeftRail 
           active={leftPanel} 
@@ -2104,7 +2141,7 @@ export function DungeonEditor() {
         shapes={doc.shapes.length}
         objects={doc.objects.length}
         fog={doc.fog.length}
-        saved={savedLabel}
+        saved={savedAt ? new Date(savedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ""}
         saveStatus={saveStatus}
         onZoom={zoomBy}
         onFit={fit}
