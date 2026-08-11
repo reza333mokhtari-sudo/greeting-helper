@@ -111,8 +111,8 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
   const toWorld = (clientX: number, clientY: number): Pt => {
     const rect = canvasRef.current?.getBoundingClientRect();
     if (!rect) return { x: 0, y: 0 };
-    const px = (clientX - rect.left) / size;
-    const py = (clientY - rect.top) / size;
+    const px = (clientX - rect.left) / width;
+    const py = (clientY - rect.top) / height;
     const bounds = docBounds(doc) ?? { x1: 0, y1: 0, x2: 400, y2: 300 };
     const pad = Math.max(40, (bounds.x2 - bounds.x1) * 0.1, (bounds.y2 - bounds.y1) * 0.1);
     const x1 = bounds.x1 - pad;
