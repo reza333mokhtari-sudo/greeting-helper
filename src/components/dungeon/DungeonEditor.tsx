@@ -1845,7 +1845,7 @@ export function DungeonEditor() {
         showGrid={doc.settings.gridStyle !== "none"}
         onShowGrid={(v) => setSettings({ gridStyle: v ? "square" : "none" })}
         onOpenHelp={openHelp}
-        onAuthRequired={requireAuth}
+        onAuthRequired={(reason: string) => requireAuth(reason, () => {})}
       />
 
       <div className="flex min-h-0 flex-1 lg:flex-row flex-col">
