@@ -373,7 +373,7 @@ export function ProfileMenu({ onAuthRequired }: { onAuthRequired?: ((reason: str
           <DropdownMenuItem onClick={() => setActiveDialog("support")} className="text-xs font-medium cursor-pointer py-2">
             <LifeBuoy className="mr-2 h-4 w-4 opacity-70" /> Admin Support
           </DropdownMenuItem>
-          {user && (
+          {user && (window as any)._isAdmin && (
             <DropdownMenuItem asChild className="text-xs font-bold text-blue-500 cursor-pointer py-2">
               <Link to="/admin">
                 <ShieldCheck className="mr-2 h-4 w-4 opacity-70" /> Control Center
