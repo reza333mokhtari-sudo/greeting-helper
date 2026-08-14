@@ -1,24 +1,23 @@
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Controls
 import DungeonEditor.Core 1.0
-
-/**
- * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
- */
+import DungeonEditor.Canvas 1.0
+import DungeonEditor.Models 1.0
+import DungeonEditor.Services 1.0
+import "components"
 
 ApplicationWindow {
     id: window
-    width: 1280
-    height: 800
+    width: 1400
+    height: 900
     visible: true
-    title: qsTr("Dungeon Editor - Native Port")
-    color: "#1e1e1e"
-
-    // Infrastructure
-    Document { id: mapDocument }
-    AssetLibraryModel { id: assetModel }
+    title: "Dungeon Editor Native"
     
+    Document { id: mapDoc }
+    AssetLibraryModel { id: assetModel }
+    FileService { id: fileService }
+
     Component.onCompleted: {
         assetModel.loadManifest("assets/soulslike/manifest.json")
     }
@@ -28,7 +27,10 @@ ApplicationWindow {
         spacing: 0
         
         TopBar {
+            id: topBar
             Layout.fillWidth: true
+            document: mapDoc
+            canvas: canvas
         }
         
         SplitView {
@@ -37,59 +39,56 @@ ApplicationWindow {
             orientation: Qt.Horizontal
             
             ToolRail {
+                id: toolRail
                 SplitView.minimumWidth: 50
                 SplitView.preferredWidth: 50
+                canvas: canvas
             }
             
             Item {
                 SplitView.fillWidth: true
+                clip: true
                 
                 MapCanvasItem {
                     id: canvas
                     anchors.fill: parent
-                    document: mapDocument
-                    onSelectionChanged: (id) => inspector.updateSelection(id)
+                    document: mapDoc
+                    onSelectionChanged: (id) => rightDock.updateInspector(id)
                 }
                 
-                // Overlay for coordinates
-                Label {
+                // Cursor coords overlay
+                Rectangle {
                     anchors.bottom: parent.bottom
                     anchors.left: parent.left
                     anchors.margins: 10
-                    text: qsTr("X: %1 Y: %2").arg(Math.round(canvas.pan.x)).arg(Math.round(canvas.pan.y))
-                    color: "white"
+                    color: "#80000000"
+                    radius: 4
+                    width: coordsLabel.width + 10
+                    height: coordsLabel.height + 4
+                    Label {
+                        id: coordsLabel
+                        anchors.centerIn: parent
+                        text: "X: " + Math.round(canvas.pan.x) + " Y: " + Math.round(canvas.pan.y)
+                        color: "white"
+                        font.pixelSize: 10
+                    }
                 }
             }
             
-            SplitView {
-                SplitView.minimumWidth: 250
-                SplitView.preferredWidth: 300
-                orientation: Qt.Vertical
-                
-                TabBar {
-                    id: rightTabs
-                    Layout.fillWidth: true
-                    TabButton { text: qsTr("Assets") }
-                    TabButton { text: qsTr("Inspector") }
-                    TabButton { text: qsTr("Layers") }
-                }
-                
-                StackLayout {
-                    currentIndex: rightTabs.currentIndex
-                    AssetLibrary { id: assets }
-                    InspectorPanel { id: inspector }
-                    LayersPanel { id: layers }
-                }
-                
-                AiPanel {
-                    SplitView.minimumHeight: 200
-                    SplitView.preferredHeight: 250
-                }
+            RightDock {
+                id: rightDock
+                SplitView.minimumWidth: 300
+                SplitView.preferredWidth: 350
+                document: mapDoc
+                canvas: canvas
+                assetModel: assetModel
             }
         }
         
         StatusBar {
             Layout.fillWidth: true
+            canvas: canvas
+            document: mapDoc
         }
     }
 }

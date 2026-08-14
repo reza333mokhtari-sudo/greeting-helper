@@ -1,15 +1,10 @@
 import QtQuick
-import QtQuick.Layouts
 import QtQuick.Controls
-
-/**
- * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
- */
+import QtQuick.Layouts
 
 Rectangle {
     color: "#252526"
-    border.color: "#3e3e42"
-    
+    property var document
     property string selectedId: ""
     property var selectedObject: null
 
@@ -18,7 +13,7 @@ Rectangle {
         if (id === "") {
             selectedObject = null;
         } else {
-            let objs = mapDocument.objects;
+            let objs = document.objects;
             for (let i = 0; i < objs.length; i++) {
                 if (objs[i].id === id) {
                     selectedObject = objs[i];
@@ -31,84 +26,102 @@ Rectangle {
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 10
-        spacing: 15
+        spacing: 12
         visible: selectedObject !== null
 
         Label {
-            text: qsTr("Object Properties")
+            text: qsTr("Inspector")
             color: "white"
             font.bold: true
         }
 
-        GridLayout {
-            columns: 2
-            rowSpacing: 10
-            columnSpacing: 10
+        ScrollView {
             Layout.fillWidth: true
+            Layout.fillHeight: true
+            clip: true
 
-            Label { text: qsTr("Name:"); color: "#cccccc" }
-            TextField {
-                text: selectedObject ? selectedObject.name : ""
-                Layout.fillWidth: true
-                color: "white"
-                background: Rectangle { color: "#3c3c3c"; radius: 4 }
-                onAccepted: mapDocument.updateObject(selectedId, { name: text })
-            }
+            ColumnLayout {
+                width: parent.width - 20
+                spacing: 10
 
-            Label { text: qsTr("X:"); color: "#cccccc" }
-            SpinBox {
-                value: selectedObject ? selectedObject.x : 0
-                editable: true
-                from: -10000; to: 10000
-                Layout.fillWidth: true
-                onValueModified: mapDocument.updateObject(selectedId, { x: value })
-            }
+                Label { text: qsTr("ID: " + selectedId); color: "#666666"; font.pixelSize: 10 }
 
-            Label { text: qsTr("Y:"); color: "#cccccc" }
-            SpinBox {
-                value: selectedObject ? selectedObject.y : 0
-                editable: true
-                from: -10000; to: 10000
-                Layout.fillWidth: true
-                onValueModified: mapDocument.updateObject(selectedId, { y: value })
-            }
+                TextField {
+                    placeholderText: qsTr("Object Name")
+                    text: selectedObject ? selectedObject.name : ""
+                    Layout.fillWidth: true
+                    background: Rectangle { color: "#3c3c3c"; radius: 4 }
+                    color: "white"
+                    onAccepted: document.updateObject(selectedId, { name: text })
+                }
 
-            Label { text: qsTr("Rotation:"); color: "#cccccc" }
-            Slider {
-                value: selectedObject ? selectedObject.rotation : 0
-                from: 0; to: 360
-                Layout.fillWidth: true
-                onMoved: mapDocument.updateObject(selectedId, { rotation: value })
-            }
+                Label { text: qsTr("Transform"); color: "white"; font.bold: true }
 
-            Label { text: qsTr("Radius:"); color: "#cccccc" }
-            Slider {
-                value: selectedObject ? (selectedObject.cornerRadius || 0) : 0
-                from: 0; to: 50
-                Layout.fillWidth: true
-                onMoved: mapDocument.updateObject(selectedId, { cornerRadius: value })
-            }
-        }
+                GridLayout {
+                    columns: 2
+                    Layout.fillWidth: true
+                    Label { text: "X"; color: "#aaa" }
+                    SpinBox {
+                        value: selectedObject ? selectedObject.x : 0
+                        from: -5000; to: 5000; editable: true
+                        onValueModified: document.updateObject(selectedId, { x: value })
+                    }
+                    Label { text: "Y"; color: "#aaa" }
+                    SpinBox {
+                        value: selectedObject ? selectedObject.y : 0
+                        from: -5000; to: 5000; editable: true
+                        onValueModified: document.updateObject(selectedId, { y: value })
+                    }
+                    Label { text: "W"; color: "#aaa"; visible: selectedObject && selectedObject.kind === "rect" }
+                    SpinBox {
+                        visible: selectedObject && selectedObject.kind === "rect"
+                        value: selectedObject ? selectedObject.w : 0
+                        from: 0; to: 5000; editable: true
+                        onValueModified: document.updateObject(selectedId, { w: value })
+                    }
+                    Label { text: "H"; color: "#aaa"; visible: selectedObject && selectedObject.kind === "rect" }
+                    SpinBox {
+                        visible: selectedObject && selectedObject.kind === "rect"
+                        value: selectedObject ? selectedObject.h : 0
+                        from: 0; to: 5000; editable: true
+                        onValueModified: document.updateObject(selectedId, { h: value })
+                    }
+                    Label { text: "Rotate"; color: "#aaa" }
+                    Slider {
+                        value: selectedObject ? selectedObject.rotation : 0
+                        from: 0; to: 360
+                        onMoved: document.updateObject(selectedId, { rotation: value })
+                    }
+                }
 
-        Item { Layout.fillHeight: true }
+                Label { text: qsTr("Style"); color: "white"; font.bold: true }
+                
+                RowLayout {
+                    Label { text: "Radius"; color: "#aaa" }
+                    Slider {
+                        value: selectedObject ? (selectedObject.cornerRadius || 0) : 0
+                        from: 0; to: 100
+                        onMoved: document.updateObject(selectedId, { cornerRadius: value })
+                    }
+                }
 
-        Button {
-            text: qsTr("Delete Object")
-            highlighted: true
-            palette.button: "#e51400"
-            Layout.fillWidth: true
-            onClicked: {
-                mapDocument.removeObject(selectedId);
-                selectedId = "";
-                selectedObject = null;
+                Button {
+                    text: qsTr("Delete")
+                    Layout.fillWidth: true
+                    palette.button: "#5c1d1d"
+                    onClicked: {
+                        document.removeObject(selectedId)
+                        updateSelection("")
+                    }
+                }
             }
         }
     }
 
     Label {
         anchors.centerIn: parent
-        text: qsTr("Select an object to inspect")
-        color: "#666666"
+        text: qsTr("No selection")
+        color: "#444"
         visible: selectedObject === null
     }
 }

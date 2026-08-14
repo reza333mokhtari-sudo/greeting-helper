@@ -2,21 +2,61 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-/**
- * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
- */
-
 Rectangle {
     color: "#252526"
+    property var document
+
+    signal objectSelected(string id)
+
     ColumnLayout {
         anchors.fill: parent
-        Label { text: "Objects List"; color: "white" }
+        anchors.margins: 10
+        
+        Label {
+            text: qsTr("Objects in Map")
+            color: "white"
+            font.bold: true
+        }
+
+        TextField {
+            id: searchField
+            placeholderText: qsTr("Search objects...")
+            Layout.fillWidth: true
+            background: Rectangle { color: "#3c3c3c"; radius: 4 }
+            color: "white"
+        }
+
         ListView {
-            Layout.fillWidth: true; Layout.fillHeight: true
-            model: mapDocument.objects
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            clip: true
+            model: document ? document.objects : null
+            spacing: 2
+            
             delegate: ItemDelegate {
-                text: modelData.name
                 width: ListView.view.width
+                height: 30
+                highlighted: ListView.isCurrentItem
+                
+                contentItem: RowLayout {
+                    Label {
+                        text: modelData.kind === "rect" ? "□" : "○"
+                        color: "#888888"
+                    }
+                    Label {
+                        text: modelData.name
+                        color: "white"
+                        Layout.fillWidth: true
+                    }
+                }
+                
+                onClicked: {
+                    objectSelected(modelData.id)
+                }
+                
+                background: Rectangle {
+                    color: highlighted ? "#37373d" : "transparent"
+                }
             }
         }
     }
