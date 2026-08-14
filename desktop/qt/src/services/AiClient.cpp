@@ -1,0 +1,40 @@
+#include "AiClient.h"
+#include <QNetworkRequest>
+#include <QJsonObject>
+#include <QJsonDocument>
+
+/**
+ * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
+ */
+
+AiClient::AiClient(QObject *parent) : QObject(parent) {
+    m_network = new QNetworkAccessManager(this);
+}
+
+void AiClient::sendMessage(const QString& prompt) {
+    if (m_isLoading) return;
+    
+    m_isLoading = true;
+    emit isLoadingChanged();
+
+    QNetworkRequest request(QUrl("http://localhost:8080/api/ai/chat"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QJsonObject body;
+    body["prompt"] = prompt;
+
+    QNetworkReply* reply = m_network->post(request, QJsonDocument(body).toJson());
+    
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        m_isLoading = false;
+        emit isLoadingChanged();
+        
+        if (reply->error() == QNetworkReply::NoError) {
+            QJsonObject res = QJsonDocument::fromJson(reply->readAll()).object();
+            emit responseReceived(res["text"].toString());
+        } else {
+            emit errorOccurred(reply->errorString());
+        }
+        reply->deleteLater();
+    });
+}
