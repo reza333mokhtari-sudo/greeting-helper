@@ -37,17 +37,8 @@ Rectangle {
             AssetLibrary {
                 id: assetLibrary
                 model: assetModel
-                onAssetClicked: (asset) => {
-                    document.addObject({
-                        kind: "image",
-                        name: asset.name,
-                        assetId: asset.assetId,
-                        x: -canvas.pan.x / canvas.zoom + (canvas.width / 2 / canvas.zoom),
-                        y: -canvas.pan.y / canvas.zoom + (canvas.height / 2 / canvas.zoom),
-                        rotation: 0,
-                        cornerRadius: 0
-                    })
-                }
+                document: root.document
+                canvas: root.canvas
             }
 
             InspectorPanel {
