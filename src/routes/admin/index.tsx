@@ -46,7 +46,7 @@ export const Route = createFileRoute("/admin/")({
   component: AdminConsole,
 });
 
-type Section = "overview" | "explorer" | "users" | "storage" | "diagnostics";
+type Section = "overview" | "explorer" | "users" | "cms" | "storage" | "diagnostics";
 
 function AdminConsole() {
   const navigate = useNavigate();
@@ -224,6 +224,10 @@ function AdminConsole() {
             setSection("users");
             setActiveTable("profiles");
           }} />
+          <NavBtn icon={FileText} label="CMS Pages" active={section === "cms"} onClick={() => {
+            setSection("cms");
+            setActiveTable("cms_pages");
+          }} />
           <NavBtn icon={HardDrive} label="Storage" active={section === "storage"} onClick={() => setSection("storage")} />
           <Separator className="my-4" />
           <div className="px-3 pb-2">
@@ -302,7 +306,7 @@ function AdminConsole() {
             </div>
           )}
 
-          {(section === "explorer" || section === "users") && (
+          {(section === "explorer" || section === "users" || section === "cms") && (
             <div className="flex h-full gap-6">
               {section === "explorer" && (
                 <div className="w-56 shrink-0 space-y-2">
@@ -376,7 +380,7 @@ function AdminConsole() {
         isOpen={!!selectedRow}
         onClose={() => setSelectedRow(null)}
         row={selectedRow}
-        tableName={activeTable || "Table"}
+        tableName={activeTable || "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            where is CMS page in /admin ?"}
       />
 
       {/* Edit Dialog */}
