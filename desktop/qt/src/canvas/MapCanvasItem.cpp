@@ -59,8 +59,20 @@ void MapCanvasItem::paint(QPainter *painter) {
             painter->rotate(obj["rotation"].toDouble());
             painter->setBrush(QColor(100, 100, 110, 200));
             painter->setPen(isSelected ? QPen(Qt::cyan, 3 / m_zoom) : QPen(Qt::black, 1 / m_zoom));
-            double r = obj["cornerRadius"].toDouble();
-            painter->drawRoundedRect(-25, -25, 50, 50, r, r);
+            double rTL = obj["radiusTL"].isDouble() ? obj["radiusTL"].toDouble() : obj["cornerRadius"].toDouble();
+            double rTR = obj["radiusTR"].isDouble() ? obj["radiusTR"].toDouble() : obj["cornerRadius"].toDouble();
+            double rBL = obj["radiusBL"].isDouble() ? obj["radiusBL"].toDouble() : obj["cornerRadius"].toDouble();
+            double rBR = obj["radiusBR"].isDouble() ? obj["radiusBR"].toDouble() : obj["cornerRadius"].toDouble();
+            
+            QPainterPath path;
+            QRectF rect(-25, -25, 50, 50);
+            path.moveTo(rect.right(), rect.top() + rTR);
+            path.arcTo(rect.right() - 2 * rTR, rect.top(), 2 * rTR, 2 * rTR, 0, 90);
+            path.arcTo(rect.left(), rect.top(), 2 * rTL, 2 * rTL, 90, 90);
+            path.arcTo(rect.left(), rect.bottom() - 2 * rBL, 2 * rBL, 2 * rBL, 180, 90);
+            path.arcTo(rect.right() - 2 * rBR, rect.bottom() - 2 * rBR, 2 * rBR, 2 * rBR, 270, 90);
+            path.closeSubpath();
+            painter->drawPath(path);
         }
         
         painter->restore();

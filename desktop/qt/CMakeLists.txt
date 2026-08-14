@@ -5,7 +5,7 @@ project(DungeonEditor VERSION 1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Gui Qml Quick Network QuickControls2 Concurrent)
+find_package(Qt6 REQUIRED COMPONENTS Gui Qml Quick Network QuickControls2 Concurrent Widgets)
 
 qt_standard_project_setup()
 
@@ -43,6 +43,7 @@ target_link_libraries(appDungeonEditor PRIVATE
     Qt6::Network
     Qt6::QuickControls2
     Qt6::Concurrent
+    Qt6::Widgets
 )
 
 # Install rules

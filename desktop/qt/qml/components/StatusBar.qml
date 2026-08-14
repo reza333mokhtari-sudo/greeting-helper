@@ -19,7 +19,7 @@ Rectangle {
         anchors.rightMargin: 10
         
         Label {
-            text: qsTr("Tool: ") + root.currentTool.toUpperCase()
+            text: qsTr("Tool: ") + (canvas ? canvas.activeTool.toUpperCase() : "NONE")
             color: "white"
             font.pixelSize: 11
         }
@@ -35,7 +35,7 @@ Rectangle {
         Item { Layout.fillWidth: true }
         
         Label {
-            text: (root.zoom * 100).toFixed(0) + "%"
+            text: (canvas ? canvas.zoom * 100 : 100).toFixed(0) + "%"
             color: "white"
             font.pixelSize: 11
         }

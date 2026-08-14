@@ -86,7 +86,7 @@ Rectangle {
             chatModel.append({content: response, isAi: true})
         }
         function onErrorOccurred(error) {
-            chatModel.append({content: qsTr("Error: ") + error, isAi: true})
+            chatModel.append({content: qsTr("AI Service Offline: ") + error, isAi: true})
         }
     }
 }
