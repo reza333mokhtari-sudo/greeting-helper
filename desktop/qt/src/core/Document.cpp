@@ -58,7 +58,8 @@ void Document::updateObject(const QString& id, QJsonObject props) {
             QJsonObject o = m_objects[i].toObject();
             if(o["id"].toString() == id) {
                 for(auto it = props.begin(); it != props.end(); ++it) o[it.key()] = it.value();
-                m_objects[i] = o; break;
+                m_objects[i] = o;
+                break;
             }
         }
         refresh();

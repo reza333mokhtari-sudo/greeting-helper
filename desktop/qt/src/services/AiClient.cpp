@@ -19,6 +19,7 @@ void AiClient::sendMessage(const QString& prompt) {
 
     QNetworkRequest request(QUrl("http://localhost:8080/api/ai/chat"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request.setTransferTimeout(30000); // 30s timeout
 
     QJsonObject body;
     body["prompt"] = prompt;
@@ -30,8 +31,13 @@ void AiClient::sendMessage(const QString& prompt) {
         emit isLoadingChanged();
         
         if (reply->error() == QNetworkReply::NoError) {
-            QJsonObject res = QJsonDocument::fromJson(reply->readAll()).object();
-            emit responseReceived(res["text"].toString());
+            QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
+            if (doc.isObject()) {
+                QJsonObject res = doc.object();
+                emit responseReceived(res["text"].toString());
+            } else {
+                emit errorOccurred(tr("Invalid AI response format"));
+            }
         } else {
             emit errorOccurred(reply->errorString());
         }

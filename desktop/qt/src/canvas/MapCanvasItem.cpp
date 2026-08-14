@@ -45,6 +45,7 @@ void MapCanvasItem::paint(QPainter *painter) {
     // Objects
     QJsonArray objects = m_document->objects();
     for (const QJsonValue &v : objects) {
+        if (!v.isObject()) continue;
         QJsonObject obj = v.toObject();
         painter->save();
         
