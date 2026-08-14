@@ -36,7 +36,7 @@ void Document::addObject(QJsonObject obj) {
         refresh();
     };
     m_undoStack->push(new BaseCommand(redo, undo));
-    setText(tr("Add %1").arg(obj["name"].toString()));
+    // setText(tr("Add %1").arg(obj["name"].toString())); // Removed for now to simplify base command
 }
 
 void Document::updateObject(const QString& id, QJsonObject props) {
