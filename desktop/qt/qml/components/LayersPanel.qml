@@ -24,21 +24,30 @@ Rectangle {
         ListView {
             id: floorList
             Layout.fillWidth: true
-            Layout.preferredHeight: 150
+            Layout.preferredHeight: 120
             clip: true
             model: ListModel {
-                ListElement { name: "Basement"; active: false }
-                ListElement { name: "Ground Floor"; active: true }
-                ListElement { name: "Second Floor"; active: false }
+                id: floorModel
+                ListElement { name: "Basement"; active: false; floorId: "f1" }
+                ListElement { name: "Ground Floor"; active: true; floorId: "f2" }
+                ListElement { name: "Second Floor"; active: false; floorId: "f3" }
             }
             delegate: ItemDelegate {
                 width: floorList.width
                 text: name
                 highlighted: active
                 onClicked: {
-                    for(var i=0; i<floorList.model.count; i++) floorList.model.setProperty(i, "active", i === index)
+                    for(var i=0; i<floorModel.count; i++) 
+                        floorModel.setProperty(i, "active", i === index)
+                    console.log("Switching to floor:", floorId)
                 }
             }
+        }
+        
+        Button {
+            text: qsTr("Add Floor")
+            Layout.fillWidth: true
+            onClicked: floorModel.append({name: "New Floor", active: false, floorId: "fn"})
         }
 
         ToolSeparator { Layout.fillWidth: true; orientation: Qt.Horizontal }
@@ -55,28 +64,22 @@ Rectangle {
             Layout.fillHeight: true
             clip: true
             model: ListModel {
-                ListElement { name: "Props"; visible: true }
-                ListElement { name: "Structure"; visible: true }
-                ListElement { name: "Background"; visible: true }
+                ListElement { name: "Props"; isVisible: true }
+                ListElement { name: "Structure"; isVisible: true }
+                ListElement { name: "Background"; isVisible: true }
             }
             delegate: RowLayout {
                 width: layerList.width
                 CheckBox {
-                    checked: model.visible
-                    onToggled: model.visible = checked
+                    checked: isVisible
+                    onToggled: isVisible = checked
                 }
                 Label {
-                    text: model.name
+                    text: name
                     color: "white"
                     Layout.fillWidth: true
                 }
             }
-        }
-
-        RowLayout {
-            Layout.fillWidth: true
-            Button { text: "+"; Layout.fillWidth: true }
-            Button { text: "-"; Layout.fillWidth: true }
         }
     }
 }

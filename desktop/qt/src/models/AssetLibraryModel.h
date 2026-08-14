@@ -19,6 +19,8 @@ struct Asset {
 
 class AssetLibraryModel : public QAbstractListModel {
     Q_OBJECT
+    Q_PROPERTY(QString searchQuery READ searchQuery WRITE setSearchQuery NOTIFY searchQueryChanged)
+    Q_PROPERTY(QString activeCategory READ activeCategory WRITE setActiveCategory NOTIFY activeCategoryChanged)
 
 public:
     enum AssetRoles {
@@ -35,7 +37,22 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void loadManifest(const QString& filePath);
+    
+    QString searchQuery() const { return m_searchQuery; }
+    void setSearchQuery(const QString& query);
+
+    QString activeCategory() const { return m_activeCategory; }
+    void setActiveCategory(const QString& category);
+
+signals:
+    void searchQueryChanged();
+    void activeCategoryChanged();
 
 private:
-    QVector<Asset> m_assets;
+    void updateFilteredAssets();
+
+    QVector<Asset> m_allAssets;
+    QVector<Asset> m_filteredAssets;
+    QString m_searchQuery;
+    QString m_activeCategory = "All";
 };

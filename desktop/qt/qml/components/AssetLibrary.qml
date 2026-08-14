@@ -27,13 +27,25 @@ Rectangle {
             Layout.fillWidth: true
             color: "white"
             background: Rectangle { color: "#3c3c3c"; radius: 4 }
+            onTextChanged: assetModel.searchQuery = text
         }
         
-        RowLayout {
+        ScrollView {
             Layout.fillWidth: true
-            Button { text: "All"; highlighted: true; Layout.fillWidth: true }
-            Button { text: "Props"; Layout.fillWidth: true }
-            Button { text: "NPCs"; Layout.fillWidth: true }
+            Layout.preferredHeight: 40
+            ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+            RowLayout {
+                spacing: 4
+                Repeater {
+                    model: ["All", "Weapons", "Armor", "Bosses", "Architecture", "Environment"]
+                    Button {
+                        text: modelData
+                        flat: true
+                        highlighted: assetModel.activeCategory === modelData
+                        onClicked: assetModel.activeCategory = modelData
+                    }
+                }
+            }
         }
 
         GridView {
@@ -76,8 +88,8 @@ Rectangle {
                                     kind: "image",
                                     name: name,
                                     assetId: assetId,
-                                    x: 100,
-                                    y: 100
+                                    x: 0,
+                                    y: 0
                                 })
                             }
                         }
@@ -98,6 +110,7 @@ Rectangle {
         Button {
             text: qsTr("Import Asset...")
             Layout.fillWidth: true
+            onClicked: console.log("Import logic...")
         }
     }
 }
