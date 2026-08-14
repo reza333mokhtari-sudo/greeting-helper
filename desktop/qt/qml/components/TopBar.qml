@@ -13,12 +13,15 @@ Rectangle {
     color: "#2d2d2d"
     border.color: "#3e3e42"
     
+    property var document: null
+    property var canvas: null
+    
     FileDialog {
         id: saveDialog
         title: "Save Map"
         fileMode: FileDialog.SaveFile
         nameFilters: ["Map files (*.json)"]
-        onAccepted: mapDocument.save(selectedFile)
+        onAccepted: document.save(selectedFile)
     }
 
     FileDialog {
@@ -26,7 +29,7 @@ Rectangle {
         title: "Open Map"
         fileMode: FileDialog.OpenFile
         nameFilters: ["Map files (*.json)"]
-        onAccepted: mapDocument.load(selectedFile)
+        onAccepted: document.load(selectedFile)
     }
 
     RowLayout {
@@ -37,7 +40,7 @@ Rectangle {
         
         RowLayout {
             spacing: 5
-            ToolButton { text: "New"; onClicked: mapDocument.clear() }
+            ToolButton { text: "New"; onClicked: document.clear() }
             ToolButton { text: "Open"; onClicked: openDialog.open() }
             ToolButton { text: "Save"; onClicked: saveDialog.open() }
         }
@@ -48,13 +51,13 @@ Rectangle {
             spacing: 5
             ToolButton {
                 text: "Undo"
-                enabled: mapDocument.undoStack.canUndo
-                onClicked: mapDocument.undoStack.undo()
+                enabled: document && document.undoStack.canUndo
+                onClicked: document.undoStack.undo()
             }
             ToolButton {
                 text: "Redo"
-                enabled: mapDocument.undoStack.canRedo
-                onClicked: mapDocument.undoStack.redo()
+                enabled: document && document.undoStack.canRedo
+                onClicked: document.undoStack.redo()
             }
         }
         
@@ -63,8 +66,9 @@ Rectangle {
         RowLayout {
             spacing: 5
             Label { 
-                text: mapDocument.dirty ? qsTr("Unsaved Changes*") : qsTr("Saved")
-                color: mapDocument.dirty ? "#f1c40f" : "#2ecc71" 
+                text: (document && document.dirty) ? qsTr("Unsaved Changes*") : qsTr("Saved")
+                color: (document && document.dirty) ? "#f1c40f" : "#2ecc71" 
+
             }
         }
     }
