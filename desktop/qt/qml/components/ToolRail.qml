@@ -12,6 +12,8 @@ Rectangle {
     color: "#2d2d2d"
     border.color: "#3e3e42"
     
+    property var canvas: null
+    
     ColumnLayout {
         anchors.fill: parent
         anchors.topMargin: 10
@@ -50,7 +52,7 @@ Rectangle {
             text: "E"
             onClicked: {
                 if (canvas.selectedId !== "") {
-                    mapDocument.removeObject(canvas.selectedId);
+                    canvas.document.removeObject(canvas.selectedId);
                 }
             }
             ToolTip.visible: hovered; ToolTip.text: "Erase Selected (E)"
