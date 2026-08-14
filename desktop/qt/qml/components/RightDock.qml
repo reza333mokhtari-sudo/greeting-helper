@@ -26,6 +26,7 @@ Rectangle {
             TabButton { text: qsTr("Objs") }
             TabButton { text: qsTr("Layers") }
             TabButton { text: qsTr("Settings") }
+            TabButton { text: qsTr("CMS") }
         }
 
         StackLayout {
@@ -51,23 +52,28 @@ Rectangle {
 
             InspectorPanel {
                 id: inspectorPanel
-                document: root.document
+                document: document
             }
             
             ObjectsPanel {
                 id: objectsPanel
-                document: root.document
+                document: document
                 onObjectSelected: (id) => canvas.selectedId = id
             }
             
             LayersPanel {
                 id: layersPanel
-                document: root.document
+                document: document
             }
             
             SettingsPanel {
                 id: settingsPanel
-                document: root.document
+                document: document
+            }
+
+            CmsPanel {
+                id: cmsPanel
+                document: document
             }
         }
 
