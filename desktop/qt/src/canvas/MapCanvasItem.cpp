@@ -1,7 +1,8 @@
 #include "MapCanvasItem.h"
+#include <QPainter>
 #include <QMouseEvent>
 #include <QWheelEvent>
-#include <QJsonObject>
+#include <cmath>
 
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
@@ -12,121 +13,91 @@ MapCanvasItem::MapCanvasItem(QQuickItem *parent) : QQuickPaintedItem(parent) {
     setAcceptHoverEvents(true);
 }
 
-void MapCanvasItem::setDocument(Document* doc) {
-    if (m_document == doc) return;
-    m_document = doc;
-    connect(m_document, &Document::documentChanged, this, [this](){ update(); });
-    emit documentChanged();
-    update();
-}
-
-void MapCanvasItem::setCurrentTool(const QString& tool) {
-    if (m_currentTool == tool) return;
-    m_currentTool = tool;
-    emit currentToolChanged();
-}
-
 void MapCanvasItem::paint(QPainter *painter) {
+    if (!m_document) return;
+
     painter->setRenderHint(QPainter::Antialiasing);
-    painter->save();
-    painter->translate(m_panOffset);
+    painter->translate(m_pan);
     painter->scale(m_zoom, m_zoom);
 
-    if (m_document && m_document->isGridVisible()) drawGrid(painter);
-    drawShapes(painter);
+    // Grid
+    if (m_document->gridVisible()) {
+        painter->setPen(QPen(QColor(60, 60, 60), 0.5));
+        int gridSize = 50;
+        int limit = 2000;
+        for (int i = -limit; i <= limit; i += gridSize) {
+            painter->drawLine(i, -limit, i, limit);
+            painter->drawLine(-limit, i, limit, i);
+        }
+    }
 
-    painter->restore();
-}
-
-void MapCanvasItem::drawGrid(QPainter *painter) {
-    painter->setPen(QPen(QColor(200, 200, 200, 30), 1));
-    int step = 32;
-    int size = 5000;
-    for (int x = -size; x <= size; x += step) painter->drawLine(x, -size, x, size);
-    for (int y = -size; y <= size; y += step) painter->drawLine(-size, y, size, y);
-}
-
-void MapCanvasItem::drawShapes(QPainter *painter) {
-    if (!m_document) return;
-    
+    // Objects
     QJsonArray objects = m_document->objects();
-    for (int i = 0; i < objects.size(); ++i) {
-        QJsonObject o = objects[i].toObject();
+    for (const QJsonValue &v : objects) {
+        QJsonObject obj = v.toObject();
         painter->save();
-        painter->translate(o["x"].toDouble(), o["y"].toDouble());
-        painter->rotate(o["rotation"].toDouble());
+        painter->translate(obj["x"].toDouble(), obj["y"].toDouble());
+        painter->rotate(obj["rotation"].toDouble());
         
-        double w = 64, h = 64;
-        double r = o["cornerRadius"].toDouble();
-
-        painter->setBrush(QColor(244, 239, 227));
-        painter->setPen(QPen(Qt::black, 2));
-        painter->drawRoundedRect(QRectF(-w/2, -h/2, w, h), r, r);
+        bool isSelected = obj["id"].toString() == m_selectedId;
+        painter->setPen(isSelected ? QPen(Qt::cyan, 2) : QPen(Qt::black, 1));
+        painter->setBrush(QColor(100, 100, 100, 200));
         
-        painter->setPen(Qt::black);
-        painter->drawText(QRectF(-w/2, -h/2, w, h), Qt::AlignCenter, o["name"].toString());
+        double r = obj["cornerRadius"].toDouble();
+        painter->drawRoundedRect(-25, -25, 50, 50, r, r);
         
         painter->restore();
     }
 }
 
 void MapCanvasItem::mousePressEvent(QMouseEvent *event) {
-    m_lastMousePos = event->position();
-    QPointF worldPos = (event->position() - m_panOffset) / m_zoom;
-
-    if (m_currentTool == "select") {
-        // Simple hit test
+    m_lastMousePos = event->position().toPoint();
+    if (event->button() == Qt::LeftButton) {
+        QPointF scenePos = (event->position() - m_pan) / m_zoom;
+        
+        QString hitId = "";
         QJsonArray objects = m_document->objects();
-        bool found = false;
         for (int i = objects.size() - 1; i >= 0; --i) {
-            QJsonObject o = objects[i].toObject();
-            double ox = o["x"].toDouble();
-            double oy = o["y"].toDouble();
-            if (qAbs(worldPos.x() - ox) < 32 && qAbs(worldPos.y() - oy) < 32) {
-                emit selectionChanged(o);
-                found = true;
+            QJsonObject obj = objects[i].toObject();
+            QRectF rect(obj["x"].toDouble() - 25, obj["y"].toDouble() - 25, 50, 50);
+            if (rect.contains(scenePos)) {
+                hitId = obj["id"].toString();
                 break;
             }
         }
-        if (!found) emit selectionChanged(QVariant());
-    } else if (m_currentTool == "draw") {
-        m_isDrawing = true;
-        m_drawStart = worldPos;
+        
+        if (hitId != m_selectedId) {
+            m_selectedId = hitId;
+            emit selectionChanged(m_selectedId);
+            update();
+        }
     }
 }
 
 void MapCanvasItem::mouseMoveEvent(QMouseEvent *event) {
-    if (event->buttons() & Qt::MiddleButton || (event->buttons() & Qt::LeftButton && m_currentTool == "pan")) {
-        m_panOffset += event->position() - m_lastMousePos;
+    if (event->buttons() & Qt::RightButton || event->buttons() & Qt::MiddleButton) {
+        m_pan += (event->position().toPoint() - m_lastMousePos);
         update();
     }
-    m_lastMousePos = event->position();
-}
-
-void MapCanvasItem::mouseReleaseEvent(QMouseEvent *event) {
-    if (m_isDrawing && m_document) {
-        QPointF end = (event->position() - m_panOffset) / m_zoom;
-        QJsonObject obj;
-        obj["kind"] = "rect";
-        obj["x"] = (m_drawStart.x() + end.x()) / 2;
-        obj["y"] = (m_drawStart.y() + end.y()) / 2;
-        obj["name"] = "Room";
-        m_document->addObject(obj);
-        m_isDrawing = false;
-        update();
-    }
+    m_lastMousePos = event->position().toPoint();
 }
 
 void MapCanvasItem::wheelEvent(QWheelEvent *event) {
     double oldZoom = m_zoom;
-    double factor = 1.1;
-    if (event->angleDelta().y() < 0) factor = 1.0 / factor;
+    double factor = event->angleDelta().y() > 0 ? 1.1 : 0.9;
     m_zoom *= factor;
+    m_zoom = std::max(0.1, std::min(m_zoom, 10.0));
     
-    // Zoom anchored to mouse
+    // Zoom toward cursor
     QPointF mousePos = event->position();
-    m_panOffset = mousePos - (mousePos - m_panOffset) * (m_zoom / oldZoom);
+    m_pan = mousePos - (mousePos - m_pan) * (m_zoom / oldZoom);
     
-    emit zoomChanged();
+    update();
+}
+
+void MapCanvasItem::setDocument(Document *doc) {
+    if (m_document == doc) return;
+    m_document = doc;
+    connect(m_document, &Document::documentChanged, this, [this](){ update(); });
     update();
 }

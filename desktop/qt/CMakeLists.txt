@@ -5,7 +5,7 @@ project(DungeonEditor VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick WebEngineQuick WebEngineCore Network)
+find_package(Qt6 REQUIRED COMPONENTS Gui Qml Quick Network)
 
 qt_standard_project_setup()
 
@@ -14,8 +14,8 @@ qt_add_executable(appDungeonEditor
     src/core/Document.h src/core/Document.cpp
     src/canvas/MapCanvasItem.h src/canvas/MapCanvasItem.cpp
     src/models/AssetLibraryModel.h src/models/AssetLibraryModel.cpp
-    src/services/FileService.h src/services/FileService.cpp
     src/services/AiClient.h src/services/AiClient.cpp
+    src/services/FileService.h src/services/FileService.cpp
 )
 
 qt_add_qml_module(appDungeonEditor
@@ -28,19 +28,18 @@ qt_add_qml_module(appDungeonEditor
         qml/components/AssetLibrary.qml
         qml/components/AiPanel.qml
         qml/components/InspectorPanel.qml
-        qml/components/StatusBar.qml
-        qml/components/RightDock.qml
         qml/components/LayersPanel.qml
-    RESOURCES
-        resources.qrc
+        qml/components/StatusBar.qml
 )
 
-target_link_libraries(appDungeonEditor PRIVATE
-    Qt6::Core
-    Qt6::Gui
-    Qt6::Qml
-    Qt6::Quick
-    Qt6::WebEngineQuick
-    Qt6::WebEngineCore
+target_link_libraries(appDungeonEditor PRIVATE 
+    Qt6::Gui 
+    Qt6::Qml 
+    Qt6::Quick 
     Qt6::Network
+)
+
+install(TARGETS appDungeonEditor
+    BUNDLE DESTINATION .
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
