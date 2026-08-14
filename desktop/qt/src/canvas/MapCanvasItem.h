@@ -4,17 +4,13 @@
 #include <QJsonObject>
 #include "Document.h"
 
-/**
- * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
- */
-
 class MapCanvasItem : public QQuickPaintedItem {
     Q_OBJECT
     Q_PROPERTY(Document* document READ document WRITE setDocument NOTIFY documentChanged)
-    Q_PROPERTY(double zoom READ zoom WRITE setZoom NOTIFY zoomChanged)
-    Q_PROPERTY(QPointF pan READ pan WRITE setPan NOTIFY panChanged)
     Q_PROPERTY(QString activeTool READ activeTool WRITE setActiveTool NOTIFY activeToolChanged)
     Q_PROPERTY(QString selectedId READ selectedId NOTIFY selectionChanged)
+    Q_PROPERTY(double zoom READ zoom NOTIFY zoomChanged)
+    Q_PROPERTY(QPointF pan READ pan NOTIFY panChanged)
 
 public:
     explicit MapCanvasItem(QQuickItem *parent = nullptr);
@@ -24,44 +20,44 @@ public:
     Document* document() const { return m_document; }
     void setDocument(Document *doc);
 
-    double zoom() const { return m_zoom; }
-    void setZoom(double z) { if(m_zoom != z) { m_zoom = z; emit zoomChanged(); update(); } }
-
-    QPointF pan() const { return m_pan; }
-    void setPan(QPointF p) { if(m_pan != p) { m_pan = p; emit panChanged(); update(); } }
-
     QString activeTool() const { return m_activeTool; }
-    void setActiveTool(const QString& tool) { if(m_activeTool != tool) { m_activeTool = tool; emit activeToolChanged(); } }
+    void setActiveTool(const QString& tool);
 
     QString selectedId() const { return m_selectedId; }
+    double zoom() const { return m_zoom; }
+    QPointF pan() const { return m_pan; }
 
 signals:
     void documentChanged();
+    void activeToolChanged();
+    void selectionChanged(const QString& id);
     void zoomChanged();
     void panChanged();
-    void selectionChanged(const QString& id);
-    void activeToolChanged();
+    void cursorWorldChanged(const QPointF& pos);
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
 private:
     QPointF screenToWorld(const QPointF& screenPos) const;
     void handleSelection(const QPointF& worldPos);
     void handleDrawing(const QPointF& worldPos, bool finished);
+    double snap(double val) const;
 
     Document *m_document = nullptr;
+    QString m_activeTool = "select";
+    QString m_selectedId;
+    
     double m_zoom = 1.0;
     QPointF m_pan = QPointF(0,0);
     QPoint m_lastMousePos;
-    QString m_selectedId;
-    QString m_activeTool = "select";
-    
+
     bool m_isDrawing = false;
+    bool m_isPanning = false;
     QPointF m_drawStart;
     QPointF m_currentWorldPos;
-    QString m_tempObjectId;
 };

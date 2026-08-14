@@ -3,159 +3,154 @@
 #include <QJsonDocument>
 #include <QUndoCommand>
 #include <QUuid>
+#include <QUrl>
 
-/**
- * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
- */
+// --- Commands ---
 
-class AddObjectCommand : public QUndoCommand {
+class BaseCommand : public QUndoCommand {
 public:
-    AddObjectCommand(QJsonArray& objects, const QJsonObject& obj, std::function<void()> refresh) 
-        : m_objects(objects), m_obj(obj), m_refresh(refresh) {
-        setText("Add Object");
-    }
-    void redo() override { 
-        m_objects.append(m_obj); 
-        m_refresh(); 
-    }
-    void undo() override { 
-        for(int i=0; i<m_objects.size(); ++i) {
-            if(m_objects[i].toObject()["id"].toString() == m_obj["id"].toString()) {
-                m_objects.removeAt(i);
-                break;
-            }
-        }
-        m_refresh(); 
-    }
+    BaseCommand(std::function<void()> redoFn, std::function<void()> undoFn) 
+        : m_redo(redoFn), m_undo(undoFn) {}
+    void redo() override { m_redo(); }
+    void undo() override { m_undo(); }
 private:
-    QJsonArray& m_objects;
-    QJsonObject m_obj;
-    std::function<void()> m_refresh;
+    std::function<void()> m_redo, m_undo;
 };
 
-class RemoveObjectCommand : public QUndoCommand {
-public:
-    RemoveObjectCommand(QJsonArray& objects, const QString& id, std::function<void()> refresh) 
-        : m_objects(objects), m_id(id), m_refresh(refresh) {
-        setText("Remove Object");
-    }
-    void redo() override { 
-        for(int i=0; i<m_objects.size(); ++i) {
-            if(m_objects[i].toObject()["id"].toString() == m_id) {
-                m_removedObj = m_objects[i].toObject();
-                m_objects.removeAt(i);
-                break;
-            }
-        }
-        m_refresh(); 
-    }
-    void undo() override { 
-        m_objects.append(m_removedObj);
-        m_refresh(); 
-    }
-private:
-    QJsonArray& m_objects;
-    QString m_id;
-    QJsonObject m_removedObj;
-    std::function<void()> m_refresh;
-};
+// --- Document ---
 
-class UpdateObjectCommand : public QUndoCommand {
-public:
-    UpdateObjectCommand(QJsonArray& objects, const QString& id, const QJsonObject& newProps, std::function<void()> refresh) 
-        : m_objects(objects), m_id(id), m_newProps(newProps), m_refresh(refresh) {
-        setText("Update Object");
-    }
-    void redo() override { 
-        for(int i=0; i<m_objects.size(); ++i) {
-            QJsonObject o = m_objects[i].toObject();
-            if(o["id"].toString() == m_id) {
-                m_oldProps = QJsonObject();
-                for(auto it = m_newProps.begin(); it != m_newProps.end(); ++it) {
-                    m_oldProps[it.key()] = o[it.key()];
-                    o[it.key()] = it.value();
-                }
-                m_objects[i] = o;
-                break;
-            }
-        }
-        m_refresh(); 
-    }
-    void undo() override { 
-        for(int i=0; i<m_objects.size(); ++i) {
-            QJsonObject o = m_objects[i].toObject();
-            if(o["id"].toString() == m_id) {
-                for(auto it = m_oldProps.begin(); it != m_oldProps.end(); ++it) {
-                    o[it.key()] = it.value();
-                }
-                m_objects[i] = o;
-                break;
-            }
-        }
-        m_refresh(); 
-    }
-private:
-    QJsonArray& m_objects;
-    QString m_id;
-    QJsonObject m_newProps;
-    QJsonObject m_oldProps;
-    std::function<void()> m_refresh;
-};
-
-Document::Document(QObject *parent) : QObject(parent), m_dirty(false), m_gridVisible(true) {
+Document::Document(QObject *parent) : QObject(parent) {
     m_undoStack = new QUndoStack(this);
 }
 
-void Document::addObject(const QJsonObject& obj) {
-    QJsonObject newObj = obj;
-    if(!newObj.contains("id")) newObj["id"] = QUuid::createUuid().toString();
-    if(!newObj.contains("name")) newObj["name"] = "New Object";
-    if(!newObj.contains("x")) newObj["x"] = 0.0;
-    if(!newObj.contains("y")) newObj["y"] = 0.0;
-    if(!newObj.contains("rotation")) newObj["rotation"] = 0.0;
-    if(!newObj.contains("cornerRadius")) newObj["cornerRadius"] = 0.0;
+void Document::addObject(QJsonObject obj) {
+    if(!obj.contains("id")) obj["id"] = QUuid::createUuid().toString();
     
-    m_undoStack->push(new AddObjectCommand(m_objects, newObj, [this](){ emit documentChanged(); setDirty(true); }));
+    auto redo = [this, obj]() { m_objects.append(obj); refresh(); };
+    auto undo = [this, id = obj["id"].toString()]() {
+        for(int i=0; i<m_objects.size(); ++i) {
+            if(m_objects[i].toObject()["id"].toString() == id) {
+                m_objects.removeAt(i); break;
+            }
+        }
+        refresh();
+    };
+    m_undoStack->push(new BaseCommand(redo, undo));
+    setText(tr("Add %1").arg(obj["name"].toString()));
 }
 
-void Document::updateObject(const QString& id, const QJsonObject& props) {
-    m_undoStack->push(new UpdateObjectCommand(m_objects, id, props, [this](){ emit documentChanged(); setDirty(true); }));
+void Document::updateObject(const QString& id, QJsonObject props) {
+    QJsonObject oldProps;
+    int idx = -1;
+    for(int i=0; i<m_objects.size(); ++i) {
+        if(m_objects[i].toObject()["id"].toString() == id) {
+            idx = i;
+            QJsonObject current = m_objects[i].toObject();
+            for(auto it = props.begin(); it != props.end(); ++it) {
+                oldProps[it.key()] = current[it.key()];
+            }
+            break;
+        }
+    }
+    if(idx == -1) return;
+
+    auto redo = [this, id, props]() {
+        for(int i=0; i<m_objects.size(); ++i) {
+            QJsonObject o = m_objects[i].toObject();
+            if(o["id"].toString() == id) {
+                for(auto it = props.begin(); it != props.end(); ++it) o[it.key()] = it.value();
+                m_objects[i] = o; break;
+            }
+        }
+        refresh();
+    };
+    auto undo = [this, id, oldProps]() {
+        for(int i=0; i<m_objects.size(); ++i) {
+            QJsonObject o = m_objects[i].toObject();
+            if(o["id"].toString() == id) {
+                for(auto it = oldProps.begin(); it != oldProps.end(); ++it) o[it.key()] = it.value();
+                m_objects[i] = o; break;
+            }
+        }
+        refresh();
+    };
+    m_undoStack->push(new BaseCommand(redo, undo));
 }
 
 void Document::removeObject(const QString& id) {
-    m_undoStack->push(new RemoveObjectCommand(m_objects, id, [this](){ emit documentChanged(); setDirty(true); }));
+    QJsonObject removed;
+    int idx = -1;
+    for(int i=0; i<m_objects.size(); ++i) {
+        if(m_objects[i].toObject()["id"].toString() == id) {
+            removed = m_objects[i].toObject();
+            idx = i; break;
+        }
+    }
+    if(idx == -1) return;
+
+    auto redo = [this, id]() {
+        for(int i=0; i<m_objects.size(); ++i) {
+            if(m_objects[i].toObject()["id"].toString() == id) {
+                m_objects.removeAt(i); break;
+            }
+        }
+        refresh();
+    };
+    auto undo = [this, removed, idx]() { m_objects.insert(idx, removed); refresh(); };
+    m_undoStack->push(new BaseCommand(redo, undo));
 }
 
 void Document::clear() {
     m_objects = QJsonArray();
     m_undoStack->clear();
     setDirty(false);
-    emit documentChanged();
+    emit objectsChanged();
 }
 
-void Document::save(const QString& filePath) {
-    QJsonObject root;
-    root["objects"] = m_objects;
-    QFile file(filePath);
+void Document::save(const QString& path) {
+    QString realPath = QUrl(path).toLocalFile();
+    if(realPath.isEmpty()) realPath = path;
+    QFile file(realPath);
     if (file.open(QIODevice::WriteOnly)) {
+        QJsonObject root;
+        root["objects"] = m_objects;
         file.write(QJsonDocument(root).toJson());
         setDirty(false);
     }
 }
 
-void Document::load(const QString& filePath) {
-    QFile file(filePath);
+void Document::load(const QString& path) {
+    QString realPath = QUrl(path).toLocalFile();
+    if(realPath.isEmpty()) realPath = path;
+    QFile file(realPath);
     if (file.open(QIODevice::ReadOnly)) {
         QJsonObject root = QJsonDocument::fromJson(file.readAll()).object();
         m_objects = root["objects"].toArray();
         m_undoStack->clear();
         setDirty(false);
-        emit documentChanged();
+        emit objectsChanged();
     }
 }
 
-void Document::setDirty(bool dirty) {
-    if(m_dirty == dirty) return;
-    m_dirty = dirty;
+void Document::setDirty(bool d) {
+    if(m_dirty == d) return;
+    m_dirty = d;
     emit dirtyChanged();
+}
+
+void Document::refresh() {
+    setDirty(true);
+    emit objectsChanged();
+}
+
+void Document::setGridVisible(bool v) {
+    if(m_gridVisible == v) return;
+    m_gridVisible = v;
+    emit gridVisibleChanged();
+}
+
+void Document::setSnapEnabled(bool v) {
+    if(m_snapEnabled == v) return;
+    m_snapEnabled = v;
+    emit snapEnabledChanged();
 }
