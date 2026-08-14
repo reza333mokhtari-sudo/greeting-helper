@@ -46,10 +46,10 @@ Rectangle {
 
         Rectangle {
             width: 10; height: 10; radius: 5
-            color: aiClient.isLoading ? "orange" : "lightgreen"
+            color: (typeof aiClient !== 'undefined' && aiClient.isLoading) ? "orange" : "lightgreen"
         }
         Label {
-            text: aiClient.isLoading ? qsTr("AI Working...") : qsTr("Online")
+            text: (typeof aiClient !== 'undefined' && aiClient.isLoading) ? qsTr("AI Working...") : qsTr("Online")
             color: "white"
             font.pixelSize: 11
         }

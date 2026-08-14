@@ -17,6 +17,7 @@ ApplicationWindow {
     Document { id: mapDoc }
     AssetLibraryModel { id: assetModel }
     FileService { id: fileService }
+    AiClient { id: aiClient }
 
     Component.onCompleted: {
         assetModel.loadManifest("assets/soulslike/manifest.json")
