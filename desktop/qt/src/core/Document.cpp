@@ -9,8 +9,8 @@
 
 class BaseCommand : public QUndoCommand {
 public:
-    BaseCommand(std::function<void()> redoFn, std::function<void()> undoFn) 
-        : m_redo(redoFn), m_undo(undoFn) {}
+    BaseCommand(const QString &text, std::function<void()> redoFn, std::function<void()> undoFn) 
+        : QUndoCommand(text), m_redo(redoFn), m_undo(undoFn) {}
     void redo() override { m_redo(); }
     void undo() override { m_undo(); }
 private:
@@ -35,8 +35,7 @@ void Document::addObject(QJsonObject obj) {
         }
         refresh();
     };
-    m_undoStack->push(new BaseCommand(redo, undo));
-    // setText(tr("Add %1").arg(obj["name"].toString())); // Removed for now to simplify base command
+    m_undoStack->push(new BaseCommand(tr("Add Object"), redo, undo));
 }
 
 void Document::updateObject(const QString& id, QJsonObject props) {
@@ -59,7 +58,8 @@ void Document::updateObject(const QString& id, QJsonObject props) {
             QJsonObject o = m_objects[i].toObject();
             if(o["id"].toString() == id) {
                 for(auto it = props.begin(); it != props.end(); ++it) o[it.key()] = it.value();
-                m_objects[i] = o; break;
+                m_objects[i] = o;
+                break;
             }
         }
         refresh();
@@ -74,7 +74,7 @@ void Document::updateObject(const QString& id, QJsonObject props) {
         }
         refresh();
     };
-    m_undoStack->push(new BaseCommand(redo, undo));
+    m_undoStack->push(new BaseCommand(tr("Update Object"), redo, undo));
 }
 
 void Document::removeObject(const QString& id) {
@@ -97,7 +97,7 @@ void Document::removeObject(const QString& id) {
         refresh();
     };
     auto undo = [this, removed, idx]() { m_objects.insert(idx, removed); refresh(); };
-    m_undoStack->push(new BaseCommand(redo, undo));
+    m_undoStack->push(new BaseCommand(tr("Remove Object"), redo, undo));
 }
 
 void Document::clear() {
