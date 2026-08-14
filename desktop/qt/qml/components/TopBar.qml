@@ -7,65 +7,61 @@ import QtQuick.Controls
  */
 
 Rectangle {
+    id: root
+    height: 40
     color: "#2d2d2d"
     border.color: "#3e3e42"
-
+    
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: 12
-        anchors.rightMargin: 12
-        spacing: 12
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
+        spacing: 15
         
-        Label {
-            text: qsTr("Dungeon Editor")
-            color: "white"
-            font.bold: true
-        }
-
-        ToolSeparator {}
-
-        Button {
-            text: qsTr("New")
-            flat: true
-            onClicked: mapDocument.clear()
-        }
-        
-        Button {
-            text: qsTr("Open...")
-            flat: true
-            onClicked: mapDocument.load("map.json")
-        }
-        
-        Button {
-            text: qsTr("Save")
-            flat: true
-            highlighted: true
-            onClicked: mapDocument.save("map.json")
-        }
-
-        ToolSeparator {}
-
         RowLayout {
-            spacing: 4
-            Button { text: "↺"; flat: true; onClicked: mapDocument.undo() }
-            Button { text: "↻"; flat: true; onClicked: mapDocument.redo() }
+            spacing: 5
+            ToolButton {
+                icon.name: "document-new"
+                text: qsTr("New")
+                onClicked: mapDocument.clear()
+            }
+            ToolButton {
+                icon.name: "document-open"
+                text: qsTr("Open")
+                onClicked: mapDocument.load("map.json")
+            }
+            ToolButton {
+                icon.name: "document-save"
+                text: qsTr("Save")
+                onClicked: mapDocument.save("map.json")
+            }
         }
-
+        
+        ToolSeparator {}
+        
+        RowLayout {
+            spacing: 5
+            ToolButton {
+                text: qsTr("Undo")
+                enabled: mapDocument.undoStack.canUndo
+                onClicked: mapDocument.undoStack.undo()
+            }
+            ToolButton {
+                text: qsTr("Redo")
+                enabled: mapDocument.undoStack.canRedo
+                onClicked: mapDocument.undoStack.redo()
+            }
+        }
+        
         Item { Layout.fillWidth: true }
         
-        Label {
-            text: qsTr("Grid")
-            color: "gray"
-        }
-        Switch {
-            id: gridSwitch
-            checked: true
-            onToggled: mapDocument.setGridVisible(checked)
-        }
-        
-        Button {
-            text: qsTr("Export PNG")
-            onClicked: console.log("Exporting...")
+        RowLayout {
+            spacing: 5
+            Label { text: mapDocument.dirty ? qsTr("Unsaved Changes*") : qsTr("Saved"); color: mapDocument.dirty ? "#f1c40f" : "#2ecc71" }
+            ToolButton {
+                text: qsTr("Admin")
+                onClicked: console.log("Open Admin View")
+            }
         }
     }
 }

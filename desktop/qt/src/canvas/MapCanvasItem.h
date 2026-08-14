@@ -1,9 +1,7 @@
 #pragma once
-#include <QtQuick/QQuickPaintedItem>
-#include <QPainter>
+#include <QQuickPaintedItem>
 #include <QPointF>
-#include <QVector>
-#include "../core/Document.h"
+#include "Document.h"
 
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
@@ -12,7 +10,8 @@
 class MapCanvasItem : public QQuickPaintedItem {
     Q_OBJECT
     Q_PROPERTY(Document* document READ document WRITE setDocument NOTIFY documentChanged)
-    Q_PROPERTY(QString currentTool READ currentTool WRITE setCurrentTool NOTIFY currentToolChanged)
+    Q_PROPERTY(double zoom READ zoom WRITE setZoom NOTIFY zoomChanged)
+    Q_PROPERTY(QPointF pan READ pan WRITE setPan NOTIFY panChanged)
 
 public:
     explicit MapCanvasItem(QQuickItem *parent = nullptr);
@@ -20,31 +19,29 @@ public:
     void paint(QPainter *painter) override;
 
     Document* document() const { return m_document; }
-    void setDocument(Document* doc);
+    void setDocument(Document *doc);
 
-    QString currentTool() const { return m_currentTool; }
-    void setCurrentTool(const QString& tool);
+    double zoom() const { return m_zoom; }
+    void setZoom(double z) { if(m_zoom != z) { m_zoom = z; emit zoomChanged(); update(); } }
+
+    QPointF pan() const { return m_pan; }
+    void setPan(QPointF p) { if(m_pan != p) { m_pan = p; emit panChanged(); update(); } }
+
+signals:
+    void documentChanged();
+    void zoomChanged();
+    void panChanged();
+    void selectionChanged(const QString& id);
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
 
-signals:
-    void documentChanged();
-    void currentToolChanged();
-
 private:
-    void drawGrid(QPainter *painter);
-    void drawShapes(QPainter *painter);
-    
-    Document* m_document = nullptr;
-    QString m_currentTool = "select";
-    
-    QPointF m_lastMousePos;
-    QPointF m_panOffset = QPointF(0, 0);
+    Document *m_document = nullptr;
     double m_zoom = 1.0;
-    bool m_isDrawing = false;
-    QPointF m_drawStart;
+    QPointF m_pan = QPointF(0,0);
+    QPoint m_lastMousePos;
+    QString m_selectedId;
 };

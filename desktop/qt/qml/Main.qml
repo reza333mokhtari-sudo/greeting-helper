@@ -1,8 +1,7 @@
 import QtQuick
-import QtQuick.Layouts
 import QtQuick.Controls
-import DungeonEditor.Canvas 1.0
-import "components"
+import QtQuick.Layouts
+import DungeonEditor.Core 1.0
 
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
@@ -10,76 +9,87 @@ import "components"
 
 ApplicationWindow {
     id: window
-    width: 1400
-    height: 900
+    width: 1280
+    height: 800
     visible: true
-    title: qsTr("Dungeon Editor - Native Pro")
+    title: qsTr("Dungeon Editor - Native Port")
+    color: "#1e1e1e"
 
-    background: Rectangle { color: "#1e1e1e" }
-
-    // Selection & Navigation State
-    property string activeTool: "select"
-    property var selectedObject: null
-    property double zoomLevel: 1.0
+    // Infrastructure
+    Document { id: mapDocument }
+    AssetLibraryModel { id: assetModel }
+    
+    Component.onCompleted: {
+        assetModel.loadManifest("assets/soulslike/manifest.json")
+    }
 
     ColumnLayout {
         anchors.fill: parent
         spacing: 0
-
+        
         TopBar {
-            id: topBar
             Layout.fillWidth: true
-            height: 48
         }
-
+        
         SplitView {
             Layout.fillWidth: true
             Layout.fillHeight: true
             orientation: Qt.Horizontal
-
+            
             ToolRail {
-                id: toolRail
+                SplitView.minimumWidth: 50
                 SplitView.preferredWidth: 50
-                SplitView.maximumWidth: 50
-                activeTool: window.activeTool
-                onToolChanged: (tool) => window.activeTool = tool
             }
-
-            MapCanvasItem {
-                id: canvas
+            
+            Item {
                 SplitView.fillWidth: true
-                document: mapDocument
-                currentTool: window.activeTool
-                zoom: window.zoomLevel
                 
-                onZoomChanged: window.zoomLevel = zoom
-                onSelectionChanged: (obj) => window.selectedObject = obj
+                MapCanvasItem {
+                    id: canvas
+                    anchors.fill: parent
+                    document: mapDocument
+                    onSelectionChanged: (id) => inspector.updateSelection(id)
+                }
                 
-                focus: true
-                Keys.onPressed: (event) => {
-                    if (event.key === Qt.Key_Delete || event.key === Qt.Key_Backspace) {
-                        if (window.selectedObject) mapDocument.removeObject(window.selectedObject.id)
-                    } else if (event.modifiers & Qt.ControlModifier) {
-                        if (event.key === Qt.Key_Z) mapDocument.undo()
-                        else if (event.key === Qt.Key_Y) mapDocument.redo()
-                        else if (event.key === Qt.Key_S) mapDocument.save("map.json")
-                    }
+                // Overlay for coordinates
+                Label {
+                    anchors.bottom: parent.bottom
+                    anchors.left: parent.left
+                    anchors.margins: 10
+                    text: qsTr("X: %1 Y: %2").arg(Math.round(canvas.pan.x)).arg(Math.round(canvas.pan.y))
+                    color: "white"
                 }
             }
-
-            RightDock {
-                id: rightDock
-                SplitView.preferredWidth: 320
+            
+            SplitView {
                 SplitView.minimumWidth: 250
+                SplitView.preferredWidth: 300
+                orientation: Qt.Vertical
+                
+                TabBar {
+                    id: rightTabs
+                    Layout.fillWidth: true
+                    TabButton { text: qsTr("Assets") }
+                    TabButton { text: qsTr("Inspector") }
+                    TabButton { text: qsTr("Layers") }
+                }
+                
+                StackLayout {
+                    currentIndex: rightTabs.currentIndex
+                    AssetLibrary { id: assets }
+                    InspectorPanel { id: inspector }
+                    LayersPanel { id: layers }
+                }
+                
+                AiPanel {
+                    SplitView.minimumHeight: 200
+                    SplitView.preferredHeight: 250
+                }
             }
         }
-
+        
         StatusBar {
             Layout.fillWidth: true
-            height: 28
-            currentTool: window.activeTool
-            zoom: window.zoomLevel
-            selectionCount: window.selectedObject ? 1 : 0
         }
     }
 }
