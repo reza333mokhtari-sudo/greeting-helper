@@ -1,7 +1,20 @@
 [
-    {"id": "sword_01", "name": "Broadsword", "category": "weapons", "icon": ""},
-    {"id": "armor_01", "name": "Knight Plate", "category": "armor", "icon": ""},
-    {"id": "boss_01", "name": "Fallen King", "category": "bosses", "icon": ""},
-    {"id": "wall_01", "name": "Broken Wall", "category": "architecture", "icon": ""},
-    {"id": "rubble_01", "name": "Debris Pile", "category": "environment", "icon": ""}
+    {
+        "id": "wall_stone",
+        "name": "Stone Wall",
+        "category": "Architecture",
+        "icon": "assets/soulslike/stone_wall.png"
+    },
+    {
+        "id": "floor_wood",
+        "name": "Wood Floor",
+        "category": "Environment",
+        "icon": "assets/soulslike/wood_floor.png"
+    },
+    {
+        "id": "torch_wall",
+        "name": "Wall Torch",
+        "category": "Architecture",
+        "icon": "assets/soulslike/torch.png"
+    }
 ]

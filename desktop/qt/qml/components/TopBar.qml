@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import QtQuick.Dialogs
 
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
@@ -12,6 +13,22 @@ Rectangle {
     color: "#2d2d2d"
     border.color: "#3e3e42"
     
+    FileDialog {
+        id: saveDialog
+        title: "Save Map"
+        fileMode: FileDialog.SaveFile
+        nameFilters: ["Map files (*.json)"]
+        onAccepted: mapDocument.save(selectedFile)
+    }
+
+    FileDialog {
+        id: openDialog
+        title: "Open Map"
+        fileMode: FileDialog.OpenFile
+        nameFilters: ["Map files (*.json)"]
+        onAccepted: mapDocument.load(selectedFile)
+    }
+
     RowLayout {
         anchors.fill: parent
         anchors.leftMargin: 10
@@ -20,21 +37,9 @@ Rectangle {
         
         RowLayout {
             spacing: 5
-            ToolButton {
-                icon.name: "document-new"
-                text: qsTr("New")
-                onClicked: mapDocument.clear()
-            }
-            ToolButton {
-                icon.name: "document-open"
-                text: qsTr("Open")
-                onClicked: mapDocument.load("map.json")
-            }
-            ToolButton {
-                icon.name: "document-save"
-                text: qsTr("Save")
-                onClicked: mapDocument.save("map.json")
-            }
+            ToolButton { text: "New"; onClicked: mapDocument.clear() }
+            ToolButton { text: "Open"; onClicked: openDialog.open() }
+            ToolButton { text: "Save"; onClicked: saveDialog.open() }
         }
         
         ToolSeparator {}
@@ -42,12 +47,12 @@ Rectangle {
         RowLayout {
             spacing: 5
             ToolButton {
-                text: qsTr("Undo")
+                text: "Undo"
                 enabled: mapDocument.undoStack.canUndo
                 onClicked: mapDocument.undoStack.undo()
             }
             ToolButton {
-                text: qsTr("Redo")
+                text: "Redo"
                 enabled: mapDocument.undoStack.canRedo
                 onClicked: mapDocument.undoStack.redo()
             }
@@ -57,10 +62,9 @@ Rectangle {
         
         RowLayout {
             spacing: 5
-            Label { text: mapDocument.dirty ? qsTr("Unsaved Changes*") : qsTr("Saved"); color: mapDocument.dirty ? "#f1c40f" : "#2ecc71" }
-            ToolButton {
-                text: qsTr("Admin")
-                onClicked: console.log("Open Admin View")
+            Label { 
+                text: mapDocument.dirty ? qsTr("Unsaved Changes*") : qsTr("Saved")
+                color: mapDocument.dirty ? "#f1c40f" : "#2ecc71" 
             }
         }
     }
