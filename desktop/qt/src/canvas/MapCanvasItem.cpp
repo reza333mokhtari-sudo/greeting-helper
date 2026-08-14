@@ -131,9 +131,20 @@ void MapCanvasItem::mouseMoveEvent(QMouseEvent *event) {
                 }
             }
             if (idx != -1) {
-                obj["x"] = obj["x"].toDouble() + delta.x();
-                obj["y"] = obj["y"].toDouble() + delta.y();
-                m_document->updateObject(m_selectedId, obj);
+                double newX = obj["x"].toDouble() + delta.x();
+                double newY = obj["y"].toDouble() + delta.y();
+                
+                // Only snap if enabled
+                if (m_document->snapEnabled()) {
+                    newX = snap(newX);
+                    newY = snap(newY);
+                }
+
+                if (newX != obj["x"].toDouble() || newY != obj["y"].toDouble()) {
+                    obj["x"] = newX;
+                    obj["y"] = newY;
+                    m_document->updateObject(m_selectedId, obj);
+                }
             }
         }
     }

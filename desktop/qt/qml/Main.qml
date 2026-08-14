@@ -68,7 +68,7 @@ ApplicationWindow {
                     Label {
                         id: coordsLabel
                         anchors.centerIn: parent
-                        text: "X: " + Math.round(canvas.pan.x) + " Y: " + Math.round(canvas.pan.y)
+                        text: "X: " + Math.round(canvas.cursorWorldPos.x) + " Y: " + Math.round(canvas.cursorWorldPos.y)
                         color: "white"
                         font.pixelSize: 10
                     }

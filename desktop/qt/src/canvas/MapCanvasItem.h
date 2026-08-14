@@ -11,6 +11,7 @@ class MapCanvasItem : public QQuickPaintedItem {
     Q_PROPERTY(QString selectedId READ selectedId NOTIFY selectionChanged)
     Q_PROPERTY(double zoom READ zoom NOTIFY zoomChanged)
     Q_PROPERTY(QPointF pan READ pan NOTIFY panChanged)
+    Q_PROPERTY(QPointF cursorWorldPos READ cursorWorldPos NOTIFY cursorWorldChanged)
 
 public:
     explicit MapCanvasItem(QQuickItem *parent = nullptr);
@@ -26,6 +27,7 @@ public:
     QString selectedId() const { return m_selectedId; }
     double zoom() const { return m_zoom; }
     QPointF pan() const { return m_pan; }
+    QPointF cursorWorldPos() const { return m_currentWorldPos; }
 
 signals:
     void documentChanged();
