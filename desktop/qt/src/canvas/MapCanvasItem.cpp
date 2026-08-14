@@ -109,15 +109,19 @@ void MapCanvasItem::mouseMoveEvent(QMouseEvent *event) {
         if (m_activeTool == "select" && !m_selectedId.isEmpty()) {
             // Drag move
             QPointF delta = (event->position() - m_lastMousePos) / m_zoom;
-            QJsonArray objects = m_document->objects();
-            for (const QJsonValue &v : objects) {
-                QJsonObject obj = v.toObject();
-                if (obj["id"].toString() == m_selectedId) {
-                    obj["x"] = obj["x"].toDouble() + delta.x();
-                    obj["y"] = obj["y"].toDouble() + delta.y();
-                    m_document->updateObject(m_selectedId, obj);
+            QJsonObject obj;
+            int idx = -1;
+            for (int i = 0; i < m_document->objects().size(); ++i) {
+                if (m_document->objects()[i].toObject()["id"].toString() == m_selectedId) {
+                    obj = m_document->objects()[i].toObject();
+                    idx = i;
                     break;
                 }
+            }
+            if (idx != -1) {
+                obj["x"] = obj["x"].toDouble() + delta.x();
+                obj["y"] = obj["y"].toDouble() + delta.y();
+                m_document->updateObject(m_selectedId, obj);
             }
         }
     }
