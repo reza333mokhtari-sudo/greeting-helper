@@ -44,7 +44,7 @@ void AssetLibraryModel::loadManifest(const QString& filePath) {
             a.id = obj["id"].toString();
             a.name = obj["name"].toString();
             a.category = obj["category"].toString();
-            a.iconUrl = obj["icon"].toString();
+            a.iconUrl = obj["icon_url"].isString() ? obj["icon_url"].toString() : obj["icon"].toString();
             a.data = obj;
             m_allAssets.append(a);
         }

@@ -77,11 +77,20 @@ Rectangle {
                         radius: 4
                         border.color: mouseArea.containsMouse ? "#007acc" : "transparent"
                         
+                        Image {
+                            anchors.fill: parent
+                            anchors.margins: 4
+                            source: icon ? icon : ""
+                            fillMode: Image.PreserveAspectFit
+                            visible: icon !== ""
+                        }
+                        
                         Text {
                             anchors.centerIn: parent
                             text: name[0]
                             color: "white"
                             font.pixelSize: 20
+                            visible: icon === ""
                         }
                         
                         MouseArea {

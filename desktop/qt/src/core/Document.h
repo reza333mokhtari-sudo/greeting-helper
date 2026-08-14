@@ -11,6 +11,8 @@ class Document : public QObject {
     Q_PROPERTY(bool dirty READ dirty NOTIFY dirtyChanged)
     Q_PROPERTY(bool gridVisible READ gridVisible WRITE setGridVisible NOTIFY gridVisibleChanged)
     Q_PROPERTY(bool snapEnabled READ snapEnabled WRITE setSnapEnabled NOTIFY snapEnabledChanged)
+    Q_PROPERTY(QJsonArray floors READ floors NOTIFY floorsChanged)
+    Q_PROPERTY(QJsonArray layers READ layers NOTIFY layersChanged)
 
 public:
     explicit Document(QObject *parent = nullptr);
@@ -22,6 +24,12 @@ public:
     void setGridVisible(bool v);
     bool snapEnabled() const { return m_snapEnabled; }
     void setSnapEnabled(bool v);
+
+    QJsonArray floors() const { return m_floors; }
+    QJsonArray layers() const { return m_layers; }
+
+    Q_INVOKABLE void addFloor(const QString& name);
+    Q_INVOKABLE void toggleLayer(const QString& name, bool visible);
 
     Q_INVOKABLE void addObject(QJsonObject obj);
     Q_INVOKABLE void updateObject(const QString& id, QJsonObject props);
@@ -36,6 +44,8 @@ signals:
     void dirtyChanged();
     void gridVisibleChanged();
     void snapEnabledChanged();
+    void floorsChanged();
+    void layersChanged();
 
 private:
     void setDirty(bool d);
@@ -46,4 +56,6 @@ private:
     bool m_dirty = false;
     bool m_gridVisible = true;
     bool m_snapEnabled = true;
+    QJsonArray m_floors;
+    QJsonArray m_layers;
 };
