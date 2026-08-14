@@ -1,6 +1,8 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QDir>
+#include <QDebug>
 #include "core/Document.h"
 #include "canvas/MapCanvasItem.h"
 #include "models/AssetLibraryModel.h"
@@ -24,7 +26,9 @@ int main(int argc, char *argv[])
     qmlRegisterType<FileService>("DungeonEditor.Core", 1, 0, "FileService");
 
     QQmlApplicationEngine engine;
-    const QUrl url(QStringLiteral("qrc:/qml/Main.qml"));
+
+    // Fix QRC pathing: Ensure the engine looks for the QML files at the correct root
+    const QUrl url(QStringLiteral("qrc:/DungeonEditor/qml/Main.qml"));
     
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {

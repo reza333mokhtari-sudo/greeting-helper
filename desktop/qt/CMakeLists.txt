@@ -5,7 +5,7 @@ project(DungeonEditor VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Gui Qml Quick Network)
+find_package(Qt6 REQUIRED COMPONENTS Gui Qml Quick Network QuickControls2)
 
 qt_standard_project_setup()
 
@@ -18,6 +18,7 @@ qt_add_executable(appDungeonEditor
     src/services/FileService.h src/services/FileService.cpp
 )
 
+# Bundle QML files with prefix DungeonEditor
 qt_add_qml_module(appDungeonEditor
     URI DungeonEditor
     VERSION 1.0
@@ -30,6 +31,9 @@ qt_add_qml_module(appDungeonEditor
         qml/components/InspectorPanel.qml
         qml/components/LayersPanel.qml
         qml/components/StatusBar.qml
+        qml/components/ObjectsPanel.qml
+        qml/components/SettingsPanel.qml
+        qml/components/RightDock.qml
 )
 
 target_link_libraries(appDungeonEditor PRIVATE 
@@ -37,9 +41,5 @@ target_link_libraries(appDungeonEditor PRIVATE
     Qt6::Qml 
     Qt6::Quick 
     Qt6::Network
-)
-
-install(TARGETS appDungeonEditor
-    BUNDLE DESTINATION .
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    Qt6::QuickControls2
 )
