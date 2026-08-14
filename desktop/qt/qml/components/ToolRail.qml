@@ -7,52 +7,53 @@ import QtQuick.Controls
  */
 
 Rectangle {
-    color: "#252526"
-    property string activeTool: "select"
-    signal toolChanged(string tool)
-
+    id: root
+    width: 50
+    color: "#2d2d2d"
+    border.color: "#3e3e42"
+    
     ColumnLayout {
         anchors.fill: parent
-        spacing: 4
-        anchors.topMargin: 8
-
-        ButtonGroup { id: toolGroup }
-
+        anchors.topMargin: 10
+        spacing: 10
+        
         ToolButton {
-            id: selectTool
-            text: "V"
+            id: selectBtn
+            text: "S"
             checkable: true
-            checked: activeTool === "select"
-            ButtonGroup.group: toolGroup
-            onClicked: toolChanged("select")
-            ToolTip.visible: hovered; ToolTip.text: qsTr("Select (V)")
+            checked: canvas.activeTool === "select"
+            onClicked: canvas.activeTool = "select"
+            ToolTip.visible: hovered; ToolTip.text: "Select (S)"
+        }
+        
+        ToolButton {
+            id: drawBtn
+            text: "D"
+            checkable: true
+            checked: canvas.activeTool === "draw"
+            onClicked: canvas.activeTool = "draw"
+            ToolTip.visible: hovered; ToolTip.text: "Draw Room (D)"
+        }
+        
+        ToolButton {
+            id: moveBtn
+            text: "M"
+            checkable: true
+            checked: canvas.activeTool === "move"
+            onClicked: canvas.activeTool = "move"
+            ToolTip.visible: hovered; ToolTip.text: "Move Object (M)"
         }
 
-        ToolButton {
-            id: drawTool
-            text: "R"
-            checkable: true
-            checked: activeTool === "draw"
-            ButtonGroup.group: toolGroup
-            onClicked: toolChanged("draw")
-            ToolTip.visible: hovered; ToolTip.text: qsTr("Draw Room (R)")
-        }
+        ToolSeparator { Layout.fillWidth: true; orientation: Qt.Horizontal }
 
         ToolButton {
-            id: panTool
-            text: "H"
-            checkable: true
-            checked: activeTool === "pan"
-            ButtonGroup.group: toolGroup
-            onClicked: toolChanged("pan")
-            ToolTip.visible: hovered; ToolTip.text: qsTr("Pan (H)")
-        }
-
-        ToolButton {
-            id: deleteTool
-            text: "X"
-            onClicked: toolChanged("delete")
-            ToolTip.visible: hovered; ToolTip.text: qsTr("Delete Selected (X)")
+            text: "E"
+            onClicked: {
+                if (canvas.selectedId !== "") {
+                    mapDocument.removeObject(canvas.selectedId);
+                }
+            }
+            ToolTip.visible: hovered; ToolTip.text: "Erase Selected (E)"
         }
 
         Item { Layout.fillHeight: true }
