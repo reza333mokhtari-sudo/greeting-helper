@@ -90,7 +90,7 @@ function AdminConsole() {
       setRows(res.rows || []);
       setCount(res.count || 0);
     } catch (e: any) {
-      toast.error(`Query failed: ${e.message}`);
+      toast.error(`'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Query failed: ${e.message}`);
     } finally {
       setLoading(false);
     }
