@@ -7,11 +7,13 @@ import QtQuick.Controls
  */
 
 Rectangle {
+    id: root
+    height: 25
     color: "#007acc"
     
-    property string currentTool: "select"
-    property double zoom: 1.0
-    property int selectionCount: 0
+    property var canvas: null
+    property var document: null
+    property int selectionCount: canvas && canvas.selectedId !== "" ? 1 : 0
 
     RowLayout {
         anchors.fill: parent

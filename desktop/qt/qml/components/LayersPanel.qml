@@ -9,14 +9,15 @@ import QtQuick.Controls
 Rectangle {
     color: "#252526"
     border.color: "#3e3e42"
-    
+    property var document: null
+
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 10
         spacing: 10
         
         Label {
-            text: qsTr("Floors & Layers")
+            text: qsTr("Floors")
             color: "white"
             font.bold: true
         }
@@ -39,7 +40,6 @@ Rectangle {
                 onClicked: {
                     for(var i=0; i<floorModel.count; i++) 
                         floorModel.setProperty(i, "active", i === index)
-                    console.log("Switching to floor:", floorId)
                 }
             }
         }
@@ -72,7 +72,7 @@ Rectangle {
                 width: layerList.width
                 CheckBox {
                     checked: isVisible
-                    onToggled: isVisible = checked
+                    onToggled: model.isVisible = checked
                 }
                 Label {
                     text: name
