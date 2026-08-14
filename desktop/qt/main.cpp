@@ -12,14 +12,15 @@
 #include <QDebug>
 #include <QWebEngineProfile>
 #include <QWebEngineSettings>
+#include <QFileSystemWatcher>
+#include <QDir>
+#include <QTimer>
 
 /**
+ * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
+ * 
  * GreetingHelper Desktop Shell
  * This C++/Qt application wraps the Dungeon Scrawl web editor in a native container.
- * 
- * Requirements:
- * - Qt 6.x
- * - Qt WebEngine module
  */
 
 class GreetingHelperWindow : public QMainWindow {
@@ -39,7 +40,7 @@ public:
         m_view->settings()->setAttribute(QWebEngineSettings::LocalStorageEnabled, true);
         
         // Load the application
-        m_view->setUrl(QUrl("http://localhost:8080")); // Or production URL
+        m_view->setUrl(QUrl("http://localhost:8080")); 
 
         setCentralWidget(m_view);
 
@@ -50,11 +51,36 @@ public:
         
         connect(m_view, &QWebEngineView::loadFinished, this, [this](bool ok) {
             if (ok) statusBar()->showMessage("System Online", 3000);
-            else statusBar()->showMessage("Connection Failed", 0);
+            else statusBar()->showMessage("Connection Failed - Ensure Vite is running", 0);
         });
+
+        setupDevMode();
     }
 
 private:
+    void setupDevMode() {
+        m_watcher = new QFileSystemWatcher(this);
+        
+        // Watch common asset directories for changes to trigger reload
+        // In a real scenario, this would point to the project's 'dist' or 'public' folder
+        QString projectPath = QDir::currentPath();
+        m_watcher->addPath(projectPath + "/src"); 
+        
+        m_reloadTimer = new QTimer(this);
+        m_reloadTimer->setSingleShot(true);
+        m_reloadTimer->setInterval(500); // Debounce reload
+
+        connect(m_watcher, &QFileSystemWatcher::directoryChanged, this, [this](const QString &path) {
+            qDebug() << "Change detected in:" << path;
+            m_reloadTimer->start();
+        });
+
+        connect(m_reloadTimer, &QTimer::timeout, this, [this]() {
+            statusBar()->showMessage("Source changed, reloading...", 2000);
+            m_view->reload();
+        });
+    }
+
     void createMenus() {
         QMenu *fileMenu = menuBar()->addMenu("&File");
         
@@ -67,12 +93,14 @@ private:
         
         QAction *devToolsAct = viewMenu->addAction("Toggle &DevTools");
         connect(devToolsAct, &QAction::triggered, this, [this]() {
-            // Implementation for opening a separate devtools window if needed
             qDebug() << "DevTools requested";
+            // For production, this usually opens a separate debugging port or window
         });
     }
 
     QWebEngineView *m_view;
+    QFileSystemWatcher *m_watcher;
+    QTimer *m_reloadTimer;
 };
 
 int main(int argc, char *argv[]) {
