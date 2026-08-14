@@ -51,23 +51,23 @@ Rectangle {
 
             InspectorPanel {
                 id: inspectorPanel
-                document: mapDoc
+                document: root.document
             }
-
+            
             ObjectsPanel {
                 id: objectsPanel
-                document: mapDoc
+                document: root.document
                 onObjectSelected: (id) => canvas.selectedId = id
             }
-
+            
             LayersPanel {
                 id: layersPanel
-                document: mapDoc
+                document: root.document
             }
-
+            
             SettingsPanel {
                 id: settingsPanel
-                document: mapDoc
+                document: root.document
             }
         }
 
