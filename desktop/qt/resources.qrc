@@ -1,0 +1,12 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/DungeonEditor">
+    <file>qml/Main.qml</file>
+    <file>qml/components/TopBar.qml</file>
+    <file>qml/components/ToolRail.qml</file>
+    <file>qml/components/AssetLibrary.qml</file>
+    <file>qml/components/AiPanel.qml</file>
+    <file>qml/components/InspectorPanel.qml</file>
+    <file>qml/components/StatusBar.qml</file>
+    <file>assets/soulslike/manifest.json</file>
+</qresource>
+</RCC>
