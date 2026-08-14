@@ -28,18 +28,29 @@ void MapCanvasItem::paint(QPainter *painter) {
 
     // Grid
     if (m_document->gridVisible()) {
-        painter->setPen(QPen(QColor(45, 45, 45), 1.0 / m_zoom));
-        int gridSize = 50;
-        int limit = 5000;
-        for (int i = -limit; i <= limit; i += gridSize) {
+        double gridSize = 50.0;
+        double subGridSize = 10.0;
+        int limit = 2000;
+        
+        // Minor grid
+        painter->setPen(QPen(QColor(35, 35, 35), 0.5 / m_zoom));
+        for (double i = -limit; i <= limit; i += subGridSize) {
             painter->drawLine(i, -limit, i, limit);
             painter->drawLine(-limit, i, limit, i);
         }
-        painter->setPen(QPen(QColor(60, 60, 60), 1.5 / m_zoom));
-        for (int i = -limit; i <= limit; i += gridSize * 5) {
+
+        // Major grid
+        painter->setPen(QPen(QColor(50, 50, 50), 1.0 / m_zoom));
+        for (double i = -limit; i <= limit; i += gridSize) {
             painter->drawLine(i, -limit, i, limit);
             painter->drawLine(-limit, i, limit, i);
         }
+
+        // Axes
+        painter->setPen(QPen(QColor(80, 50, 50), 2.0 / m_zoom));
+        painter->drawLine(0, -limit, 0, limit);
+        painter->setPen(QPen(QColor(50, 80, 50), 2.0 / m_zoom));
+        painter->drawLine(-limit, 0, limit, 0);
     }
 
     // Objects

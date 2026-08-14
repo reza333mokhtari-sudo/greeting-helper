@@ -9,9 +9,9 @@ import QtQuick.Dialogs
 
 Rectangle {
     id: root
-    height: 40
-    color: "#2d2d2d"
-    border.color: "#3e3e42"
+    height: 48
+    color: "#1e1e1e"
+    border.color: "#333333"
     
     property var document: null
     property var canvas: null
@@ -34,41 +34,84 @@ Rectangle {
 
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: 10
-        anchors.rightMargin: 10
-        spacing: 15
+        anchors.leftMargin: 15
+        anchors.rightMargin: 15
+        spacing: 20
         
+        Label {
+            text: "DUNGEON SCRAWL"
+            color: "#e0e0e0"
+            font.pixelSize: 14
+            font.bold: true
+            Layout.alignment: Qt.AlignVCenter
+        }
+
+        ToolSeparator { orientation: Qt.Vertical; padding: 10 }
+
         RowLayout {
-            spacing: 5
-            ToolButton { text: "New"; onClicked: document.clear() }
-            ToolButton { text: "Open"; onClicked: openDialog.open() }
-            ToolButton { text: "Save"; onClicked: saveDialog.open() }
+            spacing: 2
+            ToolButton { 
+                icon.name: "document-new"
+                text: "New"
+                onClicked: document.clear() 
+                display: AbstractButton.TextUnderIcon
+            }
+            ToolButton { 
+                icon.name: "document-open"
+                text: "Open"
+                onClicked: openDialog.open() 
+                display: AbstractButton.TextUnderIcon
+            }
+            ToolButton { 
+                icon.name: "document-save"
+                text: "Save"
+                onClicked: saveDialog.open() 
+                display: AbstractButton.TextUnderIcon
+            }
         }
         
-        ToolSeparator {}
+        ToolSeparator { orientation: Qt.Vertical; padding: 10 }
         
         RowLayout {
-            spacing: 5
+            spacing: 2
             ToolButton {
                 text: "Undo"
+                icon.name: "edit-undo"
                 enabled: document && document.canUndo
                 onClicked: document.undoStack.undo()
+                display: AbstractButton.TextUnderIcon
             }
             ToolButton {
                 text: "Redo"
+                icon.name: "edit-redo"
                 enabled: document && document.canRedo
                 onClicked: document.undoStack.redo()
+                display: AbstractButton.TextUnderIcon
             }
         }
         
         Item { Layout.fillWidth: true }
         
         RowLayout {
-            spacing: 5
+            spacing: 10
+            Rectangle {
+                width: 8; height: 8; radius: 4
+                color: (document && document.dirty) ? "#f1c40f" : "#2ecc71"
+                Layout.alignment: Qt.AlignVCenter
+            }
             Label { 
-                text: (document && document.dirty) ? qsTr("Unsaved Changes*") : qsTr("Saved")
-                color: (document && document.dirty) ? "#f1c40f" : "#2ecc71" 
-
+                text: (document && document.dirty) ? qsTr("UNSAVED") : qsTr("SYNCED")
+                color: (document && document.dirty) ? "#f1c40f" : "#2ecc71"
+                font.pixelSize: 10
+                font.bold: true
+                Layout.alignment: Qt.AlignVCenter
+            }
+            
+            Button {
+                text: "Export"
+                palette.button: "#007acc"
+                palette.buttonText: "white"
+                font.bold: true
             }
         }
     }
