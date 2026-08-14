@@ -248,5 +248,7 @@ void MapCanvasItem::setDocument(Document *doc) {
     if (m_document == doc) return;
     m_document = doc;
     connect(m_document, &Document::objectsChanged, this, [this](){ update(); });
+    connect(m_document, &Document::gridVisibleChanged, this, [this](){ update(); });
+    connect(m_document, &Document::snapEnabledChanged, this, [this](){ update(); });
     emit documentChanged();
 }

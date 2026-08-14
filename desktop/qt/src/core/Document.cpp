@@ -21,6 +21,8 @@ private:
 
 Document::Document(QObject *parent) : QObject(parent) {
     m_undoStack = new QUndoStack(this);
+    connect(m_undoStack, &QUndoStack::canUndoChanged, this, &Document::canUndoChanged);
+    connect(m_undoStack, &QUndoStack::canRedoChanged, this, &Document::canRedoChanged);
     
     // Default data
     QJsonObject f1; f1["id"] = "f1"; f1["name"] = "Ground Floor"; f1["active"] = true;
