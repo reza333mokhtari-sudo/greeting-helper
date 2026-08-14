@@ -37,8 +37,8 @@ Rectangle {
             AssetLibrary {
                 id: assetLibrary
                 model: assetModel
-                document: root.document
-                canvas: root.canvas
+                document: document
+                canvas: canvas
             }
 
             InspectorPanel {

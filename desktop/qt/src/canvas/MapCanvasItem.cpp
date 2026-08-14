@@ -50,16 +50,24 @@ void MapCanvasItem::paint(QPainter *painter) {
         painter->save();
         
         bool isSelected = obj["id"].toString() == m_selectedId;
+        double x = obj["x"].toDouble();
+        double y = obj["y"].toDouble();
+        double rotation = obj["rotation"].toDouble();
         
+        painter->translate(x, y);
+        painter->rotate(rotation);
+
         if (obj["kind"].toString() == "rect") {
+            double w = obj["w"].toDouble();
+            double h = obj["h"].toDouble();
             painter->setBrush(QColor(70, 70, 80, 180));
             painter->setPen(isSelected ? QPen(Qt::cyan, 3 / m_zoom) : QPen(QColor(180, 180, 190), 1 / m_zoom));
-            painter->drawRect(obj["x"].toDouble(), obj["y"].toDouble(), obj["w"].toDouble(), obj["h"].toDouble());
-        } else {
-            painter->translate(obj["x"].toDouble(), obj["y"].toDouble());
-            painter->rotate(obj["rotation"].toDouble());
+            painter->drawRect(QRectF(-w/2, -h/2, w, h));
+        } else if (obj["kind"].toString() == "image") {
+            // Draw asset placeholder or image
             painter->setBrush(QColor(100, 100, 110, 200));
             painter->setPen(isSelected ? QPen(Qt::cyan, 3 / m_zoom) : QPen(Qt::black, 1 / m_zoom));
+            
             double rTL = obj["radiusTL"].isDouble() ? obj["radiusTL"].toDouble() : obj["cornerRadius"].toDouble();
             double rTR = obj["radiusTR"].isDouble() ? obj["radiusTR"].toDouble() : obj["cornerRadius"].toDouble();
             double rBL = obj["radiusBL"].isDouble() ? obj["radiusBL"].toDouble() : obj["cornerRadius"].toDouble();
@@ -74,6 +82,12 @@ void MapCanvasItem::paint(QPainter *painter) {
             path.arcTo(rect.right() - 2 * rBR, rect.bottom() - 2 * rBR, 2 * rBR, 2 * rBR, 270, 90);
             path.closeSubpath();
             painter->drawPath(path);
+
+            // If it has an icon, we could potentially load and draw it here with QImage cache
+            // but for now, the name label helps identify it
+            painter->setPen(Qt::white);
+            painter->setFont(QFont("Arial", 8 / m_zoom));
+            painter->drawText(rect, Qt::AlignCenter, obj["name"].toString());
         }
         
         painter->restore();
@@ -166,8 +180,8 @@ void MapCanvasItem::mouseReleaseEvent(QMouseEvent *event) {
             QJsonObject obj;
             obj["kind"] = "rect";
             obj["name"] = "Room";
-            obj["x"] = rect.x();
-            obj["y"] = rect.y();
+            obj["x"] = rect.center().x();
+            obj["y"] = rect.center().y();
             obj["w"] = rect.width();
             obj["h"] = rect.height();
             m_document->addObject(obj);
@@ -184,7 +198,9 @@ void MapCanvasItem::handleSelection(const QPointF& worldPos) {
         QJsonObject obj = objects[i].toObject();
         QRectF rect;
         if (obj["kind"].toString() == "rect") {
-            rect = QRectF(obj["x"].toDouble(), obj["y"].toDouble(), obj["w"].toDouble(), obj["h"].toDouble());
+            double w = obj["w"].toDouble();
+            double h = obj["h"].toDouble();
+            rect = QRectF(obj["x"].toDouble() - w/2, obj["y"].toDouble() - h/2, w, h);
         } else {
             rect = QRectF(obj["x"].toDouble() - 25, obj["y"].toDouble() - 25, 50, 50);
         }

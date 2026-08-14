@@ -27,19 +27,13 @@ Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: 120
             clip: true
-            model: ListModel {
-                id: floorModel
-                ListElement { name: "Basement"; active: false; floorId: "f1" }
-                ListElement { name: "Ground Floor"; active: true; floorId: "f2" }
-                ListElement { name: "Second Floor"; active: false; floorId: "f3" }
-            }
+            model: document ? document.floors : null
             delegate: ItemDelegate {
                 width: floorList.width
-                text: name
-                highlighted: active
+                text: modelData.name
+                highlighted: modelData.active
                 onClicked: {
-                    for(var i=0; i<floorModel.count; i++) 
-                        floorModel.setProperty(i, "active", i === index)
+                    // Logic to switch floor in document if needed
                 }
             }
         }
@@ -47,7 +41,7 @@ Rectangle {
         Button {
             text: qsTr("Add Floor")
             Layout.fillWidth: true
-            onClicked: floorModel.append({name: "New Floor", active: false, floorId: "fn"})
+            onClicked: document.addFloor("New Floor")
         }
 
         ToolSeparator { Layout.fillWidth: true; orientation: Qt.Horizontal }
@@ -63,19 +57,15 @@ Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
             clip: true
-            model: ListModel {
-                ListElement { name: "Props"; isVisible: true }
-                ListElement { name: "Structure"; isVisible: true }
-                ListElement { name: "Background"; isVisible: true }
-            }
+            model: document ? document.layers : null
             delegate: RowLayout {
                 width: layerList.width
                 CheckBox {
-                    checked: isVisible
-                    onToggled: model.isVisible = checked
+                    checked: modelData.isVisible
+                    onToggled: document.toggleLayer(modelData.name, checked)
                 }
                 Label {
-                    text: name
+                    text: modelData.name
                     color: "white"
                     Layout.fillWidth: true
                 }
