@@ -52,28 +52,28 @@ Rectangle {
 
             InspectorPanel {
                 id: inspectorPanel
-                document: root.document
+                document: document
             }
             
             ObjectsPanel {
                 id: objectsPanel
-                document: root.document
+                document: document
                 onObjectSelected: (id) => canvas.selectedId = id
             }
             
             LayersPanel {
                 id: layersPanel
-                document: root.document
+                document: document
             }
             
             SettingsPanel {
                 id: settingsPanel
-                document: root.document
+                document: document
             }
 
             CmsPanel {
                 id: cmsPanel
-                document: root.document
+                document: document
             }
         }
 
