@@ -51,12 +51,12 @@ Rectangle {
             spacing: 5
             ToolButton {
                 text: "Undo"
-                enabled: document && document.undoStack.canUndo
+                enabled: document && document.canUndo
                 onClicked: document.undoStack.undo()
             }
             ToolButton {
                 text: "Redo"
-                enabled: document && document.undoStack.canRedo
+                enabled: document && document.canRedo
                 onClicked: document.undoStack.redo()
             }
         }

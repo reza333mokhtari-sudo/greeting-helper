@@ -8,6 +8,8 @@ class Document : public QObject {
     Q_OBJECT
     Q_PROPERTY(QJsonArray objects READ objects NOTIFY objectsChanged)
     Q_PROPERTY(QUndoStack* undoStack READ undoStack CONSTANT)
+    Q_PROPERTY(bool canUndo READ canUndo NOTIFY canUndoChanged)
+    Q_PROPERTY(bool canRedo READ canRedo NOTIFY canRedoChanged)
     Q_PROPERTY(bool dirty READ dirty NOTIFY dirtyChanged)
     Q_PROPERTY(bool gridVisible READ gridVisible WRITE setGridVisible NOTIFY gridVisibleChanged)
     Q_PROPERTY(bool snapEnabled READ snapEnabled WRITE setSnapEnabled NOTIFY snapEnabledChanged)
@@ -19,6 +21,8 @@ public:
 
     QJsonArray objects() const { return m_objects; }
     QUndoStack* undoStack() const { return m_undoStack; }
+    bool canUndo() const { return m_undoStack->canUndo(); }
+    bool canRedo() const { return m_undoStack->canRedo(); }
     bool dirty() const { return m_dirty; }
     bool gridVisible() const { return m_gridVisible; }
     void setGridVisible(bool v);
@@ -41,6 +45,8 @@ public:
 
 signals:
     void objectsChanged();
+    void canUndoChanged();
+    void canRedoChanged();
     void dirtyChanged();
     void gridVisibleChanged();
     void snapEnabledChanged();
