@@ -1,49 +1,60 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import DungeonEditor.Canvas 1.0
 
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  */
 
 Rectangle {
-    id: root
     color: "#252526"
-    
-    property string currentTool: "select"
+    property string activeTool: "select"
+    signal toolChanged(string tool)
 
     ColumnLayout {
         anchors.fill: parent
-        spacing: 10
-        
+        spacing: 4
+        anchors.topMargin: 8
+
+        ButtonGroup { id: toolGroup }
+
         ToolButton {
-            text: "S"
+            id: selectTool
+            text: "V"
             checkable: true
-            checked: root.currentTool === "select"
-            onClicked: root.currentTool = "select"
-            ToolTip.visible: hovered
-            ToolTip.text: "Select"
+            checked: activeTool === "select"
+            ButtonGroup.group: toolGroup
+            onClicked: toolChanged("select")
+            ToolTip.visible: hovered; ToolTip.text: qsTr("Select (V)")
         }
-        
+
         ToolButton {
-            text: "D"
+            id: drawTool
+            text: "R"
             checkable: true
-            checked: root.currentTool === "draw"
-            onClicked: root.currentTool = "draw"
-            ToolTip.visible: hovered
-            ToolTip.text: "Draw Rect"
+            checked: activeTool === "draw"
+            ButtonGroup.group: toolGroup
+            onClicked: toolChanged("draw")
+            ToolTip.visible: hovered; ToolTip.text: qsTr("Draw Room (R)")
         }
-        
+
         ToolButton {
-            text: "P"
+            id: panTool
+            text: "H"
             checkable: true
-            checked: root.currentTool === "pan"
-            onClicked: root.currentTool = "pan"
-            ToolTip.visible: hovered
-            ToolTip.text: "Pan"
+            checked: activeTool === "pan"
+            ButtonGroup.group: toolGroup
+            onClicked: toolChanged("pan")
+            ToolTip.visible: hovered; ToolTip.text: qsTr("Pan (H)")
         }
-        
+
+        ToolButton {
+            id: deleteTool
+            text: "X"
+            onClicked: toolChanged("delete")
+            ToolTip.visible: hovered; ToolTip.text: qsTr("Delete Selected (X)")
+        }
+
         Item { Layout.fillHeight: true }
     }
 }

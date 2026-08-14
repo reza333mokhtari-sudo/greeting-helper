@@ -12,28 +12,60 @@ Rectangle {
 
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: 10
-        anchors.rightMargin: 10
+        anchors.leftMargin: 12
+        anchors.rightMargin: 12
+        spacing: 12
         
         Label {
-            text: "Dungeon Editor"
+            text: qsTr("Dungeon Editor")
             color: "white"
             font.bold: true
         }
-        
-        Item { Layout.fillWidth: true }
-        
+
+        ToolSeparator {}
+
         Button {
-            text: "New"
-            onClicked: console.log("New Map")
+            text: qsTr("New")
+            flat: true
+            onClicked: mapDocument.clear()
         }
+        
         Button {
-            text: "Save"
+            text: qsTr("Open...")
+            flat: true
+            onClicked: mapDocument.load("map.json")
+        }
+        
+        Button {
+            text: qsTr("Save")
+            flat: true
+            highlighted: true
             onClicked: mapDocument.save("map.json")
         }
+
+        ToolSeparator {}
+
+        RowLayout {
+            spacing: 4
+            Button { text: "↺"; flat: true; onClicked: mapDocument.undo() }
+            Button { text: "↻"; flat: true; onClicked: mapDocument.redo() }
+        }
+
+        Item { Layout.fillWidth: true }
+        
+        Label {
+            text: qsTr("Grid")
+            color: "gray"
+        }
+        Switch {
+            id: gridSwitch
+            checked: true
+            onToggled: mapDocument.setGridVisible(checked)
+        }
+        
         Button {
-            text: "Load"
-            onClicked: mapDocument.load("map.json")
+            text: qsTr("Export PNG")
+            onClicked: console.log("Exporting...")
         }
     }
 }
