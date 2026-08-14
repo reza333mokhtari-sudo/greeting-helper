@@ -49,8 +49,8 @@ export const getAdminSchema = createServerFn({ method: "GET" })
         {
           name: "maps",
           pk: "id",
-          columns: ["id", "user_id", "name", "is_public", "preview_url", "created_at", "updated_at"],
-          editable: ["name", "is_public", "preview_url"],
+          columns: ["id", "user_id", "name", "is_public", "thumbnail_url", "created_at", "updated_at"],
+          editable: ["name", "is_public", "thumbnail_url"],
           deletable: true,
         },
         {

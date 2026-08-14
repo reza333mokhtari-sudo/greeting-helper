@@ -34,6 +34,7 @@ qt_add_qml_module(appDungeonEditor
         qml/components/StatusBar.qml
         qml/components/ObjectsPanel.qml
         qml/components/SettingsPanel.qml
+        qml/components/CmsPanel.qml
 )
 
 target_link_libraries(appDungeonEditor PRIVATE 

@@ -26,6 +26,7 @@ Rectangle {
             TabButton { text: qsTr("Objs") }
             TabButton { text: qsTr("Layers") }
             TabButton { text: qsTr("Settings") }
+            TabButton { text: qsTr("CMS") }
         }
 
         StackLayout {
@@ -67,6 +68,11 @@ Rectangle {
             
             SettingsPanel {
                 id: settingsPanel
+                document: root.document
+            }
+
+            CmsPanel {
+                id: cmsPanel
                 document: root.document
             }
         }
