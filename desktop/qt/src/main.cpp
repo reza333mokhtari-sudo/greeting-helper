@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     
     // Load the main entry point from QRC
-    const QUrl url(QStringLiteral("qrc:/DungeonEditor/qt/qml/Main.qml"));
+    const QUrl url(QStringLiteral("qrc:/DungeonEditor/qml/Main.qml"));
     
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
