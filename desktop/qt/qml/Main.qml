@@ -1,6 +1,6 @@
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Controls
 import DungeonEditor.Canvas 1.0
 import "components"
 
@@ -10,76 +10,76 @@ import "components"
 
 ApplicationWindow {
     id: window
-    width: 1280
-    height: 800
+    width: 1400
+    height: 900
     visible: true
-    title: qsTr("Dungeon Editor - Native Qt")
+    title: qsTr("Dungeon Editor - Native Pro")
 
     background: Rectangle { color: "#1e1e1e" }
+
+    // Selection & Navigation State
+    property string activeTool: "select"
+    property var selectedObject: null
+    property double zoomLevel: 1.0
 
     ColumnLayout {
         anchors.fill: parent
         spacing: 0
 
         TopBar {
+            id: topBar
             Layout.fillWidth: true
-            height: 40
+            height: 48
         }
 
-        RowLayout {
+        SplitView {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: 0
+            orientation: Qt.Horizontal
 
             ToolRail {
                 id: toolRail
-                width: 50
-                Layout.fillHeight: true
+                SplitView.preferredWidth: 50
+                SplitView.maximumWidth: 50
+                activeTool: window.activeTool
+                onToolChanged: (tool) => window.activeTool = tool
             }
 
             MapCanvasItem {
                 id: canvas
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+                SplitView.fillWidth: true
                 document: mapDocument
-                currentTool: toolRail.currentTool
+                currentTool: window.activeTool
+                zoom: window.zoomLevel
+                
+                onZoomChanged: window.zoomLevel = zoom
+                onSelectionChanged: (obj) => window.selectedObject = obj
                 
                 focus: true
-                
-                Text {
-                    anchors.bottom: parent.bottom
-                    anchors.right: parent.right
-                    anchors.margins: 10
-                    text: "Zoom: " + (canvas.zoom * 100).toFixed(0) + "%"
-                    color: "gray"
+                Keys.onPressed: (event) => {
+                    if (event.key === Qt.Key_Delete || event.key === Qt.Key_Backspace) {
+                        if (window.selectedObject) mapDocument.removeObject(window.selectedObject.id)
+                    } else if (event.modifiers & Qt.ControlModifier) {
+                        if (event.key === Qt.Key_Z) mapDocument.undo()
+                        else if (event.key === Qt.Key_Y) mapDocument.redo()
+                        else if (event.key === Qt.Key_S) mapDocument.save("map.json")
+                    }
                 }
             }
 
-            ColumnLayout {
-                width: 300
-                Layout.fillHeight: true
-                spacing: 0
-                
-                AssetLibrary {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                }
-                
-                InspectorPanel {
-                    Layout.fillWidth: true
-                    height: 250
-                }
-                
-                AiPanel {
-                    Layout.fillWidth: true
-                    height: 250
-                }
+            RightDock {
+                id: rightDock
+                SplitView.preferredWidth: 320
+                SplitView.minimumWidth: 250
             }
         }
 
         StatusBar {
             Layout.fillWidth: true
-            height: 25
+            height: 28
+            currentTool: window.activeTool
+            zoom: window.zoomLevel
+            selectionCount: window.selectedObject ? 1 : 0
         }
     }
 }
