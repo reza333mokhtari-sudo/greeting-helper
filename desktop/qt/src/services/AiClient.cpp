@@ -17,7 +17,7 @@ void AiClient::sendMessage(const QString& prompt) {
     m_isLoading = true;
     emit isLoadingChanged();
 
-    QNetworkRequest request(QUrl("http://localhost:8080/api/ai/chat"));
+    QNetworkRequest request(QUrl("https://id-preview--8fcae60c-9d66-40f7-8995-c04b7f611207.lovable.app/api/ai/chat"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request.setTransferTimeout(30000); // 30s timeout
 

@@ -136,6 +136,8 @@ void MapCanvasItem::mouseMoveEvent(QMouseEvent *event) {
         if (m_activeTool == "select" && !m_selectedId.isEmpty()) {
             // Drag move
             QPointF delta = (event->position() - m_lastMousePos) / m_zoom;
+            // Prevent dragging if shift is held (e.g. for zoom/pan shortcuts)
+            if (event->modifiers() & Qt::ShiftModifier) return;
             QJsonObject obj;
             int idx = -1;
             for (int i = 0; i < m_document->objects().size(); ++i) {
@@ -155,7 +157,8 @@ void MapCanvasItem::mouseMoveEvent(QMouseEvent *event) {
                     newY = snap(newY);
                 }
 
-                if (newX != obj["x"].toDouble() || newY != obj["y"].toDouble()) {
+                // Threshold check to avoid tiny updates
+                if (std::abs(newX - obj["x"].toDouble()) > 0.1 || std::abs(newY - obj["y"].toDouble()) > 0.1) {
                     obj["x"] = newX;
                     obj["y"] = newY;
                     m_document->updateObject(m_selectedId, obj);
