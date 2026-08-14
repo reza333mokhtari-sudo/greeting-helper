@@ -128,9 +128,11 @@ void MapCanvasItem::mousePressEvent(QMouseEvent *event) {
             m_drawStart = worldPos;
         } else if (m_activeTool == "pan") {
             m_isPanning = true;
+            setCursor(Qt::ClosedHandCursor);
         }
     } else if (event->button() == Qt::MiddleButton || event->button() == Qt::RightButton) {
         m_isPanning = true;
+        setCursor(Qt::ClosedHandCursor);
     }
     update();
 }
@@ -201,7 +203,10 @@ void MapCanvasItem::mouseReleaseEvent(QMouseEvent *event) {
             m_document->addObject(obj);
         }
     }
-    m_isPanning = false;
+    if (m_isPanning) {
+        m_isPanning = false;
+        unsetCursor();
+    }
     update();
 }
 
@@ -246,6 +251,15 @@ void MapCanvasItem::wheelEvent(QWheelEvent *event) {
 void MapCanvasItem::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace) {
         if (!m_selectedId.isEmpty()) m_document->removeObject(m_selectedId);
+    } else if (event->key() == Qt::Key_V) {
+        setActiveTool("select");
+    } else if (event->key() == Qt::Key_R) {
+        setActiveTool("draw");
+    } else if (event->key() == Qt::Key_H) {
+        setActiveTool("pan");
+    } else if (event->key() == Qt::Key_Z && (event->modifiers() & Qt::ControlModifier)) {
+        if (event->modifiers() & Qt::ShiftModifier) m_document->undoStack()->redo();
+        else m_document->undoStack()->undo();
     }
 }
 
