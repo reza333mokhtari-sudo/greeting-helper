@@ -1,6 +1,6 @@
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Controls
 
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
@@ -13,57 +13,80 @@ Rectangle {
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 10
+        spacing: 10
         
         Label {
-            text: "AI Assistant"
+            text: qsTr("AI Assistant")
             color: "white"
             font.bold: true
         }
         
-        ScrollView {
+        ListView {
+            id: chatView
             Layout.fillWidth: true
             Layout.fillHeight: true
-            TextArea {
-                id: chatLog
-                readOnly: true
-                textFormat: Text.PlainText
-                wrapMode: Text.Wrap
-                color: "#d4d4d4"
-                background: Rectangle { color: "#1e1e1e" }
+            clip: true
+            spacing: 8
+            model: ListModel { id: chatModel }
+            
+            delegate: Rectangle {
+                width: chatView.width
+                height: textLabel.height + 20
+                color: isAi ? "#2d2d2d" : "#007acc"
+                radius: 6
+                
+                ColumnLayout {
+                    anchors.fill: parent
+                    anchors.margins: 10
+                    Label {
+                        id: textLabel
+                        text: content
+                        color: "white"
+                        wrapMode: Text.Wrap
+                        Layout.fillWidth: true
+                    }
+                }
             }
+            
+            onCountChanged: scrollTimer.start()
+            Timer { id: scrollTimer; interval: 50; onTriggered: chatView.positionViewAtEnd() }
+        }
+        
+        ProgressBar {
+            Layout.fillWidth: true
+            visible: aiClient.isLoading
+            indeterminate: true
         }
         
         RowLayout {
             TextField {
-                id: inputField
-                placeholderText: "Ask AI..."
+                id: aiInput
+                placeholderText: qsTr("Describe your dungeon...")
                 Layout.fillWidth: true
                 color: "white"
-                background: Rectangle { color: "#3c3c3c" }
+                background: Rectangle { color: "#3c3c3c"; radius: 4 }
                 onAccepted: sendBtn.clicked()
             }
             Button {
                 id: sendBtn
-                text: aiClient.isLoading ? "..." : "Send"
-                enabled: !aiClient.isLoading
+                text: qsTr("Send")
+                enabled: !aiClient.isLoading && aiInput.text !== ""
                 onClicked: {
-                    if (inputField.text) {
-                        chatLog.text += "You: " + inputField.text + "\n"
-                        aiClient.sendMessage(inputField.text)
-                        inputField.text = ""
-                    }
+                    chatModel.append({content: aiInput.text, isAi: false})
+                    aiClient.sendMessage(aiInput.text)
+                    aiInput.text = ""
                 }
             }
         }
     }
-    
+
     Connections {
         target: aiClient
         function onResponseReceived(response) {
-            chatLog.text += "AI: " + response + "\n"
+            chatModel.append({content: response, isAi: true})
         }
         function onErrorOccurred(error) {
-            chatLog.text += "Error: " + error + "\n"
+            chatModel.append({content: qsTr("Error: ") + error, isAi: true})
         }
     }
 }
