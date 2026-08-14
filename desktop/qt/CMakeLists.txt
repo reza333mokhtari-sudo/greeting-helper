@@ -5,7 +5,7 @@ project(DungeonEditor VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick WebEngineQuick WebEngineCore)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick WebEngineQuick WebEngineCore Network)
 
 qt_standard_project_setup()
 
@@ -29,15 +29,11 @@ qt_add_qml_module(appDungeonEditor
         qml/components/AiPanel.qml
         qml/components/InspectorPanel.qml
         qml/components/StatusBar.qml
+        qml/components/RightDock.qml
+        qml/components/LayersPanel.qml
     RESOURCES
         resources.qrc
 )
-
-# Optional: Soulslike assets
-# qt_add_resources(appDungeonEditor "assets"
-#    PREFIX "/assets"
-#    FILES assets/soulslike/manifest.json
-# )
 
 target_link_libraries(appDungeonEditor PRIVATE
     Qt6::Core
@@ -46,7 +42,5 @@ target_link_libraries(appDungeonEditor PRIVATE
     Qt6::Quick
     Qt6::WebEngineQuick
     Qt6::WebEngineCore
+    Qt6::Network
 )
-
-include(FeatureSummary)
-feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)

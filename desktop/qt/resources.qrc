@@ -7,6 +7,8 @@
     <file>qml/components/AiPanel.qml</file>
     <file>qml/components/InspectorPanel.qml</file>
     <file>qml/components/StatusBar.qml</file>
+    <file>qml/components/RightDock.qml</file>
+    <file>qml/components/LayersPanel.qml</file>
     <file>assets/soulslike/manifest.json</file>
 </qresource>
 </RCC>
