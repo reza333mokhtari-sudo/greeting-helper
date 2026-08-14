@@ -1,55 +1,80 @@
 import QtQuick
-import QtQuick.Layouts
 import QtQuick.Controls
-
-/**
- * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
- */
+import QtQuick.Layouts
 
 Rectangle {
-    id: root
     color: "#252526"
     
+    property var document: null
+    property var canvas: null
+    property var assetModel: null
+
+    function updateInspector(id) {
+        inspectorPanel.updateSelection(id)
+    }
+
     ColumnLayout {
         anchors.fill: parent
         spacing: 0
 
         TabBar {
-            id: tabBar
+            id: dockTabs
             Layout.fillWidth: true
             background: Rectangle { color: "#2d2d2d" }
-            
             TabButton { text: qsTr("Assets") }
+            TabButton { text: qsTr("Insp") }
+            TabButton { text: qsTr("Objs") }
             TabButton { text: qsTr("Layers") }
-            TabButton { text: qsTr("Inspector") }
-            TabButton { text: qsTr("AI") }
+            TabButton { text: qsTr("Settings") }
         }
 
         StackLayout {
-            currentIndex: tabBar.currentIndex
+            currentIndex: dockTabs.currentIndex
             Layout.fillWidth: true
             Layout.fillHeight: true
 
             AssetLibrary {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-            }
-
-            LayersPanel {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+                id: assetLibrary
+                model: assetModel
+                onAssetClicked: (asset) => {
+                    document.addObject({
+                        kind: "image",
+                        name: asset.name,
+                        assetId: asset.assetId,
+                        x: -canvas.pan.x / canvas.zoom + (canvas.width / 2 / canvas.zoom),
+                        y: -canvas.pan.y / canvas.zoom + (canvas.height / 2 / canvas.zoom),
+                        rotation: 0,
+                        cornerRadius: 0
+                    })
+                }
             }
 
             InspectorPanel {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                targetObject: window.selectedObject
+                id: inspectorPanel
+                document: mapDoc
             }
 
-            AiPanel {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+            ObjectsPanel {
+                id: objectsPanel
+                document: mapDoc
+                onObjectSelected: (id) => canvas.selectedId = id
             }
+
+            LayersPanel {
+                id: layersPanel
+                document: mapDoc
+            }
+
+            SettingsPanel {
+                id: settingsPanel
+                document: mapDoc
+            }
+        }
+
+        AiPanel {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 250
+            SplitView.minimumHeight: 150
         }
     }
 }

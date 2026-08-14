@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(DungeonEditor VERSION 0.1 LANGUAGES CXX)
+project(DungeonEditor VERSION 1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Gui Qml Quick Network QuickControls2)
+find_package(Qt6 REQUIRED COMPONENTS Gui Qml Quick Network QuickControls2 Concurrent)
 
 qt_standard_project_setup()
 
@@ -18,10 +18,11 @@ qt_add_executable(appDungeonEditor
     src/services/FileService.h src/services/FileService.cpp
 )
 
-# Bundle QML files with prefix DungeonEditor
+# QML Module with proper prefixing for QRC
 qt_add_qml_module(appDungeonEditor
     URI DungeonEditor
     VERSION 1.0
+    RESOURCE_PREFIX "/DungeonEditor"
     QML_FILES
         qml/Main.qml
         qml/components/TopBar.qml
@@ -33,7 +34,6 @@ qt_add_qml_module(appDungeonEditor
         qml/components/StatusBar.qml
         qml/components/ObjectsPanel.qml
         qml/components/SettingsPanel.qml
-        qml/components/RightDock.qml
 )
 
 target_link_libraries(appDungeonEditor PRIVATE 
@@ -42,4 +42,11 @@ target_link_libraries(appDungeonEditor PRIVATE
     Qt6::Quick 
     Qt6::Network
     Qt6::QuickControls2
+    Qt6::Concurrent
+)
+
+# Install rules
+install(TARGETS appDungeonEditor
+    BUNDLE DESTINATION .
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
