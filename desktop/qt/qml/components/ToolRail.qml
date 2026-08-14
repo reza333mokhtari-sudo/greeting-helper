@@ -8,56 +8,80 @@ import QtQuick.Controls
 
 Rectangle {
     id: root
-    width: 50
-    color: "#2d2d2d"
-    border.color: "#3e3e42"
+    width: 60
+    color: "#1e1e1e"
+    border.color: "#333333"
     
     property var canvas: null
     
     ColumnLayout {
         anchors.fill: parent
-        anchors.topMargin: 10
-        spacing: 10
+        anchors.topMargin: 15
+        spacing: 15
         
+        ButtonGroup { id: toolGroup }
+
         ToolButton {
             id: selectBtn
-            text: "S"
+            text: "Select"
+            icon.name: "cursor-arrow"
             checkable: true
             checked: canvas.activeTool === "select"
             onClicked: canvas.activeTool = "select"
-            ToolTip.visible: hovered; ToolTip.text: "Select (S)"
+            ButtonGroup.group: toolGroup
+            display: AbstractButton.TextUnderIcon
+            Layout.fillWidth: true
+            ToolTip.visible: hovered; ToolTip.text: "Select Tool (V)"
         }
         
         ToolButton {
             id: drawBtn
-            text: "D"
+            text: "Draw"
+            icon.name: "draw-rectangle"
             checkable: true
             checked: canvas.activeTool === "draw"
             onClicked: canvas.activeTool = "draw"
-            ToolTip.visible: hovered; ToolTip.text: "Draw Room (D)"
+            ButtonGroup.group: toolGroup
+            display: AbstractButton.TextUnderIcon
+            Layout.fillWidth: true
+            ToolTip.visible: hovered; ToolTip.text: "Draw Room (R)"
         }
         
         ToolButton {
             id: moveBtn
-            text: "M"
+            text: "Pan"
+            icon.name: "input-mouse"
             checkable: true
-            checked: canvas.activeTool === "move"
-            onClicked: canvas.activeTool = "move"
-            ToolTip.visible: hovered; ToolTip.text: "Move Object (M)"
+            checked: canvas.activeTool === "pan"
+            onClicked: canvas.activeTool = "pan"
+            ButtonGroup.group: toolGroup
+            display: AbstractButton.TextUnderIcon
+            Layout.fillWidth: true
+            ToolTip.visible: hovered; ToolTip.text: "Pan View (H or Middle Click)"
         }
 
-        ToolSeparator { Layout.fillWidth: true; orientation: Qt.Horizontal }
+        ToolSeparator { Layout.fillWidth: true; orientation: Qt.Horizontal; padding: 5 }
 
         ToolButton {
-            text: "E"
+            text: "Delete"
+            icon.name: "edit-delete"
             onClicked: {
                 if (canvas.selectedId !== "") {
                     canvas.document.removeObject(canvas.selectedId);
                 }
             }
-            ToolTip.visible: hovered; ToolTip.text: "Erase Selected (E)"
+            display: AbstractButton.TextUnderIcon
+            Layout.fillWidth: true
+            ToolTip.visible: hovered; ToolTip.text: "Delete Selected (Del)"
         }
 
         Item { Layout.fillHeight: true }
+        
+        ToolButton {
+            text: "Help"
+            icon.name: "help-about"
+            display: AbstractButton.TextUnderIcon
+            Layout.fillWidth: true
+        }
     }
 }
