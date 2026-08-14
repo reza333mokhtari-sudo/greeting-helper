@@ -59,8 +59,20 @@ void MapCanvasItem::paint(QPainter *painter) {
             painter->rotate(obj["rotation"].toDouble());
             painter->setBrush(QColor(100, 100, 110, 200));
             painter->setPen(isSelected ? QPen(Qt::cyan, 3 / m_zoom) : QPen(Qt::black, 1 / m_zoom));
-            double r = obj["cornerRadius"].toDouble();
-            painter->drawRoundedRect(-25, -25, 50, 50, r, r);
+            double rTL = obj["radiusTL"].isDouble() ? obj["radiusTL"].toDouble() : obj["cornerRadius"].toDouble();
+            double rTR = obj["radiusTR"].isDouble() ? obj["radiusTR"].toDouble() : obj["cornerRadius"].toDouble();
+            double rBL = obj["radiusBL"].isDouble() ? obj["radiusBL"].toDouble() : obj["cornerRadius"].toDouble();
+            double rBR = obj["radiusBR"].isDouble() ? obj["radiusBR"].toDouble() : obj["cornerRadius"].toDouble();
+            
+            QPainterPath path;
+            QRectF rect(-25, -25, 50, 50);
+            path.moveTo(rect.right(), rect.top() + rTR);
+            path.arcTo(rect.right() - 2 * rTR, rect.top(), 2 * rTR, 2 * rTR, 0, 90);
+            path.arcTo(rect.left(), rect.top(), 2 * rTL, 2 * rTL, 90, 90);
+            path.arcTo(rect.left(), rect.bottom() - 2 * rBL, 2 * rBL, 2 * rBL, 180, 90);
+            path.arcTo(rect.right() - 2 * rBR, rect.bottom() - 2 * rBR, 2 * rBR, 2 * rBR, 270, 90);
+            path.closeSubpath();
+            painter->drawPath(path);
         }
         
         painter->restore();
@@ -109,15 +121,19 @@ void MapCanvasItem::mouseMoveEvent(QMouseEvent *event) {
         if (m_activeTool == "select" && !m_selectedId.isEmpty()) {
             // Drag move
             QPointF delta = (event->position() - m_lastMousePos) / m_zoom;
-            QJsonArray objects = m_document->objects();
-            for (const QJsonValue &v : objects) {
-                QJsonObject obj = v.toObject();
-                if (obj["id"].toString() == m_selectedId) {
-                    obj["x"] = obj["x"].toDouble() + delta.x();
-                    obj["y"] = obj["y"].toDouble() + delta.y();
-                    m_document->updateObject(m_selectedId, obj);
+            QJsonObject obj;
+            int idx = -1;
+            for (int i = 0; i < m_document->objects().size(); ++i) {
+                if (m_document->objects()[i].toObject()["id"].toString() == m_selectedId) {
+                    obj = m_document->objects()[i].toObject();
+                    idx = i;
                     break;
                 }
+            }
+            if (idx != -1) {
+                obj["x"] = obj["x"].toDouble() + delta.x();
+                obj["y"] = obj["y"].toDouble() + delta.y();
+                m_document->updateObject(m_selectedId, obj);
             }
         }
     }

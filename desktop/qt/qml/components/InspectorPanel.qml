@@ -96,12 +96,43 @@ Rectangle {
 
                 Label { text: qsTr("Style"); color: "white"; font.bold: true }
                 
-                RowLayout {
-                    Label { text: "Radius"; color: "#aaa" }
+                GridLayout {
+                    columns: 2
+                    Layout.fillWidth: true
+                    
+                    Label { text: "Global Radius"; color: "#aaa" }
                     Slider {
                         value: selectedObject ? (selectedObject.cornerRadius || 0) : 0
                         from: 0; to: 100
                         onMoved: document.updateObject(selectedId, { cornerRadius: value })
+                    }
+                    
+                    Label { text: "TL Radius"; color: "#888" }
+                    Slider {
+                        value: selectedObject ? (selectedObject.radiusTL || selectedObject.cornerRadius || 0) : 0
+                        from: 0; to: 100
+                        onMoved: document.updateObject(selectedId, { radiusTL: value })
+                    }
+                    
+                    Label { text: "TR Radius"; color: "#888" }
+                    Slider {
+                        value: selectedObject ? (selectedObject.radiusTR || selectedObject.cornerRadius || 0) : 0
+                        from: 0; to: 100
+                        onMoved: document.updateObject(selectedId, { radiusTR: value })
+                    }
+                    
+                    Label { text: "BL Radius"; color: "#888" }
+                    Slider {
+                        value: selectedObject ? (selectedObject.radiusBL || selectedObject.cornerRadius || 0) : 0
+                        from: 0; to: 100
+                        onMoved: document.updateObject(selectedId, { radiusBL: value })
+                    }
+                    
+                    Label { text: "BR Radius"; color: "#888" }
+                    Slider {
+                        value: selectedObject ? (selectedObject.radiusBR || selectedObject.cornerRadius || 0) : 0
+                        from: 0; to: 100
+                        onMoved: document.updateObject(selectedId, { radiusBR: value })
                     }
                 }
 

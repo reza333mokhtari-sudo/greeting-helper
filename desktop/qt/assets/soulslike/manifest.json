@@ -16,5 +16,23 @@
         "name": "Wall Torch",
         "category": "Architecture",
         "icon": "assets/soulslike/torch.png"
+    },
+    {
+        "id": "pillar_gothic",
+        "name": "Gothic Pillar",
+        "category": "Architecture",
+        "icon": "assets/soulslike/pillar.png"
+    },
+    {
+        "id": "chest_iron",
+        "name": "Iron Chest",
+        "category": "Environment",
+        "icon": "assets/soulslike/chest.png"
+    },
+    {
+        "id": "door_heavy",
+        "name": "Heavy Door",
+        "category": "Architecture",
+        "icon": "assets/soulslike/door.png"
     }
 ]
