@@ -5,6 +5,12 @@
 #include <QQuickStyle>
 #include <QtQml/qqml.h>
 #include <QDebug>
+#include <QProcess>
+
+#ifdef Q_OS_WIN
+#include <windows.h>
+#include <shellapi.h>
+#endif
 
 #include <core/Document.h>
 #include <canvas/MapCanvasItem.h>
@@ -14,7 +20,71 @@
 #include <services/WorkspaceService.h>
 #include <services/LicenseService.h>
 
+class StyleManager : public QObject {
+    Q_OBJECT
+    Q_PROPERTY(QString currentStyle READ currentStyle WRITE setCurrentStyle NOTIFY styleChanged)
+    Q_PROPERTY(bool isAdmin READ isAdmin CONSTANT)
+
+public:
+    explicit StyleManager(QQmlApplicationEngine* engine, QObject *parent = nullptr) 
+        : QObject(parent), m_engine(engine) {
+        m_currentStyle = QQuickStyle::name();
+        if (m_currentStyle.isEmpty()) m_currentStyle = "Fusion";
+    }
+
+    QString currentStyle() const { return m_currentStyle; }
+    void setCurrentStyle(const QString& style) {
+        if (m_currentStyle != style) {
+            m_currentStyle = style;
+            emit styleChanged();
+        }
+    }
+
+    bool isAdmin() const {
+#ifdef Q_OS_WIN
+        bool isAdmin = false;
+        HANDLE hToken = NULL;
+        if (OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken)) {
+            TOKEN_ELEVATION elevation;
+            DWORD dwSize;
+            if (GetTokenInformation(hToken, TokenElevation, &elevation, sizeof(elevation), &dwSize)) {
+                isAdmin = elevation.TokenIsElevated;
+            }
+        }
+        if (hToken) CloseHandle(hToken);
+        return isAdmin;
+#else
+        return geteuid() == 0;
+#endif
+    }
+
+    Q_INVOKABLE void reloadStyling() {
+        qDebug() << "Reloading QML styling for style:" << m_currentStyle;
+        
+        // In a real DCC app, we'd persist the style choice and restart or 
+        // use a dynamic Theme engine. For this debug toggle, we'll suggest restart
+        // but QML can also re-evaluate expressions if we notify.
+        QQuickStyle::setStyle(m_currentStyle);
+        emit styleChanged();
+    }
+
+    Q_INVOKABLE void restartApplication() {
+        qApp->quit();
+        QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+    }
+
+signals:
+    void styleChanged();
+
+private:
+    QString m_currentStyle;
+    QQmlApplicationEngine* m_engine;
+};
+
+#include "main.moc"
+
 int main(int argc, char *argv[])
+
 {
     QApplication app(argc, argv);
     app.setOrganizationName("DungeonEditor");
@@ -39,12 +109,16 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     
+    StyleManager styleManager(&engine);
+    engine.rootContext()->setContextProperty("styleManager", &styleManager);
+
     // Register "qml" root correctly for internal imports
     engine.addImportPath("qrc:/");
     engine.addImportPath("qrc:/qml");
     engine.addImportPath("qrc:/qml/components");
     engine.addImportPath("qrc:/qml/dialogs");
     engine.addImportPath("qrc:/qml/panels");
+
 
     
     const QStringList resourcePaths = {

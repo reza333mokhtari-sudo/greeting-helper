@@ -98,14 +98,77 @@ Dialog {
                 background: null
                 ColumnLayout {
                     Label { text: qsTr("Interface Settings"); color: "white"; font.bold: true; font.pixelSize: 16 }
+                    
+                    RowLayout {
+                        Label { text: qsTr("Visual Style: "); color: "#aaa" }
+                        ComboBox {
+                            id: styleCombo
+                            model: ["DungeonScrawl", "Fusion (Pro/Admin)"]
+                            Layout.fillWidth: true
+                            currentIndex: (styleManager && styleManager.currentStyle === "Fusion") ? 1 : 0
+                            
+                            // Visual constraint: Option 2 requires Admin
+                            delegate: ItemDelegate {
+                                width: parent.width
+                                text: modelData
+                                enabled: index === 0 || (styleManager && styleManager.isAdmin)
+                                highlighted: ListView.isCurrentItem
+                                contentItem: Text {
+                                    text: modelData
+                                    color: enabled ? "white" : "#666"
+                                    verticalAlignment: Text.AlignVCenter
+                                }
+                            }
+                            
+                            onActivated: {
+                                if (index === 1 && styleManager && !styleManager.isAdmin) {
+                                    // Should not be reachable due to delegate, but safety check
+                                    currentIndex = 0;
+                                    return;
+                                }
+                                let newStyle = index === 1 ? "Fusion" : "Basic";
+                                if (styleManager) styleManager.currentStyle = newStyle;
+                            }
+                        }
+                    }
+
+                    GroupBox {
+                        title: qsTr("Debug / Dev Tools")
+                        visible: styleManager && styleManager.isAdmin
+                        Layout.fillWidth: true
+                        palette.windowText: "#f39c12"
+                        
+                        ColumnLayout {
+                            CheckBox {
+                                id: forceFusionToggle
+                                text: qsTr("Force Fusion Engine")
+                                checked: styleManager && styleManager.currentStyle === "Fusion"
+                                onToggled: {
+                                    if (styleManager) {
+                                        styleManager.currentStyle = checked ? "Fusion" : "Basic"
+                                        styleManager.reloadStyling()
+                                    }
+                                }
+                            }
+                            Button {
+                                text: qsTr("Hot Reload Styling")
+                                Layout.fillWidth: true
+                                onClicked: if (styleManager) styleManager.reloadStyling()
+                            }
+                            Button {
+                                text: qsTr("Restart Application")
+                                Layout.fillWidth: true
+                                onClicked: if (styleManager) styleManager.restartApplication()
+                            }
+                        }
+                    }
+
+
                     RowLayout {
                         Label { text: qsTr("UI Scale: "); color: "#aaa" }
                         Slider { from: 0.5; to: 2.0; value: 1.0 }
                     }
-                    ComboBox {
-                        model: ["Maya Dark", "Slate Grey", "High Contrast"]
-                        Layout.fillWidth: true
-                    }
+
                 }
             }
 
