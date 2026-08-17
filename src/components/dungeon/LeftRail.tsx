@@ -3,7 +3,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Sliders, Layers, Image, Sparkles, CloudFog, History, Info, Activity, Building2, HelpCircle, Monitor, FileText, Map as MapIcon, Wand2, Package } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-export type PanelId = "settings" | "floors" | "layers" | "props" | "asset-library" | "ai" | "fog" | "history" | "properties" | "diagnostics" | "help" | "graphics" | "cms" | "maps" | "generator";
+export type PanelId = "settings" | "floors" | "layers" | "props" | "asset-library" | "ai" | "fog" | "history" | "properties" | "diagnostics" | "help" | "graphics" | "cms" | "maps" | "generator" | "support";
 
 const PANELS: { id: PanelId; label: string; icon: LucideIcon; shortcut?: string }[] = [
   { id: "settings", label: "Tool & map settings", icon: Sliders, shortcut: "Alt+S" },
@@ -16,7 +16,8 @@ const PANELS: { id: PanelId; label: string; icon: LucideIcon; shortcut?: string 
   { id: "ai", label: "AI assistant", icon: Sparkles, shortcut: "Alt+A" },
   { id: "fog", label: "Fog of war", icon: CloudFog, shortcut: "Alt+W" },
   { id: "history", label: "History", icon: History, shortcut: "Alt+H" },
-  { id: "help", label: "Quick help", icon: HelpCircle, shortcut: "F1" },
+  { id: "support", label: "Admin Support", icon: HelpCircle, shortcut: "Alt+U" },
+  { id: "help", label: "Quick help", icon: Info, shortcut: "F1" },
   { id: "diagnostics", label: "Performance diagnostics", icon: Activity, shortcut: "Alt+D" },
   { id: "cms", label: "CMS Pages", icon: FileText },
 ];

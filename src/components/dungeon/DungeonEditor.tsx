@@ -16,6 +16,7 @@ import { SidePanel } from "./SidePanel";
 import { Toolbar, TOOLS, type ToolId } from "./Toolbar";
 import { GraphicsSettingsPanel } from "./GraphicsSettingsPanel";
 import { AiPanel } from "./AiPanel";
+import { SupportPanel } from "./SupportPanel";
 import { AssetLibraryPanel } from "./AssetLibraryPanel";
 import { GeneratorPanel } from "./GeneratorPanel";
 import { FogPanel, type FogMode } from "./FogPanel";
@@ -1703,6 +1704,8 @@ export function DungeonEditor() {
             }}
           />
         );
+      case "support":
+        return <SupportPanel />;
       case "fog":
         return (
           <FogPanel
