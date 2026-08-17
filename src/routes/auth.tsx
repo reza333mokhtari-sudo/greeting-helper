@@ -155,6 +155,13 @@ function AuthPage() {
     else toast.success("Activation email sent again.");
   };
 
+  const google = async () => {
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: `${window.location.origin}${dest}`,
+    });
+    if (result.error) toast.error("Google sign-in failed");
+  };
+
   const ErrorDisplay = () => {
     if (!error) return null;
     return (
