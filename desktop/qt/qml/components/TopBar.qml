@@ -9,7 +9,7 @@ import QtQuick.Dialogs
 
 Rectangle {
     id: root
-    height: 48
+    height: 56 // h-14 equivalent (14 * 4px)
     color: "#1e1e1e"
     border.color: "#333333"
     

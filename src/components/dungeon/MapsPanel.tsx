@@ -115,9 +115,9 @@ export function MapsPanel({ onLoadMap, onNewMap, currentMapId }: Props) {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">
                     {map.isCloud ? (
-                      <Cloud className="size-3 text-primary shrink-0" title="Cloud Map" />
+                      <Cloud className="size-3 text-primary shrink-0" />
                     ) : (
-                      <HardDrive className="size-3 text-muted-foreground shrink-0" title="Local Map" />
+                      <HardDrive className="size-3 text-muted-foreground shrink-0" />
                     )}
                     <span className="text-xs font-medium truncate">{map.name || "Untitled Map"}</span>
                   </div>

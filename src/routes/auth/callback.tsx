@@ -11,7 +11,7 @@ function AuthCallback() {
   const search = useSearch({ from: "/auth/callback" }) as any;
 
   useEffect(() => {
-    supabase.auth.onAuthStateChange((event, session) => {
+    supabase.auth.onAuthStateChange((event: any, session: any) => {
       if (event === "SIGNED_IN" && session) {
         const next = search.next || "/editor";
         navigate({ to: next, replace: true });
