@@ -12,11 +12,11 @@
   /* Typography */
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", "SF Mono", "Fira Code", monospace;
-  
+
   --text-xs: 0.7rem;
   --text-sm: 0.825rem;
   --text-base: 0.9375rem;
-  
+
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
@@ -49,7 +49,7 @@
   --color-ring: var(--ring);
   --color-gold: var(--gold);
   --color-gold-foreground: var(--gold-foreground);
-  
+
   /* Sidebar context */
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
@@ -61,37 +61,37 @@
   /* Light Theme - Autodesk "Modern" Grey */
   --background: oklch(0.95 0.01 240);
   --foreground: oklch(0.2 0.02 240);
-  
+
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.2 0.02 240);
-  
+
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.2 0.02 240);
-  
+
   --primary: oklch(0.55 0.15 220); /* Professional Cyber Blue */
   --primary-foreground: oklch(1 0 0);
-  
+
   --secondary: oklch(0.9 0.01 240);
   --secondary-foreground: oklch(0.3 0.02 240);
-  
+
   --muted: oklch(0.92 0.01 240);
   --muted-foreground: oklch(0.45 0.02 240);
-  
+
   --accent: oklch(0.88 0.01 240);
   --accent-foreground: oklch(0.2 0.02 240);
-  
+
   --destructive: oklch(0.6 0.18 25);
   --destructive-foreground: oklch(0.98 0.02 45);
-  
+
   --border: oklch(0.85 0.01 240);
   --input: oklch(0.85 0.01 240);
   --ring: oklch(0.55 0.15 220);
-  
+
   --sidebar: oklch(0.93 0.01 240);
   --sidebar-foreground: oklch(0.25 0.02 240);
   --sidebar-primary: oklch(0.55 0.15 220);
   --sidebar-border: oklch(0.88 0.01 240);
-  
+
   --gold: oklch(0.7 0.12 88);
   --gold-foreground: oklch(0.2 0.02 240);
 
@@ -103,46 +103,43 @@
   /* Dark Theme - Arcane Autodesk Slate */
   --background: oklch(0.14 0.01 240);
   --foreground: oklch(0.92 0.01 240);
-  
+
   --card: oklch(0.18 0.01 240);
   --card-foreground: oklch(0.92 0.01 240);
-  
+
   --popover: oklch(0.2 0.01 240);
   --popover-foreground: oklch(0.92 0.01 240);
-  
+
   --primary: oklch(0.6 0.15 220); /* Professional Cyber Blue */
   --primary-foreground: oklch(0.98 0.01 240);
-  
+
   --secondary: oklch(0.22 0.01 240);
   --secondary-foreground: oklch(0.85 0.02 240);
-  
+
   --muted: oklch(0.2 0.01 240);
   --muted-foreground: oklch(0.6 0.02 240);
-  
+
   --accent: oklch(0.25 0.01 240);
   --accent-foreground: oklch(0.95 0.02 240);
-  
+
   --destructive: oklch(0.55 0.18 25);
   --destructive-foreground: oklch(0.98 0.02 45);
-  
+
   --border: oklch(0.22 0.01 240);
   --input: oklch(0.22 0.01 240);
   --ring: oklch(0.6 0.15 220);
-  
+
   --sidebar: oklch(0.12 0.01 240);
   --sidebar-foreground: oklch(0.9 0.02 240);
   --sidebar-primary: oklch(0.6 0.15 220);
   --sidebar-border: oklch(0.18 0.01 240);
-  
+
   --gold: oklch(0.78 0.12 88);
   --gold-foreground: oklch(0.15 0.02 240);
-  
+
   --gradient-arcane: linear-gradient(135deg, var(--primary), var(--gold));
   --shadow-arcane: 0 4px 20px -8px color-mix(in oklab, var(--primary) 30%, transparent);
 }
-
-
-
 
 @layer base {
   * {
@@ -159,7 +156,12 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-weight: var(--font-weight-semibold);
     letter-spacing: -0.01em;
   }
@@ -225,14 +227,27 @@
  * Animation System 
  */
 @keyframes icon-pulse {
-  0% { transform: scale(1); filter: drop-shadow(0 0 0px var(--primary)); }
-  50% { transform: scale(1.05); filter: drop-shadow(0 0 8px var(--primary)); }
-  100% { transform: scale(1); filter: drop-shadow(0 0 0px var(--primary)); }
+  0% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 0px var(--primary));
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 8px var(--primary));
+  }
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 0px var(--primary));
+  }
 }
 
 @keyframes dash {
-  from { stroke-dashoffset: 100; }
-  to { stroke-dashoffset: 0; }
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 svg.animated-icon path,
@@ -262,4 +277,3 @@ svg.animated-icon rect {
 .dark .group:focus-visible svg.animated-icon {
   color: var(--gold);
 }
-

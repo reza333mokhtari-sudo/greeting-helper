@@ -16,7 +16,13 @@ import type { Doc, FloorLinkKind } from "@/lib/dungeon/model";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 
 const LINK_KINDS: { id: FloorLinkKind; label: string }[] = [
@@ -55,7 +61,9 @@ export function FloorsPanel({
   const [linkLabel, setLinkLabel] = useState("");
 
   const others = doc.floors.filter((f) => f.id !== doc.activeFloorId);
-  const activeLinks = doc.links.filter((l) => l.from === doc.activeFloorId || l.to === doc.activeFloorId);
+  const activeLinks = doc.links.filter(
+    (l) => l.from === doc.activeFloorId || l.to === doc.activeFloorId,
+  );
   const nameOf = (id: string) => doc.floors.find((f) => f.id === id)?.name ?? "—";
 
   return (
@@ -65,10 +73,22 @@ export function FloorsPanel({
           <Building2 className="h-3 w-3 text-accent" /> Floors
         </h2>
         <div className="flex gap-1">
-          <Button size="icon" variant="ghost" className="size-6" aria-label="Duplicate floor" onClick={() => onAddFloor(true)}>
+          <Button
+            size="icon"
+            variant="ghost"
+            className="size-6"
+            aria-label="Duplicate floor"
+            onClick={() => onAddFloor(true)}
+          >
             <Copy className="size-3.5" />
           </Button>
-          <Button size="icon" variant="ghost" className="size-6" aria-label="Add floor" onClick={() => onAddFloor(false)}>
+          <Button
+            size="icon"
+            variant="ghost"
+            className="size-6"
+            aria-label="Add floor"
+            onClick={() => onAddFloor(false)}
+          >
             <Plus className="size-3.5" />
           </Button>
         </div>
@@ -82,7 +102,9 @@ export function FloorsPanel({
             <div
               key={f.id}
               className={`rounded-md border p-2 transition-colors ${
-                on ? "border-accent bg-accent/10" : "border-border/60 bg-card/40 hover:border-primary/60"
+                on
+                  ? "border-accent bg-accent/10"
+                  : "border-border/60 bg-card/40 hover:border-primary/60"
               }`}
             >
               <div className="flex items-center gap-1.5">
@@ -92,7 +114,9 @@ export function FloorsPanel({
                   className="flex min-w-0 flex-1 items-center gap-1.5 text-left"
                   aria-pressed={on}
                 >
-                  <Layers3 className={`size-3.5 shrink-0 ${on ? "text-accent" : "text-muted-foreground"}`} />
+                  <Layers3
+                    className={`size-3.5 shrink-0 ${on ? "text-accent" : "text-muted-foreground"}`}
+                  />
                   <span className="truncate text-[11px] font-medium">{f.name}</span>
                   {on && <Badge className="h-4 px-1 text-[9px]">active</Badge>}
                 </button>
@@ -217,20 +241,31 @@ export function FloorsPanel({
           {activeLinks.map((l) => {
             const target = l.from === doc.activeFloorId ? l.to : l.from;
             return (
-              <li key={l.id} className="flex items-center gap-1.5 rounded-md border border-border/60 bg-card/40 px-2 py-1">
+              <li
+                key={l.id}
+                className="flex items-center gap-1.5 rounded-md border border-border/60 bg-card/40 px-2 py-1"
+              >
                 <button
                   type="button"
                   className="min-w-0 flex-1 truncate text-left text-[10px]"
                   onClick={() => onSelectFloor(target)}
                   title="Go to connected floor"
                 >
-                  <span className="font-medium text-foreground">{l.label || LINK_KINDS.find((k) => k.id === l.kind)?.label}</span>
+                  <span className="font-medium text-foreground">
+                    {l.label || LINK_KINDS.find((k) => k.id === l.kind)?.label}
+                  </span>
                   <span className="text-muted-foreground">
                     {" "}
                     — {nameOf(l.from)} → {nameOf(l.to)}
                   </span>
                 </button>
-                <Button size="icon" variant="ghost" className="size-5" aria-label="Remove connection" onClick={() => onRemoveLink(l.id)}>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="size-5"
+                  aria-label="Remove connection"
+                  onClick={() => onRemoveLink(l.id)}
+                >
                   <Trash2 className="size-3" />
                 </Button>
               </li>

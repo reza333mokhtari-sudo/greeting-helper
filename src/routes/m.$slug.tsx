@@ -10,13 +10,21 @@ import { onImageLoaded } from "@/lib/dungeon/assets";
 export const Route = createFileRoute("/m/$slug")({
   loader: async ({ params }) => getSharedMap({ data: { slug: params.slug } }),
   head: ({ loaderData }) => {
-    const title = loaderData?.name ? `${loaderData.name} — Shared dungeon map` : "Shared dungeon map";
+    const title = loaderData?.name
+      ? `${loaderData.name} — Shared dungeon map`
+      : "Shared dungeon map";
     return {
       meta: [
         { title },
-        { name: "description", content: "A player-ready dungeon map shared from the Dungeon Scrawl map maker." },
+        {
+          name: "description",
+          content: "A player-ready dungeon map shared from the Dungeon Scrawl map maker.",
+        },
         { property: "og:title", content: title },
-        { property: "og:description", content: "A player-ready dungeon map shared from the Dungeon Scrawl map maker." },
+        {
+          property: "og:description",
+          content: "A player-ready dungeon map shared from the Dungeon Scrawl map maker.",
+        },
         { property: "og:type", content: "article" },
         { name: "twitter:card", content: "summary_large_image" },
       ],
@@ -28,7 +36,11 @@ export const Route = createFileRoute("/m/$slug")({
 });
 
 function Centered(p: { children: React.ReactNode }) {
-  return <div className="flex h-screen items-center justify-center text-sm text-muted-foreground">{p.children}</div>;
+  return (
+    <div className="flex h-screen items-center justify-center text-sm text-muted-foreground">
+      {p.children}
+    </div>
+  );
 }
 
 function SharedMap() {
@@ -46,7 +58,9 @@ function SharedMap() {
         </Link>
         <div className="flex items-center gap-4">
           <h1 className="text-sm font-semibold text-arcane hidden sm:block">{data.name}</h1>
-          <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted px-2 py-0.5 rounded">Player View</span>
+          <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted px-2 py-0.5 rounded">
+            Player View
+          </span>
         </div>
       </header>
       <ClientOnly fallback={<Centered>Rendering…</Centered>}>
@@ -79,13 +93,20 @@ function Viewer({ doc }: { doc: Doc }) {
       if (!ctx) return;
       const b = docBounds(doc) ?? { x1: 0, y1: 0, x2: 800, y2: 600 };
       const pad = 40;
-      const scale = Math.min((w - pad * 2) / Math.max(1, b.x2 - b.x1), (h - pad * 2) / Math.max(1, b.y2 - b.y1), 2);
+      const scale = Math.min(
+        (w - pad * 2) / Math.max(1, b.x2 - b.x1),
+        (h - pad * 2) / Math.max(1, b.y2 - b.y1),
+        2,
+      );
       const view = {
         x: w / 2 - ((b.x1 + b.x2) / 2) * scale,
         y: h / 2 - ((b.y1 + b.y2) / 2) * scale,
         scale,
       };
-      renderScene(ctx, { ...doc, settings: { ...doc.settings, playerView: true } }, view, w, h, { hideUi: true, dpr });
+      renderScene(ctx, { ...doc, settings: { ...doc.settings, playerView: true } }, view, w, h, {
+        hideUi: true,
+        dpr,
+      });
     };
     draw();
     window.addEventListener("resize", draw);

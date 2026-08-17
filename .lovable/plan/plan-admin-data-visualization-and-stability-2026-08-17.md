@@ -11,10 +11,12 @@ Improving the Admin Control Center with data visualization and fixing system-wid
 ## Technical Details
 
 ### Frontend
+
 - **src/routes/admin/index.tsx**: Refactored the overview to use \`recharts\` for audit log distribution.
 - **src/lib/admin-stats.functions.ts**: New server function for efficient aggregate statistics.
 - **src/components/ui/chart.tsx**: Removed broken shadcn chart boilerplate in favor of native recharts implementation.
 
 ### Infrastructure
+
 - **Bun**: Added \`recharts\` package.
 - **Supabase**: Verified RLS on \`admin_audit_logs\`.

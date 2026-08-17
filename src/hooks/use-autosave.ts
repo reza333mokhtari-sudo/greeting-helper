@@ -1,8 +1,8 @@
-import { useEffect, useState, useCallback } from 'react';
-import { get, set, del } from 'idb-keyval';
-import { toast } from 'sonner';
+import { useEffect, useState, useCallback } from "react";
+import { get, set, del } from "idb-keyval";
+import { toast } from "sonner";
 
-const AUTOSAVE_KEY = 'dungeon_draft_autosave';
+const AUTOSAVE_KEY = "dungeon_draft_autosave";
 
 export function useAutosave<T>(data: T, onRecover: (data: T) => void) {
   const [hasDraft, setHasDraft] = useState(false);
@@ -20,7 +20,7 @@ export function useAutosave<T>(data: T, onRecover: (data: T) => void) {
   useEffect(() => {
     if (data) {
       set(AUTOSAVE_KEY, data).catch((err) => {
-        console.error('Autosave failed:', err);
+        console.error("Autosave failed:", err);
       });
     }
   }, [data]);
@@ -30,7 +30,7 @@ export function useAutosave<T>(data: T, onRecover: (data: T) => void) {
     if (draft) {
       onRecover(draft);
       setHasDraft(false);
-      toast.success('Draft recovered successfully');
+      toast.success("Draft recovered successfully");
     }
   }, [onRecover]);
 

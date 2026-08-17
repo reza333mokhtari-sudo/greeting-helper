@@ -31,11 +31,8 @@ export function ViewCube({ settings, onUpdateSettings, onResetView, className }:
     const dy = e.clientY - dragStart.current.y;
 
     const sensitivity = 0.5;
-    let nextYaw = dragStart.current.yaw - dx * sensitivity;
-    let nextPitch = dragStart.current.pitch + dy * sensitivity;
-
-    // Clamp pitch to avoid gimbal lock or flipping
-    nextPitch = Math.max(5, Math.min(85, nextPitch));
+    const nextYaw = dragStart.current.yaw - dx * sensitivity;
+    const nextPitch = Math.max(5, Math.min(85, dragStart.current.pitch + dy * sensitivity));
 
     onUpdateSettings({
       cameraYaw: nextYaw,
@@ -46,8 +43,8 @@ export function ViewCube({ settings, onUpdateSettings, onResetView, className }:
   const handlePointerUp = (e: React.PointerEvent) => {
     setIsDragging(false);
     dragStart.current = null;
-    
-    // Snap to nearest 45/90 if close? 
+
+    // Snap to nearest 45/90 if close?
     // For now keep it free-form as requested for drag.
   };
 
@@ -55,11 +52,21 @@ export function ViewCube({ settings, onUpdateSettings, onResetView, className }:
     onUpdateSettings({ cameraYaw: y, cameraPitch: p });
   };
 
-  const Face = ({ label, y, p, className: faceClass }: { label: string; y: number; p: number; className?: string }) => (
+  const Face = ({
+    label,
+    y,
+    p,
+    className: faceClass,
+  }: {
+    label: string;
+    y: number;
+    p: number;
+    className?: string;
+  }) => (
     <div
       className={cn(
         "absolute inset-0 flex items-center justify-center text-[10px] font-bold uppercase select-none cursor-pointer border border-white/20 bg-black/60 text-white/80 hover:bg-primary/40 hover:text-white transition-colors",
-        faceClass
+        faceClass,
       )}
       onClick={(e) => {
         e.stopPropagation();
@@ -80,7 +87,7 @@ export function ViewCube({ settings, onUpdateSettings, onResetView, className }:
 
   return (
     <div className={cn("relative group", className)}>
-      <div 
+      <div
         ref={cubeRef}
         className="w-16 h-16 relative"
         onPointerDown={handlePointerDown}
@@ -89,35 +96,56 @@ export function ViewCube({ settings, onUpdateSettings, onResetView, className }:
       >
         <div className="w-full h-full transition-transform duration-200 ease-out" style={style}>
           {/* Top (Z+) */}
-          <div className="absolute inset-0 border border-white/20 bg-blue-500/20" style={{ transform: "translateZ(32px)" }}>
+          <div
+            className="absolute inset-0 border border-white/20 bg-blue-500/20"
+            style={{ transform: "translateZ(32px)" }}
+          >
             <Face label="Top" y={yaw} p={90} className="bg-blue-600/40" />
           </div>
           {/* Bottom (Z-) */}
-          <div className="absolute inset-0 border border-white/20 bg-blue-900/20" style={{ transform: "rotateX(180deg) translateZ(32px)" }}>
+          <div
+            className="absolute inset-0 border border-white/20 bg-blue-900/20"
+            style={{ transform: "rotateX(180deg) translateZ(32px)" }}
+          >
             <Face label="Bottom" y={yaw} p={5} className="bg-blue-900/60" />
           </div>
           {/* Front (Y-) */}
-          <div className="absolute inset-0 border border-white/20 bg-green-500/20" style={{ transform: "rotateX(90deg) translateZ(32px)" }}>
+          <div
+            className="absolute inset-0 border border-white/20 bg-green-500/20"
+            style={{ transform: "rotateX(90deg) translateZ(32px)" }}
+          >
             <Face label="Front" y={-90} p={45} className="bg-green-600/40" />
           </div>
           {/* Back (Y+) */}
-          <div className="absolute inset-0 border border-white/20 bg-green-900/20" style={{ transform: "rotateX(-90deg) translateZ(32px)" }}>
+          <div
+            className="absolute inset-0 border border-white/20 bg-green-900/20"
+            style={{ transform: "rotateX(-90deg) translateZ(32px)" }}
+          >
             <Face label="Back" y={90} p={45} className="bg-green-900/60" />
           </div>
           {/* Right (X+) */}
-          <div className="absolute inset-0 border border-white/20 bg-red-500/20" style={{ transform: "rotateY(90deg) translateZ(32px)" }}>
+          <div
+            className="absolute inset-0 border border-white/20 bg-red-500/20"
+            style={{ transform: "rotateY(90deg) translateZ(32px)" }}
+          >
             <Face label="Right" y={0} p={45} className="bg-red-600/40" />
           </div>
           {/* Left (X-) */}
-          <div className="absolute inset-0 border border-white/20 bg-red-900/20" style={{ transform: "rotateY(-90deg) translateZ(32px)" }}>
+          <div
+            className="absolute inset-0 border border-white/20 bg-red-900/20"
+            style={{ transform: "rotateY(-90deg) translateZ(32px)" }}
+          >
             <Face label="Left" y={180} p={45} className="bg-red-900/60" />
           </div>
         </div>
       </div>
-      
+
       {/* Reset/Home Button */}
       <button
-        onClick={(e) => { e.stopPropagation(); onResetView(); }}
+        onClick={(e) => {
+          e.stopPropagation();
+          onResetView();
+        }}
         className="absolute -bottom-6 right-0 text-[9px] uppercase font-bold text-muted-foreground hover:text-primary transition-colors bg-black/40 px-1 rounded border border-white/10"
       >
         Home

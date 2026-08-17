@@ -2,8 +2,8 @@
  * Initialize Sentry for the server (Nitro/Vercel Edge).
  */
 export async function initSentryServer() {
-  const dsn = process.env['SENTRY_DSN'] || process.env['VITE_SENTRY_DSN'];
-  
+  const dsn = process.env["SENTRY_DSN"] || process.env["VITE_SENTRY_DSN"];
+
   if (!dsn) {
     console.log("[Sentry] Skipping server initialization (SENTRY_DSN not set)");
     return;
@@ -14,7 +14,7 @@ export async function initSentryServer() {
     Sentry.init({
       dsn,
       tracesSampleRate: 1.0,
-      environment: process.env['NODE_ENV'],
+      environment: process.env["NODE_ENV"],
     });
     console.log("[Sentry] Server SDK initialized");
   } catch (err) {

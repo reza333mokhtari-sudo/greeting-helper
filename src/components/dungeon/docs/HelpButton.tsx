@@ -27,8 +27,8 @@ export function HelpButton({ onClick, className, sectionId, label }: HelpButtonP
           <span className="sr-only">Help {label ? `for ${label}` : ""}</span>
         </Button>
       </TooltipTrigger>
-      <TooltipContent 
-        side="top" 
+      <TooltipContent
+        side="top"
         className="text-[10px] bg-popover text-popover-foreground border-border z-[100]"
       >
         Learn more about {label || "this feature"}

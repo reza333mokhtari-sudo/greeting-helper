@@ -15,12 +15,7 @@ interface PropPreviewModalProps {
   onAction?: (action: string) => void;
 }
 
-export function PropPreviewModal({
-  open,
-  onOpenChange,
-  prop,
-  onAction,
-}: PropPreviewModalProps) {
+export function PropPreviewModal({ open, onOpenChange, prop, onAction }: PropPreviewModalProps) {
   if (!prop) return null;
 
   return (
@@ -44,7 +39,10 @@ export function PropPreviewModal({
                 ID: {prop.id.slice(0, 8)}
               </Badge>
               {prop.license && (
-                <Badge variant="secondary" className="bg-amber-500/20 text-amber-500 border-amber-500/30">
+                <Badge
+                  variant="secondary"
+                  className="bg-amber-500/20 text-amber-500 border-amber-500/30"
+                >
                   <Info className="mr-1 size-3" /> {prop.license}
                 </Badge>
               )}
@@ -52,31 +50,33 @@ export function PropPreviewModal({
           </div>
 
           <div className="space-y-3">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-white/50">Actions</h3>
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-white/50">
+              Actions
+            </h3>
             <div className="grid gap-2">
-              <Button 
-                variant="secondary" 
+              <Button
+                variant="secondary"
                 className="justify-start gap-2 bg-white/10 hover:bg-white/20 text-white border-none"
                 onClick={() => onAction?.("place")}
               >
                 Place on Canvas
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="justify-start gap-2 border-white/10 hover:bg-white/10 text-white"
                 onClick={() => onAction?.("remove-bg")}
               >
                 <Scissors className="size-4" /> Remove Background
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="justify-start gap-2 border-white/10 hover:bg-white/10 text-white"
                 onClick={() => onAction?.("pixelate")}
               >
                 <Palette className="size-4" /> Pixelate
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="justify-start gap-2 border-white/10 hover:bg-white/10 text-white"
                 onClick={() => onAction?.("toon")}
               >
@@ -87,7 +87,8 @@ export function PropPreviewModal({
 
           <div className="mt-auto">
             <p className="text-[10px] text-white/40 leading-relaxed">
-              Use these tools to process the image before placing it. AI-powered background removal runs locally in your browser.
+              Use these tools to process the image before placing it. AI-powered background removal
+              runs locally in your browser.
             </p>
           </div>
         </div>

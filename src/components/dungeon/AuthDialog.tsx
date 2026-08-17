@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,10 +30,12 @@ export function AuthDialog({ open, onOpenChange, reason }: Props) {
 
   useEffect(() => {
     if (open) {
-      const url = import.meta.env['VITE_SUPABASE_URL'];
-      const key = import.meta.env['VITE_SUPABASE_PUBLISHABLE_KEY'];
+      const url = import.meta.env["VITE_SUPABASE_URL"];
+      const key = import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"];
       if (!url || !key) {
-        setConfigError("Supabase is not configured on this deployment. Set VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY in Vercel, then redeploy.");
+        setConfigError(
+          "Supabase is not configured on this deployment. Set VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY in Vercel, then redeploy.",
+        );
       } else {
         setConfigError(null);
       }
@@ -40,7 +49,7 @@ export function AuthDialog({ open, onOpenChange, reason }: Props) {
 
     setLoading(true);
     setError(null);
-    
+
     try {
       const { error: signInError } = await supabase.auth.signInWithOtp({
         email,
@@ -50,7 +59,7 @@ export function AuthDialog({ open, onOpenChange, reason }: Props) {
       });
 
       if (signInError) throw signInError;
-      
+
       setSent(true);
       toast.success("Magic link sent to your email!");
     } catch (err: any) {
@@ -83,7 +92,10 @@ export function AuthDialog({ open, onOpenChange, reason }: Props) {
         ) : !sent ? (
           <form onSubmit={handleLogin} className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <Label
+                htmlFor="email"
+                className="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+              >
                 Email Address
               </Label>
               <div className="relative">
@@ -94,7 +106,7 @@ export function AuthDialog({ open, onOpenChange, reason }: Props) {
                   placeholder="name@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className={`pl-10 ${error ? 'border-destructive ring-destructive' : ''}`}
+                  className={`pl-10 ${error ? "border-destructive ring-destructive" : ""}`}
                   required
                 />
               </div>
@@ -113,7 +125,11 @@ export function AuthDialog({ open, onOpenChange, reason }: Props) {
               )}
             </div>
             <Button type="submit" className="w-full shadow-lg shadow-primary/20" disabled={loading}>
-              {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Lock className="mr-2 h-4 w-4" />}
+              {loading ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Lock className="mr-2 h-4 w-4" />
+              )}
               Send Magic Link
             </Button>
           </form>

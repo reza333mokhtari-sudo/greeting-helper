@@ -29,13 +29,23 @@ export function HistoryPanel({ entries, index, onJump }: Props) {
                   type="button"
                   onClick={() => onJump(i)}
                   className={`flex w-full items-center gap-1.5 rounded px-1.5 py-1 text-left text-[11px] transition-colors ${
-                    active ? "bg-primary/20 text-foreground" : future ? "text-muted-foreground/50 hover:bg-muted/40" : "text-muted-foreground hover:bg-muted/40"
+                    active
+                      ? "bg-primary/20 text-foreground"
+                      : future
+                        ? "text-muted-foreground/50 hover:bg-muted/40"
+                        : "text-muted-foreground hover:bg-muted/40"
                   }`}
                 >
-                  <RotateCcw className={`h-2.5 w-2.5 shrink-0 ${active ? "text-primary" : "opacity-40"}`} />
+                  <RotateCcw
+                    className={`h-2.5 w-2.5 shrink-0 ${active ? "text-primary" : "opacity-40"}`}
+                  />
                   <span className="truncate">{e.label}</span>
                   <span className="ml-auto shrink-0 text-[9px] tabular-nums opacity-60">
-                    {new Date(e.at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+                    {new Date(e.at).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                    })}
                   </span>
                 </button>
               </li>

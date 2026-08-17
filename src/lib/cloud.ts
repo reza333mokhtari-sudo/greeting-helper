@@ -10,14 +10,14 @@ export type MapRow = {
   updated_at: string;
 };
 
-export type AssetRow = { 
-  id: string; 
-  name: string; 
-  kind: string; 
-  url: string; 
-  tags: string[]; 
-  favorite: boolean; 
-  license: string | null; 
+export type AssetRow = {
+  id: string;
+  name: string;
+  kind: string;
+  url: string;
+  tags: string[];
+  favorite: boolean;
+  license: string | null;
 };
 
 const SIGNED_TTL = 60 * 60 * 24 * 365;
@@ -50,7 +50,10 @@ export async function createMap(name: string, doc: Doc, thumbnail: string | null
   return data as MapRow;
 }
 
-export async function updateMap(id: string, patch: { name?: string; doc?: Doc; thumbnail_url?: string | null; is_public?: boolean }) {
+export async function updateMap(
+  id: string,
+  patch: { name?: string; doc?: Doc; thumbnail_url?: string | null; is_public?: boolean },
+) {
   const { error } = await supabase
     .from("maps")
     .update(patch as never)
@@ -77,21 +80,35 @@ export async function uploadAsset(file: File, kind = "prop", license?: string): 
   if (!auth.user) throw new Error("Not signed in");
   const ext = file.name.split(".").pop() || "png";
   const path = `${auth.user.id}/${crypto.randomUUID()}.${ext}`;
-  const up = await supabase.storage.from("map-assets").upload(path, file, { upsert: false, contentType: file.type });
+  const up = await supabase.storage
+    .from("map-assets")
+    .upload(path, file, { upsert: false, contentType: file.type });
   if (up.error) throw up.error;
   const signed = await supabase.storage.from("map-assets").createSignedUrl(path, SIGNED_TTL);
   if (signed.error) throw signed.error;
   const { data, error } = await supabase
     .from("map_assets")
-    .insert({ user_id: auth.user.id, name: file.name.replace(/\.[^.]+$/, ""), kind, url: signed.data.signedUrl, license: license ?? null })
+    .insert({
+      user_id: auth.user.id,
+      name: file.name.replace(/\.[^.]+$/, ""),
+      kind,
+      url: signed.data.signedUrl,
+      license: license ?? null,
+    })
     .select("id,name,kind,url,tags,favorite,license")
     .single();
   if (error) throw error;
   return data as AssetRow;
 }
 
-export async function updateAsset(id: string, patch: { name?: string; tags?: string[]; favorite?: boolean; license?: string | null }) {
-  const { error } = await supabase.from("map_assets").update(patch as never).eq("id", id);
+export async function updateAsset(
+  id: string,
+  patch: { name?: string; tags?: string[]; favorite?: boolean; license?: string | null },
+) {
+  const { error } = await supabase
+    .from("map_assets")
+    .update(patch as never)
+    .eq("id", id);
   if (error) throw error;
 }
 

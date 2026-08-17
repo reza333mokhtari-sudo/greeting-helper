@@ -1,5 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ImagePlus, Search, Star, Tag, Trash2, Wand2, Palette, Image as ImageIcon, X, Info } from "lucide-react";
+import {
+  ImagePlus,
+  Search,
+  Star,
+  Tag,
+  Trash2,
+  Wand2,
+  Palette,
+  Image as ImageIcon,
+  X,
+  Info,
+} from "lucide-react";
 import { toast } from "sonner";
 import { dialog } from "@/lib/dialog";
 import { useVirtualizer } from "@tanstack/react-virtual";
@@ -13,21 +24,68 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuTrigger, ContextMenuLabel, ContextMenuSub, ContextMenuSubTrigger, ContextMenuSubContent } from "@/components/ui/context-menu";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+  ContextMenuLabel,
+  ContextMenuSub,
+  ContextMenuSubTrigger,
+  ContextMenuSubContent,
+} from "@/components/ui/context-menu";
 import { searchApp, indexAssets } from "@/lib/dungeon/search";
 
 const LIBRARIES = [
   { id: "custom", label: "My Custom Assets", license: "Proprietary / Unknown", searchUrl: "" },
-  { id: "opengameart", label: "OpenGameArt", license: "Free / OSS (Check specific asset)", searchUrl: "https://opengameart.org/art-search-advanced?keys=" },
-  { id: "icons8", label: "Icons8", license: "Free with Attribution / Commercial", searchUrl: "https://icons8.com/icons/set/" },
-  { id: "flaticon", label: "Flaticon", license: "Free with Attribution / Premium", searchUrl: "https://www.flaticon.com/search?word=" },
-  { id: "noun", label: "Noun Project", license: "CC BY / Public Domain", searchUrl: "https://thenounproject.com/search/icons/?q=" },
-  { id: "kenney", label: "Kenney", license: "CC0 (Public Domain)", searchUrl: "https://www.kenney.nl/assets?q=" },
+  {
+    id: "opengameart",
+    label: "OpenGameArt",
+    license: "Free / OSS (Check specific asset)",
+    searchUrl: "https://opengameart.org/art-search-advanced?keys=",
+  },
+  {
+    id: "icons8",
+    label: "Icons8",
+    license: "Free with Attribution / Commercial",
+    searchUrl: "https://icons8.com/icons/set/",
+  },
+  {
+    id: "flaticon",
+    label: "Flaticon",
+    license: "Free with Attribution / Premium",
+    searchUrl: "https://www.flaticon.com/search?word=",
+  },
+  {
+    id: "noun",
+    label: "Noun Project",
+    license: "CC BY / Public Domain",
+    searchUrl: "https://thenounproject.com/search/icons/?q=",
+  },
+  {
+    id: "kenney",
+    label: "Kenney",
+    license: "CC0 (Public Domain)",
+    searchUrl: "https://www.kenney.nl/assets?q=",
+  },
 ];
 
-export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name: string) => void, onPreview?: (prop: { id: string; url: string; name: string; license?: string | null }) => void }) {
+export function PropsPanel({
+  onPlace,
+  onPreview,
+}: {
+  onPlace: (url: string, name: string) => void;
+  onPreview?: (prop: { id: string; url: string; name: string; license?: string | null }) => void;
+}) {
   const [assets, setAssets] = useState<AssetRow[]>([]);
   const [signedIn, setSignedIn] = useState(false);
   const [query, setQuery] = useState("");
@@ -64,7 +122,7 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
   /** Bulk upload: sequential with a live progress bar and per-file error reporting. */
   const upload = useCallback(
     async (files: File[]) => {
-      const lib = LIBRARIES.find(l => l.id === selectedLibrary);
+      const lib = LIBRARIES.find((l) => l.id === selectedLibrary);
       const license = lib?.license;
       const images = files.filter((f) => f.type.startsWith("image/"));
       if (!images.length) return;
@@ -78,7 +136,7 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
             fileToUpload = await imageCompression(fileToUpload, {
               maxSizeMB: 1,
               maxWidthOrHeight: 2048,
-              useWebWorker: true
+              useWebWorker: true,
             });
           }
           await uploadAsset(fileToUpload, "prop", license);
@@ -105,8 +163,10 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
     const q = query.trim();
     if (q) {
       const results = searchApp(q);
-      const ids = new Set(results.filter(r => r['type'] === 'prop').map(r => r.id.replace('prop-', '')));
-      return assets.filter(a => ids.has(a.id));
+      const ids = new Set(
+        results.filter((r) => r["type"] === "prop").map((r) => r.id.replace("prop-", "")),
+      );
+      return assets.filter((a) => ids.has(a.id));
     }
 
     return assets
@@ -130,7 +190,11 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
   });
 
   const editTags = async (a: AssetRow) => {
-    const next = await dialog.prompt(`Tags for "${a.name}"`, (a.tags ?? []).join(", "), "Enter tags separated by commas");
+    const next = await dialog.prompt(
+      `Tags for "${a.name}"`,
+      (a.tags ?? []).join(", "),
+      "Enter tags separated by commas",
+    );
     if (next === null) return;
     const tags = next
       .split(",")
@@ -162,14 +226,16 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
       }}
     >
       <div className="flex items-center justify-between">
-        <h2 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">{selectedLibrary === "custom" ? "My Props & Textures" : "Props & Textures"}</h2>
+        <h2 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+          {selectedLibrary === "custom" ? "My Props & Textures" : "Props & Textures"}
+        </h2>
         <div className="flex items-center gap-2">
           <Select value={selectedLibrary} onValueChange={setSelectedLibrary}>
             <SelectTrigger className="h-6 w-[130px] text-[10px]">
               <SelectValue placeholder="Library" />
             </SelectTrigger>
             <SelectContent>
-              {LIBRARIES.map(l => (
+              {LIBRARIES.map((l) => (
                 <SelectItem key={l.id} value={l.id} className="text-[10px]">
                   {l.label}
                 </SelectItem>
@@ -193,7 +259,7 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
                 variant="outline"
                 className="h-6 px-2 text-[10px] border-primary/30 hover:border-primary/60"
                 onClick={() => {
-                  const lib = LIBRARIES.find(l => l.id === selectedLibrary);
+                  const lib = LIBRARIES.find((l) => l.id === selectedLibrary);
                   if (lib?.searchUrl) {
                     const q = query.trim() || "dungeon props";
                     window.open(`${lib.searchUrl}${encodeURIComponent(q)}`, "_blank");
@@ -221,23 +287,29 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
 
       {!signedIn ? (
         <div className="space-y-4">
-          <p className="text-[11px] text-muted-foreground">Sign in to upload and manage your own custom props and textures.</p>
+          <p className="text-[11px] text-muted-foreground">
+            Sign in to upload and manage your own custom props and textures.
+          </p>
           <div className="rounded-md border border-border/50 bg-muted/20 p-2 text-[10px] space-y-2">
             <p className="font-semibold text-foreground flex items-center gap-1">
               <Star className="h-3 w-3 text-accent fill-current" /> Recommended Icon Libraries
             </p>
             <ul className="space-y-1.5 text-muted-foreground">
               <li>
-                <span className="text-foreground font-medium">OpenGameArt</span> — Free/OSS. Massive assets (pixel, vector, hand-drawn). Best for RPGs.
+                <span className="text-foreground font-medium">OpenGameArt</span> — Free/OSS. Massive
+                assets (pixel, vector, hand-drawn). Best for RPGs.
               </li>
               <li>
-                <span className="text-foreground font-medium">Icons8</span> — 150k+ icons. Flat, lineal, filled. Great for movie/media/games. (Attribution required).
+                <span className="text-foreground font-medium">Icons8</span> — 150k+ icons. Flat,
+                lineal, filled. Great for movie/media/games. (Attribution required).
               </li>
               <li>
-                <span className="text-foreground font-medium">Flaticon</span> — Largest vector collection. Excellent Entertainment/Genre categories.
+                <span className="text-foreground font-medium">Flaticon</span> — Largest vector
+                collection. Excellent Entertainment/Genre categories.
               </li>
               <li>
-                <span className="text-foreground font-medium">Noun Project</span> — High-quality vectors for any subject (film reels, consoles).
+                <span className="text-foreground font-medium">Noun Project</span> — High-quality
+                vectors for any subject (film reels, consoles).
               </li>
             </ul>
           </div>
@@ -265,7 +337,9 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
                     e.currentTarget.blur();
                   }
                 }}
-                placeholder={selectedLibrary === "custom" ? "Search your library..." : "Search icons..."}
+                placeholder={
+                  selectedLibrary === "custom" ? "Search your library..." : "Search icons..."
+                }
                 className="h-8 pl-8 pr-8 text-[11px] bg-background/50 focus-visible:ring-accent/30"
               />
               {query && (
@@ -313,66 +387,81 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
 
           {visible.length === 0 ? (
             <p className="text-[11px] text-muted-foreground">
-              {assets.length ? "No props match that search." : "Drop images here or upload PNGs, tokens and textures."}
+              {assets.length
+                ? "No props match that search."
+                : "Drop images here or upload PNGs, tokens and textures."}
             </p>
           ) : (
             <ScrollArea viewportRef={parentRef} className="h-[400px]">
-              <div 
-                className="relative w-full" 
+              <div
+                className="relative w-full"
                 style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
               >
                 {rowVirtualizer.getVirtualItems().map((virtualRow) => {
                   const start = virtualRow.index * 3;
                   const rowAssets = visible.slice(start, start + 3);
-                  
+
                   return (
-                    <div 
+                    <div
                       key={virtualRow.key}
                       className="absolute left-0 top-0 w-full grid grid-cols-3 gap-2"
-                      style={{ 
+                      style={{
                         height: `${virtualRow.size}px`,
-                        transform: `translateY(${virtualRow.start}px)`
+                        transform: `translateY(${virtualRow.start}px)`,
                       }}
                     >
                       {rowAssets.map((a) => (
-                        <div key={a.id} className="group relative overflow-hidden rounded-md border border-border/60 bg-card/60 h-[80px]">
+                        <div
+                          key={a.id}
+                          className="group relative overflow-hidden rounded-md border border-border/60 bg-card/60 h-[80px]"
+                        >
                           <ContextMenu>
                             <ContextMenuTrigger>
-                              <button 
-                                type="button" 
-                                className="block w-full" 
-                                title={`Preview ${a.name}`} 
+                              <button
+                                type="button"
+                                className="block w-full"
+                                title={`Preview ${a.name}`}
                                 onClick={(e) => {
                                   e.preventDefault();
                                   e.stopPropagation();
                                   onPreview?.(a);
                                 }}
                               >
-                                <img src={a.url} alt={a.name} className="h-14 w-full object-contain p-1" />
+                                <img
+                                  src={a.url}
+                                  alt={a.name}
+                                  className="h-14 w-full object-contain p-1"
+                                />
                               </button>
                             </ContextMenuTrigger>
                             <ContextMenuContent className="w-48">
-                              <ContextMenuLabel className="text-[10px] uppercase tracking-wider">{a.name}</ContextMenuLabel>
+                              <ContextMenuLabel className="text-[10px] uppercase tracking-wider">
+                                {a.name}
+                              </ContextMenuLabel>
                               <ContextMenuSeparator />
                               <ContextMenuItem onClick={() => onPlace(a.url, a.name)}>
                                 Place on Map
                               </ContextMenuItem>
                               <ContextMenuItem onClick={() => toggleFav(a)}>
-                                <Star className={`mr-2 size-3.5 ${a.favorite ? "fill-current" : ""}`} /> 
+                                <Star
+                                  className={`mr-2 size-3.5 ${a.favorite ? "fill-current" : ""}`}
+                                />
                                 {a.favorite ? "Unfavorite" : "Favorite"}
                               </ContextMenuItem>
                               <ContextMenuItem onClick={() => editTags(a)}>
                                 <Tag className="mr-2 size-3.5" /> Edit Tags
                               </ContextMenuItem>
-                              <ContextMenuItem 
+                              <ContextMenuItem
                                 className="text-destructive focus:text-destructive"
                                 onClick={async () => {
-                                  if (await dialog.confirm({
-                                    title: "Delete Prop",
-                                    message: `Delete "${a.name}"? This cannot be undone.`,
-                                    confirmText: "Delete",
-                                    variant: "danger"
-                                  })) {
+                                  if (
+                                    await dialog.confirm({
+                                      title: "Delete Prop",
+                                      message: `Delete "${a.name}"? This cannot be undone.`,
+                                      confirmText: "Delete",
+                                      variant: "danger",
+                                    })
+                                  ) {
                                     await deleteAsset(a.id);
                                     refresh();
                                   }
@@ -383,7 +472,9 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
                             </ContextMenuContent>
                           </ContextMenu>
                           <div className="flex items-center justify-between px-1 pb-0.5">
-                            <span className="block truncate text-[9px] text-muted-foreground">{a.name}</span>
+                            <span className="block truncate text-[9px] text-muted-foreground">
+                              {a.name}
+                            </span>
                           </div>
                           {a.favorite && (
                             <Star className="absolute left-0.5 top-0.5 h-3 w-3 fill-current text-accent" />
@@ -405,22 +496,33 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
             <p className="font-semibold text-primary flex items-center gap-1.5">
               <Search className="h-3.5 w-3.5" /> Icon Import Workflow
             </p>
-            <Button variant="ghost" size="icon" className="size-5 -mr-1" onClick={() => setSearchOpen(false)}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-5 -mr-1"
+              onClick={() => setSearchOpen(false)}
+            >
               <span className="sr-only">Close</span>
               <Trash2 className="size-3" />
             </Button>
           </div>
           <p className="text-muted-foreground leading-relaxed">
-            I've opened the <strong>{LIBRARIES.find(l => l.id === selectedLibrary)?.label}</strong> search for you. 
-            Found an icon? 
+            I've opened the{" "}
+            <strong>{LIBRARIES.find((l) => l.id === selectedLibrary)?.label}</strong> search for
+            you. Found an icon?
           </p>
           <ol className="list-decimal list-inside space-y-1 text-muted-foreground pl-1">
-            <li>Right-click the icon and <span className="text-foreground font-medium underline decoration-primary/30">Copy Image Link</span></li>
+            <li>
+              Right-click the icon and{" "}
+              <span className="text-foreground font-medium underline decoration-primary/30">
+                Copy Image Link
+              </span>
+            </li>
             <li>Paste the URL below to import it into your map layer</li>
           </ol>
           <div className="flex gap-2 pt-1">
-            <Input 
-              placeholder="Paste image URL (png/svg/webp)..." 
+            <Input
+              placeholder="Paste image URL (png/svg/webp)..."
               className="h-8 text-[10px]"
               onKeyDown={async (e) => {
                 if (e.key === "Enter") {
@@ -438,9 +540,9 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
                 }
               }}
             />
-            <Button 
-              size="sm" 
-              className="h-8 text-[10px]" 
+            <Button
+              size="sm"
+              className="h-8 text-[10px]"
               onClick={(e) => {
                 const input = e.currentTarget.previousElementSibling as HTMLInputElement;
                 const url = input.value.trim();
@@ -455,7 +557,9 @@ export function PropsPanel({ onPlace, onPreview }: { onPlace: (url: string, name
             </Button>
           </div>
           <p className="text-[9px] text-muted-foreground italic">
-            Note: License tracker will automatically apply the <strong>{LIBRARIES.find(l => l.id === selectedLibrary)?.license}</strong> license to this import.
+            Note: License tracker will automatically apply the{" "}
+            <strong>{LIBRARIES.find((l) => l.id === selectedLibrary)?.license}</strong> license to
+            this import.
           </p>
         </div>
       )}

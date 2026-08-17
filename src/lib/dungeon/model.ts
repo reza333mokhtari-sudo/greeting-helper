@@ -32,15 +32,62 @@ export type ObjCommon = {
 };
 
 export type MapObject =
-  | (ObjCommon & { kind: "door"; x: number; y: number; angle: number; size: number; variant: DoorVariant; blocksLight?: boolean })
-  | (ObjCommon & { kind: "stairs"; x: number; y: number; angle: number; size: number; steps: number })
+  | (ObjCommon & {
+      kind: "door";
+      x: number;
+      y: number;
+      angle: number;
+      size: number;
+      variant: DoorVariant;
+      blocksLight?: boolean;
+    })
+  | (ObjCommon & {
+      kind: "stairs";
+      x: number;
+      y: number;
+      angle: number;
+      size: number;
+      steps: number;
+    })
   | (ObjCommon & { kind: "pillar"; x: number; y: number; r: number })
   | (ObjCommon & { kind: "text"; x: number; y: number; text: string; size: number })
-  | (ObjCommon & { kind: "npc"; x: number; y: number; r: number; color: string; label: string; hostile: boolean })
+  | (ObjCommon & {
+      kind: "npc";
+      x: number;
+      y: number;
+      r: number;
+      color: string;
+      label: string;
+      hostile: boolean;
+    })
   | (ObjCommon & { kind: "item"; x: number; y: number; size: number; color: string; label: string })
-  | (ObjCommon & { kind: "trigger"; x: number; y: number; w: number; h: number; color: string; trigger: TriggerKind; label: string })
-  | (ObjCommon & { kind: "light"; x: number; y: number; radius: number; color: string; intensity: number })
-  | (ObjCommon & { kind: "image"; x: number; y: number; w: number; h: number; angle: number; url: string });
+  | (ObjCommon & {
+      kind: "trigger";
+      x: number;
+      y: number;
+      w: number;
+      h: number;
+      color: string;
+      trigger: TriggerKind;
+      label: string;
+    })
+  | (ObjCommon & {
+      kind: "light";
+      x: number;
+      y: number;
+      radius: number;
+      color: string;
+      intensity: number;
+    })
+  | (ObjCommon & {
+      kind: "image";
+      x: number;
+      y: number;
+      w: number;
+      h: number;
+      angle: number;
+      url: string;
+    });
 
 export type ObjectKind = MapObject["kind"];
 
@@ -160,7 +207,6 @@ export type Obj3DCommon = {
   hidden?: boolean;
 };
 
-
 /** A single level of a multi-floor map (RE4-style floor stack). */
 export type Floor = {
   id: string;
@@ -200,7 +246,6 @@ export type Doc = {
 };
 
 export type View = { x: number; y: number; scale: number };
-
 
 export const THEMES: Record<string, Partial<Settings> & { label: string }> = {
   classic: {
@@ -298,7 +343,14 @@ export const LAYER_LIGHT = "layer_light";
 export const LAYER_PROP = "layer_prop";
 
 export function defaultLayers(): Layer[] {
-  const mk = (id: string, name: string, gmOnly = false): Layer => ({ id, name, visible: true, locked: false, opacity: 1, gmOnly });
+  const mk = (id: string, name: string, gmOnly = false): Layer => ({
+    id,
+    name,
+    visible: true,
+    locked: false,
+    opacity: 1,
+    gmOnly,
+  });
   return [
     mk(LAYER_STRUCTURE, "Structure"),
     mk(LAYER_PROP, "Props"),
@@ -345,7 +397,8 @@ export function migrateDoc(input: Partial<Doc> | null | undefined): Doc {
   const ids = new Set(layers.map((l) => l.id));
   const objects = (input.objects ?? []).map((o) => ({
     ...o,
-    layerId: o.layerId && ids.has(o.layerId) ? o.layerId : DEFAULT_LAYER_FOR[o.kind] ?? layers[0]!.id,
+    layerId:
+      o.layerId && ids.has(o.layerId) ? o.layerId : (DEFAULT_LAYER_FOR[o.kind] ?? layers[0]!.id),
   })) as MapObject[];
   const shapes = input.shapes ?? [];
   const fog = Array.isArray(input.fog) ? input.fog : [];
@@ -360,7 +413,9 @@ export function migrateDoc(input: Partial<Doc> | null | undefined): Doc {
           fog: Array.isArray(f.fog) ? f.fog : [],
         }))
       : [{ id: uid("floor"), name: "Ground floor", shapes, objects, fog }];
-  const activeFloorId = floors.some((f) => f.id === input.activeFloorId) ? input.activeFloorId! : floors[0]!.id;
+  const activeFloorId = floors.some((f) => f.id === input.activeFloorId)
+    ? input.activeFloorId!
+    : floors[0]!.id;
 
   const doc: Doc = {
     shapes,
@@ -388,7 +443,9 @@ export function migrateDoc(input: Partial<Doc> | null | undefined): Doc {
 export function syncActiveFloor(d: Doc): Doc {
   return {
     ...d,
-    floors: d.floors.map((f) => (f.id === d.activeFloorId ? { ...f, shapes: d.shapes, objects: d.objects, fog: d.fog } : f)),
+    floors: d.floors.map((f) =>
+      f.id === d.activeFloorId ? { ...f, shapes: d.shapes, objects: d.objects, fog: d.fog } : f,
+    ),
   };
 }
 
@@ -402,7 +459,13 @@ export function switchFloor(d: Doc, id: string): Doc {
   const synced = syncActiveFloor(d);
   const target = synced.floors.find((f) => f.id === id);
   if (!target) return d;
-  return { ...synced, activeFloorId: id, shapes: target.shapes, objects: target.objects, fog: target.fog };
+  return {
+    ...synced,
+    activeFloorId: id,
+    shapes: target.shapes,
+    objects: target.objects,
+    fog: target.fog,
+  };
 }
 
 /** Insert a new floor above the active one, optionally duplicating its content. */
@@ -416,10 +479,20 @@ export function addFloor(d: Doc, name?: string, duplicate = false): Doc {
     objects: duplicate && src ? src.objects.map((o) => ({ ...o, id: uid("o") })) : [],
     fog: duplicate && src ? [...src.fog] : [],
   };
-  const at = Math.max(0, synced.floors.findIndex((f) => f.id === synced.activeFloorId));
+  const at = Math.max(
+    0,
+    synced.floors.findIndex((f) => f.id === synced.activeFloorId),
+  );
   const floors = [...synced.floors];
   floors.splice(at, 0, floor);
-  return { ...synced, floors, activeFloorId: floor.id, shapes: floor.shapes, objects: floor.objects, fog: floor.fog };
+  return {
+    ...synced,
+    floors,
+    activeFloorId: floor.id,
+    shapes: floor.shapes,
+    objects: floor.objects,
+    fog: floor.fog,
+  };
 }
 
 export function renameFloor(d: Doc, id: string, name: string): Doc {
@@ -433,7 +506,15 @@ export function deleteFloor(d: Doc, id: string): Doc {
   const links = synced.links.filter((l) => l.from !== id && l.to !== id);
   if (id !== synced.activeFloorId) return { ...synced, floors, links };
   const next = floors[0]!;
-  return { ...synced, floors, links, activeFloorId: next.id, shapes: next.shapes, objects: next.objects, fog: next.fog };
+  return {
+    ...synced,
+    floors,
+    links,
+    activeFloorId: next.id,
+    shapes: next.shapes,
+    objects: next.objects,
+    fog: next.fog,
+  };
 }
 
 /** Move a floor up (-1) or down (+1) in the stack. */
@@ -460,7 +541,6 @@ export function floorBelow(d: Doc): Floor | undefined {
   const i = d.floors.findIndex((f) => f.id === d.activeFloorId);
   return i >= 0 ? d.floors[i + 1] : undefined;
 }
-
 
 export function layerOf(doc: Doc, o: MapObject): Layer | undefined {
   return doc.layers.find((l) => l.id === o.layerId);
@@ -522,14 +602,17 @@ export function pointInShape(p: Pt, s: Shape): boolean {
     for (let i = 1; i < s.pts.length; i++) {
       if (distToSeg(p, s.pts[i - 1]!, s.pts[i]!) <= s.width / 2 + 2) return true;
     }
-    return s.pts.length === 1 ? Math.hypot(p.x - s.pts[0]!.x, p.y - s.pts[0]!.y) <= s.width / 2 : false;
+    return s.pts.length === 1
+      ? Math.hypot(p.x - s.pts[0]!.x, p.y - s.pts[0]!.y) <= s.width / 2
+      : false;
   }
   let inside = false;
   const pts = s.pts;
   for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
     const pi = pts[i]!;
     const pj = pts[j]!;
-    const hit = pi.y > p.y !== pj.y > p.y && p.x < ((pj.x - pi.x) * (p.y - pi.y)) / (pj.y - pi.y) + pi.x;
+    const hit =
+      pi.y > p.y !== pj.y > p.y && p.x < ((pj.x - pi.x) * (p.y - pi.y)) / (pj.y - pi.y) + pi.x;
     if (hit) inside = !inside;
   }
   return inside;
@@ -540,15 +623,25 @@ export function objectHit(p: Pt, o: MapObject, scale: number = 1): boolean {
   if (o.kind === "text") return Math.hypot(p.x - o.x, p.y - o.y) <= Math.max(20, o.size * s);
   if (o.kind === "pillar") return Math.hypot(p.x - o.x, p.y - o.y) <= (o.r + 4) * s;
   if (o.kind === "npc") return Math.hypot(p.x - o.x, p.y - o.y) <= (o.r + 4) * s;
-  if (o.kind === "item") return Math.hypot(p.x - o.x, p.y - o.y) <= (o.size * 0.7) * s;
+  if (o.kind === "item") return Math.hypot(p.x - o.x, p.y - o.y) <= o.size * 0.7 * s;
   if (o.kind === "light") return Math.hypot(p.x - o.x, p.y - o.y) <= 14 * s;
   if (o.kind === "image") {
-    return p.x >= o.x - (o.w / 2) * s && p.x <= o.x + (o.w / 2) * s && p.y >= o.y - (o.h / 2) * s && p.y <= o.y + (o.h / 2) * s;
+    return (
+      p.x >= o.x - (o.w / 2) * s &&
+      p.x <= o.x + (o.w / 2) * s &&
+      p.y >= o.y - (o.h / 2) * s &&
+      p.y <= o.y + (o.h / 2) * s
+    );
   }
   if (o.kind === "trigger") {
-    return p.x >= o.x - (o.w / 2) * s && p.x <= o.x + (o.w / 2) * s && p.y >= o.y - (o.h / 2) * s && p.y <= o.y + (o.h / 2) * s;
+    return (
+      p.x >= o.x - (o.w / 2) * s &&
+      p.x <= o.x + (o.w / 2) * s &&
+      p.y >= o.y - (o.h / 2) * s &&
+      p.y <= o.y + (o.h / 2) * s
+    );
   }
-  return Math.hypot(p.x - o.x, p.y - o.y) <= (o.size * 0.7) * s;
+  return Math.hypot(p.x - o.x, p.y - o.y) <= o.size * 0.7 * s;
 }
 
 export function objectHitLegacy(p: Pt, o: MapObject): boolean {
@@ -558,10 +651,14 @@ export function objectHitLegacy(p: Pt, o: MapObject): boolean {
   if (o.kind === "item") return Math.hypot(p.x - o.x, p.y - o.y) <= o.size * 0.7;
   if (o.kind === "light") return Math.hypot(p.x - o.x, p.y - o.y) <= 14;
   if (o.kind === "image") {
-    return p.x >= o.x - o.w / 2 && p.x <= o.x + o.w / 2 && p.y >= o.y - o.h / 2 && p.y <= o.y + o.h / 2;
+    return (
+      p.x >= o.x - o.w / 2 && p.x <= o.x + o.w / 2 && p.y >= o.y - o.h / 2 && p.y <= o.y + o.h / 2
+    );
   }
   if (o.kind === "trigger") {
-    return p.x >= o.x - o.w / 2 && p.x <= o.x + o.w / 2 && p.y >= o.y - o.h / 2 && p.y <= o.y + o.h / 2;
+    return (
+      p.x >= o.x - o.w / 2 && p.x <= o.x + o.w / 2 && p.y >= o.y - o.h / 2 && p.y <= o.y + o.h / 2
+    );
   }
   return Math.hypot(p.x - o.x, p.y - o.y) <= o.size * 0.7;
 }
@@ -597,20 +694,28 @@ export function docBounds(doc: Doc): { x1: number; y1: number; x2: number; y2: n
     x2 = Math.max(x2, p.x + pad);
     y2 = Math.max(y2, p.y + pad);
   };
-  doc.shapes.forEach((s) => shapePoints(s).forEach((p) => add(p, s.kind === "path" ? s.width / 2 : 0)));
+  doc.shapes.forEach((s) =>
+    shapePoints(s).forEach((p) => add(p, s.kind === "path" ? s.width / 2 : 0)),
+  );
   doc.objects.forEach((o) => add({ x: o.x, y: o.y }, Math.max(30, objectRadius(o))));
   if (!isFinite(x1)) return null;
   return { x1, y1, x2, y2 };
 }
 
 /** Vertices of a regular polygon (or circle when `sides` is large). */
-export function regularPolygon(center: Pt, edge: Pt, sides: number, drawTo: "point" | "edge"): Pt[] {
+export function regularPolygon(
+  center: Pt,
+  edge: Pt,
+  sides: number,
+  drawTo: "point" | "edge",
+): Pt[] {
   const n = Math.max(3, Math.round(sides));
   const r = Math.max(1, Math.hypot(edge.x - center.x, edge.y - center.y));
   const step = (Math.PI * 2) / n;
   // "edge" means the drag point sits on the middle of a face, not on a corner
   const radius = drawTo === "edge" ? r / Math.cos(step / 2) : r;
-  const base = Math.atan2(edge.y - center.y, edge.x - center.x) + (drawTo === "edge" ? step / 2 : 0);
+  const base =
+    Math.atan2(edge.y - center.y, edge.x - center.x) + (drawTo === "edge" ? step / 2 : 0);
   return Array.from({ length: n }, (_, i) => ({
     x: center.x + Math.cos(base + i * step) * radius,
     y: center.y + Math.sin(base + i * step) * radius,
@@ -641,7 +746,6 @@ export function roughenPoly(pts: Pt[], amount: number, seedKey = 1): Pt[] {
   }
   return out;
 }
-
 
 /* ------------------------------------------------------------------ */
 /* Fog of war cell geometry (square / dot grids and pointy-top hexes)  */
@@ -751,5 +855,9 @@ export function allMapCells(doc: Doc): string[] {
   const b = docBounds(doc);
   if (!b) return [];
   const pad = doc.settings.gridSize;
-  return cellsInRect({ x: b.x1 - pad, y: b.y1 - pad }, { x: b.x2 + pad, y: b.y2 + pad }, doc.settings);
+  return cellsInRect(
+    { x: b.x1 - pad, y: b.y1 - pad },
+    { x: b.x2 + pad, y: b.y2 + pad },
+    doc.settings,
+  );
 }

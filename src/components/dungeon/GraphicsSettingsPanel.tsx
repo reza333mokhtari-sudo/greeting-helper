@@ -3,7 +3,13 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { Settings } from "@/lib/dungeon/model";
 import { Activity, Camera, Cpu } from "lucide-react";
 
@@ -44,7 +50,9 @@ function NumSlider({
         onValueChange={([v]) => onChange(v ?? value)}
         className="w-24"
       />
-      <span className="w-7 text-right text-xs tabular-nums text-foreground/80">{Math.round(value)}</span>
+      <span className="w-7 text-right text-xs tabular-nums text-foreground/80">
+        {Math.round(value)}
+      </span>
     </>
   );
 }
@@ -52,10 +60,38 @@ function NumSlider({
 export function GraphicsSettingsPanel({ settings: s, onChange }: Props) {
   const setPreset = (preset: Settings["qualityPreset"]) => {
     const patches: Record<Settings["qualityPreset"], Partial<Settings>> = {
-      low: { qualityPreset: "low", renderScale: 0.5, objectRenderScale: 1.0, antiAliasing: false, shadow: false, hatch: false },
-      medium: { qualityPreset: "medium", renderScale: 0.8, objectRenderScale: 1.0, antiAliasing: true, shadow: true, hatch: true },
-      high: { qualityPreset: "high", renderScale: 1.0, objectRenderScale: 1.0, antiAliasing: true, shadow: true, hatch: true },
-      ultra: { qualityPreset: "ultra", renderScale: 1.5, objectRenderScale: 1.0, antiAliasing: true, shadow: true, hatch: true },
+      low: {
+        qualityPreset: "low",
+        renderScale: 0.5,
+        objectRenderScale: 1.0,
+        antiAliasing: false,
+        shadow: false,
+        hatch: false,
+      },
+      medium: {
+        qualityPreset: "medium",
+        renderScale: 0.8,
+        objectRenderScale: 1.0,
+        antiAliasing: true,
+        shadow: true,
+        hatch: true,
+      },
+      high: {
+        qualityPreset: "high",
+        renderScale: 1.0,
+        objectRenderScale: 1.0,
+        antiAliasing: true,
+        shadow: true,
+        hatch: true,
+      },
+      ultra: {
+        qualityPreset: "ultra",
+        renderScale: 1.5,
+        objectRenderScale: 1.0,
+        antiAliasing: true,
+        shadow: true,
+        hatch: true,
+      },
     };
     onChange(patches[preset]);
   };
@@ -81,10 +117,22 @@ export function GraphicsSettingsPanel({ settings: s, onChange }: Props) {
           </Select>
         </Row>
         <Row label="Render scale">
-          <NumSlider value={s.renderScale} min={0.25} max={2} step={0.05} onChange={(v) => onChange({ renderScale: v })} />
+          <NumSlider
+            value={s.renderScale}
+            min={0.25}
+            max={2}
+            step={0.05}
+            onChange={(v) => onChange({ renderScale: v })}
+          />
         </Row>
         <Row label="Object scale">
-          <NumSlider value={s.objectRenderScale || 1} min={0.1} max={5} step={0.1} onChange={(v) => onChange({ objectRenderScale: v })} />
+          <NumSlider
+            value={s.objectRenderScale || 1}
+            min={0.1}
+            max={5}
+            step={0.1}
+            onChange={(v) => onChange({ objectRenderScale: v })}
+          />
         </Row>
         <Row label="Anti-aliasing">
           <Switch checked={s.antiAliasing} onCheckedChange={(v) => onChange({ antiAliasing: v })} />
@@ -93,8 +141,8 @@ export function GraphicsSettingsPanel({ settings: s, onChange }: Props) {
           <Switch checked={s.shadow} onCheckedChange={(v) => onChange({ shadow: v })} />
         </Row>
         <Row label="Animations">
-          <Select 
-            value={String(s.animationIntensity ?? 2)} 
+          <Select
+            value={String(s.animationIntensity ?? 2)}
             onValueChange={(v) => onChange({ animationIntensity: parseInt(v) })}
           >
             <SelectTrigger className="h-7 w-28 text-[10px]">
@@ -117,14 +165,13 @@ export function GraphicsSettingsPanel({ settings: s, onChange }: Props) {
 
       <section className="space-y-1.5">
         <Row label="Enabled (Experimental)">
-          <Switch 
-            disabled 
-            checked={false} 
-            onCheckedChange={(v) => onChange({ cameraMode: v })} 
-          />
+          <Switch disabled checked={false} onCheckedChange={(v) => onChange({ cameraMode: v })} />
         </Row>
         <Row label="Projection">
-          <Select value={s.cameraProjection} onValueChange={(v) => onChange({ cameraProjection: v as any })}>
+          <Select
+            value={s.cameraProjection}
+            onValueChange={(v) => onChange({ cameraProjection: v as any })}
+          >
             <SelectTrigger className="h-7 w-28 text-[10px]">
               <SelectValue />
             </SelectTrigger>
@@ -135,22 +182,45 @@ export function GraphicsSettingsPanel({ settings: s, onChange }: Props) {
           </Select>
         </Row>
         <Row label="FOV">
-          <NumSlider value={s.cameraFov} min={30} max={120} onChange={(v) => onChange({ cameraFov: v })} />
+          <NumSlider
+            value={s.cameraFov}
+            min={30}
+            max={120}
+            onChange={(v) => onChange({ cameraFov: v })}
+          />
         </Row>
         <Row label="Sensitivity">
-          <NumSlider value={s.cameraSensitivity * 10} min={1} max={50} onChange={(v) => onChange({ cameraSensitivity: v / 10 })} />
+          <NumSlider
+            value={s.cameraSensitivity * 10}
+            min={1}
+            max={50}
+            onChange={(v) => onChange({ cameraSensitivity: v / 10 })}
+          />
         </Row>
         <Row label="Damping">
-          <NumSlider value={s.cameraDamping * 100} min={1} max={50} onChange={(v) => onChange({ cameraDamping: v / 100 })} />
+          <NumSlider
+            value={s.cameraDamping * 100}
+            min={1}
+            max={50}
+            onChange={(v) => onChange({ cameraDamping: v / 100 })}
+          />
         </Row>
         <Row label="Invert Y">
-          <Switch checked={s.cameraInvertY} onCheckedChange={(v) => onChange({ cameraInvertY: v })} />
+          <Switch
+            checked={s.cameraInvertY}
+            onCheckedChange={(v) => onChange({ cameraInvertY: v })}
+          />
         </Row>
         <Row label="Show View Cube (Exp.)">
           <Switch disabled checked={false} onCheckedChange={(v) => onChange({ showViewCube: v })} />
         </Row>
         <Row label="Cube Size">
-          <NumSlider value={s.cubeSize} min={40} max={120} onChange={(v) => onChange({ cubeSize: v })} />
+          <NumSlider
+            value={s.cubeSize}
+            min={40}
+            max={120}
+            onChange={(v) => onChange({ cubeSize: v })}
+          />
         </Row>
         <Row label="Snap to Ortho">
           <Switch checked={s.snapToOrtho} onCheckedChange={(v) => onChange({ snapToOrtho: v })} />
@@ -158,11 +228,18 @@ export function GraphicsSettingsPanel({ settings: s, onChange }: Props) {
         <Row label="Show Corner Axis">
           <Switch checked={s.showAxes} onCheckedChange={(v) => onChange({ showAxes: v })} />
         </Row>
-        <Button 
-          variant="outline" 
-          size="sm" 
+        <Button
+          variant="outline"
+          size="sm"
           className="w-full mt-2 h-7 text-[10px]"
-          onClick={() => onChange({ cameraYaw: 45, cameraPitch: 45, cameraDistance: 1000, cameraTarget: { x: 0, y: 0 } })}
+          onClick={() =>
+            onChange({
+              cameraYaw: 45,
+              cameraPitch: 45,
+              cameraDistance: 1000,
+              cameraTarget: { x: 0, y: 0 },
+            })
+          }
         >
           Reset Camera View
         </Button>
@@ -175,15 +252,17 @@ export function GraphicsSettingsPanel({ settings: s, onChange }: Props) {
           <Activity className="size-3" /> Tools Engineer Note
         </p>
         <p className="mb-2">
-          Camera Mode interaction is now stabilized. Main editing remains in a stable top-down 2D plane for maximum precision.
-          Use <kbd className="bg-muted px-1 rounded text-[9px]">Space+Drag</kbd> to pan the map.
+          Camera Mode interaction is now stabilized. Main editing remains in a stable top-down 2D
+          plane for maximum precision. Use{" "}
+          <kbd className="bg-muted px-1 rounded text-[9px]">Space+Drag</kbd> to pan the map.
         </p>
         <Separator className="my-2 opacity-30" />
         <p className="flex items-center gap-1.5 font-medium text-emerald-500/90">
           <span className="size-1.5 rounded-full bg-emerald-500" /> Persistent Memory Disabled
         </p>
         <p className="mt-1 text-muted-foreground/80">
-          AI interactions and editor patterns are processed in real-time. No context is saved between sessions to ensure maximum privacy and project performance.
+          AI interactions and editor patterns are processed in real-time. No context is saved
+          between sessions to ensure maximum privacy and project performance.
         </p>
       </div>
     </section>

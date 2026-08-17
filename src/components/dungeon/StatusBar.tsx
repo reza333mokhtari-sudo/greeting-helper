@@ -58,18 +58,37 @@ export function StatusBar(props: Props) {
         Session: Active
       </span>
       <div className="ml-auto flex items-center gap-1">
-        <Button variant="ghost" size="icon" className="size-6" aria-label="Zoom out" onClick={() => props.onZoom(-1)}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="size-6"
+          aria-label="Zoom out"
+          onClick={() => props.onZoom(-1)}
+        >
           <ZoomOut className="size-3.5" />
         </Button>
-        <span className="w-10 text-center tabular-nums text-foreground/80">{Math.round(props.zoom * 100)}%</span>
-        <Button variant="ghost" size="icon" className="size-6" aria-label="Zoom in" onClick={() => props.onZoom(1)}>
+        <span className="w-10 text-center tabular-nums text-foreground/80">
+          {Math.round(props.zoom * 100)}%
+        </span>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="size-6"
+          aria-label="Zoom in"
+          onClick={() => props.onZoom(1)}
+        >
           <ZoomIn className="size-3.5" />
         </Button>
-        <Button variant="ghost" size="icon" className="size-6" aria-label="Fit map" onClick={props.onFit}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="size-6"
+          aria-label="Fit map"
+          onClick={props.onFit}
+        >
           <Maximize2 className="size-3.5" />
         </Button>
       </div>
     </footer>
   );
 }
-

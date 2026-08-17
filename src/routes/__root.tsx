@@ -48,26 +48,31 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error("[Root Error Boundary]:", error);
   const router = useRouter();
-  
+
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
 
   const isSupabaseError = error.message?.includes("Supabase configuration");
-  const isHydrationError = error.message?.includes("hydration") || error.message?.includes("Hydration");
+  const isHydrationError =
+    error.message?.includes("hydration") || error.message?.includes("Hydration");
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          {isSupabaseError ? "Configuration Required" : isHydrationError ? "Syncing App State" : "Something went wrong"}
+          {isSupabaseError
+            ? "Configuration Required"
+            : isHydrationError
+              ? "Syncing App State"
+              : "Something went wrong"}
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          {isSupabaseError 
+          {isSupabaseError
             ? "Your project is not connected to a backend. Please connect Supabase in the Lovable editor to enable all features."
             : isHydrationError
-            ? "The app is synchronizing its internal state. If this takes more than a few seconds, please try a hard refresh."
-            : "An unexpected error occurred. Please try refreshing the page."}
+              ? "The app is synchronizing its internal state. If this takes more than a few seconds, please try a hard refresh."
+              : "An unexpected error occurred. Please try refreshing the page."}
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
@@ -81,7 +86,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           </button>
           {!isSupabaseError && (
             <button
-              onClick={() => window.location.href = '/'}
+              onClick={() => (window.location.href = "/")}
               className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
             >
               Reload Editor
@@ -99,10 +104,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Dungeon Scrawl Map Maker - RPG Dungeon Editor" },
-      { name: "description", content: "A professional 2D dungeon map maker for RPGs. Design, generate, and export high-quality dungeon maps with AI assistance." },
+      {
+        name: "description",
+        content:
+          "A professional 2D dungeon map maker for RPGs. Design, generate, and export high-quality dungeon maps with AI assistance.",
+      },
       { name: "author", content: "Lovable" },
       { property: "og:title", content: "Dungeon Scrawl Map Maker" },
-      { property: "og:description", content: "Design and generate professional RPG dungeon maps with ease." },
+      {
+        property: "og:description",
+        content: "Design and generate professional RPG dungeon maps with ease.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

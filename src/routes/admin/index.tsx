@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { 
-  Activity, 
-  ArrowLeft, 
-  Database, 
-  ShieldCheck, 
+import {
+  Activity,
+  ArrowLeft,
+  Database,
+  ShieldCheck,
   LayoutDashboard,
   Users,
   HardDrive,
@@ -16,58 +16,59 @@ import {
   AlertTriangle,
   BarChart3,
   TrendingUp,
-  Clock
+  Clock,
 } from "lucide-react";
 
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip as RechartsTooltip, 
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip as RechartsTooltip,
   ResponsiveContainer,
   Cell,
   PieChart,
-  Pie
+  Pie,
 } from "recharts";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { 
-  checkAdminAccess, 
-  getAdminSchema, 
-  adminTableQuery, 
-  adminTableUpdate, 
+import {
+  checkAdminAccess,
+  getAdminSchema,
+  adminTableQuery,
+  adminTableUpdate,
   adminTableDelete,
   adminResendVerification,
   adminVerifyUser,
   adminGetUserStats,
-  adminDeleteUser
+  adminDeleteUser,
 } from "@/lib/admin.functions";
 import { getAdminStats } from "@/lib/admin-stats.functions";
 import { AdminDataTable } from "@/components/admin/AdminDataTable";
-import { 
-  MoreHorizontal, 
-  Mail, 
-  UserCheck, 
-  UserMinus, 
-  Info 
-} from "lucide-react";
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuLabel, 
-  DropdownMenuSeparator, 
-  DropdownMenuTrigger 
+import { MoreHorizontal, Mail, UserCheck, UserMinus, Info } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
 import { RowDetailDrawer } from "@/components/admin/RowDetailDrawer";
 import { EntityForm } from "@/components/admin/EntityForm";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { dialog } from "@/lib/dialog";
 import { useServerFn } from "@tanstack/react-start";
 import { cn } from "@/lib/utils";
@@ -77,14 +78,16 @@ export const Route = createFileRoute("/admin/")({
   head: () => ({
     meta: [
       { title: "Admin Control Center" },
-      { name: "description", content: "Microsoft-quality enterprise admin console for Dungeon Scrawl." },
+      {
+        name: "description",
+        content: "Microsoft-quality enterprise admin console for Dungeon Scrawl.",
+      },
     ],
   }),
   component: AdminConsole,
 });
 
-const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
-
+const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#ec4899"];
 
 type Section = "overview" | "explorer" | "users" | "cms" | "storage" | "diagnostics" | "unverified";
 
@@ -94,7 +97,7 @@ function AdminConsole() {
   const [section, setSection] = useState<Section>("overview");
   const [activeTable, setActiveTable] = useState<string | null>(null);
   const [schema, setSchema] = useState<any>(null);
-  
+
   // Table State
   const [rows, setRows] = useState<any[]>([]);
   const [count, setCount] = useState(0);
@@ -126,7 +129,6 @@ function AdminConsole() {
   const [userStats, setUserStats] = useState<Record<string, { mapCount: number }>>({});
   const [isVerifying, setIsVerifying] = useState(false);
 
-
   const loadData = useCallback(async () => {
     if (!activeTable) return;
     setLoading(true);
@@ -137,8 +139,8 @@ function AdminConsole() {
           page,
           pageSize,
           sort: sort || undefined,
-          search: search || undefined
-        }
+          search: search || undefined,
+        },
       });
       setRows(res.rows || []);
       setCount(res.count || 0);
@@ -154,10 +156,7 @@ function AdminConsole() {
       try {
         const { isAdmin } = await checkAccess();
         if (isAdmin) {
-          const [s, st] = await Promise.all([
-            fetchSchema(),
-            fetchStats()
-          ]);
+          const [s, st] = await Promise.all([fetchSchema(), fetchStats()]);
           setSchema(s);
           setStats(st);
           setState("ok");
@@ -170,7 +169,6 @@ function AdminConsole() {
     })();
   }, [checkAccess, fetchSchema, fetchStats]);
 
-
   useEffect(() => {
     loadData();
   }, [loadData]);
@@ -178,18 +176,22 @@ function AdminConsole() {
   const handleExport = () => {
     if (!rows.length) return;
     const headers = Object.keys(rows[0]).join(",");
-    const csv = rows.map(row => 
-      Object.values(row).map(val => 
-        typeof val === 'object' ? `"${JSON.stringify(val).replace(/"/g, '""')}"` : `"${val}"`
-      ).join(",")
-    ).join("\n");
-    
-    const blob = new Blob([`${headers}\n${csv}`], { type: 'text/csv' });
+    const csv = rows
+      .map((row) =>
+        Object.values(row)
+          .map((val) =>
+            typeof val === "object" ? `"${JSON.stringify(val).replace(/"/g, '""')}"` : `"${val}"`,
+          )
+          .join(","),
+      )
+      .join("\n");
+
+    const blob = new Blob([`${headers}\n${csv}`], { type: "text/csv" });
     const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.setAttribute('hidden', '');
-    a.setAttribute('href', url);
-    a.setAttribute('download', `${activeTable}_export_${new Date().toISOString()}.csv`);
+    const a = document.createElement("a");
+    a.setAttribute("hidden", "");
+    a.setAttribute("href", url);
+    a.setAttribute("download", `${activeTable}_export_${new Date().toISOString()}.csv`);
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -206,7 +208,7 @@ function AdminConsole() {
       <main className="flex min-h-screen flex-col items-center justify-center bg-slate-950 text-white p-6 overflow-hidden relative">
         {/* Background Grid Decoration */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
-        
+
         <div className="relative z-10 flex flex-col items-center gap-8 max-w-lg w-full">
           <div className="relative">
             <div className="absolute inset-0 blur-3xl bg-red-500/20 rounded-full animate-pulse" />
@@ -220,28 +222,26 @@ function AdminConsole() {
               Access Denied
             </h1>
             <div className="space-y-2">
-              <p className="text-lg text-slate-300 font-medium">
-                System Authorization Failure
-              </p>
+              <p className="text-lg text-slate-300 font-medium">System Authorization Failure</p>
               <p className="text-sm text-slate-400 leading-relaxed">
-                Your account does not have the required administrative privileges to access the Control Center. 
-                This attempt has been logged for security audit purposes.
+                Your account does not have the required administrative privileges to access the
+                Control Center. This attempt has been logged for security audit purposes.
               </p>
             </div>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto mt-4">
-            <Button 
-              onClick={() => navigate({ to: "/" })} 
-              variant="outline" 
+            <Button
+              onClick={() => navigate({ to: "/" })}
+              variant="outline"
               className="border-slate-800 bg-slate-900/50 hover:bg-slate-800 text-slate-300 hover:text-white transition-all duration-200"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
               Return Home
             </Button>
-            <Button 
-              onClick={() => window.location.reload()} 
-              variant="default" 
+            <Button
+              onClick={() => window.location.reload()}
+              variant="default"
               className="bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-900/20 transition-all duration-200"
             >
               Retry Authentication
@@ -250,7 +250,8 @@ function AdminConsole() {
 
           <div className="pt-8 border-t border-slate-800 w-full">
             <p className="text-[10px] text-slate-500 uppercase tracking-widest font-mono">
-              Terminal ID: {Math.random().toString(36).substring(7).toUpperCase()} • Security Level: 0
+              Terminal ID: {Math.random().toString(36).substring(7).toUpperCase()} • Security Level:
+              0
             </p>
           </div>
         </div>
@@ -264,7 +265,7 @@ function AdminConsole() {
       title: "Confirm Destructive Action",
       message: `Are you absolutely sure you want to delete ${ids.length} record(s) from ${activeTable}? This operation cannot be undone.`,
       confirmText: "Delete Permanently",
-      variant: "danger"
+      variant: "danger",
     });
 
     if (confirmed) {
@@ -317,7 +318,7 @@ function AdminConsole() {
   const handleFetchUserStats = async (userId: string) => {
     try {
       const stats = await getUserStats({ data: { userId } });
-      setUserStats(prev => ({ ...prev, [userId]: stats }));
+      setUserStats((prev) => ({ ...prev, [userId]: stats }));
     } catch (e: any) {
       console.error("Failed to fetch user stats", e);
     }
@@ -326,9 +327,10 @@ function AdminConsole() {
   const handleDeleteUser = async (userId: string) => {
     const confirmed = await dialog.confirm({
       title: "Delete User Account",
-      message: "This will permanently delete the user account and all associated data. This action is irreversible.",
+      message:
+        "This will permanently delete the user account and all associated data. This action is irreversible.",
       confirmText: "Delete User",
-      variant: "danger"
+      variant: "danger",
     });
 
     if (confirmed) {
@@ -367,7 +369,7 @@ function AdminConsole() {
           </div>
         )}
         <DropdownMenuSeparator />
-        <DropdownMenuItem 
+        <DropdownMenuItem
           className="text-destructive focus:text-destructive focus:bg-destructive/10"
           onClick={() => handleDeleteUser(row.id)}
         >
@@ -387,39 +389,83 @@ function AdminConsole() {
           </div>
           <div className="leading-tight">
             <h2 className="font-bold text-sm tracking-tight">ADMIN CENTER</h2>
-            <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-semibold">Enterprise Console</p>
+            <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-semibold">
+              Enterprise Console
+            </p>
           </div>
         </div>
-        
+
         <nav className="flex-1 p-4 space-y-1">
-          <NavBtn icon={LayoutDashboard} label="Overview" active={section === "overview"} onClick={() => setSection("overview")} />
-          <NavBtn icon={Database} label="Data Explorer" active={section === "explorer"} onClick={() => {
-            setSection("explorer");
-            if (!activeTable && schema?.tables.length) setActiveTable(schema.tables[0].name);
-          }} />
-          <NavBtn icon={Users} label="Users & Roles" active={section === "users"} onClick={() => {
-            setSection("users");
-            setActiveTable("profiles");
-          }} />
-          <NavBtn icon={AlertTriangle} label="Unverified Users" active={section === "unverified"} onClick={() => {
-            setSection("unverified");
-            setActiveTable("unverified_users");
-          }} />
-          <NavBtn icon={FileText} label="CMS Pages" active={section === "cms"} onClick={() => {
-            setSection("cms");
-            setActiveTable("cms_pages");
-          }} />
-          <NavBtn icon={HardDrive} label="Storage" active={section === "storage"} onClick={() => setSection("storage")} />
+          <NavBtn
+            icon={LayoutDashboard}
+            label="Overview"
+            active={section === "overview"}
+            onClick={() => setSection("overview")}
+          />
+          <NavBtn
+            icon={Database}
+            label="Data Explorer"
+            active={section === "explorer"}
+            onClick={() => {
+              setSection("explorer");
+              if (!activeTable && schema?.tables.length) setActiveTable(schema.tables[0].name);
+            }}
+          />
+          <NavBtn
+            icon={Users}
+            label="Users & Roles"
+            active={section === "users"}
+            onClick={() => {
+              setSection("users");
+              setActiveTable("profiles");
+            }}
+          />
+          <NavBtn
+            icon={AlertTriangle}
+            label="Unverified Users"
+            active={section === "unverified"}
+            onClick={() => {
+              setSection("unverified");
+              setActiveTable("unverified_users");
+            }}
+          />
+          <NavBtn
+            icon={FileText}
+            label="CMS Pages"
+            active={section === "cms"}
+            onClick={() => {
+              setSection("cms");
+              setActiveTable("cms_pages");
+            }}
+          />
+          <NavBtn
+            icon={HardDrive}
+            label="Storage"
+            active={section === "storage"}
+            onClick={() => setSection("storage")}
+          />
           <Separator className="my-4" />
           <div className="px-3 pb-2">
-            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">System</p>
+            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+              System
+            </p>
           </div>
           <NavBtn icon={Activity} label="Health" active={false} onClick={() => {}} />
-          <NavBtn icon={AlertTriangle} label="Diagnostics" active={section === "diagnostics"} onClick={() => setSection("diagnostics")} />
+          <NavBtn
+            icon={AlertTriangle}
+            label="Diagnostics"
+            active={section === "diagnostics"}
+            onClick={() => setSection("diagnostics")}
+          />
         </nav>
 
         <div className="p-4 mt-auto border-t bg-slate-50/50 dark:bg-slate-900/50">
-          <Button asChild variant="ghost" size="sm" className="w-full justify-start text-xs font-medium">
+          <Button
+            asChild
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start text-xs font-medium"
+          >
             <Link to="/">
               <ArrowLeft className="mr-2 h-4 w-4" /> Back to Product
             </Link>
@@ -442,9 +488,12 @@ function AdminConsole() {
             )}
           </div>
           <div className="flex items-center gap-3">
-             <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 text-[10px]">
-               CONNECTED: PRODUCTION
-             </Badge>
+            <Badge
+              variant="secondary"
+              className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 text-[10px]"
+            >
+              CONNECTED: PRODUCTION
+            </Badge>
           </div>
         </header>
 
@@ -453,103 +502,133 @@ function AdminConsole() {
             <div className="space-y-6 max-w-6xl animate-in fade-in slide-in-from-bottom-4 duration-500">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {stats?.stats.map((s: any, idx: number) => (
-                  <StatCard key={idx} label={s.label} value={s.value} icon={idx === 0 ? Users : idx === 1 ? Map : Database} description={s.trend} />
+                  <StatCard
+                    key={idx}
+                    label={s.label}
+                    value={s.value}
+                    icon={idx === 0 ? Users : idx === 1 ? Map : Database}
+                    description={s.trend}
+                  />
                 ))}
               </div>
-              
+
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                 <Card className="lg:col-span-2 border-border/60 shadow-sm overflow-hidden">
-                    <CardHeader className="bg-slate-50/50 dark:bg-slate-900/50 border-b pb-4">
-                      <div className="flex items-center justify-between">
-                        <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                          <BarChart3 className="h-4 w-4 text-primary" /> Audit Activity
-                        </CardTitle>
-                        <Badge variant="outline" className="text-[10px] font-mono">Last 20 Events</Badge>
-                      </div>
+                <Card className="lg:col-span-2 border-border/60 shadow-sm overflow-hidden">
+                  <CardHeader className="bg-slate-50/50 dark:bg-slate-900/50 border-b pb-4">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                        <BarChart3 className="h-4 w-4 text-primary" /> Audit Activity
+                      </CardTitle>
+                      <Badge variant="outline" className="text-[10px] font-mono">
+                        Last 20 Events
+                      </Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-6">
+                    <div className="h-[240px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={stats?.chartData || []}>
+                          <CartesianGrid
+                            strokeDasharray="3 3"
+                            vertical={false}
+                            stroke="hsl(var(--muted-foreground))"
+                            opacity={0.1}
+                          />
+                          <XAxis
+                            dataKey="name"
+                            fontSize={10}
+                            tickLine={false}
+                            axisLine={false}
+                            tick={{ fill: "currentColor", opacity: 0.5 }}
+                          />
+                          <YAxis
+                            fontSize={10}
+                            tickLine={false}
+                            axisLine={false}
+                            tick={{ fill: "currentColor", opacity: 0.5 }}
+                          />
+                          <RechartsTooltip
+                            cursor={{ fill: "currentColor", opacity: 0.05 }}
+                            contentStyle={{
+                              backgroundColor: "hsl(var(--card))",
+                              border: "1px solid hsl(var(--border))",
+                              borderRadius: "8px",
+                              fontSize: "11px",
+                            }}
+                          />
+                          <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                            {(stats?.chartData || []).map((entry: any, index: number) => (
+                              <Cell
+                                key={`cell-${index}`}
+                                fill={COLORS[index % (COLORS.length || 1)] || "#3b82f6"}
+                              />
+                            ))}
+                          </Bar>
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <div className="space-y-6">
+                  <Card className="border-border/60 shadow-sm">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                        <Activity className="h-3.5 w-3.5" /> System Health
+                      </CardTitle>
                     </CardHeader>
-                    <CardContent className="pt-6">
-                      <div className="h-[240px] w-full">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={stats?.chartData || []}>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--muted-foreground))" opacity={0.1} />
-                            <XAxis 
-                              dataKey="name" 
-                              fontSize={10} 
-                              tickLine={false} 
-                              axisLine={false}
-                              tick={{ fill: 'currentColor', opacity: 0.5 }}
-                            />
-                            <YAxis 
-                              fontSize={10} 
-                              tickLine={false} 
-                              axisLine={false}
-                              tick={{ fill: 'currentColor', opacity: 0.5 }}
-                            />
-                            <RechartsTooltip 
-                              cursor={{ fill: 'currentColor', opacity: 0.05 }}
-                              contentStyle={{ 
-                                backgroundColor: 'hsl(var(--card))', 
-                                border: '1px solid hsl(var(--border))',
-                                borderRadius: '8px',
-                                fontSize: '11px'
-                              }}
-                            />
-                            <Bar dataKey="value" radius={[4, 4, 0, 0]}>
-                              {(stats?.chartData || []).map((entry: any, index: number) => (
-                                <Cell key={`cell-${index}`} fill={COLORS[index % (COLORS.length || 1)] || '#3b82f6'} />
-                              ))}
-                            </Bar>
-                          </BarChart>
-                        </ResponsiveContainer>
+                    <CardContent className="space-y-3">
+                      <HealthRow label="Database" status="healthy" />
+                      <HealthRow label="Auth Service" status="healthy" />
+                      <HealthRow label="Storage" status="warning" />
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-border/60 shadow-sm">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                        <Clock className="h-3.5 w-3.5" /> Recent Logs
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-0">
+                      <div className="divide-y divide-border/40">
+                        {(stats?.recentAudit || []).slice(0, 5).map((log: any) => (
+                          <div
+                            key={log.id}
+                            className="p-3 flex items-center justify-between hover:bg-muted/30 transition-colors"
+                          >
+                            <div className="space-y-0.5">
+                              <p className="text-[10px] font-bold uppercase">{log.action}</p>
+                              <p className="text-[9px] text-muted-foreground font-mono">
+                                {log.table_name}
+                              </p>
+                            </div>
+                            <span className="text-[9px] text-muted-foreground">
+                              {new Date(log.created_at).toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                            </span>
+                          </div>
+                        ))}
                       </div>
                     </CardContent>
-                 </Card>
-
-                 <div className="space-y-6">
-                   <Card className="border-border/60 shadow-sm">
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                          <Activity className="h-3.5 w-3.5" /> System Health
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="space-y-3">
-                        <HealthRow label="Database" status="healthy" />
-                        <HealthRow label="Auth Service" status="healthy" />
-                        <HealthRow label="Storage" status="warning" />
-                      </CardContent>
-                   </Card>
-
-                   <Card className="border-border/60 shadow-sm">
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                          <Clock className="h-3.5 w-3.5" /> Recent Logs
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="p-0">
-                        <div className="divide-y divide-border/40">
-                          {(stats?.recentAudit || []).slice(0, 5).map((log: any) => (
-                            <div key={log.id} className="p-3 flex items-center justify-between hover:bg-muted/30 transition-colors">
-                              <div className="space-y-0.5">
-                                <p className="text-[10px] font-bold uppercase">{log.action}</p>
-                                <p className="text-[9px] text-muted-foreground font-mono">{log.table_name}</p>
-                              </div>
-                              <span className="text-[9px] text-muted-foreground">{new Date(log.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </CardContent>
-                   </Card>
-                 </div>
+                  </Card>
+                </div>
               </div>
             </div>
           )}
 
-
-          {(section === "explorer" || section === "users" || section === "cms" || section === "unverified") && (
+          {(section === "explorer" ||
+            section === "users" ||
+            section === "cms" ||
+            section === "unverified") && (
             <div className="flex h-full gap-6">
               {section === "explorer" && (
                 <div className="w-56 shrink-0 space-y-2">
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest px-2">Table Catalog</p>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest px-2">
+                    Table Catalog
+                  </p>
                   <div className="space-y-1">
                     {schema?.tables.map((t: any) => (
                       <button
@@ -560,9 +639,9 @@ function AdminConsole() {
                         }}
                         className={cn(
                           "w-full text-left px-3 py-1.5 rounded-md text-xs font-medium transition-colors",
-                          activeTable === t.name 
+                          activeTable === t.name
                             ? "bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-sm"
-                            : "text-slate-600 hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-800"
+                            : "text-slate-600 hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-800",
                         )}
                       >
                         {t.name}
@@ -576,13 +655,20 @@ function AdminConsole() {
                 {activeTable && (
                   <AdminDataTable
                     tableName={activeTable}
-                    columns={currentTableConfig?.columns.map((c: string) => ({ 
-                      key: c, 
-                      header: c.replace(/_/g, ' ').toUpperCase(),
-                      type: c.includes('created') || c.includes('updated') ? 'date' : 
-                            c.includes('is_') || c.includes('published') ? 'boolean' : 
-                            c === 'doc' || c === 'payload' ? 'json' : 'text'
-                    })) || []}
+                    columns={
+                      currentTableConfig?.columns.map((c: string) => ({
+                        key: c,
+                        header: c.replace(/_/g, " ").toUpperCase(),
+                        type:
+                          c.includes("created") || c.includes("updated")
+                            ? "date"
+                            : c.includes("is_") || c.includes("published")
+                              ? "boolean"
+                              : c === "doc" || c === "payload"
+                                ? "json"
+                                : "text",
+                      })) || []
+                    }
                     rows={rows}
                     count={count}
                     loading={loading}
@@ -608,7 +694,9 @@ function AdminConsole() {
             <div className="flex flex-col items-center justify-center h-64 border-2 border-dashed rounded-xl bg-muted/20">
               <HardDrive className="h-12 w-12 text-muted-foreground mb-4" />
               <h3 className="font-semibold text-lg text-slate-400">Storage Studio</h3>
-              <p className="text-sm text-muted-foreground">Browse buckets and objects (Coming in next patch)</p>
+              <p className="text-sm text-muted-foreground">
+                Browse buckets and objects (Coming in next patch)
+              </p>
             </div>
           )}
         </div>
@@ -632,12 +720,18 @@ function AdminConsole() {
             <EntityForm
               entityName={activeTable || "Record"}
               initialData={editingRow}
-              fields={currentTableConfig?.editable.map((f: string) => ({
-                name: f,
-                label: f.replace(/_/g, ' ').toUpperCase(),
-                type: f.includes('body') || f.includes('message') ? 'textarea' :
-                      f.includes('is_') || f.includes('published') ? 'boolean' : 'text'
-              })) || []}
+              fields={
+                currentTableConfig?.editable.map((f: string) => ({
+                  name: f,
+                  label: f.replace(/_/g, " ").toUpperCase(),
+                  type:
+                    f.includes("body") || f.includes("message")
+                      ? "textarea"
+                      : f.includes("is_") || f.includes("published")
+                        ? "boolean"
+                        : "text",
+                })) || []
+              }
               onSubmit={handleUpdate}
               onCancel={() => setEditingRow(null)}
             />
@@ -654,9 +748,9 @@ function NavBtn({ icon: Icon, label, active, onClick }: any) {
       onClick={onClick}
       className={cn(
         "flex w-full items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold transition-all",
-        active 
-          ? "bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-white" 
-          : "text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800/50"
+        active
+          ? "bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-white"
+          : "text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800/50",
       )}
     >
       <Icon className={cn("h-4 w-4", active ? "text-primary" : "text-muted-foreground")} />
@@ -670,7 +764,9 @@ function StatCard({ label, value, description, icon: Icon }: any) {
     <Card className="border-border/60 shadow-sm">
       <CardContent className="p-6">
         <div className="flex items-center justify-between mb-2">
-          <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{label}</p>
+          <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+            {label}
+          </p>
           <Icon className="h-4 w-4 text-muted-foreground" />
         </div>
         <div className="flex items-baseline gap-2">
@@ -687,11 +783,17 @@ function HealthRow({ label, status }: any) {
     <div className="flex items-center justify-between text-xs">
       <span className="font-medium">{label}</span>
       <div className="flex items-center gap-2">
-        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{status}</span>
-        <div className={cn(
-          "h-2 w-2 rounded-full",
-          status === 'healthy' ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" : "bg-orange-500 animate-pulse"
-        )} />
+        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+          {status}
+        </span>
+        <div
+          className={cn(
+            "h-2 w-2 rounded-full",
+            status === "healthy"
+              ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"
+              : "bg-orange-500 animate-pulse",
+          )}
+        />
       </div>
     </div>
   );

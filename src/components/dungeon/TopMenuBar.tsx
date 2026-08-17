@@ -15,7 +15,6 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 
-
 type Props = {
   title: string;
   dirty?: boolean;
@@ -52,7 +51,9 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
       setLoading(false);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
       setUser(session?.user ?? null);
       setLoading(false);
     });
@@ -62,13 +63,17 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
 
   return (
     <header className="relative flex h-14 shrink-0 items-center gap-2 border-b border-border bg-sidebar px-3">
-      <Link to={user ? "/editor" : "/"} className="flex items-center gap-2 px-3 py-1.5 hover:bg-accent/50 rounded-md transition-colors mr-2">
+      <Link
+        to={user ? "/editor" : "/"}
+        className="flex items-center gap-2 px-3 py-1.5 hover:bg-accent/50 rounded-md transition-colors mr-2"
+      >
         <div className="size-6 bg-primary rounded flex items-center justify-center">
           <Map className="size-4 text-primary-foreground" />
         </div>
-        <span className="font-bold text-sm tracking-tight text-foreground uppercase tracking-wider">DUNGEON SCRAWL</span>
+        <span className="font-bold text-sm tracking-tight text-foreground uppercase tracking-wider">
+          DUNGEON SCRAWL
+        </span>
       </Link>
-
 
       <Menubar className="h-8 border-0 bg-transparent p-0 shadow-none">
         <MenubarMenu>
@@ -134,18 +139,33 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
               Keyboard Shortcuts
             </MenubarItem>
             <MenubarSeparator />
-            <MenubarItem disabled className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/60 px-2 py-1">Cheat Sheet</MenubarItem>
-            <MenubarItem disabled className="text-xs py-1">R / B — Room / Brush</MenubarItem>
-            <MenubarItem disabled className="text-xs py-1">D / S — Door / Stairs</MenubarItem>
-            <MenubarItem disabled className="text-xs py-1">E — Toggle Erase</MenubarItem>
-            <MenubarItem disabled className="text-xs py-1">Space — Pan View</MenubarItem>
+            <MenubarItem
+              disabled
+              className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/60 px-2 py-1"
+            >
+              Cheat Sheet
+            </MenubarItem>
+            <MenubarItem disabled className="text-xs py-1">
+              R / B — Room / Brush
+            </MenubarItem>
+            <MenubarItem disabled className="text-xs py-1">
+              D / S — Door / Stairs
+            </MenubarItem>
+            <MenubarItem disabled className="text-xs py-1">
+              E — Toggle Erase
+            </MenubarItem>
+            <MenubarItem disabled className="text-xs py-1">
+              Space — Pan View
+            </MenubarItem>
           </MenubarContent>
         </MenubarMenu>
       </Menubar>
 
       <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs font-medium text-foreground/80">
         {props.title}
-        {props.dirty ? <span className="ml-2 text-[10px] text-amber-500 animate-pulse font-bold">● Saving…</span> : null}
+        {props.dirty ? (
+          <span className="ml-2 text-[10px] text-amber-500 animate-pulse font-bold">● Saving…</span>
+        ) : null}
       </div>
 
       <div className="ml-auto flex items-center gap-2">
@@ -158,7 +178,6 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
           <ProfileMenu onAuthRequired={props.onAuthRequired} />
         )}
       </div>
-
     </header>
   );
 }

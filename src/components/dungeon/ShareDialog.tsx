@@ -4,7 +4,13 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
@@ -52,11 +58,16 @@ export function ShareDialog({ row, onTogglePublic }: Props) {
           <div className="flex items-start justify-between gap-4 rounded-lg border border-border/60 bg-card/60 p-3">
             <div className="space-y-1">
               <div className="flex items-center gap-2 text-xs font-medium">
-                {row.is_public ? <Globe className="h-3.5 w-3.5 text-primary" /> : <Lock className="h-3.5 w-3.5 text-muted-foreground" />}
+                {row.is_public ? (
+                  <Globe className="h-3.5 w-3.5 text-primary" />
+                ) : (
+                  <Lock className="h-3.5 w-3.5 text-muted-foreground" />
+                )}
                 {row.is_public ? "Anyone with the link can view" : "Only you can view"}
               </div>
               <p className="text-[10px] text-muted-foreground leading-relaxed">
-                Public maps get a player-view link. Private maps are still saved to your account but cannot be opened by others.
+                Public maps get a player-view link. Private maps are still saved to your account but
+                cannot be opened by others.
               </p>
             </div>
             <Switch checked={row.is_public} onCheckedChange={onTogglePublic} />
@@ -77,12 +88,15 @@ export function ShareDialog({ row, onTogglePublic }: Props) {
               </Button>
             </div>
             {!row.is_public && (
-              <p className="text-[10px] text-muted-foreground">Make the map public to enable sharing.</p>
+              <p className="text-[10px] text-muted-foreground">
+                Make the map public to enable sharing.
+              </p>
             )}
           </div>
 
           <div className="rounded-lg bg-muted/50 p-2.5 text-[10px] text-muted-foreground leading-relaxed">
-            The shared link opens in <strong>Player View</strong> so GM-only layers, fog of war, and hidden notes stay hidden.
+            The shared link opens in <strong>Player View</strong> so GM-only layers, fog of war, and
+            hidden notes stay hidden.
           </div>
         </div>
       </DialogContent>

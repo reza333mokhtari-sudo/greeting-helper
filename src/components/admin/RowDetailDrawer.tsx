@@ -1,10 +1,10 @@
-import { 
-  Sheet, 
-  SheetContent, 
-  SheetHeader, 
-  SheetTitle, 
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
   SheetDescription,
-  SheetFooter
+  SheetFooter,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -18,12 +18,7 @@ interface RowDetailDrawerProps {
   tableName: string;
 }
 
-export function RowDetailDrawer({ 
-  isOpen, 
-  onClose, 
-  row, 
-  tableName 
-}: RowDetailDrawerProps) {
+export function RowDetailDrawer({ isOpen, onClose, row, tableName }: RowDetailDrawerProps) {
   if (!row) return null;
 
   const copyJson = () => {
@@ -41,11 +36,9 @@ export function RowDetailDrawer({
               {row.id?.slice(0, 8)}
             </code>
           </SheetTitle>
-          <SheetDescription>
-            Detailed view of the database record.
-          </SheetDescription>
+          <SheetDescription>Detailed view of the database record.</SheetDescription>
         </SheetHeader>
-        
+
         <ScrollArea className="flex-1 p-6">
           <div className="space-y-6">
             <div className="grid gap-4">

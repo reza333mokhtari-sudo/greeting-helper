@@ -4,4 +4,4 @@ export const docsConfig = {
   defaultSection: "quick-start",
   searchPlaceholder: "Search guides...",
   version: "1.0.0",
-}
+};
