@@ -67,7 +67,7 @@ export const Route = createFileRoute("/admin/")({
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
 
 
-type Section = "overview" | "explorer" | "users" | "cms" | "storage" | "diagnostics";
+type Section = "overview" | "explorer" | "users" | "cms" | "storage" | "diagnostics" | "unverified";
 
 function AdminConsole() {
   const navigate = useNavigate();
@@ -289,6 +289,10 @@ function AdminConsole() {
           <NavBtn icon={Users} label="Users & Roles" active={section === "users"} onClick={() => {
             setSection("users");
             setActiveTable("profiles");
+          }} />
+          <NavBtn icon={AlertTriangle} label="Unverified Users" active={section === "unverified"} onClick={() => {
+            setSection("unverified");
+            setActiveTable("unverified_users");
           }} />
           <NavBtn icon={FileText} label="CMS Pages" active={section === "cms"} onClick={() => {
             setSection("cms");

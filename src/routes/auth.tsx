@@ -170,19 +170,23 @@ function AuthPage() {
 
   };
 
-  /** Send a password-reset email pointing at the /reset-password page. */
+  /** Send a magic link or password-reset email. */
   const forgot = async () => {
     if (!email.trim()) {
       toast.error("Enter your email address first");
       return;
     }
     setBusy(true);
-    const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-      redirectTo: `${window.location.origin}/reset-password`,
+    // Use magic link for sign-in if no password is provided
+    const { error } = await supabase.auth.signInWithOtp({
+      email: email.trim(),
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(dest)}`,
+      },
     });
     setBusy(false);
     if (error) toast.error(error.message);
-    else toast.success("Password reset link sent — check your inbox.");
+    else toast.success("Magic sign-in link sent — check your inbox.");
   };
 
   /** Re-send the account activation email. */
@@ -293,8 +297,8 @@ function AuthPage() {
                 {busy ? "Signing in…" : "Sign in"}
               </Button>
               <div className="flex justify-between text-[11px]">
-                <button type="button" className="text-muted-foreground underline hover:text-foreground" onClick={forgot}>
-                  Forgot password?
+                <button type="button" className="text-muted-foreground underline hover:text-foreground font-bold" onClick={forgot}>
+                  Send Magic Link to Sign In
                 </button>
                 <button type="button" className="text-muted-foreground underline hover:text-foreground" onClick={resendActivation}>
                   Resend activation email
