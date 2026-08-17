@@ -21,8 +21,10 @@ int main(int argc, char *argv[])
     qmlRegisterType<Document>("DungeonEditor.Core", 1, 0, "Document");
     qmlRegisterType<MapCanvasItem>("DungeonEditor.Canvas", 1, 0, "MapCanvasItem");
     qmlRegisterType<AssetLibraryModel>("DungeonEditor.Models", 1, 0, "AssetLibraryModel");
+    qmlRegisterType<WorkspaceService>("DungeonEditor.Services", 1, 0, "WorkspaceService");
     qmlRegisterType<AiClient>("DungeonEditor.Services", 1, 0, "AiClient");
     qmlRegisterType<FileService>("DungeonEditor.Services", 1, 0, "FileService");
+
     
     // Icon path updated for Qt 6 resource prefix
     app.setWindowIcon(QIcon(":/qt/qml/DungeonEditor/assets/icon.png"));

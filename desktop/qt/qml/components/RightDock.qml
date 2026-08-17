@@ -8,6 +8,8 @@ Rectangle {
     property var document: null
     property var canvas: null
     property var assetModel: null
+    property alias aiPanelHeight: aiPanel.Layout.preferredHeight
+
 
     function updateInspector(id) {
         inspectorPanel.updateSelection(id)
@@ -69,9 +71,11 @@ Rectangle {
         }
 
         AiPanel {
+            id: aiPanel
             Layout.fillWidth: true
             Layout.preferredHeight: 250
             SplitView.minimumHeight: 150
         }
+
     }
 }
