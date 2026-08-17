@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { supabase } from "@/integrations/supabase/client";
+
 
 export const checkHealth = createServerFn({ method: "GET" })
   .handler(async () => {
