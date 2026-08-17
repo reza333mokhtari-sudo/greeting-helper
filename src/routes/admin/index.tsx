@@ -46,10 +46,11 @@ import {
   adminVerifyUser,
   adminGetUserStats,
   adminDeleteUser,
+  adminGenerateLicense,
 } from "@/lib/admin.functions";
 import { getAdminStats } from "@/lib/admin-stats.functions";
 import { AdminDataTable } from "@/components/admin/AdminDataTable";
-import { MoreHorizontal, Mail, UserCheck, UserMinus, Info } from "lucide-react";
+import { MoreHorizontal, Mail, UserCheck, UserMinus, Info, Key } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -125,6 +126,7 @@ function AdminConsole() {
   const verifyUser = useServerFn(adminVerifyUser);
   const getUserStats = useServerFn(adminGetUserStats);
   const deleteUser = useServerFn(adminDeleteUser);
+  const generateLicense = useServerFn(adminGenerateLicense);
 
   const [userStats, setUserStats] = useState<Record<string, { mapCount: number }>>({});
   const [isVerifying, setIsVerifying] = useState(false);
@@ -344,6 +346,15 @@ function AdminConsole() {
     }
   };
 
+  const handleGenerateLicense = async (userId: string, type: "trial" | "pro" | "enterprise") => {
+    try {
+      const res = await generateLicense({ data: { userId, type } });
+      toast.success(`License key generated: ${res.key}`);
+    } catch (e: any) {
+      toast.error(`Failed to generate: ${e.message}`);
+    }
+  };
+
   const renderUnverifiedActions = (row: any) => (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -368,6 +379,16 @@ function AdminConsole() {
             Maps created: {userStats[row.id]?.mapCount ?? 0}
           </div>
         )}
+        <DropdownMenuSeparator />
+        <DropdownMenuLabel className="text-[10px] uppercase font-bold text-muted-foreground px-2 py-1">
+          Generate License
+        </DropdownMenuLabel>
+        <DropdownMenuItem onClick={() => handleGenerateLicense(row.id, "trial")}>
+          <Key className="mr-2 h-4 w-4" /> 30-Day Trial
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => handleGenerateLicense(row.id, "pro")}>
+          <Key className="mr-2 h-4 w-4" /> Pro Annual
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="text-destructive focus:text-destructive focus:bg-destructive/10"
