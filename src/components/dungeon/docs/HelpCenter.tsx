@@ -138,7 +138,7 @@ export const HelpCenter = ({ isOpen, onOpenChange, initialSectionId }: HelpCente
                   },
                 }}
               >
-                {markdown}
+                {markdown || ""}
               </ReactMarkdown>
             </div>
           </ScrollArea>
