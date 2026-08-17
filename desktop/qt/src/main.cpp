@@ -42,6 +42,10 @@ int main(int argc, char *argv[])
     // Register "qml" root correctly for internal imports
     engine.addImportPath("qrc:/");
     engine.addImportPath("qrc:/qml");
+    engine.addImportPath("qrc:/qml/components");
+    engine.addImportPath("qrc:/qml/dialogs");
+    engine.addImportPath("qrc:/qml/panels");
+
     
     const QStringList resourcePaths = {
         "qrc:/qml/Main.qml"

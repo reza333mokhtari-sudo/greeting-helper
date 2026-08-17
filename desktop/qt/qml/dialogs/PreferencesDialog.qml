@@ -5,6 +5,7 @@ import Qt.labs.settings
 import "../components"
 
 
+
 Dialog {
     id: root
     title: qsTr("Preferences")
