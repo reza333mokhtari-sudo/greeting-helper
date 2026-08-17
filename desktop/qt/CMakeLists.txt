@@ -27,6 +27,7 @@ qt_add_executable(appDungeonEditor
     src/services/AiClient.h src/services/AiClient.cpp
     src/services/FileService.h src/services/FileService.cpp
     src/services/WorkspaceService.h src/services/WorkspaceService.cpp
+    src/services/LicenseService.h src/services/LicenseService.cpp
 )
 
 # Manual resource handling instead of qt_add_qml_module to avoid broken type registration
@@ -45,6 +46,11 @@ qt_add_resources(appDungeonEditor "qml_resources"
         qml/components/SettingsPanel.qml
         qml/components/CmsPanel.qml
         qml/components/RightDock.qml
+        qml/dialogs/BaseFloatingWindow.qml
+        qml/dialogs/WelcomeWindow.qml
+        qml/dialogs/AboutWindow.qml
+        qml/dialogs/LicenseWindow.qml
+        qml/dialogs/HelpWindow.qml
         assets/icon.png
 )
 

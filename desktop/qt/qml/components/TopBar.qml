@@ -82,6 +82,15 @@ Rectangle {
                 MenuItem { text: qsTr("Asset Browser") }
                 MenuItem { text: qsTr("Attributes Editor") }
             }
+            Menu {
+                title: qsTr("Help")
+                MenuItem { text: qsTr("Welcome Screen"); onTriggered: welcomeWindow.show() }
+                MenuItem { text: qsTr("Documentation"); onTriggered: helpWindow.show() }
+                MenuItem { text: qsTr("License Management..."); onTriggered: licenseWindow.show() }
+                MenuSeparator {}
+                MenuItem { text: qsTr("Check for Updates...") }
+                MenuItem { text: qsTr("About Dungeon Scrawl"); onTriggered: aboutWindow.show() }
+            }
         }
 
         Item { Layout.fillWidth: true }

@@ -217,7 +217,10 @@ export const adminTableQuery = createServerFn({ method: "POST" })
       };
     }
 
-    let query = (supabaseAdmin.from(table as PublicTable) as any).select("*", { count: "exact" });
+    // We cast to PostgrestFilterBuilder to ensure all builder methods like range() are recognized
+    // by the compiler and present at runtime.
+    const tableRef = supabaseAdmin.from(table as PublicTable);
+    let query = tableRef.select("*", { count: "exact" });
 
     if (data.search) {
       query = query.or(
@@ -227,7 +230,7 @@ export const adminTableQuery = createServerFn({ method: "POST" })
 
     const from = data.page * data.pageSize;
     const to = from + data.pageSize - 1;
-    query = query.range(from, to);
+    query = (query as any).range(from, to);
 
     if (data.sort) {
       query = query.order(data.sort.column, { ascending: data.sort.ascending });
