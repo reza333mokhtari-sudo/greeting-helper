@@ -12,44 +12,81 @@ Rectangle {
         spacing: 15
 
         Label {
-            text: qsTr("CMS Pages")
+            text: qsTr("Procedural Generator")
             color: "white"
             font.bold: true
             font.pixelSize: 18
         }
 
-        TextField {
-            id: searchBar
-            placeholderText: qsTr("Search pages...")
-            Layout.fillWidth: true
-            background: Rectangle { color: "#3c3c3c"; radius: 4 }
-            color: "white"
-        }
-
-        ListView {
-            id: cmsList
+        ScrollView {
             Layout.fillWidth: true
             Layout.fillHeight: true
             clip: true
-            model: 3 // Placeholder
-            delegate: ItemDelegate {
-                width: cmsList.width
-                contentItem: Column {
-                    spacing: 4
-                    Label { text: "Page Title " + (index + 1); color: "white"; font.bold: true }
-                    Label { text: "/slug-" + (index + 1); color: "#888"; font.pixelSize: 10 }
+            
+            ColumnLayout {
+                width: parent.width - 20
+                spacing: 20
+
+                GroupBox {
+                    title: qsTr("Dungeon Layout")
+                    Layout.fillWidth: true
+                    palette.windowText: "#aaa"
+                    
+                    ColumnLayout {
+                        spacing: 8
+                        Label { text: qsTr("Algorithm:"); color: "#888"; font.pixelSize: 11 }
+                        ComboBox {
+                            Layout.fillWidth: true
+                            model: ["Binary Space Partitioning", "Cellular Automata", "Random Walk", "Maze"]
+                        }
+                        
+                        RowLayout {
+                            Label { text: qsTr("Iterations:"); color: "#888"; font.pixelSize: 11 }
+                            SpinBox { value: 5; from: 1; to: 20; Layout.fillWidth: true }
+                        }
+                    }
                 }
-                background: Rectangle {
-                    color: hovered ? "#3c3c3c" : "transparent"
-                    radius: 4
+
+                GroupBox {
+                    title: qsTr("Room Parameters")
+                    Layout.fillWidth: true
+                    palette.windowText: "#aaa"
+                    
+                    ColumnLayout {
+                        spacing: 8
+                        RowLayout {
+                            Label { text: qsTr("Min Size:"); color: "#888"; font.pixelSize: 11 }
+                            SpinBox { value: 200; stepSize: 50; from: 50; to: 1000; Layout.fillWidth: true }
+                        }
+                        RowLayout {
+                            Label { text: qsTr("Max Size:"); color: "#888"; font.pixelSize: 11 }
+                            SpinBox { value: 500; stepSize: 50; from: 50; to: 2000; Layout.fillWidth: true }
+                        }
+                    }
+                }
+
+                GroupBox {
+                    title: qsTr("Connectivity")
+                    Layout.fillWidth: true
+                    palette.windowText: "#aaa"
+                    
+                    ColumnLayout {
+                        CheckBox { text: qsTr("Ensure Solvable"); checked: true; palette.windowText: "#ccc" }
+                        CheckBox { text: qsTr("Add Loops"); checked: false; palette.windowText: "#ccc" }
+                    }
                 }
             }
         }
 
         Button {
-            text: qsTr("Create New Page")
+            text: qsTr("Generate Dungeon")
             Layout.fillWidth: true
-            onClicked: console.log("Create new CMS page")
+            highlighted: true
+            onClicked: {
+                console.log("Generating procedural dungeon...")
+                // In a real impl, this would call a C++ service that adds objects to Document
+            }
         }
     }
 }
+
