@@ -5,29 +5,29 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Design system definition.
- *
- * The @theme inline block maps CSS custom properties to Tailwind utility
- * classes (e.g. --color-primary -> bg-primary, text-primary).
- *
- * The :root and .dark blocks define the actual color values using oklch.
- * All colors MUST use oklch format.
- *
- * To add a new semantic color:
- * 1. Add the variable to :root (light value) and .dark (dark value)
- * 2. Register it in @theme inline as --color-<name>: var(--<name>)
+ * Design System Tokens (Arcane Autodesk)
  */
 
 @theme inline {
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Segoe UI", sans-serif;
-  --radius-sm: calc(var(--radius) - 4px);
+  /* Typography */
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", "Fira Code", monospace;
+  
+  --text-xs: 0.7rem;
+  --text-sm: 0.825rem;
+  --text-base: 0.9375rem;
+  
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
 
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
+  /* Radii */
+  --radius-sm: 0.2rem;
+  --radius-md: 0.3rem;
+  --radius-lg: 0.375rem;
+
+  /* Colors - Functional mapping */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -47,105 +47,100 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-ring-offset-background: var(--background);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
+  --color-gold: var(--gold);
+  --color-gold-foreground: var(--gold-foreground);
+  
+  /* Sidebar context */
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-gold: var(--gold);
-  --color-gold-foreground: var(--gold-foreground);
 }
 
-
 :root {
-  --radius: 0.375rem;
-  /* Autodesk Professional Slate & Charcoal */
-  --background: oklch(0.15 0.02 240);
+  /* Light Theme - Autodesk "Modern" Grey */
+  --background: oklch(0.95 0.01 240);
+  --foreground: oklch(0.2 0.02 240);
+  
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.02 240);
+  
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2 0.02 240);
+  
+  --primary: oklch(0.55 0.15 220); /* Professional Cyber Blue */
+  --primary-foreground: oklch(1 0 0);
+  
+  --secondary: oklch(0.9 0.01 240);
+  --secondary-foreground: oklch(0.3 0.02 240);
+  
+  --muted: oklch(0.92 0.01 240);
+  --muted-foreground: oklch(0.45 0.02 240);
+  
+  --accent: oklch(0.88 0.01 240);
+  --accent-foreground: oklch(0.2 0.02 240);
+  
+  --destructive: oklch(0.6 0.18 25);
+  --destructive-foreground: oklch(0.98 0.02 45);
+  
+  --border: oklch(0.85 0.01 240);
+  --input: oklch(0.85 0.01 240);
+  --ring: oklch(0.55 0.15 220);
+  
+  --sidebar: oklch(0.93 0.01 240);
+  --sidebar-foreground: oklch(0.25 0.02 240);
+  --sidebar-primary: oklch(0.55 0.15 220);
+  --sidebar-border: oklch(0.88 0.01 240);
+  
+  --gold: oklch(0.7 0.12 88);
+  --gold-foreground: oklch(0.2 0.02 240);
+
+  --gradient-arcane: linear-gradient(135deg, var(--primary), var(--gold));
+  --shadow-arcane: 0 4px 12px -4px rgba(0, 0, 0, 0.1);
+}
+
+.dark {
+  /* Dark Theme - Arcane Autodesk Slate */
+  --background: oklch(0.14 0.01 240);
   --foreground: oklch(0.92 0.01 240);
-  --card: oklch(0.18 0.02 240);
+  
+  --card: oklch(0.18 0.01 240);
   --card-foreground: oklch(0.92 0.01 240);
-  --popover: oklch(0.2 0.02 240);
+  
+  --popover: oklch(0.2 0.01 240);
   --popover-foreground: oklch(0.92 0.01 240);
+  
   --primary: oklch(0.6 0.15 220); /* Professional Cyber Blue */
   --primary-foreground: oklch(0.98 0.01 240);
-  --secondary: oklch(0.25 0.02 240);
+  
+  --secondary: oklch(0.22 0.01 240);
   --secondary-foreground: oklch(0.85 0.02 240);
-  --muted: oklch(0.22 0.02 240);
+  
+  --muted: oklch(0.2 0.01 240);
   --muted-foreground: oklch(0.6 0.02 240);
-  --accent: oklch(0.3 0.03 240);
+  
+  --accent: oklch(0.25 0.01 240);
   --accent-foreground: oklch(0.95 0.02 240);
+  
   --destructive: oklch(0.55 0.18 25);
   --destructive-foreground: oklch(0.98 0.02 45);
-  --border: oklch(0.25 0.02 240);
-  --input: oklch(0.25 0.02 240);
+  
+  --border: oklch(0.22 0.01 240);
+  --input: oklch(0.22 0.01 240);
   --ring: oklch(0.6 0.15 220);
-  --chart-1: oklch(0.6 0.15 220);
-  --chart-2: oklch(0.78 0.12 88); /* Gold accent */
-  --chart-3: oklch(0.65 0.15 180);
-  --chart-4: oklch(0.7 0.16 200);
-  --chart-5: oklch(0.75 0.12 220);
-  --sidebar: oklch(0.12 0.02 240);
+  
+  --sidebar: oklch(0.12 0.01 240);
   --sidebar-foreground: oklch(0.9 0.02 240);
   --sidebar-primary: oklch(0.6 0.15 220);
-  --sidebar-primary-foreground: oklch(0.98 0.01 240);
-  --sidebar-accent: oklch(0.2 0.02 240);
-  --sidebar-accent-foreground: oklch(0.95 0.02 240);
-  --sidebar-border: oklch(0.2 0.02 240);
-  --sidebar-ring: oklch(0.6 0.15 220);
+  --sidebar-border: oklch(0.18 0.01 240);
+  
   --gold: oklch(0.78 0.12 88);
   --gold-foreground: oklch(0.15 0.02 240);
+  
   --gradient-arcane: linear-gradient(135deg, var(--primary), var(--gold));
   --shadow-arcane: 0 4px 20px -8px color-mix(in oklab, var(--primary) 30%, transparent);
 }
 
-
-.dark {
-  --background: oklch(0.12 0.02 240);
-  --foreground: oklch(0.9 0.01 240);
-  --card: oklch(0.14 0.02 240);
-  --card-foreground: oklch(0.9 0.01 240);
-  --popover: oklch(0.14 0.02 240);
-  --popover-foreground: oklch(0.9 0.01 240);
-  --primary: oklch(0.65 0.18 220);
-  --primary-foreground: oklch(0.12 0.02 240);
-  --secondary: oklch(0.18 0.02 240);
-  --secondary-foreground: oklch(0.9 0.01 240);
-  --muted: oklch(0.16 0.02 240);
-  --muted-foreground: oklch(0.65 0.02 240);
-  --accent: oklch(0.2 0.03 240);
-  --accent-foreground: oklch(0.98 0.01 240);
-  --destructive: oklch(0.6 0.18 25);
-  --destructive-foreground: oklch(0.98 0.02 45);
-  --border: oklch(0.2 0.02 240);
-  --input: oklch(0.2 0.02 240);
-  --ring: oklch(0.65 0.18 220);
-  --chart-1: oklch(0.65 0.18 220);
-  --chart-2: oklch(0.8 0.12 88);
-  --chart-3: oklch(0.65 0.14 180);
-  --chart-4: oklch(0.7 0.15 200);
-  --chart-5: oklch(0.75 0.12 220);
-  --sidebar: oklch(0.1 0.02 240);
-  --sidebar-foreground: oklch(0.85 0.01 240);
-  --sidebar-primary: oklch(0.65 0.18 220);
-  --sidebar-primary-foreground: oklch(0.1 0.01 240);
-  --sidebar-accent: oklch(0.15 0.02 240);
-  --sidebar-accent-foreground: oklch(0.95 0.01 240);
-  --sidebar-border: oklch(0.15 0.02 240);
-  --sidebar-ring: oklch(0.65 0.18 220);
-  --gold: oklch(0.8 0.12 88);
-  --gold-foreground: oklch(0.1 0.01 240);
-  --gradient-arcane: linear-gradient(135deg, var(--primary), var(--gold));
-  --shadow-arcane: 0 4px 20px -8px color-mix(in oklab, var(--primary) 40%, transparent);
-}
 
 
 @layer base {
