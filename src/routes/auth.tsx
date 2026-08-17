@@ -172,10 +172,25 @@ function AuthPage() {
   };
 
   const google = async () => {
+    setBusy(true);
+    setError(null);
     const result = await lovable.auth.signInWithOAuth("google", {
       redirect_uri: `${window.location.origin}${dest}`,
     });
-    if (result.error) toast.error("Google sign-in failed");
+    setBusy(false);
+    if (result.error) {
+      console.error("Google sign-in error:", result.error);
+      const m = result.error.message?.toLowerCase() || "";
+      if (m.includes("popup")) {
+        setError("The login window was closed before finishing. Please try again.");
+      } else if (m.includes("network")) {
+        setError("Connection issue. Please check your internet and try again.");
+      } else if (m.includes("unsupported")) {
+        setError("Google login is currently unavailable. Please try using your email.");
+      } else {
+        setError(result.error.message || "Google sign-in failed. Please try again or use your email.");
+      }
+    }
   };
 
   const ErrorDisplay = () => {
@@ -192,9 +207,15 @@ function AuthPage() {
               variant="link" 
               className="h-auto p-0 text-[10px] text-destructive-foreground/80 hover:text-destructive-foreground flex items-center gap-1 mt-1 font-bold uppercase tracking-wider"
               onClick={() => {
+                const prevError = error;
                 setError(null);
-                if (tab === "in") void signIn();
-                else void signUp();
+                if (prevError?.toLowerCase().includes("google")) {
+                  void google();
+                } else if (tab === "in") {
+                  void signIn();
+                } else {
+                  void signUp();
+                }
               }}
             >
               <RefreshCcw className="h-2.5 w-2.5" /> Retry
