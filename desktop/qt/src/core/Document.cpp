@@ -1,4 +1,4 @@
-#include "Document.h"
+#include <Document.h>
 #include <QFile>
 #include <QJsonDocument>
 #include <QUndoCommand>

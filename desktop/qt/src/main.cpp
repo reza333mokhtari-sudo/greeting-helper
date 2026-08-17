@@ -2,11 +2,11 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QIcon>
-#include "core/Document.h"
-#include "canvas/MapCanvasItem.h"
-#include "models/AssetLibraryModel.h"
-#include "services/AiClient.h"
-#include "services/FileService.h"
+#include <core/Document.h>
+#include <canvas/MapCanvasItem.h>
+#include <models/AssetLibraryModel.h>
+#include <services/AiClient.h>
+#include <services/FileService.h>
 
 int main(int argc, char *argv[])
 {
