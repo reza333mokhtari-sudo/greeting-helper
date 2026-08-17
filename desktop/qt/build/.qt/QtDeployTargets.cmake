@@ -1,0 +1,2 @@
+set(__QT_DEPLOY_TARGET_appDungeonEditor_FILE /dev-server/desktop/qt/build/appDungeonEditor)
+set(__QT_DEPLOY_TARGET_appDungeonEditor_TYPE EXECUTABLE)

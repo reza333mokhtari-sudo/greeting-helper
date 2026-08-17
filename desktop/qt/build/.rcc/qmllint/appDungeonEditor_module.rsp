@@ -1,0 +1,12 @@
+-I
+/dev-server/desktop/qt/build
+-I
+/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/qt-6/qml
+--resource
+/dev-server/desktop/qt/build/.qt/rcc/qmake_DungeonEditor.qrc
+--resource
+/dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_qml_0.qrc
+--resource
+/dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_res_0.qrc
+--module
+DungeonEditor
