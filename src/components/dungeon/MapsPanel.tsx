@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { Plus, Map, Trash2, Edit2, Share2, MoreVertical } from "lucide-react";
+import { Plus, Map, Trash2, Edit2, Share2, MoreVertical, Cloud, HardDrive } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,17 +11,19 @@ import {
 import { dialog } from "@/lib/dialog";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-
+import { listLocalMaps, listCloudMaps } from "@/lib/dungeon/storage";
 
 type MapEntry = {
   id: string;
   name: string;
-  updated_at: string;
-  is_public: boolean;
+  updated_at?: string;
+  lastModified?: number;
+  is_public?: boolean;
+  isCloud: boolean;
 };
 
 type Props = {
-  onLoadMap: (id: string) => void;
+  onLoadMap: (id: string, isCloud: boolean) => void;
   onNewMap: () => void;
   currentMapId?: string;
 };
@@ -30,60 +32,57 @@ export function MapsPanel({ onLoadMap, onNewMap, currentMapId }: Props) {
   const [maps, setMaps] = useState<MapEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // In a real app, we'd fetch from Supabase. 
-  // For now, we'll use a mix of local storage "cloud" simulation and Supabase if available.
-  useEffect(() => {
-    async function fetchMaps() {
-      setLoading(true);
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        
-        if (session) {
-          const { data, error } = await supabase
-            .from('dungeon_maps' as any)
-            .select('id, name, updated_at, is_public')
-            .order('updated_at', { ascending: false });
+  const fetchMaps = async () => {
+    setLoading(true);
+    try {
+      const [local, cloud] = await Promise.all([
+        listLocalMaps().catch(() => []),
+        listCloudMaps().catch(() => [])
+      ]);
 
-          if (error) throw error;
-          setMaps((data as any) || []);
-        } else {
-          // Fallback to local storage list if not logged in
-          const localMaps = JSON.parse(localStorage.getItem('dungeon-scrawl-maps-list') || '[]');
-          setMaps(localMaps);
-        }
-      } catch (err) {
-        console.error("Failed to fetch maps:", err);
-      } finally {
-        setLoading(false);
-      }
+      const combined: MapEntry[] = [
+        ...cloud.map((m: any) => ({ ...m, isCloud: true })),
+        ...local.map((m: any) => ({ ...m, updated_at: new Date(m.lastModified).toISOString(), isCloud: false }))
+      ].sort((a, b) => {
+        const dateA = new Date(a.updated_at || 0).getTime();
+        const dateB = new Date(b.updated_at || 0).getTime();
+        return dateB - dateA;
+      });
+
+      setMaps(combined);
+    } catch (err) {
+      console.error("Failed to fetch maps:", err);
+    } finally {
+      setLoading(false);
     }
+  };
 
+  useEffect(() => {
     fetchMaps();
   }, []);
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: string, isCloud: boolean) => {
     const ok = await dialog.confirm({
       title: "Delete Map",
-      message: "Are you sure you want to delete this map? This action cannot be undone.",
+      message: `Are you sure you want to delete this ${isCloud ? 'cloud' : 'local'} map? This action cannot be undone.`,
       confirmText: "Delete",
       variant: "danger"
     });
     if (!ok) return;
 
     try {
+      if (isCloud) {
+        await supabase.from('maps').delete().eq('id', id);
+      } else {
+        const localMaps = JSON.parse(localStorage.getItem('dungeon-local-maps') || '{}');
+        delete localMaps[id];
+        localStorage.setItem('dungeon-local-maps', JSON.stringify(localMaps));
+      }
       setMaps(prev => prev.filter(m => m.id !== id));
       toast.success("Map deleted");
     } catch (err) {
       toast.error("Failed to delete map");
     }
-  };
-
-  const handleRename = async (id: string, oldName: string) => {
-    const newName = await dialog.prompt("Rename Map", oldName, "Enter new name:");
-    if (!newName || newName === oldName) return;
-
-    setMaps(prev => prev.map(m => m.id === id ? { ...m, name: newName } : m));
-    toast.success("Map renamed");
   };
 
   return (
@@ -103,7 +102,7 @@ export function MapsPanel({ onLoadMap, onNewMap, currentMapId }: Props) {
           {loading ? (
             <div className="p-4 text-center text-xs text-muted-foreground">Loading maps...</div>
           ) : maps.length === 0 ? (
-            <div className="p-4 text-center text-xs text-muted-foreground">No maps found. Create your first one!</div>
+            <div className="p-4 text-center text-xs text-muted-foreground">No maps found.</div>
           ) : (
             maps.map((map) => (
               <div
@@ -111,12 +110,19 @@ export function MapsPanel({ onLoadMap, onNewMap, currentMapId }: Props) {
                 className={`group flex items-center gap-2 p-2 rounded-md transition-colors cursor-pointer ${
                   currentMapId === map.id ? 'bg-accent text-accent-foreground' : 'hover:bg-accent/50'
                 }`}
-                onClick={() => onLoadMap(map.id)}
+                onClick={() => onLoadMap(map.id, map.isCloud)}
               >
                 <div className="flex-1 min-w-0">
-                  <div className="text-xs font-medium truncate">{map.name || "Untitled Map"}</div>
+                  <div className="flex items-center gap-1.5">
+                    {map.isCloud ? (
+                      <Cloud className="size-3 text-primary shrink-0" />
+                    ) : (
+                      <HardDrive className="size-3 text-muted-foreground shrink-0" />
+                    )}
+                    <span className="text-xs font-medium truncate">{map.name || "Untitled Map"}</span>
+                  </div>
                   <div className="text-[10px] text-muted-foreground">
-                    {new Date(map.updated_at).toLocaleDateString()}
+                    {map.updated_at ? new Date(map.updated_at).toLocaleDateString() : 'Unknown date'}
                   </div>
                 </div>
 
@@ -127,15 +133,9 @@ export function MapsPanel({ onLoadMap, onNewMap, currentMapId }: Props) {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleRename(map.id, map.name); }}>
-                      <Edit2 className="size-3 mr-2" /> Rename
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={(e) => { e.stopPropagation(); }}>
-                      <Share2 className="size-3 mr-2" /> Share
-                    </DropdownMenuItem>
                     <DropdownMenuItem 
                       className="text-destructive focus:text-destructive" 
-                      onClick={(e) => { e.stopPropagation(); handleDelete(map.id); }}
+                      onClick={(e) => { e.stopPropagation(); handleDelete(map.id, map.isCloud); }}
                     >
                       <Trash2 className="size-3 mr-2" /> Delete
                     </DropdownMenuItem>

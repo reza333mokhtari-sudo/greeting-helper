@@ -14,7 +14,7 @@ ApplicationWindow {
     visible: true
     title: "DUNGEON SCRAWL - Professional Editor"
     
-    background: Rectangle { color: "#121212" }
+    background: Rectangle { color: "#0a0a0a" }
 
     Document { id: mapDoc }
     AssetLibraryModel { id: assetModel }
@@ -22,7 +22,8 @@ ApplicationWindow {
     AiClient { id: aiClient }
 
     Component.onCompleted: {
-        assetModel.loadManifest("assets/soulslike/manifest.json")
+        console.log("Dungeon Scrawl Desktop Shell Initialized");
+        assetModel.loadManifest("assets/soulslike/manifest.json");
     }
 
     ColumnLayout {
@@ -36,12 +37,6 @@ ApplicationWindow {
             canvas: canvas
         }
         
-        Rectangle {
-            Layout.fillWidth: true
-            height: 1
-            color: "#333"
-        }
-
         SplitView {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -49,7 +44,7 @@ ApplicationWindow {
             
             handle: Rectangle {
                 implicitWidth: 2
-                color: SplitView.isPressed ? "#007acc" : "#2d2d2d"
+                color: SplitView.isPressed ? "#3b82f6" : "#222"
             }
 
             ToolRail {
@@ -74,19 +69,28 @@ ApplicationWindow {
                 Rectangle {
                     anchors.bottom: parent.bottom
                     anchors.left: parent.left
-                    anchors.margins: 15
-                    color: "#cc1e1e1e"
-                    border.color: "#444"
-                    radius: 4
-                    width: coordsLabel.width + 20
-                    height: coordsLabel.height + 10
+                    anchors.margins: 16
+                    color: "#cc121212"
+                    border.color: "#333"
+                    radius: 6
+                    width: coordsLayout.width + 24
+                    height: coordsLayout.height + 12
+                    
                     RowLayout {
+                        id: coordsLayout
                         anchors.centerIn: parent
-                        spacing: 10
+                        spacing: 12
+                        Label {
+                            text: "GRID SNAP"
+                            color: "#3b82f6"
+                            font.pixelSize: 9
+                            font.bold: true
+                            font.letterSpacing: 1
+                        }
                         Label {
                             id: coordsLabel
                             text: "X: " + Math.round(canvas.cursorWorldPos.x) + "  Y: " + Math.round(canvas.cursorWorldPos.y)
-                            color: "#ccc"
+                            color: "#eee"
                             font.pixelSize: 11
                             font.family: "Monospace"
                         }

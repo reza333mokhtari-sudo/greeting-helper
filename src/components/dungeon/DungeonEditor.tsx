@@ -150,7 +150,10 @@ export function DungeonEditor() {
   const [ngon, setNgon] = useState<NgonOpts>(DEFAULT_NGON);
   const [cursor, setCursor] = useState<Pt>({ x: 0, y: 0 });
   const [spaceDown, setSpaceDown] = useState(false);
-  const [activeLayer, setActiveLayer] = useState<string>(() => emptyDoc().layers[0]!.id);
+  const [activeLayer, setActiveLayer] = useState<string>(() => {
+    const d = emptyDoc();
+    return d.layers?.[0]?.id || "layer-1";
+  });
   const [fogMode, setFogMode] = useState<FogMode>("brush");
   const [fogBrush, setFogBrush] = useState(96);
   const [leftPanel, setLeftPanel] = useState<PanelId | null>("settings");
@@ -310,9 +313,9 @@ export function DungeonEditor() {
       setPreview(null);
       setPolyPts([]);
       setAiPreview(null);
-      commit((d) => switchFloor(d, id), "Switch floor");
+      setDocState((d) => switchFloor(d, id));
     },
-    [commit],
+    [],
   );
 
 
@@ -346,6 +349,16 @@ export function DungeonEditor() {
   // load / autosave
   useEffect(() => {
     try {
+      // Check if we have a specific map ID in the URL to load
+      const params = new URLSearchParams(window.location.search);
+      const mapId = params.get("id");
+      const isCloud = params.get("cloud") === "true";
+
+      if (mapId) {
+         // Logic for loading specific map would go here
+         // For now we still default to the last session if not implemented
+      }
+
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw) as Partial<Doc>;

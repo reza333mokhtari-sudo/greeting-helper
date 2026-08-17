@@ -5,7 +5,7 @@ project(DungeonEditor VERSION 1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Gui Qml Quick Network QuickControls2 Concurrent Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network QuickControls2 Concurrent Widgets)
 
 qt_standard_project_setup()
 
@@ -35,6 +35,7 @@ qt_add_qml_module(appDungeonEditor
         qml/components/ObjectsPanel.qml
         qml/components/SettingsPanel.qml
         qml/components/CmsPanel.qml
+        qml/components/RightDock.qml
 )
 
 target_link_libraries(appDungeonEditor PRIVATE 
