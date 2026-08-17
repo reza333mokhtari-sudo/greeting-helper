@@ -108,16 +108,27 @@ function AuthPage() {
     const { data, error } = await supabase.auth.signUp({
       email: email.trim(),
       password,
-      options: { emailRedirectTo: window.location.origin, data: { display_name: name.trim() || email.split("@")[0] } },
+      options: { 
+        emailRedirectTo: window.location.origin, 
+        data: { 
+          full_name: name.trim() || email.split("@")[0],
+          display_name: name.trim() || email.split("@")[0]
+        } 
+      },
     });
     setBusy(false);
     if (error) {
+      console.error("Signup error:", error);
       const m = error.message.toLowerCase();
       if (m.includes("already registered") || m.includes("already been registered")) {
         setError("That email already has an account. Would you like to sign in instead?");
         return;
       }
-      setError(error.message);
+      if (m.includes("weak") || m.includes("guess")) {
+        setError("Password is too common or weak. Please choose a stronger one.");
+        return;
+      }
+      setError(error.message || "An error occurred during sign up. Please try again.");
       return;
     }
     if (!data.session) toast.success("Check your email to confirm your account.");
