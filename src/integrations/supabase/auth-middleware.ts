@@ -41,9 +41,13 @@ export const requireSupabaseAuth = createMiddleware({ type: "function" }).server
         ...(!SUPABASE_URL ? ["SUPABASE_URL"] : []),
         ...(!SUPABASE_PUBLISHABLE_KEY ? ["SUPABASE_PUBLISHABLE_KEY"] : []),
       ];
-      const message = `Missing Supabase environment variable(s): ${missing.join(", ")}. Connect Supabase in Lovable Cloud.`;
-      console.error(`[Supabase] ${message}`);
-      throw new Error(message);
+      const message = `Supabase is not configured. Connect it in Lovable Cloud. Missing: ${missing.join(", ")}`;
+      console.warn(`[Supabase] ${message}`);
+      // Instead of throwing a hard error that crashes the boot, we return a 503 response.
+      return new Response(JSON.stringify({ error: message }), {
+        status: 503,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
     const request = getRequest();
