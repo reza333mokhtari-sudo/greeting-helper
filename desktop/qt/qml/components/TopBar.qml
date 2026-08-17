@@ -79,14 +79,27 @@ Rectangle {
             
             Menu {
                 title: qsTr("File")
-                MenuItem { text: qsTr("New Map"); onTriggered: document.clear() }
-                MenuItem { text: qsTr("Open..."); onTriggered: openDialog.open() }
+                MenuItem { 
+                    text: qsTr("New Map"); onTriggered: document.clear()
+                    icon.source: "../../assets/icons/menu/new.svg"
+                }
+                MenuItem { 
+                    text: qsTr("Open..."); onTriggered: openDialog.open()
+                    icon.source: "../../assets/icons/menu/open.svg"
+                }
                 MenuSeparator {}
-                MenuItem { text: qsTr("Save"); onTriggered: saveDialog.open() }
+                MenuItem { 
+                    text: qsTr("Save"); onTriggered: saveDialog.open()
+                    icon.source: "../../assets/icons/menu/save.svg"
+                }
                 MenuItem { text: qsTr("Export PNG") }
                 MenuSeparator {}
-                MenuItem { text: qsTr("Preferences..."); onTriggered: preferencesDialog.open() }
+                MenuItem { 
+                    text: qsTr("Preferences..."); onTriggered: preferencesDialog.open()
+                    icon.source: "../../assets/icons/general/settings.svg"
+                }
                 MenuItem { text: qsTr("Exit"); onTriggered: Qt.quit() }
+
             }
             Menu {
                 title: qsTr("Edit")
@@ -106,9 +119,10 @@ Rectangle {
             }
             Menu {
                 title: qsTr("View")
-                MenuItem { text: qsTr("Zoom In"); onTriggered: canvas.zoomIn() }
-                MenuItem { text: qsTr("Zoom Out"); onTriggered: canvas.zoomOut() }
-                MenuItem { text: qsTr("Fit to Screen"); onTriggered: canvas.fitToScreen() }
+                MenuItem { text: qsTr("Zoom In"); onTriggered: canvas.zoomIn(); icon.source: "../../assets/icons/menu/zoom_in.svg" }
+                MenuItem { text: qsTr("Zoom Out"); onTriggered: canvas.zoomOut(); icon.source: "../../assets/icons/menu/zoom_out.svg" }
+                MenuItem { text: qsTr("Fit to Screen"); onTriggered: canvas.fitToScreen(); icon.source: "../../assets/icons/general/fit_to_screen.svg" }
+
                 MenuSeparator {}
                 MenuItem { text: qsTr("Fullscreen Viewport"); shortcut: "Ctrl+Space" }
             }
