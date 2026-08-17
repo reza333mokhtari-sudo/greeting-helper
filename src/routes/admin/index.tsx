@@ -82,6 +82,10 @@ function AdminConsole() {
   const [sort, setSort] = useState<{ column: string; ascending: boolean } | null>(null);
   const [search, setSearch] = useState("");
 
+  // Stats State
+  const [stats, setStats] = useState<any>(null);
+  const [statsLoading, setStatsLoading] = useState(false);
+
   // Detail/Edit state
   const [selectedRow, setSelectedRow] = useState<any>(null);
   const [editingRow, setEditingRow] = useState<any>(null);
@@ -91,6 +95,8 @@ function AdminConsole() {
   const updateTable = useServerFn(adminTableUpdate);
   const deleteFromTable = useServerFn(adminTableDelete);
   const checkAccess = useServerFn(checkAdminAccess);
+  const fetchStats = useServerFn(getAdminStats);
+
 
   const loadData = useCallback(async () => {
     if (!activeTable) return;
