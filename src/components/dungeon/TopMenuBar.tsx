@@ -2,7 +2,7 @@ import { useState, useEffect, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { Map, User } from "lucide-react";
 import { ProfileMenu } from "./ProfileMenu";
-import { HealthCheckIndicator } from "./HealthCheckIndicator";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
@@ -148,10 +148,12 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
         {props.dirty ? <span className="ml-2 text-[10px] text-amber-500 animate-pulse font-bold">● Saving…</span> : null}
       </div>
 
-      <div className="ml-auto flex items-center gap-3">
+      <div className="ml-auto flex items-center gap-2">
         {props.right}
+        <ThemeToggle />
+        <div className="h-4 w-px bg-border mx-1" />
         {loading ? (
-          <div className="h-9 w-9 animate-pulse rounded-full bg-muted border border-border/40 shadow-sm" />
+          <div className="h-8 w-8 animate-pulse rounded-full bg-muted border border-border/40" />
         ) : (
           <ProfileMenu onAuthRequired={props.onAuthRequired} />
         )}

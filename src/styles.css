@@ -152,7 +152,15 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: -0.01em;
   }
 }
 
@@ -163,12 +171,24 @@
   color: transparent;
 }
 
+/* 
+ * Layout & Scaling 
+ */
+.dungeon-editor-layout {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: 3.5rem 1fr 2rem;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
 .resize-handle {
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
-  width: 4px;
+  width: 2px;
   cursor: col-resize;
   background: transparent;
   transition: background 0.2s;
@@ -178,16 +198,31 @@
 .resize-handle:hover,
 .resize-handle.is-resizing {
   background: var(--primary);
-  width: 4px;
+  width: 2px;
 }
 
 .panel-scroll {
   scrollbar-width: thin;
-  scrollbar-color: color-mix(in oklab, var(--primary) 45%, transparent) transparent;
+  scrollbar-color: color-mix(in oklab, var(--primary) 20%, transparent) transparent;
   overflow-y: auto;
   overflow-x: hidden;
 }
 
+/* 
+ * Accessibility & Interaction 
+ */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.group:focus-within {
+  outline: none;
+}
+
+/* 
+ * Animation System 
+ */
 @keyframes icon-pulse {
   0% { transform: scale(1); filter: drop-shadow(0 0 0px var(--primary)); }
   50% { transform: scale(1.05); filter: drop-shadow(0 0 8px var(--primary)); }
@@ -199,46 +234,22 @@
   to { stroke-dashoffset: 0; }
 }
 
-/* Base states */
 svg.animated-icon path,
 svg.animated-icon circle,
 svg.animated-icon rect {
   transition: all 0.3s ease;
   stroke: currentColor;
+  stroke-width: 1.5;
 }
 
-/* Full Intensity (2) */
 [data-animation="2"] .animate-icon-pulse {
   animation: icon-pulse 2s infinite ease-in-out;
 }
+
 [data-animation="2"] .group:hover svg.animated-icon path {
   stroke-dasharray: 100;
   stroke-dashoffset: 0;
   animation: dash 1.5s ease-in-out;
-}
-
-/* Subtle Intensity (1) */
-[data-animation="1"] .animate-icon-pulse {
-  animation: icon-pulse 4s infinite ease-in-out;
-  filter: none;
-}
-[data-animation="1"] .group:hover svg.animated-icon {
-  transform: scale(1.05);
-}
-
-/* Off (0) */
-[data-animation="0"] .animate-icon-pulse {
-  animation: none;
-  filter: none;
-}
-[data-animation="0"] .group:hover svg.animated-icon path {
-  animation: none;
-}
-
-/* High Contrast & Accessibility */
-.group:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
 }
 
 .group:hover svg.animated-icon,
@@ -250,3 +261,4 @@ svg.animated-icon rect {
 .dark .group:focus-visible svg.animated-icon {
   color: var(--gold);
 }
+
