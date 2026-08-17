@@ -22,24 +22,28 @@ Rectangle {
             spacing: 8
 
             Button {
-                text: "New"
                 flat: true
-                font.pixelSize: 11
-                palette.buttonText: "#aaa"
+                contentItem: RowLayout {
+                    AppIcon { icon: "menu/new"; size: 14; color: "#aaa" }
+                    Label { text: "New"; font.pixelSize: 11; color: "#aaa" }
+                }
                 onClicked: document.clear()
             }
             Button {
-                text: "Open"
                 flat: true
-                font.pixelSize: 11
-                palette.buttonText: "#aaa"
+                contentItem: RowLayout {
+                    AppIcon { icon: "menu/open"; size: 14; color: "#aaa" }
+                    Label { text: "Open"; font.pixelSize: 11; color: "#aaa" }
+                }
             }
             Button {
-                text: "Save"
                 flat: true
-                font.pixelSize: 11
-                palette.buttonText: "#aaa"
+                contentItem: RowLayout {
+                    AppIcon { icon: "menu/save"; size: 14; color: "#aaa" }
+                    Label { text: "Save"; font.pixelSize: 11; color: "#aaa" }
+                }
             }
+
 
             Rectangle { width: 1; height: 16; color: "#3e3e42" }
 
@@ -52,16 +56,16 @@ Rectangle {
 
             Rectangle { width: 1; height: 16; color: "#3e3e42" }
 
-            // Snapping
             RowLayout {
                 spacing: 4
                 ToolButton { 
-                    text: "Grid"
+                    contentItem: AppIcon { icon: "tools/grid"; size: 16; active: document ? document.snapEnabled : true }
                     checkable: true
                     checked: document ? document.snapEnabled : true
                     onToggled: if (document) document.snapEnabled = checked
                 }
             }
+
 
             Item { Layout.fillWidth: true }
         }
