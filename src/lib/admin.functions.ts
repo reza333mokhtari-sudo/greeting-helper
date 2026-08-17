@@ -199,14 +199,14 @@ export const adminTableQuery = createServerFn({ method: "POST" })
       } = await query;
       if (error) throw new Error(error.message);
 
-      const unverifiedUsers = users.filter((u) => !u.email_confirmed_at);
+      const unverifiedUsers = users.filter((u: any) => !u.email_confirmed_at);
 
       const from = data.page * data.pageSize;
       const to = from + data.pageSize;
       const slicedUsers = unverifiedUsers.slice(from, to);
 
       return {
-        rows: slicedUsers.map((u) => ({
+        rows: slicedUsers.map((u: any) => ({
           id: u.id,
           email: u.email,
           created_at: u.created_at,
