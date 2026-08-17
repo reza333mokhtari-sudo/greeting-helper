@@ -150,7 +150,10 @@ export function DungeonEditor() {
   const [ngon, setNgon] = useState<NgonOpts>(DEFAULT_NGON);
   const [cursor, setCursor] = useState<Pt>({ x: 0, y: 0 });
   const [spaceDown, setSpaceDown] = useState(false);
-  const [activeLayer, setActiveLayer] = useState<string>(() => emptyDoc().layers[0]!.id);
+  const [activeLayer, setActiveLayer] = useState<string>(() => {
+    const d = emptyDoc();
+    return d.layers?.[0]?.id || "layer-1";
+  });
   const [fogMode, setFogMode] = useState<FogMode>("brush");
   const [fogBrush, setFogBrush] = useState(96);
   const [leftPanel, setLeftPanel] = useState<PanelId | null>("settings");
