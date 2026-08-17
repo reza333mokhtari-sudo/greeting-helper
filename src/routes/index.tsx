@@ -64,7 +64,7 @@ function LandingPage() {
           <span className="text-xl font-bold tracking-tight">DUNGEON SCRAWL</span>
         </div>
         <nav className="flex items-center gap-4">
-          {user ? (
+          {user && (
             <Link to="/editor" className="flex items-center gap-2 group">
                <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 overflow-hidden">
                 {user.user_metadata?.avatar_url ? (
@@ -77,8 +77,6 @@ function LandingPage() {
                  {user.user_metadata?.display_name || user.email?.split('@')[0]}
                </span>
             </Link>
-          ) : (
-            <Link to="/auth" className="text-sm font-medium hover:text-primary transition-colors">Sign In</Link>
           )}
           <Button asChild size="sm" className="shadow-lg shadow-primary/20">
             <Link to="/editor">Launch Editor</Link>
