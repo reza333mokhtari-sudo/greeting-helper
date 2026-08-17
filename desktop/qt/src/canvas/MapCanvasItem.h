@@ -2,10 +2,12 @@
 #include <QQuickPaintedItem>
 #include <QPointF>
 #include <QJsonObject>
-#include <Document.h>
+#include <QtQml/qqmlregistration.h>
+#include <core/Document.h>
 
 class MapCanvasItem : public QQuickPaintedItem {
     Q_OBJECT
+    QML_ELEMENT
     Q_PROPERTY(Document* document READ document WRITE setDocument NOTIFY documentChanged)
     Q_PROPERTY(QString activeTool READ activeTool WRITE setActiveTool NOTIFY activeToolChanged)
     Q_PROPERTY(QString selectedId READ selectedId NOTIFY selectionChanged)
