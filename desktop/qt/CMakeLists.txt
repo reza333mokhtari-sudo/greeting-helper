@@ -26,6 +26,7 @@ qt_add_executable(appDungeonEditor
     src/models/AssetLibraryModel.h src/models/AssetLibraryModel.cpp
     src/services/AiClient.h src/services/AiClient.cpp
     src/services/FileService.h src/services/FileService.cpp
+    src/services/WorkspaceService.h src/services/WorkspaceService.cpp
 )
 
 # Manual resource handling instead of qt_add_qml_module to avoid broken type registration
