@@ -290,8 +290,10 @@ export const adminVerifyUser = createServerFn({ method: "POST" })
       payload: { email: user.user.email },
     });
 
-    // Note: Manual confirmation email sending would happen here if supported by an email provider.
-    // Supabase admin.updateUserById doesn't automatically send a "you are verified" email.
+    // 3. (Mock/Simulate) Send confirmation email to client
+    console.log(`[Admin] Sending confirmation email to ${user.user.email}`);
+    // In production, you would use an email provider like Resend or SendGrid here.
+
     
     return { success: true };
   });
