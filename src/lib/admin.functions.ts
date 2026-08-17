@@ -245,3 +245,83 @@ export const adminTableDelete = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { success: true };
   });
+
+export const adminResendVerification = createServerFn({ method: "POST" })
+  .inputValidator((d) => z.object({ email: z.string().email() }).parse(d))
+  .handler(async ({ data }) => {
+    await checkAdminAccess();
+    
+    // Using service role to trigger otp email
+    const { error } = await supabaseAdmin.auth.admin.generateLink({
+      type: 'signup',
+      email: data.email,
+    });
+
+    if (error) throw new Error(error.message);
+    return { success: true };
+  });
+
+export const adminVerifyUser = createServerFn({ method: "POST" })
+  .inputValidator((d) => z.object({ userId: z.string() }).parse(d))
+  .handler(async ({ data, context }) => {
+    const { userId: adminId } = context as any;
+    await checkAdminAccess();
+
+    // 1. Update auth.users using admin client
+    const { data: user, error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
+      data.userId,
+      { email_confirm: true }
+    );
+
+    if (updateError) throw new Error(updateError.message);
+
+    // 2. Log audit trail
+    await (supabaseAdmin.from("admin_audit_logs") as any).insert({
+      admin_id: adminId,
+      action: "VERIFY_USER",
+      table_name: "auth.users",
+      row_id: data.userId,
+      payload: { email: user.user.email },
+    });
+
+    // Note: Manual confirmation email sending would happen here if supported by an email provider.
+    // Supabase admin.updateUserById doesn't automatically send a "you are verified" email.
+    
+    return { success: true };
+  });
+
+export const adminGetUserStats = createServerFn({ method: "GET" })
+  .inputValidator((d) => z.object({ userId: z.string() }).parse(d))
+  .handler(async ({ data }) => {
+    await checkAdminAccess();
+
+    const { count, error } = await (supabaseAdmin.from("maps") as any)
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", data.userId);
+
+    if (error) throw new Error(error.message);
+
+    return { mapCount: count || 0 };
+  });
+
+export const adminDeleteUser = createServerFn({ method: "POST" })
+  .inputValidator((d) => z.object({ userId: z.string() }).parse(d))
+  .handler(async ({ data, context }) => {
+    const { userId: adminId } = context as any;
+    await checkAdminAccess();
+
+    // 1. Delete user from auth (cascades to user_roles if configured, but let's be safe)
+    const { error: deleteError } = await supabaseAdmin.auth.admin.deleteUser(data.userId);
+    if (deleteError) throw new Error(deleteError.message);
+
+    // 2. Log audit trail
+    await (supabaseAdmin.from("admin_audit_logs") as any).insert({
+      admin_id: adminId,
+      action: "DELETE_USER",
+      table_name: "auth.users",
+      row_id: data.userId,
+      payload: { deleted_user_id: data.userId },
+    });
+
+    return { success: true };
+  });
