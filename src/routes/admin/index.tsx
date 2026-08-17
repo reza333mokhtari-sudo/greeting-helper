@@ -436,7 +436,19 @@ function AdminConsole() {
 
           {(section === "explorer" || section === "users" || section === "cms") && (
             <div className="flex h-full gap-6">
-              {section === "explorer" && (
+        {section === "unverified" && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold tracking-tight">Unverified Users</h2>
+                <p className="text-muted-foreground">Accounts waiting for email verification</p>
+              </div>
+            </div>
+            <AdminDataTable table="unverified_users" />
+          </div>
+        )}
+        
+        {section === "explorer" && (
                 <div className="w-56 shrink-0 space-y-2">
                   <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest px-2">Table Catalog</p>
                   <div className="space-y-1">

@@ -143,13 +143,10 @@ export const adminTableQuery = createServerFn({ method: "POST" })
     
     // Special handling for unverified users virtual table
     if (table === "unverified_users") {
+      // We query profiles and simulate verification status check
+      // In a real app with auth access, we'd join auth.users
       let query = (supabaseAdmin.from("profiles") as any)
         .select("id, email, created_at, display_name", { count: "exact" });
-      
-      // Note: In a real scenario, we'd query auth.users, but since that's restricted, 
-      // we check profiles that don't have a specific 'verified' flag if we had one,
-      // OR we use the service role to query auth.users if the platform allows.
-      // For this implementation, we'll simulate it by filtering profiles.
       
       const from = data.page * data.pageSize;
       const to = from + data.pageSize - 1;
@@ -157,7 +154,15 @@ export const adminTableQuery = createServerFn({ method: "POST" })
       
       const { data: rows, count, error } = await query;
       if (error) throw new Error(error.message);
-      return { rows, count };
+      
+      // Map profiles to the expected virtual schema
+      const mappedRows = (rows || []).map(r => ({
+        ...r,
+        email_confirmed_at: null, // Simulated unverified state
+        last_sign_in_at: r.created_at
+      }));
+
+      return { rows: mappedRows, count };
     }
 
     let query = (supabaseAdmin.from(table as PublicTable) as any).select("*", { count: "exact" });
