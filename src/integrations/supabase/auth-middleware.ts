@@ -43,11 +43,7 @@ export const requireSupabaseAuth = createMiddleware({ type: "function" }).server
       ];
       const message = `Supabase is not configured. Connect it in Lovable Cloud. Missing: ${missing.join(", ")}`;
       console.warn(`[Supabase] ${message}`);
-      // Instead of throwing a hard error that crashes the boot, we return a 503 response.
-      return new Response(JSON.stringify({ error: message }), {
-        status: 503,
-        headers: { "Content-Type": "application/json" },
-      });
+      throw new Error(message);
     }
 
     const request = getRequest();
