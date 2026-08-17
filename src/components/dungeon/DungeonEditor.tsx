@@ -596,7 +596,7 @@ export function DungeonEditor() {
   }, [doc, view, preview, selected, polyPts, cursor, aiPreview]);
 
   useEffect(() => {
-    let raf = requestAnimationFrame(draw);
+    const raf = requestAnimationFrame(draw);
     return () => cancelAnimationFrame(raf);
   }, [draw]);
 

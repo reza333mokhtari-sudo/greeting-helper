@@ -31,11 +31,8 @@ export function ViewCube({ settings, onUpdateSettings, onResetView, className }:
     const dy = e.clientY - dragStart.current.y;
 
     const sensitivity = 0.5;
-    let nextYaw = dragStart.current.yaw - dx * sensitivity;
-    let nextPitch = dragStart.current.pitch + dy * sensitivity;
-
-    // Clamp pitch to avoid gimbal lock or flipping
-    nextPitch = Math.max(5, Math.min(85, nextPitch));
+    const nextYaw = dragStart.current.yaw - dx * sensitivity;
+    const nextPitch = Math.max(5, Math.min(85, dragStart.current.pitch + dy * sensitivity));
 
     onUpdateSettings({
       cameraYaw: nextYaw,
