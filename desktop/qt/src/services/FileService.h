@@ -1,7 +1,8 @@
-#pragma once
 #include <QObject>
 #include <QString>
 #include <QtQml/qqmlregistration.h>
+
+#pragma once
 
 class FileService : public QObject {
     Q_OBJECT

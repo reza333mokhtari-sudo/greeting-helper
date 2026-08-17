@@ -1,9 +1,10 @@
-#pragma once
 #include <QObject>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QUndoStack>
 #include <QtQml/qqmlregistration.h>
+
+#pragma once
 
 class Document : public QObject {
     Q_OBJECT
@@ -16,7 +17,7 @@ class Document : public QObject {
     Q_PROPERTY(bool gridVisible READ gridVisible WRITE setGridVisible NOTIFY gridVisibleChanged)
     Q_PROPERTY(bool snapEnabled READ snapEnabled WRITE setSnapEnabled NOTIFY snapEnabledChanged)
     Q_PROPERTY(QJsonArray floors READ floors NOTIFY floorsChanged)
-    Q_PROPERTY(QJsonArray layers READ layers NOTIFY layersChanged)
+    Q_PROPERTY(QJsonArray floors READ layers NOTIFY layersChanged)
 
 public:
     explicit Document(QObject *parent = nullptr);
