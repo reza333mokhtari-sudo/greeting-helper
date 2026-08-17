@@ -201,7 +201,7 @@ function AuthPage() {
           Continue with Google
         </Button>
 
-        <Tabs value={tab} onValueChange={(v) => setTab(v as "in" | "up")}>
+        <Tabs value={tab} onValueChange={(v) => { setTab(v as "in" | "up"); setError(null); }}>
           <TabsList className="mb-3 w-full">
             <TabsTrigger className="flex-1" value="in">
               Sign in
