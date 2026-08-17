@@ -128,11 +128,11 @@ void MapCanvasItem::mousePressEvent(QMouseEvent *event) {
             m_drawStart = worldPos;
         } else if (m_activeTool == "pan") {
             m_isPanning = true;
-            setCursor(Qt::ClosedHandCursor);
+            setCursor(QCursor(Qt::ClosedHandCursor));
         }
     } else if (event->button() == Qt::MiddleButton || event->button() == Qt::RightButton) {
         m_isPanning = true;
-        setCursor(Qt::ClosedHandCursor);
+        setCursor(QCursor(Qt::ClosedHandCursor));
     }
     update();
 }

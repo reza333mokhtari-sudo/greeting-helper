@@ -2,6 +2,8 @@
 #include <QQuickPaintedItem>
 #include <QPointF>
 #include <QJsonObject>
+#include <QPainterPath>
+#include <QCursor>
 #include <QtQml/qqmlregistration.h>
 #include <core/Document.h>
 
