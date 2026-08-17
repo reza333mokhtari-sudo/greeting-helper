@@ -41,7 +41,7 @@ export function LeftRail({ active, onSelect, animationIntensity = 2, isLoggedIn,
   return (
     <TooltipProvider delayDuration={200}>
       <nav 
-        className="flex w-12 shrink-0 flex-col items-center gap-1 border-r border-border bg-sidebar py-2"
+        className="flex w-10 shrink-0 flex-col items-center gap-1 border-r border-border bg-sidebar py-1.5"
         data-animation={animationIntensity}
       >
         {PANELS.map((p) => {
