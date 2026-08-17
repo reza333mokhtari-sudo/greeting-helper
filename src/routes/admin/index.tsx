@@ -43,12 +43,33 @@ import {
   adminTableUpdate, 
   adminTableDelete 
 } from "@/lib/admin.functions";
-import { getAdminStats } from "@/lib/admin-stats.functions";
+import { 
+  getAdminStats, 
+  adminResendVerification, 
+  adminVerifyUser, 
+  adminGetUserStats, 
+  adminDeleteUser 
+} from "@/lib/admin-stats.functions";
 import { AdminDataTable } from "@/components/admin/AdminDataTable";
+import { 
+  MoreHorizontal, 
+  Mail, 
+  UserCheck, 
+  UserMinus, 
+  Info 
+} from "lucide-react";
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuLabel, 
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger 
+} from "@/components/ui/dropdown-menu";
 
 import { RowDetailDrawer } from "@/components/admin/RowDetailDrawer";
 import { EntityForm } from "@/components/admin/EntityForm";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { dialog } from "@/lib/dialog";
 import { useServerFn } from "@tanstack/react-start";
 import { cn } from "@/lib/utils";
