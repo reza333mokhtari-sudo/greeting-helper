@@ -29,16 +29,13 @@ qt_add_executable(appDungeonEditor
 )
 
 # Qt 6.2+ way of handling QML modules
+# We are NOT using SOURCES in qt_add_qml_module to avoid the automated 
+# qmlRegisterTypes which is currently failing due to missing includes in generated code.
+# Instead, we will register types manually in main.cpp.
 qt_add_qml_module(appDungeonEditor
     URI DungeonEditor
     VERSION 1.0
     RESOURCE_PREFIX "/qt/qml/DungeonEditor"
-    SOURCES
-        src/core/Document.h src/core/Document.cpp
-        src/canvas/MapCanvasItem.h src/canvas/MapCanvasItem.cpp
-        src/models/AssetLibraryModel.h src/models/AssetLibraryModel.cpp
-        src/services/AiClient.h src/services/AiClient.cpp
-        src/services/FileService.h src/services/FileService.cpp
     QML_FILES
         qml/Main.qml
         qml/components/TopBar.qml
