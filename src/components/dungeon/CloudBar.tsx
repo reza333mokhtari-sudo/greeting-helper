@@ -201,7 +201,7 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
         className="h-7 text-xs"
         onClick={onAuthRequired}
       >
-        <Cloud className="mr-1 h-3.5 w-3.5" /> Sign in to save
+        <Cloud className="mr-1 h-3.5 w-3.5" /> Cloud Storage
       </Button>
     );
   }

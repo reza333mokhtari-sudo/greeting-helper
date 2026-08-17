@@ -76,12 +76,18 @@ export function ProfileMenu({ onAuthRequired }: { onAuthRequired?: ((reason: str
         supabase.rpc("has_role", { _user_id: data.user.id, _role: "admin" })
           .then(({ data: ok }: any) => {
             (window as any)._isAdmin = !!ok;
-            // Force re-render if needed by adding a local state
             setAuthStatus(prev => prev); 
           });
       }
     });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
+      setUser(session?.user ?? null);
+      setAuthStatus(session ? 'authenticated' : 'unauthenticated');
+    });
+
     performCheck();
+    return () => subscription.unsubscribe();
   }, []);
 
   const sendTicket = async () => {
@@ -374,14 +380,7 @@ export function ProfileMenu({ onAuthRequired }: { onAuthRequired?: ((reason: str
             <DropdownMenuItem onClick={() => setActiveDialog("settings")} className="text-xs font-medium cursor-pointer py-2">
               <Settings className="mr-2 h-4 w-4 opacity-70" /> User Settings
             </DropdownMenuItem>
-          ) : (
-            <DropdownMenuItem 
-              onClick={() => onAuthRequired?.("Sign in to access your account settings and cloud storage.")} 
-              className="text-xs font-bold text-primary cursor-pointer py-2"
-            >
-              <Key className="mr-2 h-4 w-4 opacity-70" /> Sign In
-            </DropdownMenuItem>
-          )}
+          ) : null}
           <DropdownMenuItem onClick={() => setActiveDialog("help")} className="text-xs font-medium cursor-pointer py-2">
             <HelpCircle className="mr-2 h-4 w-4 opacity-70" /> Help Center
           </DropdownMenuItem>

@@ -150,11 +150,11 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
 
       <div className="ml-auto flex items-center gap-3">
         {props.right}
-        {user ? (
+        {loading ? (
+          <div className="h-9 w-9 animate-pulse rounded-full bg-muted border border-border/40 shadow-sm" />
+        ) : (
           <ProfileMenu onAuthRequired={props.onAuthRequired} />
-        ) : loading ? (
-          <div className="h-8 w-8 animate-pulse rounded-full bg-muted" />
-        ) : null}
+        )}
       </div>
 
     </header>
