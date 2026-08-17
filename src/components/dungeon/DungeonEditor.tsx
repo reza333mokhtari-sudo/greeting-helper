@@ -1704,6 +1704,8 @@ export function DungeonEditor() {
             }}
           />
         );
+      case "support":
+        return <SupportPanel />;
       case "fog":
         return (
           <FogPanel
