@@ -41,7 +41,7 @@ Rectangle {
             }
             
             ToolButton {
-                icon.source: "../../assets/icons/general/settings.svg"
+                icon.source: "qrc:/assets/icons/general/settings.svg"
                 ToolTip.visible: hovered; ToolTip.text: qsTr("Grid Settings")
             }
         }

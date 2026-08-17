@@ -28,12 +28,13 @@ Rectangle {
         spacing: 0
         
         Image {
-            source: "../../assets/icons/general/settings.svg" // Placeholder for Logo
+            source: "qrc:/assets/icons/general/settings.svg"
             sourceSize.width: 16
             sourceSize.height: 16
             Layout.alignment: Qt.AlignVCenter
             Layout.rightMargin: 8
         }
+
 
         MenuBar {
             id: menuBar
@@ -52,10 +53,11 @@ Rectangle {
 
             Menu {
                 title: qsTr("File")
-                MenuItem { text: qsTr("New"); icon.source: "../../assets/icons/menu/new.svg"; onTriggered: document.clear() }
-                MenuItem { text: qsTr("Open..."); icon.source: "../../assets/icons/menu/open.svg"; onTriggered: openDialog.open() }
+                MenuItem { text: qsTr("New"); icon.source: "qrc:/assets/icons/menu/new.svg"; onTriggered: document.clear() }
+                MenuItem { text: qsTr("Open..."); icon.source: "qrc:/assets/icons/menu/open.svg"; onTriggered: openDialog.open() }
+
                 MenuSeparator {}
-                MenuItem { text: qsTr("Save"); icon.source: "../../assets/icons/menu/save.svg"; onTriggered: document.save() }
+                MenuItem { text: qsTr("Save"); icon.source: "qrc:/assets/icons/menu/save.svg"; onTriggered: document.save() }
                 MenuItem { text: qsTr("Preferences..."); onTriggered: preferencesDialog.open() }
                 MenuSeparator {}
                 MenuItem { text: qsTr("Quit"); onTriggered: Qt.quit() }

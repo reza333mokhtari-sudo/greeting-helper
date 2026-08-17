@@ -48,7 +48,9 @@ qt_add_resources(appDungeonEditor "qml_resources"
         qml/components/ObjectsPanel.qml
         qml/components/SettingsPanel.qml
         qml/components/CmsPanel.qml
+        qml/components/FogTools.qml
         qml/components/RightDock.qml
+
         qml/components/AdvancedStatusBar.qml
         qml/components/AppIcon.qml
         qml/components/MayaShelf.qml
