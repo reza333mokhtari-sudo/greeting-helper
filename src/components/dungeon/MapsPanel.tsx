@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { Plus, Map, Trash2, Edit2, Share2, MoreVertical, Cloud, HardDrive } from "lucide-react";
+import { Plus, Map, Trash2, Edit2, Share2, MoreVertical, Cloud, HardDrive, CheckCircle2, RefreshCw, AlertCircle } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,6 +12,8 @@ import { dialog } from "@/lib/dialog";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { listLocalMaps, listCloudMaps } from "@/lib/dungeon/storage";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Badge } from "@/components/ui/badge";
 
 type MapEntry = {
   id: string;
@@ -20,6 +22,7 @@ type MapEntry = {
   lastModified?: number;
   is_public?: boolean;
   isCloud: boolean;
+  syncStatus?: "synced" | "pending" | "error";
 };
 
 type Props = {
@@ -41,8 +44,13 @@ export function MapsPanel({ onLoadMap, onNewMap, currentMapId }: Props) {
       ]);
 
       const combined: MapEntry[] = [
-        ...cloud.map((m: any) => ({ ...m, isCloud: true })),
-        ...local.map((m: any) => ({ ...m, updated_at: new Date(m.lastModified).toISOString(), isCloud: false }))
+        ...cloud.map((m: any) => ({ ...m, isCloud: true, syncStatus: "synced" })),
+        ...local.map((m: any) => ({ 
+          ...m, 
+          updated_at: new Date(m.lastModified).toISOString(), 
+          isCloud: false,
+          syncStatus: "synced" // Local maps are "synced" to local storage
+        }))
       ].sort((a, b) => {
         const dateA = new Date(a.updated_at || 0).getTime();
         const dateB = new Date(b.updated_at || 0).getTime();
@@ -114,12 +122,39 @@ export function MapsPanel({ onLoadMap, onNewMap, currentMapId }: Props) {
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">
-                    {map.isCloud ? (
-                      <Cloud className="size-3 text-primary shrink-0" />
-                    ) : (
-                      <HardDrive className="size-3 text-muted-foreground shrink-0" />
-                    )}
+                    <TooltipProvider delayDuration={400}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div className="flex items-center gap-1">
+                            {map.isCloud ? (
+                              <Cloud className="size-3 text-primary shrink-0" />
+                            ) : (
+                              <HardDrive className="size-3 text-muted-foreground shrink-0" />
+                            )}
+                            {map.syncStatus === "synced" && (
+                              <CheckCircle2 className="size-2.5 text-green-500 shrink-0" />
+                            )}
+                            {map.syncStatus === "pending" && (
+                              <RefreshCw className="size-2.5 text-blue-500 animate-spin shrink-0" />
+                            )}
+                            {map.syncStatus === "error" && (
+                              <AlertCircle className="size-2.5 text-destructive shrink-0" />
+                            )}
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent side="right" className="text-[10px] px-2 py-1">
+                          {map.isCloud ? "Saved to Cloud" : "Saved Locally"}
+                          {map.syncStatus === "synced" && " • Up to date"}
+                          {map.syncStatus === "pending" && " • Syncing..."}
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                     <span className="text-xs font-medium truncate">{map.name || "Untitled Map"}</span>
+                    {map.is_public && (
+                      <Badge variant="outline" className="text-[8px] h-3 px-1 border-primary/30 text-primary/70">
+                        Public
+                      </Badge>
+                    )}
                   </div>
                   <div className="text-[10px] text-muted-foreground">
                     {map.updated_at ? new Date(map.updated_at).toLocaleDateString() : 'Unknown date'}
