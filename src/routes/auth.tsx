@@ -118,13 +118,18 @@ function AuthPage() {
     });
     setBusy(false);
     if (error) {
-      console.error("Signup error:", error);
+      console.error("Signup error details:", {
+        message: error.message,
+        status: error.status,
+        name: error.name,
+        code: error.code
+      });
       const m = error.message.toLowerCase();
       if (m.includes("already registered") || m.includes("already been registered")) {
         setError("That email already has an account. Would you like to sign in instead?");
         return;
       }
-      if (m.includes("weak") || m.includes("guess")) {
+      if (m.includes("weak") || m.includes("guess") || error.status === 422) {
         setError("Password is too common or weak. Please choose a stronger one.");
         return;
       }

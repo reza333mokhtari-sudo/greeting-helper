@@ -143,9 +143,13 @@ export function MapsPanel({ onLoadMap, onNewMap, currentMapId }: Props) {
                           </div>
                         </TooltipTrigger>
                         <TooltipContent side="right" className="text-[10px] px-2 py-1">
-                          {map.isCloud ? "Saved to Cloud" : "Saved Locally"}
-                          {map.syncStatus === "synced" && " • Up to date"}
-                          {map.syncStatus === "pending" && " • Syncing..."}
+                          <p className="font-bold">{map.isCloud ? "Cloud Map" : "Local Map"}</p>
+                          <p>{map.syncStatus === "synced" ? "All changes synced" : "Sync pending"}</p>
+                          {map.updated_at && (
+                            <p className="text-muted-foreground mt-1">
+                              Last saved: {new Date(map.updated_at).toLocaleString()}
+                            </p>
+                          )}
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
