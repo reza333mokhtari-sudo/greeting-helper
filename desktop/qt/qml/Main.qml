@@ -6,6 +6,8 @@ import DungeonEditor.Canvas 1.0
 import DungeonEditor.Models 1.0
 import DungeonEditor.Services 1.0
 import "components"
+import "panels"
+import "dialogs"
 
 ApplicationWindow {
     id: window
@@ -21,6 +23,10 @@ ApplicationWindow {
     FileService { id: fileService }
     AiClient { id: aiClient }
 
+    PreferencesDialog {
+        id: preferencesDialog
+    }
+
     Component.onCompleted: {
         console.log("Dungeon Scrawl Desktop Shell Initialized");
         assetModel.loadManifest("assets/soulslike/manifest.json");
@@ -30,8 +36,17 @@ ApplicationWindow {
         anchors.fill: parent
         spacing: 0
         
+        // Maya Top Bar (Menu)
         TopBar {
             id: topBar
+            Layout.fillWidth: true
+            document: mapDoc
+            canvas: canvas
+        }
+
+        // Maya Shelf & Status Line
+        MayaShelf {
+            id: shelf
             Layout.fillWidth: true
             document: mapDoc
             canvas: canvas
@@ -47,10 +62,11 @@ ApplicationWindow {
                 color: SplitView.isPressed ? "#3b82f6" : "#222"
             }
 
-            ToolRail {
-                id: toolRail
-                SplitView.minimumWidth: 60
-                SplitView.preferredWidth: 60
+            // Maya Tool Box
+            MayaToolBox {
+                id: toolBox
+                SplitView.minimumWidth: 50
+                SplitView.preferredWidth: 50
                 canvas: canvas
             }
             
@@ -58,43 +74,39 @@ ApplicationWindow {
                 SplitView.fillWidth: true
                 clip: true
                 
+                // Viewport Toolbar
+                Rectangle {
+                    id: viewportToolbar
+                    z: 10
+                    width: parent.width
+                    height: 28
+                    color: "#cc1e1e1e"
+                    RowLayout {
+                        anchors.fill: parent
+                        anchors.leftMargin: 10
+                        spacing: 8
+                        ToolButton { text: "Cam"; font.pixelSize: 10 }
+                        ToolButton { 
+                            text: "Grid"
+                            font.pixelSize: 10
+                            checkable: true
+                            checked: mapDoc.gridVisible
+                            onToggled: mapDoc.gridVisible = checked
+                        }
+                        ToolButton { text: "Light"; font.pixelSize: 10 }
+                        Item { Layout.fillWidth: true }
+                        Label { text: "[ Perspective ]"; color: "#aaa"; font.pixelSize: 10 }
+                    }
+                }
+
                 MapCanvasItem {
                     id: canvas
-                    anchors.fill: parent
-                    document: mapDoc
-                    onSelectionChanged: (id) => rightDock.updateInspector(id)
-                }
-                
-                // Cursor coords overlay
-                Rectangle {
+                    anchors.top: viewportToolbar.bottom
                     anchors.bottom: parent.bottom
                     anchors.left: parent.left
-                    anchors.margins: 16
-                    color: "#cc121212"
-                    border.color: "#333"
-                    radius: 6
-                    width: coordsLayout.width + 24
-                    height: coordsLayout.height + 12
-                    
-                    RowLayout {
-                        id: coordsLayout
-                        anchors.centerIn: parent
-                        spacing: 12
-                        Label {
-                            text: "GRID SNAP"
-                            color: "#3b82f6"
-                            font.pixelSize: 9
-                            font.bold: true
-                            font.letterSpacing: 1
-                        }
-                        Label {
-                            id: coordsLabel
-                            text: "X: " + Math.round(canvas.cursorWorldPos.x) + "  Y: " + Math.round(canvas.cursorWorldPos.y)
-                            color: "#eee"
-                            font.pixelSize: 11
-                            font.family: "Monospace"
-                        }
-                    }
+                    anchors.right: parent.right
+                    document: mapDoc
+                    onSelectionChanged: (id) => rightDock.updateInspector(id)
                 }
             }
             
@@ -108,7 +120,7 @@ ApplicationWindow {
             }
         }
         
-        StatusBar {
+        AdvancedStatusBar {
             Layout.fillWidth: true
             canvas: canvas
             document: mapDoc
