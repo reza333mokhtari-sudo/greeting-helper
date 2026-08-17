@@ -157,7 +157,12 @@ export function DungeonEditor() {
   const [fogMode, setFogMode] = useState<FogMode>("brush");
   const [fogBrush, setFogBrush] = useState(96);
   const [leftPanel, setLeftPanel] = useState<PanelId | null>("settings");
-  const [sidebarWidth, setSidebarWidth] = useState(320);
+  const [sidebarWidth, setSidebarWidth] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth < 1024 ? 280 : 320;
+    }
+    return 320;
+  });
   const [isResizing, setIsResizing] = useState(false);
   const [savedAt, setSavedAt] = useState<number | null>(null);
   const [saveMs, setSaveMs] = useState<number | null>(null);

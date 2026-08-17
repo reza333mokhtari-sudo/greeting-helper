@@ -126,12 +126,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "light") {
+      document.documentElement.classList.remove("dark");
+    } else {
+      document.documentElement.classList.add("dark");
+    }
+  }, []);
+
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body className="antialiased selection:bg-primary/30 selection:text-foreground">
         <TooltipProvider delayDuration={200}>
           <DialogProvider>{children}</DialogProvider>
         </TooltipProvider>
