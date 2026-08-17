@@ -155,8 +155,14 @@ Dialog {
                                 Layout.fillWidth: true
                                 onClicked: if (styleManager) styleManager.reloadStyling()
                             }
+                            Button {
+                                text: qsTr("Restart Application")
+                                Layout.fillWidth: true
+                                onClicked: if (styleManager) styleManager.restartApplication()
+                            }
                         }
                     }
+
 
                     RowLayout {
                         Label { text: qsTr("UI Scale: "); color: "#aaa" }
