@@ -105,6 +105,13 @@ export const getAdminSchema = createServerFn({ method: "GET" })
           deletable: true,
         },
         {
+          name: "unverified_users",
+          pk: "id",
+          columns: ["id", "email", "created_at", "last_sign_in_at"],
+          editable: [],
+          deletable: true,
+        },
+        {
           name: "admin_audit_logs",
           pk: "id",
           columns: ["id", "admin_id", "action", "table_name", "row_id", "payload", "created_at"],
@@ -143,26 +150,28 @@ export const adminTableQuery = createServerFn({ method: "POST" })
     
     // Special handling for unverified users virtual table
     if (table === "unverified_users") {
-      // We query profiles and simulate verification status check
-      // In a real app with auth access, we'd join auth.users
-      let query = (supabaseAdmin.from("profiles") as any)
-        .select("id, email, created_at, display_name", { count: "exact" });
+      // Query users who haven't confirmed their email using the service role client
+      let query = supabaseAdmin.auth.admin.listUsers();
       
-      const from = data.page * data.pageSize;
-      const to = from + data.pageSize - 1;
-      query = query.range(from, to);
-      
-      const { data: rows, count, error } = await query;
+      const { data: { users }, error } = await query;
       if (error) throw new Error(error.message);
       
-      // Map profiles to the expected virtual schema
-      const mappedRows = (rows || []).map((r: any) => ({
-        ...r,
-        email_confirmed_at: null, // Simulated unverified state
-        last_sign_in_at: r.created_at
-      }));
-
-      return { rows: mappedRows, count };
+      const unverifiedUsers = users.filter(u => !u.email_confirmed_at);
+      
+      const from = data.page * data.pageSize;
+      const to = from + data.pageSize;
+      const slicedUsers = unverifiedUsers.slice(from, to);
+      
+      return {
+        rows: slicedUsers.map(u => ({
+          id: u.id,
+          email: u.email,
+          created_at: u.created_at,
+          last_sign_in_at: u.last_sign_in_at,
+          email_confirmed_at: u.email_confirmed_at
+        })),
+        count: unverifiedUsers.length,
+      };
     }
 
     let query = (supabaseAdmin.from(table as PublicTable) as any).select("*", { count: "exact" });
@@ -243,5 +252,84 @@ export const adminTableDelete = createServerFn({ method: "POST" })
       .in("id", data.ids);
 
     if (error) throw new Error(error.message);
+    return { success: true };
+  });
+
+export const adminResendVerification = createServerFn({ method: "POST" })
+  .inputValidator((d) => z.object({ email: z.string().email() }).parse(d))
+  .handler(async ({ data }) => {
+    await checkAdminAccess();
+    
+    // Using service role to trigger otp email
+    const { error } = await supabaseAdmin.auth.admin.inviteUserByEmail(data.email);
+
+    if (error) throw new Error(error.message);
+    return { success: true };
+  });
+
+export const adminVerifyUser = createServerFn({ method: "POST" })
+  .inputValidator((d) => z.object({ userId: z.string() }).parse(d))
+  .handler(async ({ data, context }) => {
+    const { userId: adminId } = context as any;
+    await checkAdminAccess();
+
+    // 1. Update auth.users using admin client
+    const { data: user, error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
+      data.userId,
+      { email_confirm: true }
+    );
+
+    if (updateError) throw new Error(updateError.message);
+
+    // 2. Log audit trail
+    await (supabaseAdmin.from("admin_audit_logs") as any).insert({
+      admin_id: adminId,
+      action: "VERIFY_USER",
+      table_name: "auth.users",
+      row_id: data.userId,
+      payload: { email: user.user.email },
+    });
+
+    // 3. (Mock/Simulate) Send confirmation email to client
+    console.log(`[Admin] Sending confirmation email to ${user.user.email}`);
+    // In production, you would use an email provider like Resend or SendGrid here.
+
+    
+    return { success: true };
+  });
+
+export const adminGetUserStats = createServerFn({ method: "GET" })
+  .inputValidator((d) => z.object({ userId: z.string() }).parse(d))
+  .handler(async ({ data }) => {
+    await checkAdminAccess();
+
+    const { count, error } = await (supabaseAdmin.from("maps") as any)
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", data.userId);
+
+    if (error) throw new Error(error.message);
+
+    return { mapCount: count || 0 };
+  });
+
+export const adminDeleteUser = createServerFn({ method: "POST" })
+  .inputValidator((d) => z.object({ userId: z.string() }).parse(d))
+  .handler(async ({ data, context }) => {
+    const { userId: adminId } = context as any;
+    await checkAdminAccess();
+
+    // 1. Delete user from auth (cascades to user_roles if configured, but let's be safe)
+    const { error: deleteError } = await supabaseAdmin.auth.admin.deleteUser(data.userId);
+    if (deleteError) throw new Error(deleteError.message);
+
+    // 2. Log audit trail
+    await (supabaseAdmin.from("admin_audit_logs") as any).insert({
+      admin_id: adminId,
+      action: "DELETE_USER",
+      table_name: "auth.users",
+      row_id: data.userId,
+      payload: { deleted_user_id: data.userId },
+    });
+
     return { success: true };
   });

@@ -62,6 +62,7 @@ interface AdminDataTableProps {
   onView?: (row: any) => void;
   tableName: string;
   onExport?: () => void;
+  actions?: (row: any) => React.ReactNode;
 }
 
 export function AdminDataTable({
@@ -81,7 +82,8 @@ export function AdminDataTable({
   onDelete,
   onView,
   tableName,
-  onExport
+  onExport,
+  actions
 }: AdminDataTableProps) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [visibleColumns, setVisibleColumns] = useState<string[]>(columns.map(c => c.key));
@@ -261,7 +263,8 @@ export function AdminDataTable({
                     </TableCell>
                   ))}
                   <TableCell className="text-right">
-                    <div className="flex justify-end gap-1">
+                    <div className="flex justify-end items-center gap-1">
+                      {actions?.(row)}
                       {onView && (
                         <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => onView(row)}>
                           <Eye className="h-4 w-4" />
