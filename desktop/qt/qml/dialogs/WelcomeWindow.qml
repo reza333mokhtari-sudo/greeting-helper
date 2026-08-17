@@ -28,6 +28,7 @@ BaseFloatingWindow {
                     Layout.preferredHeight: 64
                     Layout.alignment: Qt.AlignHCenter
                 }
+
                 
                 Label {
                     text: "DUNGEON SCRAWL"
