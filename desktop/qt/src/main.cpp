@@ -27,16 +27,37 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     
-    // Load the main entry point from the generated QML module path
-    const QUrl url(QStringLiteral("qrc:/qt/qml/DungeonEditor/qml/Main.qml"));
+    // Register "components" relative to the resource root
+    engine.addImportPath("qrc:/qt/qml/DungeonEditor");
     
-    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
-                     &app, [url](QObject *obj, const QUrl &objUrl) {
-        if (!obj && url == objUrl)
-            QCoreApplication::exit(-1);
-    }, Qt::QueuedConnection);
-    
-    engine.load(url);
+    // Attempt multiple resource prefixes for robustness across build systems
+    const QStringList resourcePaths = {
+        "qrc:/qt/qml/DungeonEditor/qml/Main.qml",
+        "qrc:/DungeonEditor/qml/Main.qml",
+        "qrc:/qml/Main.qml"
+    };
+
+    bool loaded = false;
+    for (const QString &path : resourcePaths) {
+        const QUrl url(path);
+        QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
+                         &app, [url](QObject *obj, const QUrl &objUrl) {
+            if (!obj && url == objUrl) {
+                qCritical() << "Failed to load QML component:" << objUrl;
+            }
+        }, Qt::DirectConnection);
+        
+        engine.load(url);
+        if (!engine.rootObjects().isEmpty()) {
+            loaded = true;
+            break;
+        }
+    }
+
+    if (!loaded) {
+        qCritical() << "Critical: Could not find Main.qml in any resource path.";
+        return -1;
+    }
     if (engine.rootObjects().isEmpty())
         return -1;
 
