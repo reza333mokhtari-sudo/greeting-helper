@@ -44,11 +44,20 @@ type Props = {
 
 export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => void }) {
   const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }: any) => {
       setUser(data.user);
+      setLoading(false);
     });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   return (
@@ -143,16 +152,9 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
         {props.right}
         {user ? (
           <ProfileMenu onAuthRequired={props.onAuthRequired} />
-        ) : (
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="h-8 px-3 text-xs font-bold uppercase tracking-wider shadow-sm hover:bg-primary/5 hover:text-primary transition-all"
-            asChild
-          >
-            <Link to="/auth">Sign In</Link>
-          </Button>
-        )}
+        ) : loading ? (
+          <div className="h-8 w-8 animate-pulse rounded-full bg-muted" />
+        ) : null}
       </div>
 
     </header>
