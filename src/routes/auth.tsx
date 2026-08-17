@@ -127,13 +127,17 @@ function AuthPage() {
         name: error.name,
         code: error.code
       });
-      const m = error.message.toLowerCase();
+      const m = error.message?.toLowerCase() || "";
       if (m.includes("already registered") || m.includes("already been registered")) {
         setError("That email already has an account. Would you like to sign in instead?");
         return;
       }
       if (m.includes("weak") || m.includes("guess") || error.status === 422) {
         setError("Password is too common or weak. Please choose a stronger one.");
+        return;
+      }
+      if (!m || m === "{}") {
+        setError("Account creation failed. This can happen if the database is busy. Please try again.");
         return;
       }
       setError(error.message || "An error occurred during sign up. Please try again.");
