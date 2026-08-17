@@ -36,9 +36,9 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     
-    // Register "qml" root
-    engine.addImportPath("qrc:/qml");
+    // Register "qml" root correctly for internal imports
     engine.addImportPath("qrc:/");
+    engine.addImportPath("qrc:/qml");
     
     const QStringList resourcePaths = {
         "qrc:/qml/Main.qml"
