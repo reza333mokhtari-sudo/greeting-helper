@@ -41,9 +41,56 @@ function createSupabaseAdminClient() {
       ...(!SUPABASE_URL ? ["SUPABASE_URL"] : []),
       ...(!SUPABASE_SERVICE_ROLE_KEY ? ["SUPABASE_SERVICE_ROLE_KEY"] : []),
     ];
-    const message = `Missing Supabase environment variable(s): ${missing.join(", ")}. Connect Supabase in Lovable Cloud.`;
-    console.error(`[Supabase] ${message}`);
-    throw new Error(message);
+    const message = `Supabase Admin is not configured. Missing: ${missing.join(", ")}`;
+    console.warn(`[Supabase] ${message}`);
+
+    return new Proxy({} as any, {
+      get(_, prop) {
+        if (prop === "auth") {
+          return {
+            admin: {
+              listUsers: async () => ({ data: { users: [] }, error: { message } }),
+              updateUserById: async () => ({ data: { user: null }, error: { message } }),
+              deleteUser: async () => ({ error: { message } }),
+              inviteUserByEmail: async () => ({ error: { message } }),
+            },
+          };
+        }
+        if (prop === "from")
+          return () => ({
+            select: () => ({
+              order: () => ({
+                limit: () =>
+                  Promise.resolve({
+                    data: [],
+                    error: { message, code: "CONFIG_ERROR" },
+                  }),
+              }),
+            }),
+            insert: () =>
+              Promise.resolve({
+                data: null,
+                error: { message, code: "CONFIG_ERROR" },
+              }),
+            update: () =>
+              Promise.resolve({
+                data: null,
+                error: { message, code: "CONFIG_ERROR" },
+              }),
+            delete: () =>
+              Promise.resolve({
+                data: null,
+                error: { message, code: "CONFIG_ERROR" },
+              }),
+            rpc: () =>
+              Promise.resolve({
+                data: null,
+                error: { message, code: "CONFIG_ERROR" },
+              }),
+          });
+        return () => {};
+      },
+    });
   }
 
   return createClient<Database>(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
