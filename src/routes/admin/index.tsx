@@ -332,42 +332,100 @@ function AdminConsole() {
 
         <div className="flex-1 overflow-auto bg-slate-50/50 dark:bg-slate-950/50 p-6">
           {section === "overview" && (
-            <div className="space-y-6 max-w-5xl">
+            <div className="space-y-6 max-w-6xl animate-in fade-in slide-in-from-bottom-4 duration-500">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <StatCard label="Total Tables" value={schema?.tables.length || 0} icon={Database} description="Accessible in public schema" />
-                <StatCard label="Auth Users" value={count} icon={Users} description="Registered profiles" />
-                <StatCard label="Audit Events" value="1.2k" icon={History} description="Past 24 hours" />
+                {stats?.stats.map((s: any, idx: number) => (
+                  <StatCard key={idx} label={s.label} value={s.value} icon={idx === 0 ? Users : idx === 1 ? Map : Database} description={s.trend} />
+                ))}
               </div>
               
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                 <Card className="border-border/60">
-                    <CardHeader>
-                      <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                        <Activity className="h-4 w-4 text-primary" /> System Health
-                      </CardTitle>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                 <Card className="lg:col-span-2 border-border/60 shadow-sm overflow-hidden">
+                    <CardHeader className="bg-slate-50/50 dark:bg-slate-900/50 border-b pb-4">
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                          <BarChart3 className="h-4 w-4 text-primary" /> Audit Activity
+                        </CardTitle>
+                        <Badge variant="outline" className="text-[10px] font-mono">Last 20 Events</Badge>
+                      </div>
                     </CardHeader>
-                    <CardContent className="space-y-4">
-                      <HealthRow label="Database Connection" status="healthy" />
-                      <HealthRow label="Authentication Service" status="healthy" />
-                      <HealthRow label="Storage Engine" status="warning" />
-                      <HealthRow label="Edge Functions" status="healthy" />
+                    <CardContent className="pt-6">
+                      <div className="h-[240px] w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={stats?.chartData || []}>
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--muted-foreground))" opacity={0.1} />
+                            <XAxis 
+                              dataKey="name" 
+                              fontSize={10} 
+                              tickLine={false} 
+                              axisLine={false}
+                              tick={{ fill: 'currentColor', opacity: 0.5 }}
+                            />
+                            <YAxis 
+                              fontSize={10} 
+                              tickLine={false} 
+                              axisLine={false}
+                              tick={{ fill: 'currentColor', opacity: 0.5 }}
+                            />
+                            <RechartsTooltip 
+                              cursor={{ fill: 'currentColor', opacity: 0.05 }}
+                              contentStyle={{ 
+                                backgroundColor: 'hsl(var(--card))', 
+                                border: '1px solid hsl(var(--border))',
+                                borderRadius: '8px',
+                                fontSize: '11px'
+                              }}
+                            />
+                            <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                              {(stats?.chartData || []).map((entry: any, index: number) => (
+                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                              ))}
+                            </Bar>
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </div>
                     </CardContent>
                  </Card>
 
-                 <Card className="border-border/60">
-                    <CardHeader>
-                      <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                        <AlertTriangle className="h-4 w-4 text-orange-500" /> Security Warnings
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                       <WarningItem title="Public RLS missing" description="Table 'map_assets' has no RLS policies enabled." />
-                       <WarningItem title="Expired Service Keys" description="Production keys rotate in 12 days." />
-                    </CardContent>
-                 </Card>
+                 <div className="space-y-6">
+                   <Card className="border-border/60 shadow-sm">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                          <Activity className="h-3.5 w-3.5" /> System Health
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <HealthRow label="Database" status="healthy" />
+                        <HealthRow label="Auth Service" status="healthy" />
+                        <HealthRow label="Storage" status="warning" />
+                      </CardContent>
+                   </Card>
+
+                   <Card className="border-border/60 shadow-sm">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                          <Clock className="h-3.5 w-3.5" /> Recent Logs
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="p-0">
+                        <div className="divide-y divide-border/40">
+                          {(stats?.recentAudit || []).slice(0, 5).map((log: any) => (
+                            <div key={log.id} className="p-3 flex items-center justify-between hover:bg-muted/30 transition-colors">
+                              <div className="space-y-0.5">
+                                <p className="text-[10px] font-bold uppercase">{log.action}</p>
+                                <p className="text-[9px] text-muted-foreground font-mono">{log.table_name}</p>
+                              </div>
+                              <span className="text-[9px] text-muted-foreground">{new Date(log.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                   </Card>
+                 </div>
               </div>
             </div>
           )}
+
 
           {(section === "explorer" || section === "users" || section === "cms") && (
             <div className="flex h-full gap-6">
