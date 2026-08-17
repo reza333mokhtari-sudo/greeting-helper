@@ -9,7 +9,7 @@
 
 FileService::FileService(QObject *parent) : QObject(parent) {}
 
-void FileService::saveToFile(const QString& path, const QString& content) {
+void FileService::saveFile(const QString& path, const QString& content) {
     QString realPath = path;
     if (path.startsWith("file:///")) {
         realPath = QUrl(path).toLocalFile();
@@ -22,7 +22,7 @@ void FileService::saveToFile(const QString& path, const QString& content) {
     }
 }
 
-QString FileService::loadFromFile(const QString& path) {
+QString FileService::readFile(const QString& path) {
     QString realPath = path;
     if (path.startsWith("file:///")) {
         realPath = QUrl(path).toLocalFile();

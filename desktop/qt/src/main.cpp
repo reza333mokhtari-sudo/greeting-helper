@@ -2,6 +2,8 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QIcon>
+#include <QtQml/qqml.h>
+
 #include <core/Document.h>
 #include <canvas/MapCanvasItem.h>
 #include <models/AssetLibraryModel.h>
