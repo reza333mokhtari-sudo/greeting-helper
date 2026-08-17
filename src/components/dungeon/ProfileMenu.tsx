@@ -76,12 +76,8 @@ export function ProfileMenu({ onAuthRequired }: { onAuthRequired?: ((reason: str
         supabase.rpc("has_role", { _user_id: data.user.id, _role: "admin" })
           .then(({ data: ok }: any) => {
             (window as any)._isAdmin = !!ok;
-            // Force re-render if needed by adding a local state
             setAuthStatus(prev => prev); 
           });
-      }
-      } else {
-        setUser(null);
       }
     });
 
