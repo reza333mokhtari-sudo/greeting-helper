@@ -16,7 +16,7 @@
                         {
                             "codegenResult": 0,
                             "column": 23,
-                            "durationMicroseconds": 277,
+                            "durationMicroseconds": 2683,
                             "functionName": "fill",
                             "line": 30,
                             "message": ""
@@ -24,7 +24,7 @@
                         {
                             "codegenResult": 2,
                             "column": 23,
-                            "durationMicroseconds": 38,
+                            "durationMicroseconds": 46,
                             "functionName": "document",
                             "line": 36,
                             "message": "Cannot retrieve a non-object type by ID: mapDoc"
@@ -48,7 +48,7 @@
                         {
                             "codegenResult": 2,
                             "column": 24,
-                            "durationMicroseconds": 272,
+                            "durationMicroseconds": 278,
                             "functionName": "color",
                             "line": 47,
                             "message": "Cannot access value for name SplitView"
@@ -56,7 +56,7 @@
                         {
                             "codegenResult": 2,
                             "column": 25,
-                            "durationMicroseconds": 34,
+                            "durationMicroseconds": 18,
                             "functionName": "canvas",
                             "line": 54,
                             "message": "Cannot retrieve a non-object type by ID: canvas"
@@ -96,7 +96,7 @@
                         {
                             "codegenResult": 0,
                             "column": 28,
-                            "durationMicroseconds": 233,
+                            "durationMicroseconds": 237,
                             "functionName": "width",
                             "line": 76,
                             "message": ""
@@ -104,7 +104,7 @@
                         {
                             "codegenResult": 0,
                             "column": 29,
-                            "durationMicroseconds": 162,
+                            "durationMicroseconds": 690,
                             "functionName": "height",
                             "line": 77,
                             "message": ""
@@ -112,7 +112,7 @@
                         {
                             "codegenResult": 0,
                             "column": 37,
-                            "durationMicroseconds": 103,
+                            "durationMicroseconds": 116,
                             "functionName": "bottom",
                             "line": 70,
                             "message": ""
@@ -120,7 +120,7 @@
                         {
                             "codegenResult": 0,
                             "column": 35,
-                            "durationMicroseconds": 83,
+                            "durationMicroseconds": 118,
                             "functionName": "left",
                             "line": 71,
                             "message": ""
@@ -128,7 +128,7 @@
                         {
                             "codegenResult": 0,
                             "column": 43,
-                            "durationMicroseconds": 51,
+                            "durationMicroseconds": 58,
                             "functionName": "centerIn",
                             "line": 81,
                             "message": ""
@@ -144,7 +144,7 @@
                         {
                             "codegenResult": 2,
                             "column": 27,
-                            "durationMicroseconds": 20,
+                            "durationMicroseconds": 35,
                             "functionName": "document",
                             "line": 105,
                             "message": "Cannot retrieve a non-object type by ID: mapDoc"
@@ -152,7 +152,7 @@
                         {
                             "codegenResult": 2,
                             "column": 25,
-                            "durationMicroseconds": 29,
+                            "durationMicroseconds": 489,
                             "functionName": "canvas",
                             "line": 106,
                             "message": "Cannot retrieve a non-object type by ID: canvas"
@@ -160,7 +160,7 @@
                         {
                             "codegenResult": 2,
                             "column": 29,
-                            "durationMicroseconds": 11,
+                            "durationMicroseconds": 20,
                             "functionName": "assetModel",
                             "line": 107,
                             "message": "Cannot retrieve a non-object type by ID: assetModel"
@@ -168,7 +168,7 @@
                         {
                             "codegenResult": 2,
                             "column": 21,
-                            "durationMicroseconds": 17,
+                            "durationMicroseconds": 16,
                             "functionName": "canvas",
                             "line": 113,
                             "message": "Cannot retrieve a non-object type by ID: canvas"
@@ -176,7 +176,7 @@
                         {
                             "codegenResult": 2,
                             "column": 23,
-                            "durationMicroseconds": 13,
+                            "durationMicroseconds": 14,
                             "functionName": "document",
                             "line": 114,
                             "message": "Cannot retrieve a non-object type by ID: mapDoc"

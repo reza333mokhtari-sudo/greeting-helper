@@ -8,7 +8,7 @@
                         {
                             "codegenResult": 2,
                             "column": 34,
-                            "durationMicroseconds": 161,
+                            "durationMicroseconds": 228,
                             "functionName": "selectionCount",
                             "line": 17,
                             "message": "Cannot load property selectedId from (component in /dev-server/desktop/qt/qml/components/StatusBar.qml)::canvas with type QVariant."
@@ -16,7 +16,7 @@
                         {
                             "codegenResult": 0,
                             "column": 23,
-                            "durationMicroseconds": 255,
+                            "durationMicroseconds": 271,
                             "functionName": "fill",
                             "line": 20,
                             "message": ""
@@ -48,7 +48,7 @@
                         {
                             "codegenResult": 2,
                             "column": 24,
-                            "durationMicroseconds": 474,
+                            "durationMicroseconds": 455,
                             "functionName": "color",
                             "line": 54,
                             "message": "Cannot access value for name aiClient"

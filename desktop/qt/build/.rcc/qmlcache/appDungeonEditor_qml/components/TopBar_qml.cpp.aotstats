@@ -8,7 +8,7 @@
                         {
                             "codegenResult": 0,
                             "column": 16,
-                            "durationMicroseconds": 767,
+                            "durationMicroseconds": 467,
                             "functionName": "width",
                             "line": 20,
                             "message": ""
@@ -16,7 +16,7 @@
                         {
                             "codegenResult": 0,
                             "column": 25,
-                            "durationMicroseconds": 187,
+                            "durationMicroseconds": 118,
                             "functionName": "bottom",
                             "line": 19,
                             "message": ""
@@ -24,7 +24,7 @@
                         {
                             "codegenResult": 0,
                             "column": 19,
-                            "durationMicroseconds": 70,
+                            "durationMicroseconds": 58,
                             "functionName": "fileMode",
                             "line": 28,
                             "message": ""
@@ -32,7 +32,7 @@
                         {
                             "codegenResult": 0,
                             "column": 22,
-                            "durationMicroseconds": 102,
+                            "durationMicroseconds": 72,
                             "functionName": "nameFilters",
                             "line": 29,
                             "message": ""
@@ -40,7 +40,7 @@
                         {
                             "codegenResult": 2,
                             "column": 21,
-                            "durationMicroseconds": 199,
+                            "durationMicroseconds": 84,
                             "functionName": "onAccepted",
                             "line": 30,
                             "message": "Cannot access value for name document"
@@ -48,7 +48,7 @@
                         {
                             "codegenResult": 0,
                             "column": 19,
-                            "durationMicroseconds": 315,
+                            "durationMicroseconds": 57,
                             "functionName": "fileMode",
                             "line": 36,
                             "message": ""
@@ -56,7 +56,7 @@
                         {
                             "codegenResult": 0,
                             "column": 22,
-                            "durationMicroseconds": 214,
+                            "durationMicroseconds": 409,
                             "functionName": "nameFilters",
                             "line": 37,
                             "message": ""
@@ -64,7 +64,7 @@
                         {
                             "codegenResult": 2,
                             "column": 21,
-                            "durationMicroseconds": 282,
+                            "durationMicroseconds": 62,
                             "functionName": "onAccepted",
                             "line": 38,
                             "message": "Cannot access value for name document"
@@ -72,7 +72,7 @@
                         {
                             "codegenResult": 0,
                             "column": 23,
-                            "durationMicroseconds": 138,
+                            "durationMicroseconds": 118,
                             "functionName": "fill",
                             "line": 42,
                             "message": ""
@@ -80,7 +80,7 @@
                         {
                             "codegenResult": 0,
                             "column": 31,
-                            "durationMicroseconds": 105,
+                            "durationMicroseconds": 61,
                             "functionName": "alignment",
                             "line": 50,
                             "message": ""
@@ -96,7 +96,7 @@
                         {
                             "codegenResult": 0,
                             "column": 31,
-                            "durationMicroseconds": 79,
+                            "durationMicroseconds": 51,
                             "functionName": "alignment",
                             "line": 77,
                             "message": ""
@@ -184,7 +184,7 @@
                         {
                             "codegenResult": 2,
                             "column": 28,
-                            "durationMicroseconds": 104,
+                            "durationMicroseconds": 170,
                             "functionName": "color",
                             "line": 111,
                             "message": "Cannot access value for name document"

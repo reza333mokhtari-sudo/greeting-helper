@@ -16,7 +16,7 @@
                         {
                             "codegenResult": 0,
                             "column": 23,
-                            "durationMicroseconds": 348,
+                            "durationMicroseconds": 246,
                             "functionName": "fill",
                             "line": 17,
                             "message": ""
@@ -24,7 +24,7 @@
                         {
                             "codegenResult": 2,
                             "column": 27,
-                            "durationMicroseconds": 61,
+                            "durationMicroseconds": 41,
                             "functionName": "currentIndex",
                             "line": 33,
                             "message": "Cannot retrieve a non-object type by ID: dockTabs"
@@ -32,7 +32,7 @@
                         {
                             "codegenResult": 2,
                             "column": 24,
-                            "durationMicroseconds": 87,
+                            "durationMicroseconds": 50,
                             "functionName": "model",
                             "line": 39,
                             "message": "Cannot access value for name assetModel"
@@ -40,7 +40,7 @@
                         {
                             "codegenResult": 0,
                             "column": 27,
-                            "durationMicroseconds": 96,
+                            "durationMicroseconds": 81,
                             "functionName": "document",
                             "line": 40,
                             "message": ""
@@ -56,7 +56,7 @@
                         {
                             "codegenResult": 0,
                             "column": 27,
-                            "durationMicroseconds": 49,
+                            "durationMicroseconds": 41,
                             "functionName": "document",
                             "line": 46,
                             "message": ""
@@ -64,7 +64,7 @@
                         {
                             "codegenResult": 0,
                             "column": 27,
-                            "durationMicroseconds": 50,
+                            "durationMicroseconds": 36,
                             "functionName": "document",
                             "line": 51,
                             "message": ""
@@ -72,7 +72,7 @@
                         {
                             "codegenResult": 2,
                             "column": 35,
-                            "durationMicroseconds": 51,
+                            "durationMicroseconds": 37,
                             "functionName": "onObjectSelected",
                             "line": 52,
                             "message": "Cannot access value for name canvas"
@@ -80,7 +80,7 @@
                         {
                             "codegenResult": 0,
                             "column": 35,
-                            "durationMicroseconds": 42,
+                            "durationMicroseconds": 29,
                             "functionName": "onObjectSelected",
                             "line": 52,
                             "message": ""
@@ -88,7 +88,7 @@
                         {
                             "codegenResult": 0,
                             "column": 27,
-                            "durationMicroseconds": 109,
+                            "durationMicroseconds": 35,
                             "functionName": "document",
                             "line": 57,
                             "message": ""
@@ -96,7 +96,7 @@
                         {
                             "codegenResult": 0,
                             "column": 27,
-                            "durationMicroseconds": 99,
+                            "durationMicroseconds": 40,
                             "functionName": "document",
                             "line": 62,
                             "message": ""
@@ -104,7 +104,7 @@
                         {
                             "codegenResult": 0,
                             "column": 27,
-                            "durationMicroseconds": 51,
+                            "durationMicroseconds": 32,
                             "functionName": "document",
                             "line": 67,
                             "message": ""

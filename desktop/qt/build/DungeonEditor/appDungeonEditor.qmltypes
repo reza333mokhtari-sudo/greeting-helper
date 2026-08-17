@@ -234,7 +234,7 @@ Module {
     }
     Component {
         file: "MapCanvasItem.h"
-        lineNumber: 8
+        lineNumber: 10
         name: "MapCanvasItem"
         accessSemantics: "reference"
         prototype: "QQuickPaintedItem"
@@ -248,7 +248,7 @@ Module {
             write: "setDocument"
             notify: "documentChanged"
             index: 0
-            lineNumber: 11
+            lineNumber: 13
         }
         Property {
             name: "activeTool"
@@ -257,7 +257,7 @@ Module {
             write: "setActiveTool"
             notify: "activeToolChanged"
             index: 1
-            lineNumber: 12
+            lineNumber: 14
         }
         Property {
             name: "selectedId"
@@ -265,7 +265,7 @@ Module {
             read: "selectedId"
             notify: "selectionChanged"
             index: 2
-            lineNumber: 13
+            lineNumber: 15
             isReadonly: true
         }
         Property {
@@ -274,7 +274,7 @@ Module {
             read: "zoom"
             notify: "zoomChanged"
             index: 3
-            lineNumber: 14
+            lineNumber: 16
             isReadonly: true
         }
         Property {
@@ -283,7 +283,7 @@ Module {
             read: "pan"
             notify: "panChanged"
             index: 4
-            lineNumber: 15
+            lineNumber: 17
             isReadonly: true
         }
         Property {
@@ -292,21 +292,21 @@ Module {
             read: "cursorWorldPos"
             notify: "cursorWorldChanged"
             index: 5
-            lineNumber: 16
+            lineNumber: 18
             isReadonly: true
         }
-        Signal { name: "documentChanged"; lineNumber: 35 }
-        Signal { name: "activeToolChanged"; lineNumber: 36 }
+        Signal { name: "documentChanged"; lineNumber: 37 }
+        Signal { name: "activeToolChanged"; lineNumber: 38 }
         Signal {
             name: "selectionChanged"
-            lineNumber: 37
+            lineNumber: 39
             Parameter { name: "id"; type: "QString" }
         }
-        Signal { name: "zoomChanged"; lineNumber: 38 }
-        Signal { name: "panChanged"; lineNumber: 39 }
+        Signal { name: "zoomChanged"; lineNumber: 40 }
+        Signal { name: "panChanged"; lineNumber: 41 }
         Signal {
             name: "cursorWorldChanged"
-            lineNumber: 40
+            lineNumber: 42
             Parameter { name: "pos"; type: "QPointF" }
         }
     }

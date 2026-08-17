@@ -8,7 +8,7 @@
                 }
             ],
             "className": "MapCanvasItem",
-            "lineNumber": 8,
+            "lineNumber": 10,
             "object": true,
             "properties": [
                 {
@@ -16,7 +16,7 @@
                     "designable": true,
                     "final": false,
                     "index": 0,
-                    "lineNumber": 11,
+                    "lineNumber": 13,
                     "name": "document",
                     "notify": "documentChanged",
                     "read": "document",
@@ -32,7 +32,7 @@
                     "designable": true,
                     "final": false,
                     "index": 1,
-                    "lineNumber": 12,
+                    "lineNumber": 14,
                     "name": "activeTool",
                     "notify": "activeToolChanged",
                     "read": "activeTool",
@@ -48,7 +48,7 @@
                     "designable": true,
                     "final": false,
                     "index": 2,
-                    "lineNumber": 13,
+                    "lineNumber": 15,
                     "name": "selectedId",
                     "notify": "selectionChanged",
                     "read": "selectedId",
@@ -63,7 +63,7 @@
                     "designable": true,
                     "final": false,
                     "index": 3,
-                    "lineNumber": 14,
+                    "lineNumber": 16,
                     "name": "zoom",
                     "notify": "zoomChanged",
                     "read": "zoom",
@@ -78,7 +78,7 @@
                     "designable": true,
                     "final": false,
                     "index": 4,
-                    "lineNumber": 15,
+                    "lineNumber": 17,
                     "name": "pan",
                     "notify": "panChanged",
                     "read": "pan",
@@ -93,7 +93,7 @@
                     "designable": true,
                     "final": false,
                     "index": 5,
-                    "lineNumber": 16,
+                    "lineNumber": 18,
                     "name": "cursorWorldPos",
                     "notify": "cursorWorldChanged",
                     "read": "cursorWorldPos",
@@ -109,14 +109,14 @@
                 {
                     "access": "public",
                     "index": 0,
-                    "lineNumber": 35,
+                    "lineNumber": 37,
                     "name": "documentChanged",
                     "returnType": "void"
                 },
                 {
                     "access": "public",
                     "index": 1,
-                    "lineNumber": 36,
+                    "lineNumber": 38,
                     "name": "activeToolChanged",
                     "returnType": "void"
                 },
@@ -129,21 +129,21 @@
                         }
                     ],
                     "index": 2,
-                    "lineNumber": 37,
+                    "lineNumber": 39,
                     "name": "selectionChanged",
                     "returnType": "void"
                 },
                 {
                     "access": "public",
                     "index": 3,
-                    "lineNumber": 38,
+                    "lineNumber": 40,
                     "name": "zoomChanged",
                     "returnType": "void"
                 },
                 {
                     "access": "public",
                     "index": 4,
-                    "lineNumber": 39,
+                    "lineNumber": 41,
                     "name": "panChanged",
                     "returnType": "void"
                 },
@@ -156,7 +156,7 @@
                         }
                     ],
                     "index": 5,
-                    "lineNumber": 40,
+                    "lineNumber": 42,
                     "name": "cursorWorldChanged",
                     "returnType": "void"
                 }

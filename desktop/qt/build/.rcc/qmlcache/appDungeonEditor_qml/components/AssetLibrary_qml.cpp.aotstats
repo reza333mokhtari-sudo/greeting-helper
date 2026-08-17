@@ -8,7 +8,7 @@
                         {
                             "codegenResult": 0,
                             "column": 23,
-                            "durationMicroseconds": 344,
+                            "durationMicroseconds": 340,
                             "functionName": "fill",
                             "line": 19,
                             "message": ""
@@ -32,7 +32,7 @@
                         {
                             "codegenResult": 2,
                             "column": 28,
-                            "durationMicroseconds": 217,
+                            "durationMicroseconds": 230,
                             "functionName": "model",
                             "line": 45,
                             "message": "Cannot generate efficient code for storing an array in a non-sequence type"
@@ -64,7 +64,7 @@
                         {
                             "codegenResult": 0,
                             "column": 20,
-                            "durationMicroseconds": 76,
+                            "durationMicroseconds": 80,
                             "functionName": "model",
                             "line": 63,
                             "message": ""
@@ -80,7 +80,7 @@
                         {
                             "codegenResult": 0,
                             "column": 39,
-                            "durationMicroseconds": 173,
+                            "durationMicroseconds": 169,
                             "functionName": "color",
                             "line": 78,
                             "message": ""
@@ -88,7 +88,7 @@
                         {
                             "codegenResult": 2,
                             "column": 37,
-                            "durationMicroseconds": 383,
+                            "durationMicroseconds": 340,
                             "functionName": "source",
                             "line": 83,
                             "message": "Cannot access value for name icon"
@@ -96,7 +96,7 @@
                         {
                             "codegenResult": 0,
                             "column": 39,
-                            "durationMicroseconds": 65,
+                            "durationMicroseconds": 55,
                             "functionName": "fillMode",
                             "line": 84,
                             "message": ""
@@ -104,7 +104,7 @@
                         {
                             "codegenResult": 2,
                             "column": 38,
-                            "durationMicroseconds": 250,
+                            "durationMicroseconds": 140,
                             "functionName": "visible",
                             "line": 85,
                             "message": "Cannot access value for name icon"
@@ -112,7 +112,7 @@
                         {
                             "codegenResult": 0,
                             "column": 43,
-                            "durationMicroseconds": 89,
+                            "durationMicroseconds": 112,
                             "functionName": "fill",
                             "line": 81,
                             "message": ""
@@ -120,7 +120,7 @@
                         {
                             "codegenResult": 2,
                             "column": 35,
-                            "durationMicroseconds": 956,
+                            "durationMicroseconds": 190,
                             "functionName": "text",
                             "line": 90,
                             "message": "Cannot access value for name name"
@@ -128,7 +128,7 @@
                         {
                             "codegenResult": 2,
                             "column": 38,
-                            "durationMicroseconds": 647,
+                            "durationMicroseconds": 1170,
                             "functionName": "visible",
                             "line": 93,
                             "message": "Cannot access value for name icon"
@@ -136,7 +136,7 @@
                         {
                             "codegenResult": 0,
                             "column": 47,
-                            "durationMicroseconds": 91,
+                            "durationMicroseconds": 72,
                             "functionName": "centerIn",
                             "line": 89,
                             "message": ""
@@ -144,7 +144,7 @@
                         {
                             "codegenResult": 2,
                             "column": 40,
-                            "durationMicroseconds": 1008,
+                            "durationMicroseconds": 767,
                             "functionName": "onClicked",
                             "line": 100,
                             "message": "Cannot access value for name root"
@@ -152,7 +152,7 @@
                         {
                             "codegenResult": 0,
                             "column": 43,
-                            "durationMicroseconds": 91,
+                            "durationMicroseconds": 65,
                             "functionName": "fill",
                             "line": 98,
                             "message": ""
@@ -160,7 +160,7 @@
                         {
                             "codegenResult": 2,
                             "column": 31,
-                            "durationMicroseconds": 278,
+                            "durationMicroseconds": 185,
                             "functionName": "text",
                             "line": 115,
                             "message": "Cannot access value for name name"
@@ -168,7 +168,7 @@
                         {
                             "codegenResult": 0,
                             "column": 46,
-                            "durationMicroseconds": 92,
+                            "durationMicroseconds": 57,
                             "functionName": "horizontalAlignment",
                             "line": 119,
                             "message": ""
@@ -176,7 +176,7 @@
                         {
                             "codegenResult": 0,
                             "column": 32,
-                            "durationMicroseconds": 66,
+                            "durationMicroseconds": 40,
                             "functionName": "elide",
                             "line": 120,
                             "message": ""

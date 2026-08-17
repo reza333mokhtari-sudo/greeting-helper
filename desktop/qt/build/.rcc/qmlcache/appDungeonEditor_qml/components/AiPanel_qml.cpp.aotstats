@@ -8,7 +8,7 @@
                         {
                             "codegenResult": 0,
                             "column": 23,
-                            "durationMicroseconds": 386,
+                            "durationMicroseconds": 396,
                             "functionName": "fill",
                             "line": 14,
                             "message": ""
@@ -24,7 +24,7 @@
                         {
                             "codegenResult": 2,
                             "column": 24,
-                            "durationMicroseconds": 105,
+                            "durationMicroseconds": 111,
                             "functionName": "width",
                             "line": 33,
                             "message": "Cannot access value for name chatView"
@@ -32,7 +32,7 @@
                         {
                             "codegenResult": 2,
                             "column": 25,
-                            "durationMicroseconds": 42,
+                            "durationMicroseconds": 76,
                             "functionName": "height",
                             "line": 34,
                             "message": "Cannot retrieve a non-object type by ID: textLabel"
@@ -40,7 +40,7 @@
                         {
                             "codegenResult": 2,
                             "column": 24,
-                            "durationMicroseconds": 189,
+                            "durationMicroseconds": 216,
                             "functionName": "color",
                             "line": 35,
                             "message": "Cannot access value for name isAi"
@@ -48,7 +48,7 @@
                         {
                             "codegenResult": 0,
                             "column": 35,
-                            "durationMicroseconds": 71,
+                            "durationMicroseconds": 1249,
                             "functionName": "fill",
                             "line": 39,
                             "message": ""
@@ -72,7 +72,7 @@
                         {
                             "codegenResult": 0,
                             "column": 65,
-                            "durationMicroseconds": 177,
+                            "durationMicroseconds": 146,
                             "functionName": "onTriggered",
                             "line": 52,
                             "message": ""
@@ -112,7 +112,7 @@
                         {
                             "codegenResult": 2,
                             "column": 17,
-                            "durationMicroseconds": 141,
+                            "durationMicroseconds": 97,
                             "functionName": "target",
                             "line": 84,
                             "message": "Cannot access value for name aiClient"

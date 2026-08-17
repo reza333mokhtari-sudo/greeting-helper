@@ -8,7 +8,7 @@
                         {
                             "codegenResult": 0,
                             "column": 23,
-                            "durationMicroseconds": 391,
+                            "durationMicroseconds": 438,
                             "functionName": "fill",
                             "line": 12,
                             "message": ""
@@ -16,7 +16,7 @@
                         {
                             "codegenResult": 2,
                             "column": 20,
-                            "durationMicroseconds": 170,
+                            "durationMicroseconds": 367,
                             "functionName": "model",
                             "line": 33,
                             "message": "Cannot access value for name document"
@@ -64,7 +64,7 @@
                         {
                             "codegenResult": 2,
                             "column": 28,
-                            "durationMicroseconds": 289,
+                            "durationMicroseconds": 349,
                             "functionName": "color",
                             "line": 58,
                             "message": "Cannot access value for name highlighted"
