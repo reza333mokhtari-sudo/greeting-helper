@@ -4,9 +4,11 @@ import { supabase } from "@/integrations/supabase/client";
 export const checkHealth = createServerFn({ method: "GET" })
   .handler(async () => {
     try {
-      // Basic connectivity check: try to fetch something trivial or just check session
-      // Since this is a health check, we just want to see if the client can reach the backend.
-      const { data, error } = await supabase.from('user_roles').select('id').limit(1);
+      // In SSR/Worker environments, we must use the service role client or a specifically configured server client
+      // to avoid issues with browser-only storage or missing env vars at module scope.
+      const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+      
+      const { data, error } = await supabaseAdmin.from('user_roles').select('id').limit(1);
       
       return {
         status: error ? "error" : "healthy",
@@ -15,6 +17,7 @@ export const checkHealth = createServerFn({ method: "GET" })
         error: error?.message || null
       };
     } catch (err: any) {
+      console.error("[HealthCheck] Failed:", err);
       return {
         status: "error",
         database: false,

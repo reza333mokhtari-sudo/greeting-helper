@@ -183,6 +183,8 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
         );
     }
 
+    if (!email) return content;
+
     return (
       <TooltipProvider delayDuration={0}>
         <Tooltip>
@@ -192,7 +194,7 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
             </button>
           </TooltipTrigger>
           <TooltipContent side="bottom" className="text-[10px] px-2 py-1">
-            <p>{email ? "Cloud synchronization is active" : "Saving maps to browser storage"}</p>
+            <p>Cloud synchronization is active</p>
             {localLastSaved && (
               <p className="text-muted-foreground mt-0.5">
                 Last saved: {new Date(localLastSaved).toLocaleTimeString()}
