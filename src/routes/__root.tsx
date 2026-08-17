@@ -163,10 +163,3 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
-
-  return (
-    <QueryClientProvider client={queryClient}>
-      <Outlet />
-    </QueryClientProvider>
-  );
-}
