@@ -80,8 +80,18 @@ export function ProfileMenu({ onAuthRequired }: { onAuthRequired?: ((reason: str
             setAuthStatus(prev => prev); 
           });
       }
+      } else {
+        setUser(null);
+      }
     });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      setAuthStatus(session ? 'authenticated' : 'unauthenticated');
+    });
+
     performCheck();
+    return () => subscription.unsubscribe();
   }, []);
 
   const sendTicket = async () => {
