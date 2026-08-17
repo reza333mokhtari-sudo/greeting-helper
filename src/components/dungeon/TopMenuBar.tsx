@@ -46,7 +46,7 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
+    supabase.auth.getUser().then(({ data }: any) => {
       setUser(data.user);
     });
   }, []);
