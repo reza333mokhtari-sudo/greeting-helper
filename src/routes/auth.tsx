@@ -124,7 +124,7 @@ function AuthPage() {
         setError("That email already has an account. Would you like to sign in instead?");
         return;
       }
-      if (m.includes("weak") || m.includes("guess")) {
+      if (m.includes("weak") || m.includes("guess") || error.status === 422) {
         setError("Password is too common or weak. Please choose a stronger one.");
         return;
       }
