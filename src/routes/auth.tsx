@@ -108,7 +108,13 @@ function AuthPage() {
     const { data, error } = await supabase.auth.signUp({
       email: email.trim(),
       password,
-      options: { emailRedirectTo: window.location.origin, data: { display_name: name.trim() || email.split("@")[0] } },
+      options: { 
+        emailRedirectTo: window.location.origin, 
+        data: { 
+          full_name: name.trim() || email.split("@")[0],
+          display_name: name.trim() || email.split("@")[0]
+        } 
+      },
     });
     setBusy(false);
     if (error) {
