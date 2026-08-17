@@ -81,8 +81,10 @@ private:
     QQmlApplicationEngine* m_engine;
 };
 
+#include "main.moc"
 
 int main(int argc, char *argv[])
+
 {
     QApplication app(argc, argv);
     app.setOrganizationName("DungeonEditor");
