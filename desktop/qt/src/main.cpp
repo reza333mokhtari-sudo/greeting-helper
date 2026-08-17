@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QIcon>
+#include <QQuickStyle>
 #include <QtQml/qqml.h>
 #include <QDebug>
 
@@ -19,6 +20,9 @@ int main(int argc, char *argv[])
     app.setOrganizationName("DungeonEditor");
     app.setApplicationName("DungeonEditorNative");
 
+    // Force Fusion style for professional DCC look and to support customization
+    QQuickStyle::setStyle("Fusion");
+
     qmlRegisterType<Document>("DungeonEditor.Core", 1, 0, "Document");
     qmlRegisterType<MapCanvasItem>("DungeonEditor.Canvas", 1, 0, "MapCanvasItem");
     qmlRegisterType<AssetLibraryModel>("DungeonEditor.Models", 1, 0, "AssetLibraryModel");
@@ -27,14 +31,21 @@ int main(int argc, char *argv[])
     qmlRegisterType<LicenseService>("DungeonEditor.Services", 1, 0, "LicenseService");
     qmlRegisterType<FileService>("DungeonEditor.Services", 1, 0, "FileService");
 
+    // Standardized QML Component Registration
+    qmlRegisterType<Document>("DungeonEditor.Components", 1, 0, "Document");
+
     // Icon path updated for resource prefix
     app.setWindowIcon(QIcon(":/assets/icon.png"));
 
     QQmlApplicationEngine engine;
     
-    // Register "qml" root
-    engine.addImportPath("qrc:/qml");
+    // Register "qml" root correctly for internal imports
     engine.addImportPath("qrc:/");
+    engine.addImportPath("qrc:/qml");
+    engine.addImportPath("qrc:/qml/components");
+    engine.addImportPath("qrc:/qml/dialogs");
+    engine.addImportPath("qrc:/qml/panels");
+
     
     const QStringList resourcePaths = {
         "qrc:/qml/Main.qml"

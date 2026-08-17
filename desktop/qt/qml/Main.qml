@@ -126,6 +126,7 @@ ApplicationWindow {
         }
         
         SplitView {
+            id: mainSplit
             Layout.fillWidth: true
             Layout.fillHeight: true
             orientation: Qt.Horizontal
@@ -134,6 +135,8 @@ ApplicationWindow {
                 implicitWidth: 1
                 color: "#2d2d2d"
             }
+
+
 
             // 4. Left Tool Box
             MayaToolBox {

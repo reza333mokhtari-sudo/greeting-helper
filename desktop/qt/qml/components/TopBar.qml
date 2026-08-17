@@ -38,7 +38,6 @@ Rectangle {
         MenuBar {
             id: menuBar
             Layout.alignment: Qt.AlignVCenter
-            background: Item {}
             
             delegate: MenuBarItem {
                 id: barItem
@@ -48,10 +47,8 @@ Rectangle {
                     color: barItem.highlighted ? "white" : "#ccc"
                     verticalAlignment: Text.AlignVCenter
                 }
-                background: Rectangle {
-                    color: barItem.highlighted ? "#3b82f6" : "transparent"
-                }
             }
+
 
             Menu {
                 title: qsTr("File")

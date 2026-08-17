@@ -64,7 +64,7 @@ Rectangle {
                 placeholderText: qsTr("Describe your dungeon...")
                 Layout.fillWidth: true
                 color: "white"
-                background: Rectangle { color: "#3c3c3c"; radius: 4 }
+
                 onAccepted: sendBtn.clicked()
             }
             Button {
