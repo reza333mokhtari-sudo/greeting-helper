@@ -61,11 +61,36 @@ qt_add_resources(appDungeonEditor "qml_resources"
         qml/dialogs/HelpWindow.qml
         qml/dialogs/PreferencesDialog.qml
         assets/icon.png
-        assets/icons/general/undo.svg
-        assets/icons/general/redo.svg
-        assets/icons/status/engine_ready.svg
-        assets/icons/status/help.svg
+        assets/icons/tools/select.svg
+        assets/icons/tools/move.svg
+        assets/icons/tools/texture_brush.svg
+        assets/icons/tools/draw_corridor.svg
+        assets/icons/tools/measure.svg
+        assets/icons/tools/place_prop.svg
+        assets/icons/tools/eraser.svg
+        assets/icons/tools/procedural.svg
+        assets/icons/tools/draw_room.svg
+        assets/icons/tools/fog_brush.svg
         assets/icons/tools/grid.svg
+        assets/icons/panels/layers.svg
+        assets/icons/panels/asset_library.svg
+        assets/icons/panels/attributes.svg
+        assets/icons/status/performance.svg
+        assets/icons/status/history.svg
+        assets/icons/status/help.svg
+        assets/icons/status/engine_ready.svg
+        assets/icons/menu/save.svg
+        assets/icons/menu/open.svg
+        assets/icons/menu/zoom_out.svg
+        assets/icons/menu/zoom_in.svg
+        assets/icons/menu/new.svg
+        assets/icons/menu/vulkan.svg
+        assets/icons/menu/opengl.svg
+        assets/icons/general/settings.svg
+        assets/icons/general/fit_to_screen.svg
+        assets/icons/general/redo.svg
+        assets/icons/general/undo.svg
+
 
 )
 
