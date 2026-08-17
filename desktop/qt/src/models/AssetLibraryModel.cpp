@@ -1,4 +1,4 @@
-#include <AssetLibraryModel.h>
+#include <models/AssetLibraryModel.h>
 #include <QFile>
 #include <QJsonDocument>
 #include <QDebug>
