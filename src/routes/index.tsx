@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { listLocalMaps, listCloudMaps } from "@/lib/dungeon/storage";
 import { Badge } from "@/components/ui/badge";
 import { ProfileMenu } from "@/components/dungeon/ProfileMenu";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -24,10 +25,16 @@ function LandingPage() {
 
   useEffect(() => {
     const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { session } } = await supabase.auth.getSession();
+      const user = session?.user ?? null;
       setUser(user);
       
       if (user) {
+        // If user is logged in but email not verified, we show a warning
+        if (!user.email_confirmed_at) {
+          toast.info("Please verify your email to enable all features.");
+        }
+
         try {
           const [local, cloud] = await Promise.all([
             listLocalMaps().catch(() => []),
@@ -38,7 +45,6 @@ function LandingPage() {
             ...cloud.map((m: any) => ({ ...m, isCloud: true })),
             ...local.map((m: any) => ({ ...m, isCloud: false, updated_at: new Date(m.lastModified).toISOString() }))
           ].sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
-
           
           setMaps(combined.slice(0, 4));
         } catch (err) {
@@ -50,7 +56,19 @@ function LandingPage() {
         setLoading(false);
       }
     };
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
+      setUser(session?.user ?? null);
+      setLoading(false);
+      
+      // Automatically redirect if magic link just verified the account
+      if (_event === 'SIGNED_IN' && session) {
+        toast.success("Identity verified. Redirecting...");
+      }
+    });
+
     checkUser();
+    return () => subscription.unsubscribe();
   }, []);
 
   return (

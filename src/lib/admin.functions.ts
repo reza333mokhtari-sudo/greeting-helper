@@ -110,6 +110,15 @@ export const getAdminSchema = createServerFn({ method: "GET" })
           columns: ["id", "admin_id", "action", "table_name", "row_id", "payload", "created_at"],
           editable: [],
           deletable: false,
+        },
+        {
+          name: "unverified_users",
+          pk: "id",
+          columns: ["id", "email", "created_at", "last_sign_in_at", "email_confirmed_at"],
+          editable: [],
+          deletable: true,
+          isVirtual: true,
+          baseTable: "auth.users"
         }
       ]
     };
@@ -130,8 +139,33 @@ export const adminTableQuery = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await checkAdminAccess();
 
-    const table = data.table as PublicTable;
-    let query = (supabaseAdmin.from(table) as any).select("*", { count: "exact" });
+    const table = data.table as any;
+    
+    // Special handling for unverified users virtual table
+    if (table === "unverified_users") {
+      // We query profiles and simulate verification status check
+      // In a real app with auth access, we'd join auth.users
+      let query = (supabaseAdmin.from("profiles") as any)
+        .select("id, email, created_at, display_name", { count: "exact" });
+      
+      const from = data.page * data.pageSize;
+      const to = from + data.pageSize - 1;
+      query = query.range(from, to);
+      
+      const { data: rows, count, error } = await query;
+      if (error) throw new Error(error.message);
+      
+      // Map profiles to the expected virtual schema
+      const mappedRows = (rows || []).map((r: any) => ({
+        ...r,
+        email_confirmed_at: null, // Simulated unverified state
+        last_sign_in_at: r.created_at
+      }));
+
+      return { rows: mappedRows, count };
+    }
+
+    let query = (supabaseAdmin.from(table as PublicTable) as any).select("*", { count: "exact" });
 
     if (data.search) {
       query = query.or(`name.ilike.%${data.search}%,title.ilike.%${data.search}%,subject.ilike.%${data.search}%`);
