@@ -27,6 +27,7 @@ CMakeFiles/appDungeonEditor.dir/appDungeonEditor_autogen/mocs_compilation.cpp.o:
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQml/qtqmlexports.h \
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQml/qtqmlglobal.h \
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQmlIntegration/qqmlintegration.h \
+  /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQuick/QQuickItem \
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQuick/QQuickPaintedItem \
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQuick/qquickitem.h \
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQuick/qquickpainteditem.h \
@@ -7789,6 +7790,7 @@ CMakeFiles/appDungeonEditor.dir/src/canvas/MapCanvasItem.cpp.o: /dev-server/desk
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQml/qtqmlexports.h \
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQml/qtqmlglobal.h \
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQmlIntegration/qqmlintegration.h \
+  /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQuick/QQuickItem \
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQuick/QQuickPaintedItem \
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQuick/qquickitem.h \
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQuick/qquickpainteditem.h \
@@ -8912,6 +8914,7 @@ CMakeFiles/appDungeonEditor.dir/src/main.cpp.o: /dev-server/desktop/qt/src/main.
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQml/qtqmlexports.h \
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQml/qtqmlglobal.h \
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQmlIntegration/qqmlintegration.h \
+  /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQuick/QQuickItem \
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQuick/QQuickPaintedItem \
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQuick/qquickitem.h \
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQuick/qquickpainteditem.h \
@@ -11427,6 +11430,10 @@ appdungeoneditor_qmltyperegistrations.cpp:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qmap.h:
 
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qconfig.h:
+
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/q20utility.h:
+
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qstringmatcher.h:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qmalloc.h:
@@ -11507,19 +11514,45 @@ appdungeoneditor_qmltyperegistrations.cpp:
 
 /nix/store/radp574lyk1l05lccg0i4hj4z1p3ig0m-glibc-2.40-218-dev/include/bits/getopt_core.h:
 
+/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/bits/uses_allocator_args.h:
+
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qforeach.h:
+
+/nix/store/radp574lyk1l05lccg0i4hj4z1p3ig0m-glibc-2.40-218-dev/include/bits/fp-fast.h:
+
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qtconfigmacros.h:
+
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qscopedpointer.h:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/QCursor:
 
-/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qtconfigmacros.h:
-
 /nix/store/radp574lyk1l05lccg0i4hj4z1p3ig0m-glibc-2.40-218-dev/include/bits/locale.h:
+
+appDungeonEditor_autogen/SXBUF2WVFU/moc_MapCanvasItem.cpp:
+
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qjsondocument.h:
+
+/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/bits/parse_numbers.h:
+
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/QString:
 
 /nix/store/radp574lyk1l05lccg0i4hj4z1p3ig0m-glibc-2.40-218-dev/include/bits/struct_mutex.h:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qanystringview.h:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qdatetime.h:
+
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/QJsonArray:
+
+/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQmlIntegration/qqmlintegration.h:
+
+/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/bits/invoke.h:
+
+/nix/store/radp574lyk1l05lccg0i4hj4z1p3ig0m-glibc-2.40-218-dev/include/bits/mathcalls.h:
+
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qstringlist.h:
+
+appDungeonEditor_autogen/GQ6NBGVJMG/moc_AiClient.cpp:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/QMetaType:
 
@@ -11573,42 +11606,6 @@ appdungeoneditor_qmltyperegistrations.cpp:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qcborvalue.h:
 
-/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/q20utility.h:
-
-/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qconfig.h:
-
-appDungeonEditor_autogen/SXBUF2WVFU/moc_MapCanvasItem.cpp:
-
-/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qjsondocument.h:
-
-/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qstringlist.h:
-
-appDungeonEditor_autogen/GQ6NBGVJMG/moc_AiClient.cpp:
-
-/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/QJsonArray:
-
-/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQmlIntegration/qqmlintegration.h:
-
-/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/bits/invoke.h:
-
-/nix/store/radp574lyk1l05lccg0i4hj4z1p3ig0m-glibc-2.40-218-dev/include/bits/mathcalls.h:
-
-/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/bits/parse_numbers.h:
-
-/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/QString:
-
-/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qdirlisting.h:
-
-/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtNetwork/qhttpheaders.h:
-
-/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQuick/qquickpainteditem.h:
-
-/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/bits/uses_allocator_args.h:
-
-/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qforeach.h:
-
-/nix/store/radp574lyk1l05lccg0i4hj4z1p3ig0m-glibc-2.40-218-dev/include/bits/fp-fast.h:
-
 /nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/bits/stl_set.h:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/QJsonObject:
@@ -11616,6 +11613,22 @@ appDungeonEditor_autogen/GQ6NBGVJMG/moc_AiClient.cpp:
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qfunctionaltools_impl.h:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/q20memory.h:
+
+/dev-server/desktop/qt/src/canvas/MapCanvasItem.h:
+
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qfont.h:
+
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qglobal.h:
+
+/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/bits/string_view.tcc:
+
+appDungeonEditor_autogen/M4YTXQ7V2H/moc_AssetLibraryModel.cpp:
+
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtNetwork/qnetworkreply.h:
+
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qhashfunctions.h:
+
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qshareddata.h:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/q20functional.h:
 
@@ -11633,21 +11646,9 @@ appDungeonEditor_autogen/GQ6NBGVJMG/moc_AiClient.cpp:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qcontiguouscache.h:
 
-/dev-server/desktop/qt/src/canvas/MapCanvasItem.h:
+/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/exception:
 
-/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qfont.h:
-
-/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qglobal.h:
-
-/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/bits/string_view.tcc:
-
-appDungeonEditor_autogen/M4YTXQ7V2H/moc_AssetLibraryModel.cpp:
-
-/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtNetwork/qnetworkreply.h:
-
-/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qhashfunctions.h:
-
-/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qshareddata.h:
+/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/climits:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qtnoop.h:
 
@@ -11837,11 +11838,17 @@ appDungeonEditor_autogen/GQ6NBGVJMG/moc_FileService.cpp:
 
 /nix/store/radp574lyk1l05lccg0i4hj4z1p3ig0m-glibc-2.40-218-dev/include/asm-generic/errno-base.h:
 
+/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQuick/QQuickItem:
+
 /nix/store/radp574lyk1l05lccg0i4hj4z1p3ig0m-glibc-2.40-218-dev/include/bits/setjmp.h:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qendian.h:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qeventloop.h:
+
+/nix/store/radp574lyk1l05lccg0i4hj4z1p3ig0m-glibc-2.40-218-dev/include/bits/stdio2-decl.h:
+
+/nix/store/radp574lyk1l05lccg0i4hj4z1p3ig0m-glibc-2.40-218-dev/include/bits/floatn-common.h:
 
 /nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/ext/numeric_traits.h:
 
@@ -11911,6 +11918,12 @@ appDungeonEditor_autogen/GQ6NBGVJMG/moc_FileService.cpp:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qjsonparseerror.h:
 
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qdirlisting.h:
+
+/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQuick/qquickpainteditem.h:
+
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtNetwork/qhttpheaders.h:
+
 /nix/store/radp574lyk1l05lccg0i4hj4z1p3ig0m-glibc-2.40-218-dev/include/bits/byteswap.h:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtNetwork/qnetworkaccessmanager.h:
@@ -11920,10 +11933,6 @@ appDungeonEditor_autogen/GQ6NBGVJMG/moc_FileService.cpp:
 /nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/tr1/poly_hermite.tcc:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtNetwork/qssl.h:
-
-/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/exception:
-
-/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/climits:
 
 /nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/x86_64-unknown-linux-gnu/bits/time_members.h:
 
@@ -12382,10 +12391,6 @@ appDungeonEditor_autogen/PRMOGMWJPH/moc_Document.cpp:
 /nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/ranges:
 
 /nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/lib/gcc/x86_64-unknown-linux-gnu/14.3.0/include/limits.h:
-
-/nix/store/radp574lyk1l05lccg0i4hj4z1p3ig0m-glibc-2.40-218-dev/include/bits/floatn-common.h:
-
-/nix/store/radp574lyk1l05lccg0i4hj4z1p3ig0m-glibc-2.40-218-dev/include/bits/stdio2-decl.h:
 
 /nix/store/radp574lyk1l05lccg0i4hj4z1p3ig0m-glibc-2.40-218-dev/include/bits/types/time_t.h:
 

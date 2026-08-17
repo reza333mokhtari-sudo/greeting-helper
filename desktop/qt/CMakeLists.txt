@@ -32,7 +32,7 @@ qt_add_executable(appDungeonEditor
 # We are NOT using SOURCES in qt_add_qml_module to avoid the automated 
 # qmlRegisterTypes which is currently failing due to missing includes in generated code.
 # Instead, we will register types manually in main.cpp.
-qt_add_qml_module(appDungeonEditor
+qt_add_qml_module(appDungeonEditor NO_GENERATE_PLUGIN_SOURCE
     URI DungeonEditor
     VERSION 1.0
     RESOURCE_PREFIX "/qt/qml/DungeonEditor"

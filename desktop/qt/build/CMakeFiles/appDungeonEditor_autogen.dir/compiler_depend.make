@@ -32,6 +32,7 @@ appDungeonEditor_autogen/timestamp: /dev-server/desktop/qt/CMakeLists.txt \
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQml/qtqmlexports.h \
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQml/qtqmlglobal.h \
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQmlIntegration/qqmlintegration.h \
+  /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQuick/QQuickItem \
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQuick/QQuickPaintedItem \
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQuick/qquickitem.h \
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQuick/qquickpainteditem.h \
@@ -1348,6 +1349,8 @@ appDungeonEditor_autogen/timestamp: /dev-server/desktop/qt/CMakeLists.txt \
 
 /nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/x86_64-unknown-linux-gnu/bits/ctype_base.h:
 
+/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/x86_64-unknown-linux-gnu/bits/cpu_defines.h:
+
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qyieldcpu.h:
 
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6qtquickcontrols2materialstylepluginTargets-release.cmake:
@@ -1864,6 +1867,8 @@ CMakeFiles/4.1.2/CMakeCXXCompiler.cmake:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qendian.h:
 
+/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQuick/QQuickItem:
+
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/QPointF:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qjsonvalue.h:
@@ -1901,14 +1906,6 @@ CMakeFiles/4.1.2/CMakeCXXCompiler.cmake:
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6qmlsettingspluginConfig.cmake:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/lib/cmake/Qt6Gui/Qt6QXcbEglIntegrationPluginTargets.cmake:
-
-/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qpair.h:
-
-/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qtconfigmacros.h:
-
-/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6qmlpluginTargets.cmake:
-
-/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6qquickvectorimagepluginAdditionalTargetInfo.cmake:
 
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6QmlModels/Qt6QmlModelsTargets-release.cmake:
 
@@ -2044,8 +2041,6 @@ CMakeFiles/4.1.2/CMakeCXXCompiler.cmake:
 
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6labsanimationpluginTargets.cmake:
 
-/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6qtquick2pluginAdditionalTargetInfo.cmake:
-
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6labsanimationpluginAdditionalTargetInfo.cmake:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/lib/cmake/Qt6Network/Qt6NetworkPlugins.cmake:
@@ -2061,6 +2056,10 @@ CMakeFiles/4.1.2/CMakeCXXCompiler.cmake:
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6QmlTools/Qt6QmlToolsConfigVersionImpl.cmake:
 
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6QuickTestpluginConfig.cmake:
+
+/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6QuickTestpluginAdditionalTargetInfo.cmake:
+
+/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6LabsPlatformpluginAdditionalTargetInfo.cmake:
 
 /nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/bits/stl_multiset.h:
 
@@ -2091,10 +2090,6 @@ CMakeFiles/4.1.2/CMakeCXXCompiler.cmake:
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/Qt6QmlConfigVersionImpl.cmake:
 
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6qmlpluginTargets-release.cmake:
-
-/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/Qt6QQmlNativeDebugConnectorFactoryPluginTargets-release.cmake:
-
-/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQml/qtqml-config.h:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qstringtokenizer.h:
 
@@ -2185,6 +2180,26 @@ CMakeFiles/4.1.2/CMakeSystem.cmake:
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/lib/cmake/Qt6/QtInstallPaths.cmake:
 
 /nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/tr1/exp_integral.tcc:
+
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qpair.h:
+
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qtconfigmacros.h:
+
+/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6qmlpluginTargets.cmake:
+
+/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6qquickvectorimagepluginAdditionalTargetInfo.cmake:
+
+/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQml/qtqml-config.h:
+
+/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/Qt6QQmlNativeDebugConnectorFactoryPluginTargets-release.cmake:
+
+/nix/store/radp574lyk1l05lccg0i4hj4z1p3ig0m-glibc-2.40-218-dev/include/bits/types/__fpos64_t.h:
+
+/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6effectspluginConfig.cmake:
+
+/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQml/qqmlpropertyvaluesource.h:
+
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/lib/cmake/Qt6Gui/Qt6QEglFSX11IntegrationPluginTargets-release.cmake:
 
 .qt/qml_imports/appDungeonEditor_conf.cmake:
 
@@ -2314,13 +2329,11 @@ CMakeFiles/4.1.2/CMakeSystem.cmake:
 
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6qmlxmllistmodelpluginConfig.cmake:
 
-/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6LabsPlatformpluginAdditionalTargetInfo.cmake:
-
-/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6QuickTestpluginAdditionalTargetInfo.cmake:
-
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6QuickControlsTestUtilsPrivatepluginConfig.cmake:
 
 /nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/experimental/source_location:
+
+/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6qtquick2pluginAdditionalTargetInfo.cmake:
 
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6QuickControlsTestUtilsPrivatepluginTargets.cmake:
 
@@ -2633,14 +2646,6 @@ CMakeFiles/4.1.2/CMakeSystem.cmake:
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/lib/cmake/Qt6Gui/Qt6QJpegPluginTargets-release.cmake:
 
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/Qt6QQmlProfilerServiceFactoryPluginTargets-release.cmake:
-
-/nix/store/radp574lyk1l05lccg0i4hj4z1p3ig0m-glibc-2.40-218-dev/include/bits/types/__fpos64_t.h:
-
-/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6effectspluginConfig.cmake:
-
-/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQml/qqmlpropertyvaluesource.h:
-
-/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/lib/cmake/Qt6Gui/Qt6QEglFSX11IntegrationPluginTargets-release.cmake:
 
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6qmlxmllistmodelpluginTargets-release.cmake:
 
@@ -3639,5 +3644,3 @@ appDungeonEditor_autogen/moc_predefs.h:
 /nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/vector:
 
 /nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/x86_64-unknown-linux-gnu/bits/c++config.h:
-
-/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/x86_64-unknown-linux-gnu/bits/cpu_defines.h:
