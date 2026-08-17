@@ -145,22 +145,56 @@ function AdminConsole() {
 
   if (state === "denied") {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-slate-950 text-white p-6 text-center">
-        <ShieldCheck className="h-16 w-16 text-red-500 animate-pulse" />
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">Access Forbidden</h1>
-          <p className="max-w-md text-slate-400">
-            This workstation is restricted to Authorized Administrators only. 
-            Please sign in with an admin account or contact support.
-          </p>
-        </div>
-        <div className="flex gap-4">
-          <Button onClick={handleExit} variant="outline" className="border-slate-800 hover:bg-slate-900 text-slate-300">
-            Exit System
-          </Button>
-          <Button onClick={() => navigate({ to: "/" })} variant="default" className="bg-blue-600 hover:bg-blue-700">
-            Return Home
-          </Button>
+      <main className="flex min-h-screen flex-col items-center justify-center bg-slate-950 text-white p-6 overflow-hidden relative">
+        {/* Background Grid Decoration */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+        
+        <div className="relative z-10 flex flex-col items-center gap-8 max-w-lg w-full">
+          <div className="relative">
+            <div className="absolute inset-0 blur-3xl bg-red-500/20 rounded-full animate-pulse" />
+            <div className="relative bg-slate-900 border border-red-500/50 p-6 rounded-2xl shadow-2xl">
+              <ShieldCheck className="h-16 w-16 text-red-500" />
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h1 className="text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-b from-white to-slate-400">
+              Access Denied
+            </h1>
+            <div className="space-y-2">
+              <p className="text-lg text-slate-300 font-medium">
+                System Authorization Failure
+              </p>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Your account does not have the required administrative privileges to access the Control Center. 
+                This attempt has been logged for security audit purposes.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto mt-4">
+            <Button 
+              onClick={() => navigate({ to: "/" })} 
+              variant="outline" 
+              className="border-slate-800 bg-slate-900/50 hover:bg-slate-800 text-slate-300 hover:text-white transition-all duration-200"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Return Home
+            </Button>
+            <Button 
+              onClick={() => window.location.reload()} 
+              variant="default" 
+              className="bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-900/20 transition-all duration-200"
+            >
+              Retry Authentication
+            </Button>
+          </div>
+
+          <div className="pt-8 border-t border-slate-800 w-full">
+            <p className="text-[10px] text-slate-500 uppercase tracking-widest font-mono">
+              Terminal ID: {Math.random().toString(36).substring(7).toUpperCase()} • Security Level: 0
+            </p>
+          </div>
         </div>
       </main>
     );

@@ -24,15 +24,27 @@ export const checkAdminAccess = createServerFn({ method: "GET" })
         _role: "admin",
       });
 
-      if (error) {
-        console.error("[checkAdminAccess] RPC error:", error);
-        throw new Error("Forbidden");
-      }
-
-      if (!isAdmin) {
+      if (error || !isAdmin) {
+        // Log denied access
+        await (supabaseAdmin.from("admin_audit_logs") as any).insert({
+          admin_id: userId,
+          action: "ACCESS_DENIED",
+          table_name: "admin_control_center",
+          status: "denied",
+          payload: { error: error?.message || "User does not have admin role" }
+        });
+        
         console.warn(`[checkAdminAccess] Access denied for user ${userId}`);
         throw new Error("Forbidden");
       }
+
+      // Log successful role check (optional, but requested for "every admin role check")
+      await (supabaseAdmin.from("admin_audit_logs") as any).insert({
+        admin_id: userId,
+        action: "ROLE_CHECK_SUCCESS",
+        table_name: "admin_control_center",
+        status: "success"
+      });
 
       return { isAdmin: true };
     } catch (e: any) {
