@@ -150,24 +150,29 @@ export const adminTableQuery = createServerFn({ method: "POST" })
     
     // Special handling for unverified users virtual table
     if (table === "unverified_users") {
-      // We query profiles and simulate verification status check
-      // In a real app with auth access, we'd join auth.users
-      let query = (supabaseAdmin.from("profiles") as any)
-        .select("id, email, created_at, display_name", { count: "exact" });
+      // Query users who haven't confirmed their email using the service role client
+      let query = supabaseAdmin.auth.admin.listUsers();
       
-      const from = data.page * data.pageSize;
-      const to = from + data.pageSize - 1;
-      query = query.range(from, to);
-      
-      const { data: rows, count, error } = await query;
+      const { data: { users }, error } = await query;
       if (error) throw new Error(error.message);
       
-      // Map profiles to the expected virtual schema
-      const mappedRows = (rows || []).map((r: any) => ({
-        ...r,
-        email_confirmed_at: null, // Simulated unverified state
-        last_sign_in_at: r.created_at
-      }));
+      const unverifiedUsers = users.filter(u => !u.email_confirmed_at);
+      
+      const from = data.page * data.pageSize;
+      const to = from + data.pageSize;
+      const slicedUsers = unverifiedUsers.slice(from, to);
+      
+      return {
+        rows: slicedUsers.map(u => ({
+          id: u.id,
+          email: u.email,
+          created_at: u.created_at,
+          last_sign_in_at: u.last_sign_in_at,
+          email_confirmed_at: u.email_confirmed_at
+        })),
+        count: unverifiedUsers.length,
+      };
+    }
 
       return { rows: mappedRows, count };
     }
