@@ -1,0 +1,89 @@
+{
+    "classes": [
+        {
+            "classInfos": [
+                {
+                    "name": "QML.Element",
+                    "value": "auto"
+                }
+            ],
+            "className": "AssetLibraryModel",
+            "lineNumber": 21,
+            "methods": [
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "filePath",
+                            "type": "QString"
+                        }
+                    ],
+                    "index": 2,
+                    "lineNumber": 41,
+                    "name": "loadManifest",
+                    "returnType": "void"
+                }
+            ],
+            "object": true,
+            "properties": [
+                {
+                    "constant": false,
+                    "designable": true,
+                    "final": false,
+                    "index": 0,
+                    "lineNumber": 24,
+                    "name": "searchQuery",
+                    "notify": "searchQueryChanged",
+                    "read": "searchQuery",
+                    "required": false,
+                    "scriptable": true,
+                    "stored": true,
+                    "type": "QString",
+                    "user": false,
+                    "write": "setSearchQuery"
+                },
+                {
+                    "constant": false,
+                    "designable": true,
+                    "final": false,
+                    "index": 1,
+                    "lineNumber": 25,
+                    "name": "activeCategory",
+                    "notify": "activeCategoryChanged",
+                    "read": "activeCategory",
+                    "required": false,
+                    "scriptable": true,
+                    "stored": true,
+                    "type": "QString",
+                    "user": false,
+                    "write": "setActiveCategory"
+                }
+            ],
+            "qualifiedClassName": "AssetLibraryModel",
+            "signals": [
+                {
+                    "access": "public",
+                    "index": 0,
+                    "lineNumber": 50,
+                    "name": "searchQueryChanged",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "index": 1,
+                    "lineNumber": 51,
+                    "name": "activeCategoryChanged",
+                    "returnType": "void"
+                }
+            ],
+            "superClasses": [
+                {
+                    "access": "public",
+                    "name": "QAbstractListModel"
+                }
+            ]
+        }
+    ],
+    "inputFile": "AssetLibraryModel.h",
+    "outputRevision": 69
+}

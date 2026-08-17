@@ -1,0 +1,263 @@
+{
+    "formatRevision": 1,
+    "modules": [
+        {
+            "moduleFiles": [
+                {
+                    "entries": [
+                        {
+                            "codegenResult": 0,
+                            "column": 16,
+                            "durationMicroseconds": 767,
+                            "functionName": "width",
+                            "line": 20,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 25,
+                            "durationMicroseconds": 187,
+                            "functionName": "bottom",
+                            "line": 19,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 19,
+                            "durationMicroseconds": 70,
+                            "functionName": "fileMode",
+                            "line": 28,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 22,
+                            "durationMicroseconds": 102,
+                            "functionName": "nameFilters",
+                            "line": 29,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 21,
+                            "durationMicroseconds": 199,
+                            "functionName": "onAccepted",
+                            "line": 30,
+                            "message": "Cannot access value for name document"
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 19,
+                            "durationMicroseconds": 315,
+                            "functionName": "fileMode",
+                            "line": 36,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 22,
+                            "durationMicroseconds": 214,
+                            "functionName": "nameFilters",
+                            "line": 37,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 21,
+                            "durationMicroseconds": 282,
+                            "functionName": "onAccepted",
+                            "line": 38,
+                            "message": "Cannot access value for name document"
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 23,
+                            "durationMicroseconds": 138,
+                            "functionName": "fill",
+                            "line": 42,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 31,
+                            "durationMicroseconds": 105,
+                            "functionName": "alignment",
+                            "line": 50,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 39,
+                            "durationMicroseconds": 0,
+                            "functionName": "centerIn",
+                            "line": 56,
+                            "message": "Could not find property \"centerIn\"."
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 31,
+                            "durationMicroseconds": 79,
+                            "functionName": "alignment",
+                            "line": 77,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 64,
+                            "durationMicroseconds": 0,
+                            "functionName": "onTriggered",
+                            "line": 82,
+                            "message": "Could not find signal \"triggered\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 64,
+                            "durationMicroseconds": 0,
+                            "functionName": "onTriggered",
+                            "line": 83,
+                            "message": "Could not find signal \"triggered\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 61,
+                            "durationMicroseconds": 0,
+                            "functionName": "onTriggered",
+                            "line": 85,
+                            "message": "Could not find signal \"triggered\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 57,
+                            "durationMicroseconds": 0,
+                            "functionName": "enabled",
+                            "line": 90,
+                            "message": "Could not find property \"enabled\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 100,
+                            "durationMicroseconds": 0,
+                            "functionName": "onTriggered",
+                            "line": 90,
+                            "message": "Could not find signal \"triggered\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 57,
+                            "durationMicroseconds": 0,
+                            "functionName": "enabled",
+                            "line": 91,
+                            "message": "Could not find property \"enabled\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 100,
+                            "durationMicroseconds": 0,
+                            "functionName": "onTriggered",
+                            "line": 91,
+                            "message": "Could not find signal \"triggered\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 64,
+                            "durationMicroseconds": 0,
+                            "functionName": "onTriggered",
+                            "line": 95,
+                            "message": "Could not find signal \"triggered\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 65,
+                            "durationMicroseconds": 0,
+                            "functionName": "onTriggered",
+                            "line": 96,
+                            "message": "Could not find signal \"triggered\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 70,
+                            "durationMicroseconds": 0,
+                            "functionName": "onTriggered",
+                            "line": 97,
+                            "message": "Could not find signal \"triggered\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 28,
+                            "durationMicroseconds": 104,
+                            "functionName": "color",
+                            "line": 111,
+                            "message": "Cannot access value for name document"
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 27,
+                            "durationMicroseconds": 0,
+                            "functionName": "text",
+                            "line": 114,
+                            "message": "Could not find property \"text\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 28,
+                            "durationMicroseconds": 0,
+                            "functionName": "color",
+                            "line": 115,
+                            "message": "Could not find property \"color\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 27,
+                            "durationMicroseconds": 0,
+                            "functionName": "text",
+                            "line": 125,
+                            "message": "Could not find property \"text\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 42,
+                            "durationMicroseconds": 0,
+                            "functionName": "horizontalAlignment",
+                            "line": 129,
+                            "message": "Could not find property \"horizontalAlignment\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 40,
+                            "durationMicroseconds": 0,
+                            "functionName": "verticalAlignment",
+                            "line": 130,
+                            "message": "Could not find property \"verticalAlignment\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 27,
+                            "durationMicroseconds": 0,
+                            "functionName": "text",
+                            "line": 143,
+                            "message": "Could not find property \"text\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 42,
+                            "durationMicroseconds": 0,
+                            "functionName": "horizontalAlignment",
+                            "line": 147,
+                            "message": "Could not find property \"horizontalAlignment\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 40,
+                            "durationMicroseconds": 0,
+                            "functionName": "verticalAlignment",
+                            "line": 148,
+                            "message": "Could not find property \"verticalAlignment\"."
+                        }
+                    ],
+                    "filePath": "/dev-server/desktop/qt/qml/components/TopBar.qml"
+                }
+            ],
+            "moduleId": "DungeonEditor(appDungeonEditor)"
+        }
+    ]
+}

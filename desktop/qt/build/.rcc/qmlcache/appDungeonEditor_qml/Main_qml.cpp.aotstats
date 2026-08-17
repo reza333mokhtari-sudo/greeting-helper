@@ -1,0 +1,191 @@
+{
+    "formatRevision": 1,
+    "modules": [
+        {
+            "moduleFiles": [
+                {
+                    "entries": [
+                        {
+                            "codegenResult": 2,
+                            "column": 28,
+                            "durationMicroseconds": 156,
+                            "functionName": "onCompleted",
+                            "line": 24,
+                            "message": "Cannot retrieve a non-object type by ID: assetModel"
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 23,
+                            "durationMicroseconds": 277,
+                            "functionName": "fill",
+                            "line": 30,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 23,
+                            "durationMicroseconds": 38,
+                            "functionName": "document",
+                            "line": 36,
+                            "message": "Cannot retrieve a non-object type by ID: mapDoc"
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 21,
+                            "durationMicroseconds": 15,
+                            "functionName": "canvas",
+                            "line": 37,
+                            "message": "Cannot retrieve a non-object type by ID: canvas"
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 26,
+                            "durationMicroseconds": 0,
+                            "functionName": "orientation",
+                            "line": 43,
+                            "message": "Could not find property \"orientation\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 24,
+                            "durationMicroseconds": 272,
+                            "functionName": "color",
+                            "line": 47,
+                            "message": "Cannot access value for name SplitView"
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 25,
+                            "durationMicroseconds": 34,
+                            "functionName": "canvas",
+                            "line": 54,
+                            "message": "Cannot retrieve a non-object type by ID: canvas"
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 31,
+                            "durationMicroseconds": 0,
+                            "functionName": "document",
+                            "line": 64,
+                            "message": "Could not find property \"document\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 41,
+                            "durationMicroseconds": 0,
+                            "functionName": "onSelectionChanged",
+                            "line": 65,
+                            "message": "Could not find signal \"selectionChanged\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 41,
+                            "durationMicroseconds": 0,
+                            "functionName": "onSelectionChanged",
+                            "line": 65,
+                            "message": "Could not find signal \"selectionChanged\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 35,
+                            "durationMicroseconds": 0,
+                            "functionName": "fill",
+                            "line": 63,
+                            "message": "Could not find property \"fill\"."
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 28,
+                            "durationMicroseconds": 233,
+                            "functionName": "width",
+                            "line": 76,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 29,
+                            "durationMicroseconds": 162,
+                            "functionName": "height",
+                            "line": 77,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 37,
+                            "durationMicroseconds": 103,
+                            "functionName": "bottom",
+                            "line": 70,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 35,
+                            "durationMicroseconds": 83,
+                            "functionName": "left",
+                            "line": 71,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 43,
+                            "durationMicroseconds": 51,
+                            "functionName": "centerIn",
+                            "line": 81,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 35,
+                            "durationMicroseconds": 0,
+                            "functionName": "text",
+                            "line": 92,
+                            "message": "Could not find property \"text\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 27,
+                            "durationMicroseconds": 20,
+                            "functionName": "document",
+                            "line": 105,
+                            "message": "Cannot retrieve a non-object type by ID: mapDoc"
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 25,
+                            "durationMicroseconds": 29,
+                            "functionName": "canvas",
+                            "line": 106,
+                            "message": "Cannot retrieve a non-object type by ID: canvas"
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 29,
+                            "durationMicroseconds": 11,
+                            "functionName": "assetModel",
+                            "line": 107,
+                            "message": "Cannot retrieve a non-object type by ID: assetModel"
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 21,
+                            "durationMicroseconds": 17,
+                            "functionName": "canvas",
+                            "line": 113,
+                            "message": "Cannot retrieve a non-object type by ID: canvas"
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 23,
+                            "durationMicroseconds": 13,
+                            "functionName": "document",
+                            "line": 114,
+                            "message": "Cannot retrieve a non-object type by ID: mapDoc"
+                        }
+                    ],
+                    "filePath": "/dev-server/desktop/qt/qml/Main.qml"
+                }
+            ],
+            "moduleId": "DungeonEditor(appDungeonEditor)"
+        }
+    ]
+}

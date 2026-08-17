@@ -1,0 +1,119 @@
+{
+    "formatRevision": 1,
+    "modules": [
+        {
+            "moduleFiles": [
+                {
+                    "entries": [
+                        {
+                            "codegenResult": 2,
+                            "column": 5,
+                            "durationMicroseconds": 0,
+                            "functionName": "updateInspector",
+                            "line": 12,
+                            "message": "Functions without type annotations won't be compiled"
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 23,
+                            "durationMicroseconds": 348,
+                            "functionName": "fill",
+                            "line": 17,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 27,
+                            "durationMicroseconds": 61,
+                            "functionName": "currentIndex",
+                            "line": 33,
+                            "message": "Cannot retrieve a non-object type by ID: dockTabs"
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 24,
+                            "durationMicroseconds": 87,
+                            "functionName": "model",
+                            "line": 39,
+                            "message": "Cannot access value for name assetModel"
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 27,
+                            "durationMicroseconds": 96,
+                            "functionName": "document",
+                            "line": 40,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 25,
+                            "durationMicroseconds": 52,
+                            "functionName": "canvas",
+                            "line": 41,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 27,
+                            "durationMicroseconds": 49,
+                            "functionName": "document",
+                            "line": 46,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 27,
+                            "durationMicroseconds": 50,
+                            "functionName": "document",
+                            "line": 51,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 35,
+                            "durationMicroseconds": 51,
+                            "functionName": "onObjectSelected",
+                            "line": 52,
+                            "message": "Cannot access value for name canvas"
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 35,
+                            "durationMicroseconds": 42,
+                            "functionName": "onObjectSelected",
+                            "line": 52,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 27,
+                            "durationMicroseconds": 109,
+                            "functionName": "document",
+                            "line": 57,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 27,
+                            "durationMicroseconds": 99,
+                            "functionName": "document",
+                            "line": 62,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 27,
+                            "durationMicroseconds": 51,
+                            "functionName": "document",
+                            "line": 67,
+                            "message": ""
+                        }
+                    ],
+                    "filePath": "/dev-server/desktop/qt/qml/components/RightDock.qml"
+                }
+            ],
+            "moduleId": "DungeonEditor(appDungeonEditor)"
+        }
+    ]
+}

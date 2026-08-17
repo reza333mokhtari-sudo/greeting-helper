@@ -1,0 +1,174 @@
+{
+    "classes": [
+        {
+            "classInfos": [
+                {
+                    "name": "QML.Element",
+                    "value": "auto"
+                }
+            ],
+            "className": "MapCanvasItem",
+            "lineNumber": 8,
+            "object": true,
+            "properties": [
+                {
+                    "constant": false,
+                    "designable": true,
+                    "final": false,
+                    "index": 0,
+                    "lineNumber": 11,
+                    "name": "document",
+                    "notify": "documentChanged",
+                    "read": "document",
+                    "required": false,
+                    "scriptable": true,
+                    "stored": true,
+                    "type": "Document*",
+                    "user": false,
+                    "write": "setDocument"
+                },
+                {
+                    "constant": false,
+                    "designable": true,
+                    "final": false,
+                    "index": 1,
+                    "lineNumber": 12,
+                    "name": "activeTool",
+                    "notify": "activeToolChanged",
+                    "read": "activeTool",
+                    "required": false,
+                    "scriptable": true,
+                    "stored": true,
+                    "type": "QString",
+                    "user": false,
+                    "write": "setActiveTool"
+                },
+                {
+                    "constant": false,
+                    "designable": true,
+                    "final": false,
+                    "index": 2,
+                    "lineNumber": 13,
+                    "name": "selectedId",
+                    "notify": "selectionChanged",
+                    "read": "selectedId",
+                    "required": false,
+                    "scriptable": true,
+                    "stored": true,
+                    "type": "QString",
+                    "user": false
+                },
+                {
+                    "constant": false,
+                    "designable": true,
+                    "final": false,
+                    "index": 3,
+                    "lineNumber": 14,
+                    "name": "zoom",
+                    "notify": "zoomChanged",
+                    "read": "zoom",
+                    "required": false,
+                    "scriptable": true,
+                    "stored": true,
+                    "type": "double",
+                    "user": false
+                },
+                {
+                    "constant": false,
+                    "designable": true,
+                    "final": false,
+                    "index": 4,
+                    "lineNumber": 15,
+                    "name": "pan",
+                    "notify": "panChanged",
+                    "read": "pan",
+                    "required": false,
+                    "scriptable": true,
+                    "stored": true,
+                    "type": "QPointF",
+                    "user": false
+                },
+                {
+                    "constant": false,
+                    "designable": true,
+                    "final": false,
+                    "index": 5,
+                    "lineNumber": 16,
+                    "name": "cursorWorldPos",
+                    "notify": "cursorWorldChanged",
+                    "read": "cursorWorldPos",
+                    "required": false,
+                    "scriptable": true,
+                    "stored": true,
+                    "type": "QPointF",
+                    "user": false
+                }
+            ],
+            "qualifiedClassName": "MapCanvasItem",
+            "signals": [
+                {
+                    "access": "public",
+                    "index": 0,
+                    "lineNumber": 35,
+                    "name": "documentChanged",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "index": 1,
+                    "lineNumber": 36,
+                    "name": "activeToolChanged",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "id",
+                            "type": "QString"
+                        }
+                    ],
+                    "index": 2,
+                    "lineNumber": 37,
+                    "name": "selectionChanged",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "index": 3,
+                    "lineNumber": 38,
+                    "name": "zoomChanged",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "index": 4,
+                    "lineNumber": 39,
+                    "name": "panChanged",
+                    "returnType": "void"
+                },
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "pos",
+                            "type": "QPointF"
+                        }
+                    ],
+                    "index": 5,
+                    "lineNumber": 40,
+                    "name": "cursorWorldChanged",
+                    "returnType": "void"
+                }
+            ],
+            "superClasses": [
+                {
+                    "access": "public",
+                    "name": "QQuickPaintedItem"
+                }
+            ]
+        }
+    ],
+    "inputFile": "MapCanvasItem.h",
+    "outputRevision": 69
+}

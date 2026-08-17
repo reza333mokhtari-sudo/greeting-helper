@@ -3,6 +3,9 @@
 8922281ab123de403afb66da728d603d .qt/appDungeonEditor_qml.txt
 72946d2eb4a199716fc32c5a7d0d4393 .qt/appDungeonEditor_res.txt
 bcde9e3cac7bcd3425816ca087a2d275 .qt/qml_imports/appDungeonEditor_build.cmake
+438c394776a764728218b3733e71e662 .qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp
+8b29d7875b6deab27e41839f42e737ce .qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp
+c04dea0164cbbd8b557ecf47cfa2f330 .qt/rcc/qrc_qmake_DungeonEditor.cpp
 526f784e7c8cc17bd0f5d952d9498f43 .rcc/qmlcache/all_aotstats.aotstats
 85571b0b93e2342b10fee5e3da0f2c61 .rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp
 9b32ed77e61c4d86085b31d81c2acbb9 .rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp
@@ -16,6 +19,7 @@ e5d57fb312e934536af464c330735661 .rcc/qmlcache/appDungeonEditor_qml/components/S
 d39b474ad74630feb9275a4bddbfd549 .rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp
 08128cb726178db004f9f24883d0a7b7 .rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp
 13e4ebb7e437d60b36f457e3e063085e .rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp
+f2b2e5dbf316be46c5254624407b0b2e .rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp
 578b6137dbbae653ec343e998fb2bbf5 .rcc/qmlcache/module_appDungeonEditor.aotstats
 97ffc77e8bb793313f94fee893655dac CMakeFiles/all_aotstats
 4fa147e73babe002e4fa7324c61368bd CMakeFiles/appDungeonEditor_autogen
