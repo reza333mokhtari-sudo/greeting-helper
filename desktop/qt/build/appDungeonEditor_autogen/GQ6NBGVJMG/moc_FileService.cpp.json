@@ -8,7 +8,7 @@
                 }
             ],
             "className": "FileService",
-            "lineNumber": 6,
+            "lineNumber": 7,
             "methods": [
                 {
                     "access": "public",
@@ -23,7 +23,7 @@
                         }
                     ],
                     "index": 0,
-                    "lineNumber": 12,
+                    "lineNumber": 13,
                     "name": "saveFile",
                     "returnType": "void"
                 },
@@ -36,7 +36,7 @@
                         }
                     ],
                     "index": 1,
-                    "lineNumber": 13,
+                    "lineNumber": 14,
                     "name": "readFile",
                     "returnType": "QString"
                 }

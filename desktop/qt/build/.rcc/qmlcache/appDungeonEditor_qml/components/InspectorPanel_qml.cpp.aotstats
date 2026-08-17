@@ -16,7 +16,7 @@
                         {
                             "codegenResult": 2,
                             "column": 18,
-                            "durationMicroseconds": 175,
+                            "durationMicroseconds": 162,
                             "functionName": "visible",
                             "line": 30,
                             "message": "Cannot access value for name selectedObject"
@@ -24,7 +24,7 @@
                         {
                             "codegenResult": 0,
                             "column": 23,
-                            "durationMicroseconds": 282,
+                            "durationMicroseconds": 262,
                             "functionName": "fill",
                             "line": 27,
                             "message": ""
@@ -32,7 +32,7 @@
                         {
                             "codegenResult": 0,
                             "column": 24,
-                            "durationMicroseconds": 179,
+                            "durationMicroseconds": 174,
                             "functionName": "width",
                             "line": 44,
                             "message": ""

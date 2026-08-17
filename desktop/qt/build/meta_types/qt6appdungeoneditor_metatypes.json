@@ -9,7 +9,7 @@
                     }
                 ],
                 "className": "AiClient",
-                "lineNumber": 8,
+                "lineNumber": 9,
                 "methods": [
                     {
                         "access": "public",
@@ -20,7 +20,7 @@
                             }
                         ],
                         "index": 3,
-                        "lineNumber": 18,
+                        "lineNumber": 19,
                         "name": "sendMessage",
                         "returnType": "void"
                     }
@@ -32,7 +32,7 @@
                         "designable": true,
                         "final": false,
                         "index": 0,
-                        "lineNumber": 11,
+                        "lineNumber": 12,
                         "name": "isLoading",
                         "notify": "isLoadingChanged",
                         "read": "isLoading",
@@ -48,7 +48,7 @@
                     {
                         "access": "public",
                         "index": 0,
-                        "lineNumber": 21,
+                        "lineNumber": 22,
                         "name": "isLoadingChanged",
                         "returnType": "void"
                     },
@@ -61,7 +61,7 @@
                             }
                         ],
                         "index": 1,
-                        "lineNumber": 22,
+                        "lineNumber": 23,
                         "name": "responseReceived",
                         "returnType": "void"
                     },
@@ -74,7 +74,7 @@
                             }
                         ],
                         "index": 2,
-                        "lineNumber": 23,
+                        "lineNumber": 24,
                         "name": "errorOccurred",
                         "returnType": "void"
                     }
@@ -100,7 +100,7 @@
                     }
                 ],
                 "className": "FileService",
-                "lineNumber": 6,
+                "lineNumber": 7,
                 "methods": [
                     {
                         "access": "public",
@@ -115,7 +115,7 @@
                             }
                         ],
                         "index": 0,
-                        "lineNumber": 12,
+                        "lineNumber": 13,
                         "name": "saveFile",
                         "returnType": "void"
                     },
@@ -128,7 +128,7 @@
                             }
                         ],
                         "index": 1,
-                        "lineNumber": 13,
+                        "lineNumber": 14,
                         "name": "readFile",
                         "returnType": "QString"
                     }
@@ -156,7 +156,7 @@
                     }
                 ],
                 "className": "AssetLibraryModel",
-                "lineNumber": 21,
+                "lineNumber": 18,
                 "methods": [
                     {
                         "access": "public",
@@ -167,7 +167,7 @@
                             }
                         ],
                         "index": 2,
-                        "lineNumber": 41,
+                        "lineNumber": 38,
                         "name": "loadManifest",
                         "returnType": "void"
                     }
@@ -179,7 +179,7 @@
                         "designable": true,
                         "final": false,
                         "index": 0,
-                        "lineNumber": 24,
+                        "lineNumber": 21,
                         "name": "searchQuery",
                         "notify": "searchQueryChanged",
                         "read": "searchQuery",
@@ -195,7 +195,7 @@
                         "designable": true,
                         "final": false,
                         "index": 1,
-                        "lineNumber": 25,
+                        "lineNumber": 22,
                         "name": "activeCategory",
                         "notify": "activeCategoryChanged",
                         "read": "activeCategory",
@@ -212,14 +212,14 @@
                     {
                         "access": "public",
                         "index": 0,
-                        "lineNumber": 50,
+                        "lineNumber": 47,
                         "name": "searchQueryChanged",
                         "returnType": "void"
                     },
                     {
                         "access": "public",
                         "index": 1,
-                        "lineNumber": 51,
+                        "lineNumber": 48,
                         "name": "activeCategoryChanged",
                         "returnType": "void"
                     }
@@ -245,7 +245,7 @@
                     }
                 ],
                 "className": "Document",
-                "lineNumber": 8,
+                "lineNumber": 9,
                 "methods": [
                     {
                         "access": "public",
@@ -256,7 +256,7 @@
                             }
                         ],
                         "index": 8,
-                        "lineNumber": 37,
+                        "lineNumber": 38,
                         "name": "addFloor",
                         "returnType": "void"
                     },
@@ -273,7 +273,7 @@
                             }
                         ],
                         "index": 9,
-                        "lineNumber": 38,
+                        "lineNumber": 39,
                         "name": "toggleLayer",
                         "returnType": "void"
                     },
@@ -286,7 +286,7 @@
                             }
                         ],
                         "index": 10,
-                        "lineNumber": 40,
+                        "lineNumber": 41,
                         "name": "addObject",
                         "returnType": "void"
                     },
@@ -303,7 +303,7 @@
                             }
                         ],
                         "index": 11,
-                        "lineNumber": 41,
+                        "lineNumber": 42,
                         "name": "updateObject",
                         "returnType": "void"
                     },
@@ -316,14 +316,14 @@
                             }
                         ],
                         "index": 12,
-                        "lineNumber": 42,
+                        "lineNumber": 43,
                         "name": "removeObject",
                         "returnType": "void"
                     },
                     {
                         "access": "public",
                         "index": 13,
-                        "lineNumber": 43,
+                        "lineNumber": 44,
                         "name": "clear",
                         "returnType": "void"
                     },
@@ -336,7 +336,7 @@
                             }
                         ],
                         "index": 14,
-                        "lineNumber": 45,
+                        "lineNumber": 46,
                         "name": "save",
                         "returnType": "void"
                     },
@@ -349,7 +349,7 @@
                             }
                         ],
                         "index": 15,
-                        "lineNumber": 46,
+                        "lineNumber": 47,
                         "name": "load",
                         "returnType": "void"
                     }
@@ -361,7 +361,7 @@
                         "designable": true,
                         "final": false,
                         "index": 0,
-                        "lineNumber": 11,
+                        "lineNumber": 12,
                         "name": "objects",
                         "notify": "objectsChanged",
                         "read": "objects",
@@ -376,7 +376,7 @@
                         "designable": true,
                         "final": false,
                         "index": 1,
-                        "lineNumber": 12,
+                        "lineNumber": 13,
                         "name": "undoStack",
                         "read": "undoStack",
                         "required": false,
@@ -390,7 +390,7 @@
                         "designable": true,
                         "final": false,
                         "index": 2,
-                        "lineNumber": 13,
+                        "lineNumber": 14,
                         "name": "canUndo",
                         "notify": "canUndoChanged",
                         "read": "canUndo",
@@ -405,7 +405,7 @@
                         "designable": true,
                         "final": false,
                         "index": 3,
-                        "lineNumber": 14,
+                        "lineNumber": 15,
                         "name": "canRedo",
                         "notify": "canRedoChanged",
                         "read": "canRedo",
@@ -420,7 +420,7 @@
                         "designable": true,
                         "final": false,
                         "index": 4,
-                        "lineNumber": 15,
+                        "lineNumber": 16,
                         "name": "dirty",
                         "notify": "dirtyChanged",
                         "read": "dirty",
@@ -435,7 +435,7 @@
                         "designable": true,
                         "final": false,
                         "index": 5,
-                        "lineNumber": 16,
+                        "lineNumber": 17,
                         "name": "gridVisible",
                         "notify": "gridVisibleChanged",
                         "read": "gridVisible",
@@ -451,7 +451,7 @@
                         "designable": true,
                         "final": false,
                         "index": 6,
-                        "lineNumber": 17,
+                        "lineNumber": 18,
                         "name": "snapEnabled",
                         "notify": "snapEnabledChanged",
                         "read": "snapEnabled",
@@ -467,7 +467,7 @@
                         "designable": true,
                         "final": false,
                         "index": 7,
-                        "lineNumber": 18,
+                        "lineNumber": 19,
                         "name": "floors",
                         "notify": "floorsChanged",
                         "read": "floors",
@@ -482,8 +482,8 @@
                         "designable": true,
                         "final": false,
                         "index": 8,
-                        "lineNumber": 19,
-                        "name": "layers",
+                        "lineNumber": 20,
+                        "name": "floors",
                         "notify": "layersChanged",
                         "read": "layers",
                         "required": false,
@@ -498,56 +498,56 @@
                     {
                         "access": "public",
                         "index": 0,
-                        "lineNumber": 49,
+                        "lineNumber": 50,
                         "name": "objectsChanged",
                         "returnType": "void"
                     },
                     {
                         "access": "public",
                         "index": 1,
-                        "lineNumber": 50,
+                        "lineNumber": 51,
                         "name": "canUndoChanged",
                         "returnType": "void"
                     },
                     {
                         "access": "public",
                         "index": 2,
-                        "lineNumber": 51,
+                        "lineNumber": 52,
                         "name": "canRedoChanged",
                         "returnType": "void"
                     },
                     {
                         "access": "public",
                         "index": 3,
-                        "lineNumber": 52,
+                        "lineNumber": 53,
                         "name": "dirtyChanged",
                         "returnType": "void"
                     },
                     {
                         "access": "public",
                         "index": 4,
-                        "lineNumber": 53,
+                        "lineNumber": 54,
                         "name": "gridVisibleChanged",
                         "returnType": "void"
                     },
                     {
                         "access": "public",
                         "index": 5,
-                        "lineNumber": 54,
+                        "lineNumber": 55,
                         "name": "snapEnabledChanged",
                         "returnType": "void"
                     },
                     {
                         "access": "public",
                         "index": 6,
-                        "lineNumber": 55,
+                        "lineNumber": 56,
                         "name": "floorsChanged",
                         "returnType": "void"
                     },
                     {
                         "access": "public",
                         "index": 7,
-                        "lineNumber": 56,
+                        "lineNumber": 57,
                         "name": "layersChanged",
                         "returnType": "void"
                     }
@@ -573,7 +573,7 @@
                     }
                 ],
                 "className": "MapCanvasItem",
-                "lineNumber": 10,
+                "lineNumber": 13,
                 "object": true,
                 "properties": [
                     {
@@ -581,7 +581,7 @@
                         "designable": true,
                         "final": false,
                         "index": 0,
-                        "lineNumber": 13,
+                        "lineNumber": 16,
                         "name": "document",
                         "notify": "documentChanged",
                         "read": "document",
@@ -597,7 +597,7 @@
                         "designable": true,
                         "final": false,
                         "index": 1,
-                        "lineNumber": 14,
+                        "lineNumber": 17,
                         "name": "activeTool",
                         "notify": "activeToolChanged",
                         "read": "activeTool",
@@ -613,7 +613,7 @@
                         "designable": true,
                         "final": false,
                         "index": 2,
-                        "lineNumber": 15,
+                        "lineNumber": 18,
                         "name": "selectedId",
                         "notify": "selectionChanged",
                         "read": "selectedId",
@@ -628,7 +628,7 @@
                         "designable": true,
                         "final": false,
                         "index": 3,
-                        "lineNumber": 16,
+                        "lineNumber": 19,
                         "name": "zoom",
                         "notify": "zoomChanged",
                         "read": "zoom",
@@ -643,7 +643,7 @@
                         "designable": true,
                         "final": false,
                         "index": 4,
-                        "lineNumber": 17,
+                        "lineNumber": 20,
                         "name": "pan",
                         "notify": "panChanged",
                         "read": "pan",
@@ -658,7 +658,7 @@
                         "designable": true,
                         "final": false,
                         "index": 5,
-                        "lineNumber": 18,
+                        "lineNumber": 21,
                         "name": "cursorWorldPos",
                         "notify": "cursorWorldChanged",
                         "read": "cursorWorldPos",
@@ -674,14 +674,14 @@
                     {
                         "access": "public",
                         "index": 0,
-                        "lineNumber": 37,
+                        "lineNumber": 40,
                         "name": "documentChanged",
                         "returnType": "void"
                     },
                     {
                         "access": "public",
                         "index": 1,
-                        "lineNumber": 38,
+                        "lineNumber": 41,
                         "name": "activeToolChanged",
                         "returnType": "void"
                     },
@@ -694,21 +694,21 @@
                             }
                         ],
                         "index": 2,
-                        "lineNumber": 39,
+                        "lineNumber": 42,
                         "name": "selectionChanged",
                         "returnType": "void"
                     },
                     {
                         "access": "public",
                         "index": 3,
-                        "lineNumber": 40,
+                        "lineNumber": 43,
                         "name": "zoomChanged",
                         "returnType": "void"
                     },
                     {
                         "access": "public",
                         "index": 4,
-                        "lineNumber": 41,
+                        "lineNumber": 44,
                         "name": "panChanged",
                         "returnType": "void"
                     },
@@ -721,7 +721,7 @@
                             }
                         ],
                         "index": 5,
-                        "lineNumber": 42,
+                        "lineNumber": 45,
                         "name": "cursorWorldChanged",
                         "returnType": "void"
                     }

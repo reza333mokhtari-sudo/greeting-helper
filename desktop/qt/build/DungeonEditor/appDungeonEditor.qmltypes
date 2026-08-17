@@ -8,7 +8,7 @@ import QtQuick.tooling 1.2
 Module {
     Component {
         file: "AiClient.h"
-        lineNumber: 8
+        lineNumber: 9
         name: "AiClient"
         accessSemantics: "reference"
         prototype: "QObject"
@@ -20,29 +20,29 @@ Module {
             read: "isLoading"
             notify: "isLoadingChanged"
             index: 0
-            lineNumber: 11
+            lineNumber: 12
             isReadonly: true
         }
-        Signal { name: "isLoadingChanged"; lineNumber: 21 }
+        Signal { name: "isLoadingChanged"; lineNumber: 22 }
         Signal {
             name: "responseReceived"
-            lineNumber: 22
+            lineNumber: 23
             Parameter { name: "response"; type: "QString" }
         }
         Signal {
             name: "errorOccurred"
-            lineNumber: 23
+            lineNumber: 24
             Parameter { name: "error"; type: "QString" }
         }
         Method {
             name: "sendMessage"
-            lineNumber: 18
+            lineNumber: 19
             Parameter { name: "prompt"; type: "QString" }
         }
     }
     Component {
         file: "AssetLibraryModel.h"
-        lineNumber: 21
+        lineNumber: 18
         name: "AssetLibraryModel"
         accessSemantics: "reference"
         prototype: "QAbstractListModel"
@@ -55,7 +55,7 @@ Module {
             write: "setSearchQuery"
             notify: "searchQueryChanged"
             index: 0
-            lineNumber: 24
+            lineNumber: 21
         }
         Property {
             name: "activeCategory"
@@ -64,19 +64,19 @@ Module {
             write: "setActiveCategory"
             notify: "activeCategoryChanged"
             index: 1
-            lineNumber: 25
+            lineNumber: 22
         }
-        Signal { name: "searchQueryChanged"; lineNumber: 50 }
-        Signal { name: "activeCategoryChanged"; lineNumber: 51 }
+        Signal { name: "searchQueryChanged"; lineNumber: 47 }
+        Signal { name: "activeCategoryChanged"; lineNumber: 48 }
         Method {
             name: "loadManifest"
-            lineNumber: 41
+            lineNumber: 38
             Parameter { name: "filePath"; type: "QString" }
         }
     }
     Component {
         file: "Document.h"
-        lineNumber: 8
+        lineNumber: 9
         name: "Document"
         accessSemantics: "reference"
         prototype: "QObject"
@@ -88,7 +88,7 @@ Module {
             read: "objects"
             notify: "objectsChanged"
             index: 0
-            lineNumber: 11
+            lineNumber: 12
             isReadonly: true
         }
         Property {
@@ -97,7 +97,7 @@ Module {
             isPointer: true
             read: "undoStack"
             index: 1
-            lineNumber: 12
+            lineNumber: 13
             isReadonly: true
             isPropertyConstant: true
         }
@@ -107,7 +107,7 @@ Module {
             read: "canUndo"
             notify: "canUndoChanged"
             index: 2
-            lineNumber: 13
+            lineNumber: 14
             isReadonly: true
         }
         Property {
@@ -116,7 +116,7 @@ Module {
             read: "canRedo"
             notify: "canRedoChanged"
             index: 3
-            lineNumber: 14
+            lineNumber: 15
             isReadonly: true
         }
         Property {
@@ -125,7 +125,7 @@ Module {
             read: "dirty"
             notify: "dirtyChanged"
             index: 4
-            lineNumber: 15
+            lineNumber: 16
             isReadonly: true
         }
         Property {
@@ -135,7 +135,7 @@ Module {
             write: "setGridVisible"
             notify: "gridVisibleChanged"
             index: 5
-            lineNumber: 16
+            lineNumber: 17
         }
         Property {
             name: "snapEnabled"
@@ -144,7 +144,7 @@ Module {
             write: "setSnapEnabled"
             notify: "snapEnabledChanged"
             index: 6
-            lineNumber: 17
+            lineNumber: 18
         }
         Property {
             name: "floors"
@@ -152,68 +152,68 @@ Module {
             read: "floors"
             notify: "floorsChanged"
             index: 7
-            lineNumber: 18
+            lineNumber: 19
             isReadonly: true
         }
         Property {
-            name: "layers"
+            name: "floors"
             type: "QJsonArray"
             read: "layers"
             notify: "layersChanged"
             index: 8
-            lineNumber: 19
+            lineNumber: 20
             isReadonly: true
         }
-        Signal { name: "objectsChanged"; lineNumber: 49 }
-        Signal { name: "canUndoChanged"; lineNumber: 50 }
-        Signal { name: "canRedoChanged"; lineNumber: 51 }
-        Signal { name: "dirtyChanged"; lineNumber: 52 }
-        Signal { name: "gridVisibleChanged"; lineNumber: 53 }
-        Signal { name: "snapEnabledChanged"; lineNumber: 54 }
-        Signal { name: "floorsChanged"; lineNumber: 55 }
-        Signal { name: "layersChanged"; lineNumber: 56 }
+        Signal { name: "objectsChanged"; lineNumber: 50 }
+        Signal { name: "canUndoChanged"; lineNumber: 51 }
+        Signal { name: "canRedoChanged"; lineNumber: 52 }
+        Signal { name: "dirtyChanged"; lineNumber: 53 }
+        Signal { name: "gridVisibleChanged"; lineNumber: 54 }
+        Signal { name: "snapEnabledChanged"; lineNumber: 55 }
+        Signal { name: "floorsChanged"; lineNumber: 56 }
+        Signal { name: "layersChanged"; lineNumber: 57 }
         Method {
             name: "addFloor"
-            lineNumber: 37
+            lineNumber: 38
             Parameter { name: "name"; type: "QString" }
         }
         Method {
             name: "toggleLayer"
-            lineNumber: 38
+            lineNumber: 39
             Parameter { name: "name"; type: "QString" }
             Parameter { name: "visible"; type: "bool" }
         }
         Method {
             name: "addObject"
-            lineNumber: 40
+            lineNumber: 41
             Parameter { name: "obj"; type: "QJsonObject" }
         }
         Method {
             name: "updateObject"
-            lineNumber: 41
+            lineNumber: 42
             Parameter { name: "id"; type: "QString" }
             Parameter { name: "props"; type: "QJsonObject" }
         }
         Method {
             name: "removeObject"
-            lineNumber: 42
+            lineNumber: 43
             Parameter { name: "id"; type: "QString" }
         }
-        Method { name: "clear"; lineNumber: 43 }
+        Method { name: "clear"; lineNumber: 44 }
         Method {
             name: "save"
-            lineNumber: 45
+            lineNumber: 46
             Parameter { name: "url"; type: "QString" }
         }
         Method {
             name: "load"
-            lineNumber: 46
+            lineNumber: 47
             Parameter { name: "url"; type: "QString" }
         }
     }
     Component {
         file: "FileService.h"
-        lineNumber: 6
+        lineNumber: 7
         name: "FileService"
         accessSemantics: "reference"
         prototype: "QObject"
@@ -221,20 +221,20 @@ Module {
         exportMetaObjectRevisions: [256]
         Method {
             name: "saveFile"
-            lineNumber: 12
+            lineNumber: 13
             Parameter { name: "path"; type: "QString" }
             Parameter { name: "content"; type: "QString" }
         }
         Method {
             name: "readFile"
             type: "QString"
-            lineNumber: 13
+            lineNumber: 14
             Parameter { name: "path"; type: "QString" }
         }
     }
     Component {
         file: "MapCanvasItem.h"
-        lineNumber: 10
+        lineNumber: 13
         name: "MapCanvasItem"
         accessSemantics: "reference"
         prototype: "QQuickPaintedItem"
@@ -248,7 +248,7 @@ Module {
             write: "setDocument"
             notify: "documentChanged"
             index: 0
-            lineNumber: 13
+            lineNumber: 16
         }
         Property {
             name: "activeTool"
@@ -257,7 +257,7 @@ Module {
             write: "setActiveTool"
             notify: "activeToolChanged"
             index: 1
-            lineNumber: 14
+            lineNumber: 17
         }
         Property {
             name: "selectedId"
@@ -265,7 +265,7 @@ Module {
             read: "selectedId"
             notify: "selectionChanged"
             index: 2
-            lineNumber: 15
+            lineNumber: 18
             isReadonly: true
         }
         Property {
@@ -274,7 +274,7 @@ Module {
             read: "zoom"
             notify: "zoomChanged"
             index: 3
-            lineNumber: 16
+            lineNumber: 19
             isReadonly: true
         }
         Property {
@@ -283,7 +283,7 @@ Module {
             read: "pan"
             notify: "panChanged"
             index: 4
-            lineNumber: 17
+            lineNumber: 20
             isReadonly: true
         }
         Property {
@@ -292,21 +292,21 @@ Module {
             read: "cursorWorldPos"
             notify: "cursorWorldChanged"
             index: 5
-            lineNumber: 18
+            lineNumber: 21
             isReadonly: true
         }
-        Signal { name: "documentChanged"; lineNumber: 37 }
-        Signal { name: "activeToolChanged"; lineNumber: 38 }
+        Signal { name: "documentChanged"; lineNumber: 40 }
+        Signal { name: "activeToolChanged"; lineNumber: 41 }
         Signal {
             name: "selectionChanged"
-            lineNumber: 39
+            lineNumber: 42
             Parameter { name: "id"; type: "QString" }
         }
-        Signal { name: "zoomChanged"; lineNumber: 40 }
-        Signal { name: "panChanged"; lineNumber: 41 }
+        Signal { name: "zoomChanged"; lineNumber: 43 }
+        Signal { name: "panChanged"; lineNumber: 44 }
         Signal {
             name: "cursorWorldChanged"
-            lineNumber: 42
+            lineNumber: 45
             Parameter { name: "pos"; type: "QPointF" }
         }
     }

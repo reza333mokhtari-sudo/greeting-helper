@@ -8,7 +8,7 @@
                 }
             ],
             "className": "AssetLibraryModel",
-            "lineNumber": 21,
+            "lineNumber": 18,
             "methods": [
                 {
                     "access": "public",
@@ -19,7 +19,7 @@
                         }
                     ],
                     "index": 2,
-                    "lineNumber": 41,
+                    "lineNumber": 38,
                     "name": "loadManifest",
                     "returnType": "void"
                 }
@@ -31,7 +31,7 @@
                     "designable": true,
                     "final": false,
                     "index": 0,
-                    "lineNumber": 24,
+                    "lineNumber": 21,
                     "name": "searchQuery",
                     "notify": "searchQueryChanged",
                     "read": "searchQuery",
@@ -47,7 +47,7 @@
                     "designable": true,
                     "final": false,
                     "index": 1,
-                    "lineNumber": 25,
+                    "lineNumber": 22,
                     "name": "activeCategory",
                     "notify": "activeCategoryChanged",
                     "read": "activeCategory",
@@ -64,14 +64,14 @@
                 {
                     "access": "public",
                     "index": 0,
-                    "lineNumber": 50,
+                    "lineNumber": 47,
                     "name": "searchQueryChanged",
                     "returnType": "void"
                 },
                 {
                     "access": "public",
                     "index": 1,
-                    "lineNumber": 51,
+                    "lineNumber": 48,
                     "name": "activeCategoryChanged",
                     "returnType": "void"
                 }

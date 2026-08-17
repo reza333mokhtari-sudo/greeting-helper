@@ -8,7 +8,7 @@
                         {
                             "codegenResult": 0,
                             "column": 23,
-                            "durationMicroseconds": 1432,
+                            "durationMicroseconds": 392,
                             "functionName": "fill",
                             "line": 10,
                             "message": ""
@@ -40,7 +40,7 @@
                         {
                             "codegenResult": 2,
                             "column": 28,
-                            "durationMicroseconds": 982,
+                            "durationMicroseconds": 279,
                             "functionName": "color",
                             "line": 43,
                             "message": "Cannot access value for name hovered"
