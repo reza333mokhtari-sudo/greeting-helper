@@ -18,16 +18,27 @@ export const checkAdminAccess = createServerFn({ method: "GET" })
       throw new Error("Unauthorized");
     }
 
-    const { data: isAdmin, error } = await supabase.rpc("has_role", {
-      _user_id: userId,
-      _role: "admin",
-    });
+    try {
+      const { data: isAdmin, error } = await supabase.rpc("has_role", {
+        _user_id: userId,
+        _role: "admin",
+      });
 
-    if (error || !isAdmin) {
-      throw new Error("Forbidden");
+      if (error) {
+        console.error("[checkAdminAccess] RPC error:", error);
+        throw new Error("Forbidden");
+      }
+
+      if (!isAdmin) {
+        console.warn(`[checkAdminAccess] Access denied for user ${userId}`);
+        throw new Error("Forbidden");
+      }
+
+      return { isAdmin: true };
+    } catch (e: any) {
+      console.error("[checkAdminAccess] Unexpected error:", e);
+      throw e.message === "Forbidden" ? e : new Error("Forbidden");
     }
-
-    return { isAdmin: true };
   });
 
 /**
