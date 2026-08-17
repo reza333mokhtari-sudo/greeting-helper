@@ -16,6 +16,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/dev-server/desktop/qt/src/models/AssetLibraryModel.cpp" "CMakeFiles/appDungeonEditor.dir/src/models/AssetLibraryModel.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/src/models/AssetLibraryModel.cpp.o.d"
   "/dev-server/desktop/qt/src/services/AiClient.cpp" "CMakeFiles/appDungeonEditor.dir/src/services/AiClient.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/src/services/AiClient.cpp.o.d"
   "/dev-server/desktop/qt/src/services/FileService.cpp" "CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.o.d"
+  "/dev-server/desktop/qt/src/services/WorkspaceService.cpp" "CMakeFiles/appDungeonEditor.dir/src/services/WorkspaceService.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/src/services/WorkspaceService.cpp.o.d"
   "" "appDungeonEditor" "gcc" "CMakeFiles/appDungeonEditor.dir/link.d"
   )
 

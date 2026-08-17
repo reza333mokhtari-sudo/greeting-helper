@@ -20,6 +20,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/appDungeonEditor.dir/src/services/AiClient.cpp.o.d"
   "CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.o"
   "CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.o.d"
+  "CMakeFiles/appDungeonEditor.dir/src/services/WorkspaceService.cpp.o"
+  "CMakeFiles/appDungeonEditor.dir/src/services/WorkspaceService.cpp.o.d"
   "appDungeonEditor"
   "appDungeonEditor.pdb"
 )

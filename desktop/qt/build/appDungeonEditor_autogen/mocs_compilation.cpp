@@ -4,3 +4,4 @@
 #include "M4YTXQ7V2H/moc_AssetLibraryModel.cpp"
 #include "GQ6NBGVJMG/moc_AiClient.cpp"
 #include "GQ6NBGVJMG/moc_FileService.cpp"
+#include "GQ6NBGVJMG/moc_WorkspaceService.cpp"
