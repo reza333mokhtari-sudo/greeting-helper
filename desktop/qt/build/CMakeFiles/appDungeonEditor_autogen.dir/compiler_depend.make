@@ -541,19 +541,28 @@ appDungeonEditor_autogen/timestamp: /dev-server/desktop/qt/CMakeLists.txt \
   /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qversiontagging.h \
   /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qxptype_traits.h \
   /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qyieldcpu.h \
+  /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/QCursor \
+  /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/QPainterPath \
   /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/QTransform \
   /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/QUndoStack \
   /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qaccessible.h \
   /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qaccessible_base.h \
+  /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qbitmap.h \
   /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qcolor.h \
+  /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qcursor.h \
   /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qevent.h \
   /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qeventpoint.h \
   /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qfont.h \
   /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qguiapplication.h \
   /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qguiapplication_platform.h \
+  /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qimage.h \
   /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qinputdevice.h \
   /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qinputmethod.h \
   /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qkeysequence.h \
+  /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qpaintdevice.h \
+  /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qpainterpath.h \
+  /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qpixelformat.h \
+  /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qpixmap.h \
   /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qpointingdevice.h \
   /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qpolygon.h \
   /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qregion.h \
@@ -1247,8 +1256,6 @@ appDungeonEditor_autogen/timestamp: /dev-server/desktop/qt/CMakeLists.txt \
 
 /nix/store/radp574lyk1l05lccg0i4hj4z1p3ig0m-glibc-2.40-218-dev/include/bits/wchar2.h:
 
-/nix/store/radp574lyk1l05lccg0i4hj4z1p3ig0m-glibc-2.40-218-dev/include/bits/wchar2-decl.h:
-
 /nix/store/radp574lyk1l05lccg0i4hj4z1p3ig0m-glibc-2.40-218-dev/include/bits/wchar.h:
 
 /nix/store/radp574lyk1l05lccg0i4hj4z1p3ig0m-glibc-2.40-218-dev/include/bits/unistd_ext.h:
@@ -1327,9 +1334,19 @@ appDungeonEditor_autogen/timestamp: /dev-server/desktop/qt/CMakeLists.txt \
 
 /nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/lib/gcc/x86_64-unknown-linux-gnu/14.3.0/include/stdbool.h:
 
-/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/QTransform:
+/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/lib/gcc/x86_64-unknown-linux-gnu/14.3.0/include/limits.h:
 
-/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6QmlTools/Qt6QmlToolsTargets-release.cmake:
+/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/x86_64-unknown-linux-gnu/bits/time_members.h:
+
+/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/x86_64-unknown-linux-gnu/bits/os_defines.h:
+
+/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/x86_64-unknown-linux-gnu/bits/messages_members.h:
+
+/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/x86_64-unknown-linux-gnu/bits/error_constants.h:
+
+/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/x86_64-unknown-linux-gnu/bits/ctype_inline.h:
+
+/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/x86_64-unknown-linux-gnu/bits/ctype_base.h:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qyieldcpu.h:
 
@@ -1351,6 +1368,8 @@ appDungeonEditor_autogen/timestamp: /dev-server/desktop/qt/CMakeLists.txt \
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qsysinfo.h:
 
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qbitmap.h:
+
 /nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/tr1/hypergeometric.tcc:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qswap.h:
@@ -1366,6 +1385,10 @@ appDungeonEditor_autogen/timestamp: /dev-server/desktop/qt/CMakeLists.txt \
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qstringfwd.h:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfigVersion.cmake:
+
+/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/x86_64-unknown-linux-gnu/bits/gthr.h:
+
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qstringlist.h:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/lib/cmake/Qt6Gui/Qt6GuiConfigVersionImpl.cmake:
 
@@ -1400,8 +1423,6 @@ appDungeonEditor_autogen/timestamp: /dev-server/desktop/qt/CMakeLists.txt \
 /nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/tr1/ell_integral.tcc:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qnativeinterface.h:
-
-/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qjsonobject.h:
 
 /nix/store/radp574lyk1l05lccg0i4hj4z1p3ig0m-glibc-2.40-218-dev/include/bits/confname.h:
 
@@ -1679,6 +1700,10 @@ appDungeonEditor_autogen/timestamp: /dev-server/desktop/qt/CMakeLists.txt \
 
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6qmlshapespluginTargets.cmake:
 
+/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6QmlTools/Qt6QmlToolsTargets-release.cmake:
+
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/QTransform:
+
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qversionnumber.h:
 
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/Qt6QmlPublicCMakeHelpers.cmake:
@@ -1755,6 +1780,8 @@ appDungeonEditor_autogen/timestamp: /dev-server/desktop/qt/CMakeLists.txt \
 
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6QmlAssetDownloader/Qt6QmlAssetDownloaderVersionlessAliasTargets.cmake:
 
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/QPainterPath:
+
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qcheckedint_impl.h:
 
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6QmlAssetDownloader/Qt6QmlAssetDownloaderConfig.cmake:
@@ -1765,6 +1792,8 @@ appDungeonEditor_autogen/timestamp: /dev-server/desktop/qt/CMakeLists.txt \
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qoverload.h:
 
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qpixmap.h:
+
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/lib/cmake/Qt6DBus/Qt6DBusDependencies.cmake:
 
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/Qt6QmlTargets-release.cmake:
@@ -1774,8 +1803,6 @@ appDungeonEditor_autogen/timestamp: /dev-server/desktop/qt/CMakeLists.txt \
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qvarlengtharray.h:
 
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/Qt6QQmlDebuggerServiceFactoryPluginAdditionalTargetInfo.cmake:
-
-/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/x86_64-unknown-linux-gnu/bits/ctype_inline.h:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qstringconverter_base.h:
 
@@ -1828,8 +1855,6 @@ appDungeonEditor_autogen/timestamp: /dev-server/desktop/qt/CMakeLists.txt \
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6qquicklayoutspluginConfig.cmake:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtNetwork/QSslPreSharedKeyAuthenticator:
-
-/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/x86_64-unknown-linux-gnu/bits/ctype_base.h:
 
 CMakeFiles/4.1.2/CMakeCXXCompiler.cmake:
 
@@ -1947,6 +1972,10 @@ CMakeFiles/4.1.2/CMakeCXXCompiler.cmake:
 
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6qtqmlcorepluginTargets.cmake:
 
+/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/x86_64-unknown-linux-gnu/bits/gthr-default.h:
+
+/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6particlespluginAdditionalTargetInfo.cmake:
+
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/lib/cmake/Qt6Gui/Qt6QVkKhrDisplayIntegrationPluginTargets-release.cmake:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qvariant.h:
@@ -2035,10 +2064,6 @@ CMakeFiles/4.1.2/CMakeCXXCompiler.cmake:
 
 /nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/bits/stl_multiset.h:
 
-/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qstringlist.h:
-
-/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/x86_64-unknown-linux-gnu/bits/gthr.h:
-
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6qtquickcontrols2universalstyleimplpluginConfig.cmake:
 
 /nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/x86_64-unknown-linux-gnu/bits/c++allocator.h:
@@ -2048,6 +2073,10 @@ CMakeFiles/4.1.2/CMakeCXXCompiler.cmake:
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qtenvironmentvariables.h:
 
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6QmlNetworkpluginTargets-release.cmake:
+
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qjsonobject.h:
+
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qpaintdevice.h:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qiodevice.h:
 
@@ -2090,6 +2119,8 @@ CMakeFiles/4.1.2/CMakeCXXCompiler.cmake:
 /nix/store/dx1zhzy951phnqyixy0z77s0gcp6wc2z-cmake-4.1.2/share/cmake-4.1/Modules/CMakeGenericSystem.cmake:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qmetaobject.h:
+
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qpainterpath.h:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/lib/cmake/Qt6/QtPublicSbomOpsHelpers.cmake:
 
@@ -2543,6 +2574,10 @@ CMakeFiles/4.1.2/CMakeSystem.cmake:
 
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/Qt6QQmlNativeDebugServiceFactoryPluginConfig.cmake:
 
+/nix/store/radp574lyk1l05lccg0i4hj4z1p3ig0m-glibc-2.40-218-dev/include/bits/wchar2-decl.h:
+
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qimage.h:
+
 /dev-server/desktop/qt/CMakeLists.txt:
 
 /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6qtquicktemplates2pluginTargets.cmake:
@@ -2705,8 +2740,6 @@ CMakeFiles/4.1.2/CMakeSystem.cmake:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtNetwork/qsslconfiguration.h:
 
-/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/x86_64-unknown-linux-gnu/bits/time_members.h:
-
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtNetwork/qsslerror.h:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/lib/cmake/Qt6Gui/Qt6GuiConfigVersion.cmake:
@@ -2794,6 +2827,8 @@ CMakeFiles/4.1.2/CMakeSystem.cmake:
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/lib/cmake/Qt6Concurrent/Qt6ConcurrentConfig.cmake:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/lib/cmake/Qt6Concurrent/Qt6ConcurrentConfigVersionImpl.cmake:
+
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qpixelformat.h:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/lib/cmake/Qt6Gui/Qt6QMinimalEglIntegrationPluginConfig.cmake:
 
@@ -2974,6 +3009,8 @@ appDungeonEditor_autogen/moc_predefs.h:
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/lib/cmake/Qt6Gui/Qt6QEglFSKmsEglDeviceIntegrationPluginTargets-release.cmake:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/lib/cmake/Qt6Gui/Qt6QEglFSKmsEglDeviceIntegrationPluginTargets.cmake:
+
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/QCursor:
 
 /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/lib/cmake/Qt6Gui/Qt6QEglFSKmsGbmIntegrationPluginAdditionalTargetInfo.cmake:
 
@@ -3299,6 +3336,8 @@ appDungeonEditor_autogen/moc_predefs.h:
 
 /nix/store/dx1zhzy951phnqyixy0z77s0gcp6wc2z-cmake-4.1.2/share/cmake-4.1/Modules/CheckIncludeFileCXX.cmake:
 
+/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qcursor.h:
+
 /nix/store/dx1zhzy951phnqyixy0z77s0gcp6wc2z-cmake-4.1.2/share/cmake-4.1/Modules/CheckLibraryExists.cmake:
 
 /nix/store/dx1zhzy951phnqyixy0z77s0gcp6wc2z-cmake-4.1.2/share/cmake-4.1/Modules/Compiler/CMakeCommonCompilerMacros.cmake:
@@ -3364,8 +3403,6 @@ appDungeonEditor_autogen/moc_predefs.h:
 /nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/bits/basic_string.h:
 
 /nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/bits/basic_string.tcc:
-
-/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/x86_64-unknown-linux-gnu/bits/error_constants.h:
 
 /nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/bits/codecvt.h:
 
@@ -3604,13 +3641,3 @@ appDungeonEditor_autogen/moc_predefs.h:
 /nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/x86_64-unknown-linux-gnu/bits/c++config.h:
 
 /nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/x86_64-unknown-linux-gnu/bits/cpu_defines.h:
-
-/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/cmake/Qt6Qml/QmlPlugins/Qt6particlespluginAdditionalTargetInfo.cmake:
-
-/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/x86_64-unknown-linux-gnu/bits/gthr-default.h:
-
-/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/x86_64-unknown-linux-gnu/bits/messages_members.h:
-
-/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/include/c++/14.3.0/x86_64-unknown-linux-gnu/bits/os_defines.h:
-
-/nix/store/k3qc3y1f6i8g2dgz5z0cf00dj4xc5rrv-gcc-14.3.0/lib/gcc/x86_64-unknown-linux-gnu/14.3.0/include/limits.h:
