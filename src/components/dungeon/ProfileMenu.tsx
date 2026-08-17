@@ -398,6 +398,7 @@ export function ProfileMenu({ onAuthRequired }: { onAuthRequired?: ((reason: str
               onClick={async () => {
                 await supabase.auth.signOut();
                 toast.success("Signed out");
+                window.location.href = "/";
               }}
             >
               <LogOut className="mr-2 h-4 w-4 opacity-70" /> Sign Out
