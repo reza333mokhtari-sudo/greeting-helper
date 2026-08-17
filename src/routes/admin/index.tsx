@@ -46,6 +46,7 @@ import {
   adminVerifyUser,
   adminGetUserStats,
   adminDeleteUser,
+  adminGenerateLicense,
 } from "@/lib/admin.functions";
 import { getAdminStats } from "@/lib/admin-stats.functions";
 import { AdminDataTable } from "@/components/admin/AdminDataTable";
