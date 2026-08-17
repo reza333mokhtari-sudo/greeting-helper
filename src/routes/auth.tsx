@@ -82,13 +82,16 @@ function AuthPage() {
     const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
     setBusy(false);
     if (error) {
-      const m = error.message.toLowerCase();
+      console.error("Sign-in error:", error);
+      const m = error.message?.toLowerCase() || "";
       if (m.includes("not confirmed")) {
         setError("Your email isn't confirmed yet. Please check your inbox for an activation link.");
       } else if (m.includes("invalid login")) {
         setError("Incorrect email or password. Please double-check your credentials and try again.");
       } else if (m.includes("network")) {
         setError("Network error. Please check your internet connection and try again.");
+      } else if (!m || m === "{}") {
+        setError("Authentication service unavailable. Please try again in a few moments.");
       } else {
         setError(error.message);
       }
@@ -124,13 +127,17 @@ function AuthPage() {
         name: error.name,
         code: error.code
       });
-      const m = error.message.toLowerCase();
+      const m = error.message?.toLowerCase() || "";
       if (m.includes("already registered") || m.includes("already been registered")) {
         setError("That email already has an account. Would you like to sign in instead?");
         return;
       }
       if (m.includes("weak") || m.includes("guess") || error.status === 422) {
         setError("Password is too common or weak. Please choose a stronger one.");
+        return;
+      }
+      if (!m || m === "{}") {
+        setError("Account creation failed. This can happen if the database is busy. Please try again.");
         return;
       }
       setError(error.message || "An error occurred during sign up. Please try again.");
