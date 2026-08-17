@@ -23,6 +23,12 @@ ApplicationWindow {
     FileService { id: fileService }
     WorkspaceService { id: workspaceService }
     AiClient { id: aiClient }
+    LicenseService { id: licenseService }
+
+    WelcomeWindow { id: welcomeWindow }
+    HelpWindow { id: helpWindow }
+    AboutWindow { id: aboutWindow }
+    LicenseWindow { id: licenseWindow }
 
     PreferencesDialog {
         id: preferencesDialog
@@ -32,6 +38,12 @@ ApplicationWindow {
         console.log("Dungeon Scrawl Desktop Shell Initialized");
         assetModel.loadManifest("assets/soulslike/manifest.json");
         loadWorkspace("Default");
+        
+        // Auto-show welcome screen if not disabled
+        let showWelcome = workspaceService.loadLayout("Settings").showWelcome !== false;
+        if (showWelcome) {
+            welcomeWindow.show();
+        }
     }
 
     function saveWorkspace(name) {
