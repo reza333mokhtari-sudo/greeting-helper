@@ -381,7 +381,7 @@ function AdminConsole() {
                             />
                             <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                               {(stats?.chartData || []).map((entry: any, index: number) => (
-                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length] || '#3b82f6'} />
                               ))}
                             </Bar>
                           </BarChart>
