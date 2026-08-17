@@ -11,14 +11,23 @@ function AuthCallback() {
   const search = useSearch({ from: "/auth/callback" }) as any;
 
   useEffect(() => {
-    supabase.auth.onAuthStateChange((event: any, session: any) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event: any, session: any) => {
       if (event === "SIGNED_IN" && session) {
         const next = search.next || "/editor";
+        // Handle OAuth session recovery if needed
         navigate({ to: next, replace: true });
-      } else if (event === "SIGNED_OUT") {
-        navigate({ to: "/auth", replace: true });
       }
     });
+    
+    // Fallback: check session immediately if onAuthStateChange doesn't fire fast enough
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        const next = search.next || "/editor";
+        navigate({ to: next, replace: true });
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, [navigate, search.next]);
 
   return (

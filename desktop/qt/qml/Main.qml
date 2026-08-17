@@ -14,7 +14,12 @@ ApplicationWindow {
     visible: true
     title: "DUNGEON SCRAWL - Professional Editor"
     
-    background: Rectangle { color: "#121212" }
+    background: Rectangle { color: "#0a0a0a" }
+
+    Document { id: mapDoc }
+    AssetLibraryModel { id: assetModel }
+    FileService { id: fileService }
+    AiClient { id: aiClient }
 
     Document { id: mapDoc }
     AssetLibraryModel { id: assetModel }

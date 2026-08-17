@@ -2,20 +2,26 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Dialogs
+import DungeonEditor.Core 1.0
 
 /**
- * Native Top Bar
+ * Native Top Bar - Professional Dungeon Scrawl Aesthetic
  */
-
 Rectangle {
     id: root
-    height: 56 // h-14 equivalent (14 * 4px)
-    color: "#1e1e1e"
-    border.color: "#333333"
+    height: 56 // h-14 equivalent
+    color: "#121212"
     
     property var document: null
     property var canvas: null
     
+    Rectangle {
+        anchors.bottom: parent.bottom
+        width: parent.width
+        height: 1
+        color: "#2d2d2d"
+    }
+
     FileDialog {
         id: saveDialog
         title: "Save Map"
@@ -34,84 +40,113 @@ Rectangle {
 
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: 15
-        anchors.rightMargin: 15
-        spacing: 20
+        anchors.leftMargin: 16
+        anchors.rightMargin: 16
+        spacing: 12
         
-        Label {
-            text: "DUNGEON SCRAWL"
-            color: "#e0e0e0"
-            font.pixelSize: 14
-            font.bold: true
-            Layout.alignment: Qt.AlignVCenter
-        }
-
-        ToolSeparator { orientation: Qt.Vertical; padding: 10 }
-
-        RowLayout {
-            spacing: 2
-            ToolButton { 
-                icon.name: "document-new"
-                text: "New"
-                onClicked: document.clear() 
-                display: AbstractButton.TextUnderIcon
-            }
-            ToolButton { 
-                icon.name: "document-open"
-                text: "Open"
-                onClicked: openDialog.open() 
-                display: AbstractButton.TextUnderIcon
-            }
-            ToolButton { 
-                icon.name: "document-save"
-                text: "Save"
-                onClicked: saveDialog.open() 
-                display: AbstractButton.TextUnderIcon
-            }
-        }
-        
-        ToolSeparator { orientation: Qt.Vertical; padding: 10 }
-        
-        RowLayout {
-            spacing: 2
-            ToolButton {
-                text: "Undo"
-                icon.name: "edit-undo"
-                enabled: document && document.canUndo
-                onClicked: document.undoStack.undo()
-                display: AbstractButton.TextUnderIcon
-            }
-            ToolButton {
-                text: "Redo"
-                icon.name: "edit-redo"
-                enabled: document && document.canRedo
-                onClicked: document.undoStack.redo()
-                display: AbstractButton.TextUnderIcon
-            }
-        }
-        
-        Item { Layout.fillWidth: true }
-        
+        // Brand Area
         RowLayout {
             spacing: 10
+            Layout.alignment: Qt.AlignVCenter
+            
             Rectangle {
-                width: 8; height: 8; radius: 4
-                color: (document && document.dirty) ? "#f1c40f" : "#2ecc71"
-                Layout.alignment: Qt.AlignVCenter
+                width: 28; height: 28; radius: 4
+                color: "#3b82f6" // Primary
+                Label {
+                    anchors.centerIn: parent
+                    text: "M"
+                    color: "white"
+                    font.bold: true
+                }
             }
-            Label { 
-                text: (document && document.dirty) ? qsTr("UNSAVED") : qsTr("SYNCED")
-                color: (document && document.dirty) ? "#f1c40f" : "#2ecc71"
-                font.pixelSize: 10
+            
+            Label {
+                text: "DUNGEON SCRAWL"
+                color: "white"
+                font.pixelSize: 14
                 font.bold: true
-                Layout.alignment: Qt.AlignVCenter
+                font.letterSpacing: 0.5
+            }
+        }
+
+        Rectangle { width: 1; height: 24; color: "#333"; Layout.leftMargin: 8; Layout.rightMargin: 8 }
+
+        // Menu Bar
+        MenuBar {
+            id: menuBar
+            Layout.alignment: Qt.AlignVCenter
+            background: Item {}
+            
+            Menu {
+                title: qsTr("File")
+                MenuItem { text: qsTr("New Map"); onTriggered: document.clear() }
+                MenuItem { text: qsTr("Open..."); onTriggered: openDialog.open() }
+                MenuSeparator {}
+                MenuItem { text: qsTr("Save"); onTriggered: saveDialog.open() }
+                MenuItem { text: qsTr("Export PNG") }
+            }
+            Menu {
+                title: qsTr("Edit")
+                MenuItem { text: qsTr("Undo"); enabled: document && document.canUndo; onTriggered: document.undoStack.undo() }
+                MenuItem { text: qsTr("Redo"); enabled: document && document.canRedo; onTriggered: document.undoStack.redo() }
+            }
+            Menu {
+                title: qsTr("View")
+                MenuItem { text: qsTr("Zoom In"); onTriggered: canvas.zoomIn() }
+                MenuItem { text: qsTr("Zoom Out"); onTriggered: canvas.zoomOut() }
+                MenuItem { text: qsTr("Fit to Screen"); onTriggered: canvas.fitToScreen() }
+            }
+        }
+
+        Item { Layout.fillWidth: true }
+        
+        // Status & User
+        RowLayout {
+            spacing: 16
+            
+            RowLayout {
+                spacing: 6
+                Rectangle {
+                    width: 8; height: 8; radius: 4
+                    color: (document && document.dirty) ? "#f59e0b" : "#10b981"
+                }
+                Label {
+                    text: (document && document.dirty) ? "UNSAVED" : "SYNCED"
+                    color: (document && document.dirty) ? "#f59e0b" : "#10b981"
+                    font.pixelSize: 10
+                    font.bold: true
+                }
+            }
+            
+            Button {
+                text: "Sign In"
+                flat: true
+                contentItem: Label {
+                    text: parent.text
+                    color: "#3b82f6"
+                    font.bold: true
+                    font.pixelSize: 12
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
             }
             
             Button {
                 text: "Export"
-                palette.button: "#007acc"
-                palette.buttonText: "white"
-                font.bold: true
+                background: Rectangle {
+                    implicitWidth: 80
+                    implicitHeight: 32
+                    radius: 6
+                    color: "#3b82f6"
+                }
+                contentItem: Label {
+                    text: parent.text
+                    color: "white"
+                    font.bold: true
+                    font.pixelSize: 12
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
             }
         }
     }
