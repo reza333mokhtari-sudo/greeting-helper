@@ -1,4 +1,3 @@
-#pragma once
 #include <QAbstractListModel>
 #include <QVector>
 #include <QString>
@@ -6,9 +5,7 @@
 #include <QJsonArray>
 #include <QtQml/qqmlregistration.h>
 
-/**
- * Asset Library List Model
- */
+#pragma once
 
 struct Asset {
     QString id;

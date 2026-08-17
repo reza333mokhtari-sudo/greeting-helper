@@ -1,0 +1,17 @@
+<RCC>
+  <qresource prefix="/qt/qml/DungeonEditor/DungeonEditor/">
+    <file alias="qml/Main.qml">/dev-server/desktop/qt/qml/Main.qml</file>
+    <file alias="qml/components/TopBar.qml">/dev-server/desktop/qt/qml/components/TopBar.qml</file>
+    <file alias="qml/components/ToolRail.qml">/dev-server/desktop/qt/qml/components/ToolRail.qml</file>
+    <file alias="qml/components/AssetLibrary.qml">/dev-server/desktop/qt/qml/components/AssetLibrary.qml</file>
+    <file alias="qml/components/AiPanel.qml">/dev-server/desktop/qt/qml/components/AiPanel.qml</file>
+    <file alias="qml/components/InspectorPanel.qml">/dev-server/desktop/qt/qml/components/InspectorPanel.qml</file>
+    <file alias="qml/components/LayersPanel.qml">/dev-server/desktop/qt/qml/components/LayersPanel.qml</file>
+    <file alias="qml/components/StatusBar.qml">/dev-server/desktop/qt/qml/components/StatusBar.qml</file>
+    <file alias="qml/components/ObjectsPanel.qml">/dev-server/desktop/qt/qml/components/ObjectsPanel.qml</file>
+    <file alias="qml/components/SettingsPanel.qml">/dev-server/desktop/qt/qml/components/SettingsPanel.qml</file>
+    <file alias="qml/components/CmsPanel.qml">/dev-server/desktop/qt/qml/components/CmsPanel.qml</file>
+    <file alias="qml/components/RightDock.qml">/dev-server/desktop/qt/qml/components/RightDock.qml</file>
+  </qresource>
+</RCC>
+

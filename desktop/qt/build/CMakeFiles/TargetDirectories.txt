@@ -1,0 +1,10 @@
+/dev-server/desktop/qt/build/CMakeFiles/appDungeonEditor.dir
+/dev-server/desktop/qt/build/CMakeFiles/appDungeonEditor_qmlimportscan.dir
+/dev-server/desktop/qt/build/CMakeFiles/edit_cache.dir
+/dev-server/desktop/qt/build/CMakeFiles/rebuild_cache.dir
+/dev-server/desktop/qt/build/CMakeFiles/list_install_components.dir
+/dev-server/desktop/qt/build/CMakeFiles/install.dir
+/dev-server/desktop/qt/build/CMakeFiles/install/local.dir
+/dev-server/desktop/qt/build/CMakeFiles/install/strip.dir
+/dev-server/desktop/qt/build/CMakeFiles/appDungeonEditor_autogen_timestamp_deps.dir
+/dev-server/desktop/qt/build/CMakeFiles/appDungeonEditor_autogen.dir

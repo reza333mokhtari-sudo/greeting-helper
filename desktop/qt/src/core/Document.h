@@ -1,9 +1,10 @@
-#pragma once
 #include <QObject>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QUndoStack>
 #include <QtQml/qqmlregistration.h>
+
+#pragma once
 
 class Document : public QObject {
     Q_OBJECT

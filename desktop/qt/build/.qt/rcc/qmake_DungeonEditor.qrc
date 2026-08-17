@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/qt/qml/DungeonEditor/DungeonEditor">
+    <file alias="qmldir">/dev-server/desktop/qt/build/DungeonEditor/qmldir</file>
+  </qresource>
+</RCC>
+

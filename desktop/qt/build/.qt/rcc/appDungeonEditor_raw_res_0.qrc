@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/qt/qml/DungeonEditor/DungeonEditor/">
+    <file alias="assets/icon.png">/dev-server/desktop/qt/assets/icon.png</file>
+  </qresource>
+</RCC>
+

@@ -1,9 +1,14 @@
-#pragma once
 #include <QQuickPaintedItem>
 #include <QPointF>
 #include <QJsonObject>
+#include <QPainterPath>
+#include <QCursor>
+#include <QQuickItem>
 #include <QtQml/qqmlregistration.h>
+
 #include <core/Document.h>
+
+#pragma once
 
 class MapCanvasItem : public QQuickPaintedItem {
     Q_OBJECT

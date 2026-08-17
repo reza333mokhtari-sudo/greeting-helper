@@ -18,7 +18,7 @@ find_package(Qt6 REQUIRED COMPONENTS
 
 qt_standard_project_setup()
 
-# Define the QML module and executable
+# Define the executable
 qt_add_executable(appDungeonEditor
     src/main.cpp
     src/core/Document.h src/core/Document.cpp
@@ -28,18 +28,10 @@ qt_add_executable(appDungeonEditor
     src/services/FileService.h src/services/FileService.cpp
 )
 
-# Qt 6.2+ way of handling QML modules
-qt_add_qml_module(appDungeonEditor
-    URI DungeonEditor
-    VERSION 1.0
-    RESOURCE_PREFIX "/qt/qml/DungeonEditor"
-    SOURCES
-        src/core/Document.h src/core/Document.cpp
-        src/canvas/MapCanvasItem.h src/canvas/MapCanvasItem.cpp
-        src/models/AssetLibraryModel.h src/models/AssetLibraryModel.cpp
-        src/services/AiClient.h src/services/AiClient.cpp
-        src/services/FileService.h src/services/FileService.cpp
-    QML_FILES
+# Manual resource handling instead of qt_add_qml_module to avoid broken type registration
+qt_add_resources(appDungeonEditor "qml_resources"
+    PREFIX "/qt/qml/DungeonEditor"
+    FILES
         qml/Main.qml
         qml/components/TopBar.qml
         qml/components/ToolRail.qml
@@ -52,7 +44,6 @@ qt_add_qml_module(appDungeonEditor
         qml/components/SettingsPanel.qml
         qml/components/CmsPanel.qml
         qml/components/RightDock.qml
-    RESOURCES
         assets/icon.png
 )
 
@@ -76,4 +67,3 @@ install(TARGETS appDungeonEditor
     BUNDLE DESTINATION .
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-

@@ -2,6 +2,8 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QIcon>
+#include <QtQml/qqml.h>
+
 #include <core/Document.h>
 #include <canvas/MapCanvasItem.h>
 #include <models/AssetLibraryModel.h>
@@ -13,6 +15,12 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     app.setOrganizationName("DungeonEditor");
     app.setApplicationName("DungeonEditorNative");
+
+    qmlRegisterType<Document>("DungeonEditor", 1, 0, "Document");
+    qmlRegisterType<MapCanvasItem>("DungeonEditor", 1, 0, "MapCanvasItem");
+    qmlRegisterType<AssetLibraryModel>("DungeonEditor", 1, 0, "AssetLibraryModel");
+    qmlRegisterType<AiClient>("DungeonEditor", 1, 0, "AiClient");
+    qmlRegisterType<FileService>("DungeonEditor", 1, 0, "FileService");
     
     // Icon path updated for Qt 6 resource prefix
     app.setWindowIcon(QIcon(":/qt/qml/DungeonEditor/assets/icon.png"));

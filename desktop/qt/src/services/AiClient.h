@@ -1,9 +1,10 @@
-#pragma once
 #include <QObject>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QString>
 #include <QtQml/qqmlregistration.h>
+
+#pragma once
 
 class AiClient : public QObject {
     Q_OBJECT
