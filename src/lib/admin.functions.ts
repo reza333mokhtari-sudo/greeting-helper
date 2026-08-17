@@ -333,3 +333,47 @@ export const adminDeleteUser = createServerFn({ method: "POST" })
 
     return { success: true };
   });
+
+/**
+ * Client-facing support ticket creation.
+ */
+export const createSupportTicket = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({
+    subject: z.string().min(3).max(100),
+    message: z.string().min(10).max(2000),
+    priority: z.enum(["low", "medium", "high"]).default("medium"),
+  }).parse(d))
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context as any;
+    
+    const { data: ticket, error } = await supabase
+      .from("support_tickets")
+      .insert({
+        user_id: userId,
+        subject: data.subject,
+        message: data.message,
+        priority: data.priority,
+        status: "open"
+      })
+      .select()
+      .single();
+
+    if (error) throw new Error(error.message);
+    return ticket;
+  });
+
+export const getUserTickets = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabase, userId } = context as any;
+    
+    const { data, error } = await supabase
+      .from("support_tickets")
+      .select("*")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
+
+    if (error) throw new Error(error.message);
+    return data;
+  });
