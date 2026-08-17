@@ -7,8 +7,13 @@ import QtQuick.Controls
  */
 
 Rectangle {
+    id: root
     color: "#252526"
     border.color: "#3e3e42"
+    
+    property var model: null
+    property var document: null
+    property var canvas: null
     
     ColumnLayout {
         anchors.fill: parent
@@ -27,7 +32,7 @@ Rectangle {
             Layout.fillWidth: true
             color: "white"
             background: Rectangle { color: "#3c3c3c"; radius: 4 }
-            onTextChanged: assetModel.searchQuery = text
+            onTextChanged: root.model.searchQuery = text
         }
         
         ScrollView {
@@ -41,8 +46,8 @@ Rectangle {
                     Button {
                         text: modelData
                         flat: true
-                        highlighted: assetModel.activeCategory === modelData
-                        onClicked: assetModel.activeCategory = modelData
+                        highlighted: root.model.activeCategory === modelData
+                        onClicked: root.model.activeCategory = modelData
                     }
                 }
             }
@@ -55,7 +60,7 @@ Rectangle {
             clip: true
             cellWidth: 80
             cellHeight: 100
-            model: assetModel
+            model: root.model
             
             delegate: Item {
                 width: 80
@@ -72,11 +77,20 @@ Rectangle {
                         radius: 4
                         border.color: mouseArea.containsMouse ? "#007acc" : "transparent"
                         
+                        Image {
+                            anchors.fill: parent
+                            anchors.margins: 4
+                            source: icon ? icon : ""
+                            fillMode: Image.PreserveAspectFit
+                            visible: icon !== ""
+                        }
+                        
                         Text {
                             anchors.centerIn: parent
                             text: name[0]
                             color: "white"
                             font.pixelSize: 20
+                            visible: icon === ""
                         }
                         
                         MouseArea {
@@ -84,12 +98,14 @@ Rectangle {
                             anchors.fill: parent
                             hoverEnabled: true
                             onClicked: {
-                                mapDocument.addObject({
+                                root.document.addObject({
                                     kind: "image",
                                     name: name,
                                     assetId: assetId,
-                                    x: 0,
-                                    y: 0
+                                    x: root.canvas ? -root.canvas.pan.x / root.canvas.zoom + (root.canvas.width / 2 / root.canvas.zoom) : 0,
+                                    y: root.canvas ? -root.canvas.pan.y / root.canvas.zoom + (root.canvas.height / 2 / root.canvas.zoom) : 0,
+                                    rotation: 0,
+                                    cornerRadius: 0
                                 })
                             }
                         }

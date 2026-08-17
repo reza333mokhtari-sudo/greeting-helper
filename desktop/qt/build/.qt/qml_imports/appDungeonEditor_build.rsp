@@ -1,0 +1,11 @@
+-rootPath
+/dev-server/desktop/qt
+-cmake-output
+-output-file
+/dev-server/desktop/qt/build/.qt/qml_imports/appDungeonEditor_build.cmake
+-importPath
+/dev-server/desktop/qt/build
+-importPath
+/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/qt-6/qml
+-qrcFiles
+/dev-server/desktop/qt/build/.qt/rcc/qml_resources.qrc

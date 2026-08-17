@@ -1,10 +1,10 @@
-#include "AssetLibraryModel.h"
+#include <models/AssetLibraryModel.h>
 #include <QFile>
 #include <QJsonDocument>
 #include <QDebug>
 
 /**
- * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
+ * Asset Library Model Implementation
  */
 
 AssetLibraryModel::AssetLibraryModel(QObject *parent) : QAbstractListModel(parent) {
@@ -44,7 +44,7 @@ void AssetLibraryModel::loadManifest(const QString& filePath) {
             a.id = obj["id"].toString();
             a.name = obj["name"].toString();
             a.category = obj["category"].toString();
-            a.iconUrl = obj["icon"].toString();
+            a.iconUrl = obj["icon_url"].isString() ? obj["icon_url"].toString() : obj["icon"].toString();
             a.data = obj;
             m_allAssets.append(a);
         }

@@ -61,7 +61,8 @@ export function OfflineOverlay() {
         </div>
         <p className="text-sm font-medium text-foreground">Waiting for your connection…</p>
         <p className="text-xs leading-relaxed text-muted-foreground">
-          The editor is paused. Everything you drew is stored on this device and will sync once you are back online.
+          The editor is paused. Everything you drew is stored on this device and will sync once you
+          are back online.
         </p>
         <p className="text-[11px] tabular-nums text-muted-foreground/70">offline for {seconds}s</p>
       </div>

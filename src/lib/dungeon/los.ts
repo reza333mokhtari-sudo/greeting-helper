@@ -29,7 +29,12 @@ function shapeOutline(s: Shape): Pt[] | null {
     ];
   }
   if (s.kind === "ellipse") {
-    return ellipsePts((s.a.x + s.b.x) / 2, (s.a.y + s.b.y) / 2, Math.abs(s.b.x - s.a.x) / 2, Math.abs(s.b.y - s.a.y) / 2);
+    return ellipsePts(
+      (s.a.x + s.b.x) / 2,
+      (s.a.y + s.b.y) / 2,
+      Math.abs(s.b.x - s.a.x) / 2,
+      Math.abs(s.b.y - s.a.y) / 2,
+    );
   }
   if (s.kind === "poly") return s.pts.length > 2 ? s.pts : null;
   return null; // brush corridors are open passages: they do not block sight
@@ -63,9 +68,10 @@ function rayHit(origin: Pt, dx: number, dy: number, segs: Seg[], maxDist: number
     if (Math.abs(denom) < 1e-9) continue;
     const t2 = ((s.a.x - origin.x) * dy - (s.a.y - origin.y) * dx) / denom;
     if (t2 < 0 || t2 > 1) continue;
-    const t1 = Math.abs(dx) > Math.abs(dy)
-      ? (s.a.x + sx * t2 - origin.x) / dx
-      : (s.a.y + sy * t2 - origin.y) / dy;
+    const t1 =
+      Math.abs(dx) > Math.abs(dy)
+        ? (s.a.x + sx * t2 - origin.x) / dx
+        : (s.a.y + sy * t2 - origin.y) / dy;
 
     if (t1 > 0.0001 && t1 < best) best = t1;
   }

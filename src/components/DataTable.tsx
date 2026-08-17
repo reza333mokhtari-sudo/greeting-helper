@@ -21,8 +21,21 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -111,7 +124,10 @@ export function DataTable<T>({
   const [selected, setSelected] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
 
-  const visibleColumns = useMemo(() => columns.filter((c) => !hidden.includes(c.key)), [columns, hidden]);
+  const visibleColumns = useMemo(
+    () => columns.filter((c) => !hidden.includes(c.key)),
+    [columns, hidden],
+  );
   const valueOf = (row: T, col: Column<T>) => (col.value ? col.value(row) : "");
 
   const filtered = useMemo(() => {
@@ -121,7 +137,8 @@ export function DataTable<T>({
       const tests = facets.filter((f) => activeFacets.includes(f.key));
       out = out.filter((r) => tests.every((f) => f.test(r)));
     }
-    if (q) out = out.filter((r) => columns.some((c) => String(valueOf(r, c)).toLowerCase().includes(q)));
+    if (q)
+      out = out.filter((r) => columns.some((c) => String(valueOf(r, c)).toLowerCase().includes(q)));
     return out;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rows, columns, query, activeFacets, facets]);
@@ -222,7 +239,13 @@ export function DataTable<T>({
         {onRefresh && (
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button size="icon" variant="outline" className="size-8" onClick={onRefresh} aria-label="Refresh data">
+              <Button
+                size="icon"
+                variant="outline"
+                className="size-8"
+                onClick={onRefresh}
+                aria-label="Refresh data"
+              >
                 <RefreshCw className="h-3.5 w-3.5" />
               </Button>
             </TooltipTrigger>
@@ -232,8 +255,18 @@ export function DataTable<T>({
 
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button size="icon" variant="outline" className="size-8" onClick={() => setDense((d) => !d)} aria-label="Toggle row density">
-              {dense ? <Rows3 className="h-3.5 w-3.5" /> : <ChevronsUpDown className="h-3.5 w-3.5" />}
+            <Button
+              size="icon"
+              variant="outline"
+              className="size-8"
+              onClick={() => setDense((d) => !d)}
+              aria-label="Toggle row density"
+            >
+              {dense ? (
+                <Rows3 className="h-3.5 w-3.5" />
+              ) : (
+                <ChevronsUpDown className="h-3.5 w-3.5" />
+              )}
             </Button>
           </TooltipTrigger>
           <TooltipContent>{dense ? "Comfortable rows" : "Compact rows"}</TooltipContent>
@@ -256,7 +289,9 @@ export function DataTable<T>({
                   checked={!hidden.includes(c.key)}
                   disabled={c.locked === true}
                   onSelect={(e) => e.preventDefault()}
-                  onCheckedChange={(v) => setHidden((h) => (v ? h.filter((k) => k !== c.key) : [...h, c.key]))}
+                  onCheckedChange={(v) =>
+                    setHidden((h) => (v ? h.filter((k) => k !== c.key) : [...h, c.key]))
+                  }
                 >
                   {c.header}
                 </DropdownMenuCheckboxItem>
@@ -266,7 +301,13 @@ export function DataTable<T>({
 
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button size="icon" variant="outline" className="size-8" onClick={download} aria-label="Export CSV">
+            <Button
+              size="icon"
+              variant="outline"
+              className="size-8"
+              onClick={download}
+              aria-label="Export CSV"
+            >
               <Download className="h-3.5 w-3.5" />
             </Button>
           </TooltipTrigger>
@@ -281,7 +322,12 @@ export function DataTable<T>({
           <Badge variant="default" className="text-[10px]">
             {selected.length} selected
           </Badge>
-          <Button size="sm" variant="ghost" className="h-7 text-[11px]" onClick={() => setSelected([])}>
+          <Button
+            size="sm"
+            variant="ghost"
+            className="h-7 text-[11px]"
+            onClick={() => setSelected([])}
+          >
             Clear
           </Button>
           <Separator orientation="vertical" className="h-5" />
@@ -311,7 +357,11 @@ export function DataTable<T>({
                     aria-label="Select all rows on this page"
                     checked={allOnPage}
                     onCheckedChange={(v) =>
-                      setSelected((s) => (v ? Array.from(new Set([...s, ...pageIds])) : s.filter((id) => !pageIds.includes(id))))
+                      setSelected((s) =>
+                        v
+                          ? Array.from(new Set([...s, ...pageIds]))
+                          : s.filter((id) => !pageIds.includes(id)),
+                      )
                     }
                   />
                 </TableHead>
@@ -327,7 +377,11 @@ export function DataTable<T>({
                         type="button"
                         className="flex items-center gap-1 text-[11px] uppercase tracking-wider hover:text-foreground"
                         onClick={() =>
-                          setSort((s) => (s?.key === c.key ? { key: c.key, dir: s.dir === 1 ? -1 : 1 } : { key: c.key, dir: 1 }))
+                          setSort((s) =>
+                            s?.key === c.key
+                              ? { key: c.key, dir: s.dir === 1 ? -1 : 1 }
+                              : { key: c.key, dir: 1 },
+                          )
                         }
                       >
                         {c.header}
@@ -360,7 +414,10 @@ export function DataTable<T>({
               ))
             ) : slice.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={colSpan} className="py-10 text-center text-xs text-muted-foreground">
+                <TableCell
+                  colSpan={colSpan}
+                  className="py-10 text-center text-xs text-muted-foreground"
+                >
                   {empty}
                 </TableCell>
               </TableRow>
@@ -380,7 +437,9 @@ export function DataTable<T>({
                         <Checkbox
                           aria-label="Select row"
                           checked={isSel}
-                          onCheckedChange={(v) => setSelected((s) => (v ? [...s, id] : s.filter((x) => x !== id)))}
+                          onCheckedChange={(v) =>
+                            setSelected((s) => (v ? [...s, id] : s.filter((x) => x !== id)))
+                          }
                         />
                       </TableCell>
                     )}
@@ -422,10 +481,24 @@ export function DataTable<T>({
               ))}
             </SelectContent>
           </Select>
-          <Button size="icon" variant="ghost" className="size-7" disabled={current === 0} onClick={() => setPage(0)} aria-label="First page">
+          <Button
+            size="icon"
+            variant="ghost"
+            className="size-7"
+            disabled={current === 0}
+            onClick={() => setPage(0)}
+            aria-label="First page"
+          >
             <ChevronsLeft className="h-3.5 w-3.5" />
           </Button>
-          <Button size="icon" variant="ghost" className="size-7" disabled={current === 0} onClick={() => setPage(current - 1)} aria-label="Previous page">
+          <Button
+            size="icon"
+            variant="ghost"
+            className="size-7"
+            disabled={current === 0}
+            onClick={() => setPage(current - 1)}
+            aria-label="Previous page"
+          >
             <ChevronLeft className="h-3.5 w-3.5" />
           </Button>
           <span className="tabular-nums">

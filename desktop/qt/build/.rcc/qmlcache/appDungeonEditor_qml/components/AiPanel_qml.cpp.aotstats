@@ -1,0 +1,143 @@
+{
+    "formatRevision": 1,
+    "modules": [
+        {
+            "moduleFiles": [
+                {
+                    "entries": [
+                        {
+                            "codegenResult": 0,
+                            "column": 23,
+                            "durationMicroseconds": 396,
+                            "functionName": "fill",
+                            "line": 14,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 29,
+                            "durationMicroseconds": 138,
+                            "functionName": "onCountChanged",
+                            "line": 51,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 24,
+                            "durationMicroseconds": 118,
+                            "functionName": "width",
+                            "line": 33,
+                            "message": "Cannot access value for name chatView"
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 25,
+                            "durationMicroseconds": 42,
+                            "functionName": "height",
+                            "line": 34,
+                            "message": "Cannot retrieve a non-object type by ID: textLabel"
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 24,
+                            "durationMicroseconds": 193,
+                            "functionName": "color",
+                            "line": 35,
+                            "message": "Cannot access value for name isAi"
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 35,
+                            "durationMicroseconds": 73,
+                            "functionName": "fill",
+                            "line": 39,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 31,
+                            "durationMicroseconds": 0,
+                            "functionName": "text",
+                            "line": 43,
+                            "message": "Could not find property \"text\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 35,
+                            "durationMicroseconds": 0,
+                            "functionName": "wrapMode",
+                            "line": 45,
+                            "message": "Could not find property \"wrapMode\"."
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 65,
+                            "durationMicroseconds": 106,
+                            "functionName": "onTriggered",
+                            "line": 52,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 22,
+                            "durationMicroseconds": 0,
+                            "functionName": "visible",
+                            "line": 57,
+                            "message": "Could not find property \"visible\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 29,
+                            "durationMicroseconds": 0,
+                            "functionName": "onAccepted",
+                            "line": 68,
+                            "message": "Could not find signal \"accepted\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 26,
+                            "durationMicroseconds": 0,
+                            "functionName": "enabled",
+                            "line": 73,
+                            "message": "Could not find property \"enabled\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 28,
+                            "durationMicroseconds": 0,
+                            "functionName": "onClicked",
+                            "line": 74,
+                            "message": "Could not find signal \"clicked\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 17,
+                            "durationMicroseconds": 77,
+                            "functionName": "target",
+                            "line": 84,
+                            "message": "Cannot access value for name aiClient"
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 9,
+                            "durationMicroseconds": 0,
+                            "functionName": "onResponseReceived",
+                            "line": 85,
+                            "message": "Functions without type annotations won't be compiled"
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 9,
+                            "durationMicroseconds": 0,
+                            "functionName": "onErrorOccurred",
+                            "line": 88,
+                            "message": "Functions without type annotations won't be compiled"
+                        }
+                    ],
+                    "filePath": "/dev-server/desktop/qt/qml/components/AiPanel.qml"
+                }
+            ],
+            "moduleId": "DungeonEditor(appDungeonEditor)"
+        }
+    ]
+}

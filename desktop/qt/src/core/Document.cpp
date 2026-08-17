@@ -1,4 +1,4 @@
-#include "Document.h"
+#include <core/Document.h>
 #include <QFile>
 #include <QJsonDocument>
 #include <QUndoCommand>
@@ -9,8 +9,8 @@
 
 class BaseCommand : public QUndoCommand {
 public:
-    BaseCommand(std::function<void()> redoFn, std::function<void()> undoFn) 
-        : m_redo(redoFn), m_undo(undoFn) {}
+    BaseCommand(const QString &text, std::function<void()> redoFn, std::function<void()> undoFn) 
+        : QUndoCommand(text), m_redo(redoFn), m_undo(undoFn) {}
     void redo() override { m_redo(); }
     void undo() override { m_undo(); }
 private:
@@ -21,6 +21,39 @@ private:
 
 Document::Document(QObject *parent) : QObject(parent) {
     m_undoStack = new QUndoStack(this);
+    connect(m_undoStack, &QUndoStack::canUndoChanged, this, &Document::canUndoChanged);
+    connect(m_undoStack, &QUndoStack::canRedoChanged, this, &Document::canRedoChanged);
+    
+    // Default data
+    QJsonObject f1; f1["id"] = "f1"; f1["name"] = "Ground Floor"; f1["active"] = true;
+    m_floors.append(f1);
+
+    QJsonObject l1; l1["name"] = "Props"; l1["isVisible"] = true;
+    QJsonObject l2; l2["name"] = "Structure"; l2["isVisible"] = true;
+    m_layers.append(l1);
+    m_layers.append(l2);
+}
+
+void Document::addFloor(const QString& name) {
+    QJsonObject f;
+    f["id"] = QUuid::createUuid().toString();
+    f["name"] = name;
+    f["active"] = false;
+    m_floors.append(f);
+    emit floorsChanged();
+}
+
+void Document::toggleLayer(const QString& name, bool visible) {
+    for(int i=0; i<m_layers.size(); ++i) {
+        QJsonObject l = m_layers[i].toObject();
+        if(l["name"].toString() == name) {
+            l["isVisible"] = visible;
+            m_layers[i] = l;
+            break;
+        }
+    }
+    emit layersChanged();
+    emit objectsChanged(); // Redraw if layer visibility changes
 }
 
 void Document::addObject(QJsonObject obj) {
@@ -35,8 +68,7 @@ void Document::addObject(QJsonObject obj) {
         }
         refresh();
     };
-    m_undoStack->push(new BaseCommand(redo, undo));
-    setText(tr("Add %1").arg(obj["name"].toString()));
+    m_undoStack->push(new BaseCommand(tr("Add Object"), redo, undo));
 }
 
 void Document::updateObject(const QString& id, QJsonObject props) {
@@ -59,7 +91,8 @@ void Document::updateObject(const QString& id, QJsonObject props) {
             QJsonObject o = m_objects[i].toObject();
             if(o["id"].toString() == id) {
                 for(auto it = props.begin(); it != props.end(); ++it) o[it.key()] = it.value();
-                m_objects[i] = o; break;
+                m_objects[i] = o;
+                break;
             }
         }
         refresh();
@@ -74,7 +107,7 @@ void Document::updateObject(const QString& id, QJsonObject props) {
         }
         refresh();
     };
-    m_undoStack->push(new BaseCommand(redo, undo));
+    m_undoStack->push(new BaseCommand(tr("Update Object"), redo, undo));
 }
 
 void Document::removeObject(const QString& id) {
@@ -97,7 +130,7 @@ void Document::removeObject(const QString& id) {
         refresh();
     };
     auto undo = [this, removed, idx]() { m_objects.insert(idx, removed); refresh(); };
-    m_undoStack->push(new BaseCommand(redo, undo));
+    m_undoStack->push(new BaseCommand(tr("Remove Object"), redo, undo));
 }
 
 void Document::clear() {

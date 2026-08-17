@@ -3,7 +3,19 @@
   "name": "Soulslike Core Pack",
   "version": "1.0.0",
   "grid": 64,
-  "categories": ["weapons", "armor", "items", "enemies", "bosses", "architecture", "terrain", "nature", "props", "markers", "fx"],
+  "categories": [
+    "weapons",
+    "armor",
+    "items",
+    "enemies",
+    "bosses",
+    "architecture",
+    "terrain",
+    "nature",
+    "props",
+    "markers",
+    "fx"
+  ],
   "assets": [
     {
       "id": "ter_stone_floor",

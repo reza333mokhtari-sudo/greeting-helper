@@ -1,10 +1,10 @@
-#include "AiClient.h"
+#include <services/AiClient.h>
 #include <QNetworkRequest>
 #include <QJsonObject>
 #include <QJsonDocument>
 
 /**
- * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
+ * AI Client Implementation
  */
 
 AiClient::AiClient(QObject *parent) : QObject(parent) {
@@ -17,8 +17,9 @@ void AiClient::sendMessage(const QString& prompt) {
     m_isLoading = true;
     emit isLoadingChanged();
 
-    QNetworkRequest request(QUrl("http://localhost:8080/api/ai/chat"));
+    QNetworkRequest request(QUrl("https://id-preview--8fcae60c-9d66-40f7-8995-c04b7f611207.lovable.app/api/ai/chat"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request.setTransferTimeout(30000); // 30s timeout
 
     QJsonObject body;
     body["prompt"] = prompt;
@@ -30,8 +31,13 @@ void AiClient::sendMessage(const QString& prompt) {
         emit isLoadingChanged();
         
         if (reply->error() == QNetworkReply::NoError) {
-            QJsonObject res = QJsonDocument::fromJson(reply->readAll()).object();
-            emit responseReceived(res["text"].toString());
+            QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
+            if (doc.isObject()) {
+                QJsonObject res = doc.object();
+                emit responseReceived(res["text"].toString());
+            } else {
+                emit errorOccurred(tr("Invalid AI response format"));
+            }
         } else {
             emit errorOccurred(reply->errorString());
         }

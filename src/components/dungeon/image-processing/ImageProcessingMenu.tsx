@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
   ContextMenuContent,
@@ -9,16 +8,13 @@ import {
   ContextMenuSubContent,
   ContextMenuSubTrigger,
 } from "@/components/ui/context-menu";
+import { ImageIcon, Wand2, Palette, MinusCircle, Sun, Contrast, Layers } from "lucide-react";
 import {
-  ImageIcon,
-  Wand2,
-  Palette,
-  MinusCircle,
-  Sun,
-  Contrast,
-  Layers,
-} from "lucide-react";
-import { removeBackground, pixelate, toonify, applyFilter } from "@/lib/image-processing/processors";
+  removeBackground,
+  pixelate,
+  toonify,
+  applyFilter,
+} from "@/lib/image-processing/processors";
 import { toast } from "sonner";
 
 export type ImageProcessingActions = {
@@ -38,10 +34,7 @@ export function ImageProcessingMenu({
 }) {
   const [processing, setProcessing] = useState(false);
 
-  const runProcessor = async (
-    label: string,
-    processor: (src: string) => Promise<string>
-  ) => {
+  const runProcessor = async (label: string, processor: (src: string) => Promise<string>) => {
     if (processing) return;
     setProcessing(true);
     actions.onProcessingStart(objectId);
@@ -66,7 +59,7 @@ export function ImageProcessingMenu({
       <ContextMenuLabel className="text-[10px] uppercase tracking-wider flex items-center gap-2">
         <ImageIcon className="size-3" /> Image Effects
       </ContextMenuLabel>
-      
+
       <ContextMenuItem onSelect={() => runProcessor("Remove Background", removeBackground)}>
         <MinusCircle className="mr-2 size-3.5" /> Remove Background
       </ContextMenuItem>
@@ -84,32 +77,56 @@ export function ImageProcessingMenu({
           <Layers className="mr-2 size-3.5" /> Filters
         </ContextMenuSubTrigger>
         <ContextMenuSubContent className="w-48">
-          <ContextMenuItem onSelect={() => runProcessor("Grayscale", (src) => applyFilter(src, "grayscale(1)"))}>
+          <ContextMenuItem
+            onSelect={() => runProcessor("Grayscale", (src) => applyFilter(src, "grayscale(1)"))}
+          >
             Grayscale
           </ContextMenuItem>
-          <ContextMenuItem onSelect={() => runProcessor("Sepia", (src) => applyFilter(src, "sepia(1)"))}>
+          <ContextMenuItem
+            onSelect={() => runProcessor("Sepia", (src) => applyFilter(src, "sepia(1)"))}
+          >
             Sepia
           </ContextMenuItem>
-          <ContextMenuItem onSelect={() => runProcessor("Invert", (src) => applyFilter(src, "invert(1)"))}>
+          <ContextMenuItem
+            onSelect={() => runProcessor("Invert", (src) => applyFilter(src, "invert(1)"))}
+          >
             Invert
           </ContextMenuItem>
-          <ContextMenuItem onSelect={() => runProcessor("Blur", (src) => applyFilter(src, "blur(4px)"))}>
+          <ContextMenuItem
+            onSelect={() => runProcessor("Blur", (src) => applyFilter(src, "blur(4px)"))}
+          >
             Blur
           </ContextMenuItem>
-          <ContextMenuItem onSelect={() => runProcessor("Sharpen", (src) => applyFilter(src, "contrast(1.2) brightness(1.1)"))}>
+          <ContextMenuItem
+            onSelect={() =>
+              runProcessor("Sharpen", (src) => applyFilter(src, "contrast(1.2) brightness(1.1)"))
+            }
+          >
             Sharpen
           </ContextMenuItem>
           <ContextMenuSeparator />
-          <ContextMenuItem onSelect={() => runProcessor("Contrast+", (src) => applyFilter(src, "contrast(1.5)"))}>
+          <ContextMenuItem
+            onSelect={() => runProcessor("Contrast+", (src) => applyFilter(src, "contrast(1.5)"))}
+          >
             <Contrast className="mr-2 size-3.5" /> Contrast +
           </ContextMenuItem>
-          <ContextMenuItem onSelect={() => runProcessor("Contrast-", (src) => applyFilter(src, "contrast(0.7)"))}>
+          <ContextMenuItem
+            onSelect={() => runProcessor("Contrast-", (src) => applyFilter(src, "contrast(0.7)"))}
+          >
             <Contrast className="mr-2 size-3.5" /> Contrast -
           </ContextMenuItem>
-          <ContextMenuItem onSelect={() => runProcessor("Brightness+", (src) => applyFilter(src, "brightness(1.3)"))}>
+          <ContextMenuItem
+            onSelect={() =>
+              runProcessor("Brightness+", (src) => applyFilter(src, "brightness(1.3)"))
+            }
+          >
             <Sun className="mr-2 size-3.5" /> Brightness +
           </ContextMenuItem>
-          <ContextMenuItem onSelect={() => runProcessor("Brightness-", (src) => applyFilter(src, "brightness(0.7)"))}>
+          <ContextMenuItem
+            onSelect={() =>
+              runProcessor("Brightness-", (src) => applyFilter(src, "brightness(0.7)"))
+            }
+          >
             <Sun className="mr-2 size-3.5" /> Brightness -
           </ContextMenuItem>
         </ContextMenuSubContent>

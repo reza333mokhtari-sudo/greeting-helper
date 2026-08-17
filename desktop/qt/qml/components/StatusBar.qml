@@ -3,53 +3,62 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 /**
- * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
+ * Native Status Bar
  */
 
 Rectangle {
-    color: "#007acc"
+    id: root
+    height: 28
+    color: "#1e1e1e"
+    border.color: "#333333"
     
-    property string currentTool: "select"
-    property double zoom: 1.0
-    property int selectionCount: 0
+    property var canvas: null
+    property var document: null
+    property int selectionCount: canvas && canvas.selectedId !== "" ? 1 : 0
 
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: 10
-        anchors.rightMargin: 10
+        anchors.leftMargin: 15
+        anchors.rightMargin: 15
+        spacing: 15
         
         Label {
-            text: qsTr("Tool: ") + root.currentTool.toUpperCase()
-            color: "white"
-            font.pixelSize: 11
+            text: (canvas ? canvas.activeTool.toUpperCase() : "NONE")
+            color: "#007acc"
+            font.pixelSize: 10
+            font.bold: true
         }
         
-        ToolSeparator { visible: true }
+        Rectangle { width: 1; height: 14; color: "#444" }
 
         Label {
-            text: qsTr("Selection: ") + root.selectionCount
-            color: "white"
-            font.pixelSize: 11
+            text: qsTr("SELECTION: ") + root.selectionCount
+            color: "#aaa"
+            font.pixelSize: 10
         }
 
         Item { Layout.fillWidth: true }
         
         Label {
-            text: (root.zoom * 100).toFixed(0) + "%"
-            color: "white"
-            font.pixelSize: 11
+            text: qsTr("ZOOM: ") + (canvas ? (canvas.zoom * 100).toFixed(0) : "100") + "%"
+            color: "#aaa"
+            font.pixelSize: 10
         }
         
-        ToolSeparator {}
+        Rectangle { width: 1; height: 14; color: "#444" }
 
-        Rectangle {
-            width: 10; height: 10; radius: 5
-            color: aiClient.isLoading ? "orange" : "lightgreen"
-        }
-        Label {
-            text: aiClient.isLoading ? qsTr("AI Working...") : qsTr("Online")
-            color: "white"
-            font.pixelSize: 11
+        RowLayout {
+            spacing: 8
+            Rectangle {
+                width: 8; height: 8; radius: 4
+                color: (typeof aiClient !== 'undefined' && aiClient && aiClient.isLoading) ? "#f39c12" : "#27ae60"
+            }
+            Label {
+                text: (typeof aiClient !== 'undefined' && aiClient && aiClient.isLoading) ? qsTr("AI PROCESSING") : qsTr("ENGINE READY")
+                color: "#ccc"
+                font.pixelSize: 10
+                font.bold: true
+            }
         }
     }
 }

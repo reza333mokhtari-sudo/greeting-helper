@@ -1,6 +1,10 @@
-import type { ReactNode } from "react";
+import { useState, useEffect, type ReactNode } from "react";
+import { Link } from "@tanstack/react-router";
+import { Map, User } from "lucide-react";
 import { ProfileMenu } from "./ProfileMenu";
-import { HealthCheckIndicator } from "./HealthCheckIndicator";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
 import {
   Menubar,
   MenubarContent,
@@ -38,13 +42,40 @@ type Props = {
 };
 
 export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => void }) {
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }: any) => {
+      setUser(data.user);
+      setLoading(false);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   return (
     <header className="relative flex h-14 shrink-0 items-center gap-2 border-b border-border bg-sidebar px-3">
-      <span className="px-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-arcane">
-        Scrawl
-      </span>
-      <Menubar className="h-8 border-0 bg-transparent p-0 shadow-none">
+      <Link
+        to={user ? "/editor" : "/"}
+        className="flex items-center gap-2 px-3 py-1.5 hover:bg-accent/50 rounded-md transition-colors mr-2"
+      >
+        <div className="size-6 bg-primary rounded flex items-center justify-center">
+          <Map className="size-4 text-primary-foreground" />
+        </div>
+        <span className="font-bold text-sm tracking-tight text-foreground uppercase tracking-wider">
+          DUNGEON SCRAWL
+        </span>
+      </Link>
 
+      <Menubar className="h-8 border-0 bg-transparent p-0 shadow-none">
         <MenubarMenu>
           <MenubarTrigger className="h-8 px-3 text-xs">File</MenubarTrigger>
           <MenubarContent>
@@ -108,23 +139,44 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
               Keyboard Shortcuts
             </MenubarItem>
             <MenubarSeparator />
-            <MenubarItem disabled className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/60 px-2 py-1">Cheat Sheet</MenubarItem>
-            <MenubarItem disabled className="text-xs py-1">R / B — Room / Brush</MenubarItem>
-            <MenubarItem disabled className="text-xs py-1">D / S — Door / Stairs</MenubarItem>
-            <MenubarItem disabled className="text-xs py-1">E — Toggle Erase</MenubarItem>
-            <MenubarItem disabled className="text-xs py-1">Space — Pan View</MenubarItem>
+            <MenubarItem
+              disabled
+              className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/60 px-2 py-1"
+            >
+              Cheat Sheet
+            </MenubarItem>
+            <MenubarItem disabled className="text-xs py-1">
+              R / B — Room / Brush
+            </MenubarItem>
+            <MenubarItem disabled className="text-xs py-1">
+              D / S — Door / Stairs
+            </MenubarItem>
+            <MenubarItem disabled className="text-xs py-1">
+              E — Toggle Erase
+            </MenubarItem>
+            <MenubarItem disabled className="text-xs py-1">
+              Space — Pan View
+            </MenubarItem>
           </MenubarContent>
         </MenubarMenu>
       </Menubar>
 
       <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs font-medium text-foreground/80">
         {props.title}
-        {props.dirty ? <span className="ml-2 text-[10px] text-amber-500 animate-pulse font-bold">● Saving…</span> : null}
+        {props.dirty ? (
+          <span className="ml-2 text-[10px] text-amber-500 animate-pulse font-bold">● Saving…</span>
+        ) : null}
       </div>
 
-      <div className="ml-auto flex items-center gap-3">
+      <div className="ml-auto flex items-center gap-2">
         {props.right}
-        <ProfileMenu onAuthRequired={props.onAuthRequired} />
+        <ThemeToggle />
+        <div className="h-4 w-px bg-border mx-1" />
+        {loading ? (
+          <div className="h-8 w-8 animate-pulse rounded-full bg-muted border border-border/40" />
+        ) : (
+          <ProfileMenu onAuthRequired={props.onAuthRequired} />
+        )}
       </div>
     </header>
   );

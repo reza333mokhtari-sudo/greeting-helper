@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/dev-server/desktop/qt/build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

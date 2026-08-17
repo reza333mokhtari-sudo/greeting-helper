@@ -3,12 +3,16 @@ import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 export const saveMapOffline = createServerFn({ method: "POST" })
-  .inputValidator((data) => z.object({
-    id: z.string(),
-    name: z.string(),
-    data: z.any(),
-    lastModified: z.number()
-  }).parse(data))
+  .inputValidator((data) =>
+    z
+      .object({
+        id: z.string(),
+        name: z.string(),
+        data: z.any(),
+        lastModified: z.number(),
+      })
+      .parse(data),
+  )
   .handler(async ({ data }) => {
     // This is a stub for server-side persistence if needed later.
     // For now, we rely on local storage for offline and Supabase for online.

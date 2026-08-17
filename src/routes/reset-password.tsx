@@ -12,7 +12,10 @@ export const Route = createFileRoute("/reset-password")({
   head: () => ({
     meta: [
       { title: "Reset password — Dungeon Scrawl Map Maker" },
-      { name: "description", content: "Choose a new password for your Dungeon Scrawl map maker account." },
+      {
+        name: "description",
+        content: "Choose a new password for your Dungeon Scrawl map maker account.",
+      },
       { property: "og:title", content: "Reset password — Dungeon Scrawl Map Maker" },
       { property: "og:description", content: "Choose a new password for your map maker account." },
       { property: "og:type", content: "website" },
@@ -64,16 +67,28 @@ function ResetPasswordPage() {
       <div className="w-full max-w-sm rounded-xl border border-border/60 bg-card/70 p-6 shadow-lg backdrop-blur">
         <h1 className="mb-1 text-xl font-semibold text-arcane">Choose a new password</h1>
         <p className="mb-5 text-xs text-muted-foreground">
-          {ready ? "Enter a new password for your account." : "Open the reset link from your email to continue."}
+          {ready
+            ? "Enter a new password for your account."
+            : "Open the reset link from your email to continue."}
         </p>
         <div className="space-y-3">
           <div className="space-y-1.5">
             <Label className="text-xs text-muted-foreground">New password</Label>
-            <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={!ready} />
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={!ready}
+            />
           </div>
           <div className="space-y-1.5">
             <Label className="text-xs text-muted-foreground">Confirm password</Label>
-            <Input type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} disabled={!ready} />
+            <Input
+              type="password"
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
+              disabled={!ready}
+            />
           </div>
           <Button className="w-full" disabled={!ready || busy} onClick={submit}>
             Update password

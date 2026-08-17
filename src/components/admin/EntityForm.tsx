@@ -2,14 +2,14 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { 
-  Form, 
-  FormControl, 
-  FormField, 
-  FormItem, 
-  FormLabel, 
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
   FormMessage,
-  FormDescription
+  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -32,21 +32,21 @@ interface EntityFormProps {
   onCancel: () => void;
 }
 
-export function EntityForm({ 
-  entityName, 
-  fields, 
-  initialData, 
-  onSubmit, 
-  onCancel 
+export function EntityForm({
+  entityName,
+  fields,
+  initialData,
+  onSubmit,
+  onCancel,
 }: EntityFormProps) {
   const [busy, setBusy] = useState(false);
 
   // Dynamically build schema based on fields
   const schemaShape: Record<string, any> = {};
-  fields.forEach(f => {
-    if (f.type === 'boolean') {
+  fields.forEach((f) => {
+    if (f.type === "boolean") {
       schemaShape[f.name] = z.boolean().default(false);
-    } else if (f.type === 'number') {
+    } else if (f.type === "number") {
       schemaShape[f.name] = z.coerce.number();
     } else {
       schemaShape[f.name] = z.string().min(1, `${f.label} is required`);
@@ -82,23 +82,15 @@ export function EntityForm({
                 <FormControl>
                   {field.type === "boolean" ? (
                     <div className="flex items-center space-x-2">
-                      <Switch
-                        checked={formField.value}
-                        onCheckedChange={formField.onChange}
-                      />
+                      <Switch checked={formField.value} onCheckedChange={formField.onChange} />
                     </div>
                   ) : field.type === "textarea" ? (
                     <Textarea {...formField} />
                   ) : (
-                    <Input
-                      type={field.type === "number" ? "number" : "text"}
-                      {...formField}
-                    />
+                    <Input type={field.type === "number" ? "number" : "text"} {...formField} />
                   )}
                 </FormControl>
-                {field.description && (
-                  <FormDescription>{field.description}</FormDescription>
-                )}
+                {field.description && <FormDescription>{field.description}</FormDescription>}
                 <FormMessage />
               </FormItem>
             )}

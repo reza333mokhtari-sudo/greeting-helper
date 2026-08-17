@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ONBOARDING_STEPS } from "@/lib/dungeon/onboarding";
 import { ChevronRight, ChevronLeft, Sparkles, X } from "lucide-react";
@@ -41,9 +48,7 @@ export function OnboardingOverlay() {
             </svg>
           </div>
           <div className="space-y-1">
-            <DialogTitle className="text-xl font-bold tracking-tight">
-              {current.title}
-            </DialogTitle>
+            <DialogTitle className="text-xl font-bold tracking-tight">{current.title}</DialogTitle>
             <DialogDescription className="text-sm leading-relaxed text-muted-foreground">
               {current.content}
             </DialogDescription>
@@ -73,15 +78,19 @@ export function OnboardingOverlay() {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => setStep(s => Math.max(0, s - 1))}
+            onClick={() => setStep((s) => Math.max(0, s - 1))}
             disabled={step === 0}
             className="text-muted-foreground"
           >
             <ChevronLeft className="mr-1 size-4" /> Back
           </Button>
-          
+
           {step < ONBOARDING_STEPS.length - 1 ? (
-            <Button size="sm" onClick={() => setStep(s => s + 1)} className="shadow-lg shadow-primary/20">
+            <Button
+              size="sm"
+              onClick={() => setStep((s) => s + 1)}
+              className="shadow-lg shadow-primary/20"
+            >
               Continue <ChevronRight className="ml-1 size-4" />
             </Button>
           ) : (

@@ -13,11 +13,12 @@ export function generateRoom(doc: Doc, pos: Pt, template: RoomTemplate): Doc {
   const { gridSize } = doc.settings;
   const shapes: Shape[] = [...doc.shapes];
   const objects: MapObject[] = [...doc.objects];
-  const noteLayer = doc.layers.find((l) => l.id === DEFAULT_LAYER_FOR.text)?.id ?? doc.layers[0]!.id;
+  const noteLayer =
+    doc.layers.find((l) => l.id === DEFAULT_LAYER_FOR.text)?.id ?? doc.layers[0]!.id;
 
   const a = { x: pos.x, y: pos.y };
   const b = { x: pos.x + template.w * gridSize, y: pos.y + template.h * gridSize };
-  
+
   shapes.push({
     id: uid("s"),
     kind: "rect",
@@ -47,7 +48,7 @@ export function generateRoom(doc: Doc, pos: Pt, template: RoomTemplate): Doc {
 export function generateCorridor(doc: Doc, start: Pt, end: Pt, width: number = 1): Doc {
   const { gridSize } = doc.settings;
   const id = uid("s");
-  
+
   // Simple L-shaped corridor
   const newShape = {
     id,

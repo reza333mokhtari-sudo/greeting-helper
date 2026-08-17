@@ -42,7 +42,7 @@ export function AppDialog() {
         <DialogPrimitive.Content
           className={cn(
             "fixed left-1/2 top-1/2 z-[201] w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-xl bg-sidebar p-6 shadow-2xl transition-all duration-300 animate-in fade-in zoom-in-95",
-            options.fullscreen && "inset-0 max-w-none rounded-none"
+            options.fullscreen && "inset-0 max-w-none rounded-none",
           )}
           onPointerDownOutside={(e) => {
             if (type === "custom") return; // Let custom dialogs handle their own click-outside logic if needed
@@ -54,10 +54,13 @@ export function AppDialog() {
               <div
                 className={cn(
                   "flex size-10 shrink-0 items-center justify-center rounded-full",
-                  isDanger ? "bg-destructive/20 text-destructive" :
-                  isWarning ? "bg-amber-500/20 text-amber-500" :
-                  isSuccess ? "bg-emerald-500/20 text-emerald-500" :
-                  "bg-primary/20 text-primary"
+                  isDanger
+                    ? "bg-destructive/20 text-destructive"
+                    : isWarning
+                      ? "bg-amber-500/20 text-amber-500"
+                      : isSuccess
+                        ? "bg-emerald-500/20 text-emerald-500"
+                        : "bg-primary/20 text-primary",
                 )}
               >
                 <Icon className="size-5" />
@@ -94,13 +97,18 @@ export function AppDialog() {
 
               <div className="mt-6 flex flex-wrap items-center justify-end gap-3">
                 {options.cancelText && (
-                  <Button variant="outline" onClick={() => handleClose(type === "confirm" ? false : null)}>
+                  <Button
+                    variant="outline"
+                    onClick={() => handleClose(type === "confirm" ? false : null)}
+                  >
                     {options.cancelText}
                   </Button>
                 )}
                 <Button
                   variant={isDanger ? "destructive" : "default"}
-                  onClick={() => handleClose(type === "prompt" ? promptValue : type === "confirm" ? true : true)}
+                  onClick={() =>
+                    handleClose(type === "prompt" ? promptValue : type === "confirm" ? true : true)
+                  }
                 >
                   {options.confirmText || "OK"}
                 </Button>

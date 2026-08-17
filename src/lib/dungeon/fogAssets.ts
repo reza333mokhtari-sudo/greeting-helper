@@ -41,7 +41,14 @@ function lift(hex: string, amount: number) {
 }
 
 /** Draw a puff at (x,y), wrapping across tile edges so the sheet tiles. */
-function puff(ctx: CanvasRenderingContext2D, x: number, y: number, r: number, color: string, alpha: number) {
+function puff(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  r: number,
+  color: string,
+  alpha: number,
+) {
   for (const dx of [-TILE, 0, TILE]) {
     for (const dy of [-TILE, 0, TILE]) {
       const cx = x + dx;
@@ -98,11 +105,19 @@ function paint(style: FogStyle, color: string): HTMLCanvasElement {
       ctx.lineWidth = 8 + rand() * 26;
       ctx.beginPath();
       ctx.moveTo(x, y);
-      ctx.bezierCurveTo(x + 60 - rand() * 120, y - 60, x + 90 - rand() * 60, y + 70, x + 120 - rand() * 240, y + 110);
+      ctx.bezierCurveTo(
+        x + 60 - rand() * 120,
+        y - 60,
+        x + 90 - rand() * 60,
+        y + 70,
+        x + 120 - rand() * 240,
+        y + 110,
+      );
       ctx.stroke();
     }
     ctx.globalAlpha = 1;
-    for (let i = 0; i < 14; i++) puff(ctx, rand() * TILE, rand() * TILE, 40 + rand() * 60, hi, 0.08);
+    for (let i = 0; i < 14; i++)
+      puff(ctx, rand() * TILE, rand() * TILE, 40 + rand() * 60, hi, 0.08);
     return c;
   }
 

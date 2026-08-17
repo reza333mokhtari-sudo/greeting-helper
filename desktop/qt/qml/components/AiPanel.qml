@@ -54,7 +54,7 @@ Rectangle {
         
         ProgressBar {
             Layout.fillWidth: true
-            visible: aiClient.isLoading
+            visible: typeof aiClient !== 'undefined' && aiClient.isLoading
             indeterminate: true
         }
         
@@ -70,10 +70,10 @@ Rectangle {
             Button {
                 id: sendBtn
                 text: qsTr("Send")
-                enabled: !aiClient.isLoading && aiInput.text !== ""
+                enabled: typeof aiClient !== 'undefined' && !aiClient.isLoading && aiInput.text !== ""
                 onClicked: {
                     chatModel.append({content: aiInput.text, isAi: false})
-                    aiClient.sendMessage(aiInput.text)
+                    if (typeof aiClient !== 'undefined') aiClient.sendMessage(aiInput.text)
                     aiInput.text = ""
                 }
             }
@@ -81,12 +81,12 @@ Rectangle {
     }
 
     Connections {
-        target: aiClient
+        target: (typeof aiClient !== 'undefined') ? aiClient : null
         function onResponseReceived(response) {
             chatModel.append({content: response, isAi: true})
         }
         function onErrorOccurred(error) {
-            chatModel.append({content: qsTr("Error: ") + error, isAi: true})
+            chatModel.append({content: qsTr("AI Service Offline: ") + error, isAi: true})
         }
     }
 }

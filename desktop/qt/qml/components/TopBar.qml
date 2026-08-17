@@ -2,23 +2,32 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Dialogs
+import DungeonEditor.Core 1.0
 
 /**
- * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
+ * Native Top Bar - Professional Dungeon Scrawl Aesthetic
  */
-
 Rectangle {
     id: root
-    height: 40
-    color: "#2d2d2d"
-    border.color: "#3e3e42"
+    height: 56 // h-14 equivalent
+    color: "#121212"
     
+    property var document: null
+    property var canvas: null
+    
+    Rectangle {
+        anchors.bottom: parent.bottom
+        width: parent.width
+        height: 1
+        color: "#2d2d2d"
+    }
+
     FileDialog {
         id: saveDialog
         title: "Save Map"
         fileMode: FileDialog.SaveFile
         nameFilters: ["Map files (*.json)"]
-        onAccepted: mapDocument.save(selectedFile)
+        onAccepted: document.save(selectedFile)
     }
 
     FileDialog {
@@ -26,45 +35,118 @@ Rectangle {
         title: "Open Map"
         fileMode: FileDialog.OpenFile
         nameFilters: ["Map files (*.json)"]
-        onAccepted: mapDocument.load(selectedFile)
+        onAccepted: document.load(selectedFile)
     }
 
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: 10
-        anchors.rightMargin: 10
-        spacing: 15
+        anchors.leftMargin: 16
+        anchors.rightMargin: 16
+        spacing: 12
         
+        // Brand Area
         RowLayout {
-            spacing: 5
-            ToolButton { text: "New"; onClicked: mapDocument.clear() }
-            ToolButton { text: "Open"; onClicked: openDialog.open() }
-            ToolButton { text: "Save"; onClicked: saveDialog.open() }
-        }
-        
-        ToolSeparator {}
-        
-        RowLayout {
-            spacing: 5
-            ToolButton {
-                text: "Undo"
-                enabled: mapDocument.undoStack.canUndo
-                onClicked: mapDocument.undoStack.undo()
+            spacing: 10
+            Layout.alignment: Qt.AlignVCenter
+            
+            Rectangle {
+                width: 28; height: 28; radius: 4
+                color: "#3b82f6" // Primary
+                Label {
+                    anchors.centerIn: parent
+                    text: "M"
+                    color: "white"
+                    font.bold: true
+                }
             }
-            ToolButton {
-                text: "Redo"
-                enabled: mapDocument.undoStack.canRedo
-                onClicked: mapDocument.undoStack.redo()
+            
+            Label {
+                text: "DUNGEON SCRAWL"
+                color: "white"
+                font.pixelSize: 14
+                font.bold: true
+                font.letterSpacing: 0.5
             }
         }
-        
+
+        Rectangle { width: 1; height: 24; color: "#333"; Layout.leftMargin: 8; Layout.rightMargin: 8 }
+
+        // Menu Bar
+        MenuBar {
+            id: menuBar
+            Layout.alignment: Qt.AlignVCenter
+            background: Item {}
+            
+            Menu {
+                title: qsTr("File")
+                MenuItem { text: qsTr("New Map"); onTriggered: document.clear() }
+                MenuItem { text: qsTr("Open..."); onTriggered: openDialog.open() }
+                MenuSeparator {}
+                MenuItem { text: qsTr("Save"); onTriggered: saveDialog.open() }
+                MenuItem { text: qsTr("Export PNG") }
+            }
+            Menu {
+                title: qsTr("Edit")
+                MenuItem { text: qsTr("Undo"); enabled: document && document.canUndo; onTriggered: document.undoStack.undo() }
+                MenuItem { text: qsTr("Redo"); enabled: document && document.canRedo; onTriggered: document.undoStack.redo() }
+            }
+            Menu {
+                title: qsTr("View")
+                MenuItem { text: qsTr("Zoom In"); onTriggered: canvas.zoomIn() }
+                MenuItem { text: qsTr("Zoom Out"); onTriggered: canvas.zoomOut() }
+                MenuItem { text: qsTr("Fit to Screen"); onTriggered: canvas.fitToScreen() }
+            }
+        }
+
         Item { Layout.fillWidth: true }
         
+        // Status & User
         RowLayout {
-            spacing: 5
-            Label { 
-                text: mapDocument.dirty ? qsTr("Unsaved Changes*") : qsTr("Saved")
-                color: mapDocument.dirty ? "#f1c40f" : "#2ecc71" 
+            spacing: 16
+            
+            RowLayout {
+                spacing: 6
+                Rectangle {
+                    width: 8; height: 8; radius: 4
+                    color: (document && document.dirty) ? "#f59e0b" : "#10b981"
+                }
+                Label {
+                    text: (document && document.dirty) ? "UNSAVED" : "SYNCED"
+                    color: (document && document.dirty) ? "#f59e0b" : "#10b981"
+                    font.pixelSize: 10
+                    font.bold: true
+                }
+            }
+            
+            Button {
+                text: "Sign In"
+                flat: true
+                contentItem: Label {
+                    text: parent.text
+                    color: "#3b82f6"
+                    font.bold: true
+                    font.pixelSize: 12
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+            }
+            
+            Button {
+                text: "Export"
+                background: Rectangle {
+                    implicitWidth: 80
+                    implicitHeight: 32
+                    radius: 6
+                    color: "#3b82f6"
+                }
+                contentItem: Label {
+                    text: parent.text
+                    color: "white"
+                    font.bold: true
+                    font.pixelSize: 12
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
             }
         }
     }

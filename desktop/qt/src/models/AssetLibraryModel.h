@@ -1,13 +1,11 @@
-#pragma once
 #include <QAbstractListModel>
 #include <QVector>
 #include <QString>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QtQml/qqmlregistration.h>
 
-/**
- * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
- */
+#pragma once
 
 struct Asset {
     QString id;
@@ -19,6 +17,7 @@ struct Asset {
 
 class AssetLibraryModel : public QAbstractListModel {
     Q_OBJECT
+    QML_ELEMENT
     Q_PROPERTY(QString searchQuery READ searchQuery WRITE setSearchQuery NOTIFY searchQueryChanged)
     Q_PROPERTY(QString activeCategory READ activeCategory WRITE setActiveCategory NOTIFY activeCategoryChanged)
 

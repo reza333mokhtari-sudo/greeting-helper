@@ -12,14 +12,18 @@ ApplicationWindow {
     width: 1400
     height: 900
     visible: true
-    title: "Dungeon Editor Native"
+    title: "DUNGEON SCRAWL - Professional Editor"
     
+    background: Rectangle { color: "#0a0a0a" }
+
     Document { id: mapDoc }
     AssetLibraryModel { id: assetModel }
     FileService { id: fileService }
+    AiClient { id: aiClient }
 
     Component.onCompleted: {
-        assetModel.loadManifest("assets/soulslike/manifest.json")
+        console.log("Dungeon Scrawl Desktop Shell Initialized");
+        assetModel.loadManifest("assets/soulslike/manifest.json");
     }
 
     ColumnLayout {
@@ -38,10 +42,15 @@ ApplicationWindow {
             Layout.fillHeight: true
             orientation: Qt.Horizontal
             
+            handle: Rectangle {
+                implicitWidth: 2
+                color: SplitView.isPressed ? "#3b82f6" : "#222"
+            }
+
             ToolRail {
                 id: toolRail
-                SplitView.minimumWidth: 50
-                SplitView.preferredWidth: 50
+                SplitView.minimumWidth: 60
+                SplitView.preferredWidth: 60
                 canvas: canvas
             }
             
@@ -60,25 +69,39 @@ ApplicationWindow {
                 Rectangle {
                     anchors.bottom: parent.bottom
                     anchors.left: parent.left
-                    anchors.margins: 10
-                    color: "#80000000"
-                    radius: 4
-                    width: coordsLabel.width + 10
-                    height: coordsLabel.height + 4
-                    Label {
-                        id: coordsLabel
+                    anchors.margins: 16
+                    color: "#cc121212"
+                    border.color: "#333"
+                    radius: 6
+                    width: coordsLayout.width + 24
+                    height: coordsLayout.height + 12
+                    
+                    RowLayout {
+                        id: coordsLayout
                         anchors.centerIn: parent
-                        text: "X: " + Math.round(canvas.pan.x) + " Y: " + Math.round(canvas.pan.y)
-                        color: "white"
-                        font.pixelSize: 10
+                        spacing: 12
+                        Label {
+                            text: "GRID SNAP"
+                            color: "#3b82f6"
+                            font.pixelSize: 9
+                            font.bold: true
+                            font.letterSpacing: 1
+                        }
+                        Label {
+                            id: coordsLabel
+                            text: "X: " + Math.round(canvas.cursorWorldPos.x) + "  Y: " + Math.round(canvas.cursorWorldPos.y)
+                            color: "#eee"
+                            font.pixelSize: 11
+                            font.family: "Monospace"
+                        }
                     }
                 }
             }
             
             RightDock {
                 id: rightDock
-                SplitView.minimumWidth: 300
-                SplitView.preferredWidth: 350
+                SplitView.minimumWidth: 320
+                SplitView.preferredWidth: 380
                 document: mapDoc
                 canvas: canvas
                 assetModel: assetModel

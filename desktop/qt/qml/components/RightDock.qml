@@ -26,6 +26,7 @@ Rectangle {
             TabButton { text: qsTr("Objs") }
             TabButton { text: qsTr("Layers") }
             TabButton { text: qsTr("Settings") }
+            TabButton { text: qsTr("CMS") }
         }
 
         StackLayout {
@@ -36,38 +37,34 @@ Rectangle {
             AssetLibrary {
                 id: assetLibrary
                 model: assetModel
-                onAssetClicked: (asset) => {
-                    document.addObject({
-                        kind: "image",
-                        name: asset.name,
-                        assetId: asset.assetId,
-                        x: -canvas.pan.x / canvas.zoom + (canvas.width / 2 / canvas.zoom),
-                        y: -canvas.pan.y / canvas.zoom + (canvas.height / 2 / canvas.zoom),
-                        rotation: 0,
-                        cornerRadius: 0
-                    })
-                }
+                document: document
+                canvas: canvas
             }
 
             InspectorPanel {
                 id: inspectorPanel
-                document: mapDoc
+                document: document
             }
-
+            
             ObjectsPanel {
                 id: objectsPanel
-                document: mapDoc
+                document: document
                 onObjectSelected: (id) => canvas.selectedId = id
             }
-
+            
             LayersPanel {
                 id: layersPanel
-                document: mapDoc
+                document: document
             }
-
+            
             SettingsPanel {
                 id: settingsPanel
-                document: mapDoc
+                document: document
+            }
+
+            CmsPanel {
+                id: cmsPanel
+                document: document
             }
         }
 
