@@ -64,6 +64,9 @@ export const Route = createFileRoute("/admin/")({
   component: AdminConsole,
 });
 
+const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
+
+
 type Section = "overview" | "explorer" | "users" | "cms" | "storage" | "diagnostics";
 
 function AdminConsole() {
