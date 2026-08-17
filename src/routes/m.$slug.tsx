@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { createFileRoute, ClientOnly } from "@tanstack/react-router";
+import { createFileRoute, ClientOnly, Link } from "@tanstack/react-router";
+import { Map } from "lucide-react";
 
 import { getSharedMap } from "@/lib/sharedmap.functions";
 import { migrateDoc, docBounds, type Doc } from "@/lib/dungeon/model";
@@ -36,9 +37,17 @@ function SharedMap() {
   const doc = migrateDoc(JSON.parse(data.docJson));
   return (
     <main className="flex h-screen flex-col bg-background">
-      <header className="flex items-center justify-between border-b border-border/60 px-4 py-2">
-        <h1 className="text-sm font-semibold text-arcane">{data.name}</h1>
-        <span className="text-[11px] uppercase tracking-wider text-muted-foreground">Player view</span>
+      <header className="flex h-14 items-center justify-between border-b border-border/60 px-6 shrink-0 bg-sidebar/50 backdrop-blur">
+        <Link to="/" className="flex items-center gap-2">
+          <div className="size-6 bg-primary rounded flex items-center justify-center">
+            <Map className="size-4 text-primary-foreground" />
+          </div>
+          <span className="font-bold text-sm tracking-tight text-foreground">DUNGEON SCRAWL</span>
+        </Link>
+        <div className="flex items-center gap-4">
+          <h1 className="text-sm font-semibold text-arcane hidden sm:block">{data.name}</h1>
+          <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted px-2 py-0.5 rounded">Player View</span>
+        </div>
       </header>
       <ClientOnly fallback={<Centered>Rendering…</Centered>}>
         <Viewer doc={doc} />

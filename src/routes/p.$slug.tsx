@@ -57,7 +57,7 @@ function Shell({ title, children }: { title: string; children: React.ReactNode }
       <h1 className="mb-3 text-2xl font-semibold text-arcane">{title}</h1>
       <p className="text-sm text-muted-foreground">{children}</p>
       <Link to="/" className="mt-6 inline-block text-sm text-primary underline">
-        Return to Editor
+        Return Home
       </Link>
     </main>
   );
@@ -71,7 +71,7 @@ function PageView() {
       <p className="mb-8 text-xs text-muted-foreground">Updated {new Date(page.updated_at).toLocaleDateString()}</p>
       <article className="whitespace-pre-wrap text-sm leading-relaxed text-foreground/90">{page.body}</article>
       <Link to="/" className="mt-10 inline-block text-sm text-primary underline">
-        Return to Editor
+        Return Home
       </Link>
     </main>
   );
