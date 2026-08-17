@@ -1,4 +1,3 @@
-
 import { removeBackground as imglyRemoveBackground } from "@imgly/background-removal";
 import { toast } from "sonner";
 
@@ -48,7 +47,7 @@ export async function pixelate(imageSrc: string, blockSize: number = 8): Promise
       // Draw back upscaled (pixelated)
       ctx.imageSmoothingEnabled = false;
       ctx.drawImage(offscreen, 0, 0, smallW, smallH, 0, 0, img.width, img.height);
-      
+
       resolve(canvas.toDataURL("image/png"));
     };
     img.onerror = (e) => {
@@ -62,10 +61,7 @@ export async function pixelate(imageSrc: string, blockSize: number = 8): Promise
 /**
  * Apply CSS-like filters and bake them into the image.
  */
-export async function applyFilter(
-  imageSrc: string,
-  filter: string
-): Promise<string> {
+export async function applyFilter(imageSrc: string, filter: string): Promise<string> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.crossOrigin = "anonymous";
@@ -74,10 +70,10 @@ export async function applyFilter(
       const ctx = canvas.getContext("2d")!;
       canvas.width = img.width;
       canvas.height = img.height;
-      
+
       ctx.filter = filter;
       ctx.drawImage(img, 0, 0);
-      
+
       resolve(canvas.toDataURL("image/png"));
     };
     img.onerror = (e) => {

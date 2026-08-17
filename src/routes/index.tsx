@@ -12,7 +12,11 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Dungeon Scrawl — Professional RPG Map Maker" },
-      { name: "description", content: "The next generation of dungeon mapping. AI-assisted, high-fidelity, and cross-platform." },
+      {
+        name: "description",
+        content:
+          "The next generation of dungeon mapping. AI-assisted, high-fidelity, and cross-platform.",
+      },
     ],
   }),
   component: LandingPage,
@@ -25,10 +29,12 @@ function LandingPage() {
 
   useEffect(() => {
     const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       const user = session?.user ?? null;
       setUser(user);
-      
+
       if (user) {
         // If user is logged in but email not verified, we show a warning
         if (!user.email_confirmed_at) {
@@ -38,14 +44,18 @@ function LandingPage() {
         try {
           const [local, cloud] = await Promise.all([
             listLocalMaps().catch(() => []),
-            listCloudMaps().catch(() => [])
+            listCloudMaps().catch(() => []),
           ]);
-          
+
           const combined = [
             ...cloud.map((m: any) => ({ ...m, isCloud: true })),
-            ...local.map((m: any) => ({ ...m, isCloud: false, updated_at: new Date(m.lastModified).toISOString() }))
+            ...local.map((m: any) => ({
+              ...m,
+              isCloud: false,
+              updated_at: new Date(m.lastModified).toISOString(),
+            })),
           ].sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
-          
+
           setMaps(combined.slice(0, 4));
         } catch (err) {
           console.error("Failed to fetch maps:", err);
@@ -57,12 +67,14 @@ function LandingPage() {
       }
     };
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
       setUser(session?.user ?? null);
       setLoading(false);
-      
+
       // Automatically redirect if magic link just verified the account
-      if (_event === 'SIGNED_IN' && session) {
+      if (_event === "SIGNED_IN" && session) {
         toast.success("Identity verified. Redirecting...");
       }
     });
@@ -75,11 +87,16 @@ function LandingPage() {
     <div className="flex min-h-screen flex-col bg-background text-foreground">
       {/* Nav */}
       <header className="flex h-16 items-center justify-between border-b border-border/40 px-6 backdrop-blur sticky top-0 z-50 bg-background/80">
-        <Link to={user ? "/editor" : "/"} className="flex items-center gap-2 group hover:opacity-80 transition-opacity">
+        <Link
+          to={user ? "/editor" : "/"}
+          className="flex items-center gap-2 group hover:opacity-80 transition-opacity"
+        >
           <div className="size-8 rounded bg-primary flex items-center justify-center">
             <Map className="size-5 text-primary-foreground" />
           </div>
-          <span className="text-xl font-bold tracking-tight uppercase tracking-wider">DUNGEON SCRAWL</span>
+          <span className="text-xl font-bold tracking-tight uppercase tracking-wider">
+            DUNGEON SCRAWL
+          </span>
         </Link>
         <nav className="flex items-center gap-4">
           {loading ? (
@@ -99,7 +116,9 @@ function LandingPage() {
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
               <div>
                 <h2 className="text-3xl font-extrabold tracking-tight">Welcome back, Traveler.</h2>
-                <p className="text-muted-foreground mt-2">Pick up where you left off or start a new quest.</p>
+                <p className="text-muted-foreground mt-2">
+                  Pick up where you left off or start a new quest.
+                </p>
               </div>
               <Button asChild size="lg" className="h-12 px-8">
                 <Link to="/editor" className="flex items-center gap-2">
@@ -111,14 +130,17 @@ function LandingPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {loading ? (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="aspect-[4/3] rounded-xl bg-muted animate-pulse border border-border/50" />
+                  <div
+                    key={i}
+                    className="aspect-[4/3] rounded-xl bg-muted animate-pulse border border-border/50"
+                  />
                 ))
               ) : maps.length > 0 ? (
                 maps.map((map) => (
-                  <Link 
-                    key={map.id} 
-                    to="/editor" 
-                    params={{ mapId: map.id } as any} 
+                  <Link
+                    key={map.id}
+                    to="/editor"
+                    params={{ mapId: map.id } as any}
                     className="group relative aspect-[4/3] rounded-xl border border-border/50 bg-card overflow-hidden hover:border-primary/50 transition-all hover:shadow-2xl hover:shadow-primary/5 shadow-sm"
                   >
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60 z-10" />
@@ -127,14 +149,19 @@ function LandingPage() {
                     </div>
                     <div className="absolute bottom-0 left-0 right-0 p-4 z-20">
                       <div className="flex items-center gap-2">
-                         <Badge variant="secondary" className="text-[9px] font-bold uppercase h-4 px-1.5 bg-background/80 backdrop-blur-sm">
-                           {map.isCloud ? "Cloud" : "Local"}
-                         </Badge>
-                         <span className="text-[10px] text-white/60 font-medium">
-                           {new Date(map.updated_at).toLocaleDateString()}
-                         </span>
+                        <Badge
+                          variant="secondary"
+                          className="text-[9px] font-bold uppercase h-4 px-1.5 bg-background/80 backdrop-blur-sm"
+                        >
+                          {map.isCloud ? "Cloud" : "Local"}
+                        </Badge>
+                        <span className="text-[10px] text-white/60 font-medium">
+                          {new Date(map.updated_at).toLocaleDateString()}
+                        </span>
                       </div>
-                      <h3 className="text-sm font-bold text-white mt-1 truncate">{map.name || "Untitled Map"}</h3>
+                      <h3 className="text-sm font-bold text-white mt-1 truncate">
+                        {map.name || "Untitled Map"}
+                      </h3>
                     </div>
                     <div className="absolute top-3 right-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
                       <div className="size-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-lg">
@@ -146,7 +173,9 @@ function LandingPage() {
               ) : (
                 <div className="col-span-full py-20 text-center border-2 border-dashed border-border/50 rounded-2xl bg-muted/10">
                   <Map className="size-12 text-muted-foreground/30 mx-auto mb-4" />
-                  <p className="text-muted-foreground font-medium">No maps found in your library.</p>
+                  <p className="text-muted-foreground font-medium">
+                    No maps found in your library.
+                  </p>
                   <Button variant="link" asChild className="mt-2">
                     <Link to="/editor">Start your first scrawl</Link>
                   </Button>
@@ -163,9 +192,10 @@ function LandingPage() {
                 </div>
                 <h3 className="text-xl font-bold">What is Dungeon Scrawl?</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Dungeon Scrawl is the premier 2D map maker designed specifically for TTRPG enthusiasts. 
-                  It combines the simplicity of digital drawing with professional cartography tools, 
-                  allowing you to create "old-school" style maps that look like they were pulled right from a handbook.
+                  Dungeon Scrawl is the premier 2D map maker designed specifically for TTRPG
+                  enthusiasts. It combines the simplicity of digital drawing with professional
+                  cartography tools, allowing you to create "old-school" style maps that look like
+                  they were pulled right from a handbook.
                 </p>
                 <div className="grid grid-cols-2 gap-4 pt-4">
                   <div className="flex items-start gap-3">
@@ -181,7 +211,9 @@ function LandingPage() {
               <div className="rounded-2xl border border-border/50 bg-muted/20 aspect-video flex items-center justify-center overflow-hidden relative group">
                 <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                 <Layout className="size-16 text-muted-foreground/20" />
-                <span className="absolute bottom-4 left-4 text-[10px] font-mono text-muted-foreground uppercase tracking-widest">Editor Core Visualizer</span>
+                <span className="absolute bottom-4 left-4 text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
+                  Editor Core Visualizer
+                </span>
               </div>
             </div>
           </section>
@@ -194,22 +226,31 @@ function LandingPage() {
                 <span className="text-primary">Map Engine.</span>
               </h1>
               <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-                High-fidelity TTRPG mapping tools powered by AI. Design, simulate, and render your adventures with a professional-grade editor.
+                High-fidelity TTRPG mapping tools powered by AI. Design, simulate, and render your
+                adventures with a professional-grade editor.
               </p>
               <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
-                <Button size="lg" className="h-12 px-8 text-base shadow-xl shadow-primary/20" asChild>
+                <Button
+                  size="lg"
+                  className="h-12 px-8 text-base shadow-xl shadow-primary/20"
+                  asChild
+                >
                   <Link to="/editor">Get Started for Free</Link>
                 </Button>
                 <Button size="lg" variant="outline" className="h-12 px-8 text-base" asChild>
-                  <Link to="/auth" search={{ tab: "up" } as any}>Create Pro Account</Link>
+                  <Link to="/auth" search={{ tab: "up" } as any}>
+                    Create Pro Account
+                  </Link>
                 </Button>
               </div>
-              
+
               <div className="mt-20 rounded-xl border border-border/50 bg-muted/30 p-2 shadow-2xl">
-                 <div className="aspect-video w-full max-w-5xl mx-auto rounded-lg bg-card flex items-center justify-center border border-border/20 shadow-inner">
-                    <Layout className="size-20 text-muted-foreground/10" />
-                    <span className="absolute text-muted-foreground text-xs font-medium opacity-50">Editor Live Preview</span>
-                 </div>
+                <div className="aspect-video w-full max-w-5xl mx-auto rounded-lg bg-card flex items-center justify-center border border-border/20 shadow-inner">
+                  <Layout className="size-20 text-muted-foreground/10" />
+                  <span className="absolute text-muted-foreground text-xs font-medium opacity-50">
+                    Editor Live Preview
+                  </span>
+                </div>
               </div>
             </section>
 
@@ -221,21 +262,30 @@ function LandingPage() {
                     <Sparkles className="size-8" />
                   </div>
                   <h3 className="text-xl font-bold">AI Cartographer</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">Natural language commands to generate complex rooms and corridors instantly. No manual drawing required.</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Natural language commands to generate complex rooms and corridors instantly. No
+                    manual drawing required.
+                  </p>
                 </div>
                 <div className="flex flex-col items-center text-center gap-4 group">
                   <div className="size-16 rounded-3xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-500">
                     <Shield className="size-8" />
                   </div>
                   <h3 className="text-xl font-bold">Cloud Sync</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">Your maps follow you everywhere. Start on web, continue on desktop, and access your entire library anywhere.</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Your maps follow you everywhere. Start on web, continue on desktop, and access
+                    your entire library anywhere.
+                  </p>
                 </div>
                 <div className="flex flex-col items-center text-center gap-4 group">
                   <div className="size-16 rounded-3xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-500">
                     <Zap className="size-8" />
                   </div>
                   <h3 className="text-xl font-bold">Professional Tools</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">High-performance vector engine with layers, props, and advanced transformations for professional map makers.</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    High-performance vector engine with layers, props, and advanced transformations
+                    for professional map makers.
+                  </p>
                 </div>
               </div>
             </section>
@@ -249,11 +299,19 @@ function LandingPage() {
             <Map className="size-4 text-primary" />
             <span className="text-sm font-bold tracking-tight">DUNGEON SCRAWL</span>
           </div>
-          <span className="text-xs text-muted-foreground">© 2026 Dungeon Scrawl Editor. Professional Mapping Solutions.</span>
+          <span className="text-xs text-muted-foreground">
+            © 2026 Dungeon Scrawl Editor. Professional Mapping Solutions.
+          </span>
           <div className="flex gap-8 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-            <a href="#" className="hover:text-primary transition-colors">Terms</a>
-            <a href="#" className="hover:text-primary transition-colors">Privacy</a>
-            <a href="#" className="hover:text-primary transition-colors">Contact</a>
+            <a href="#" className="hover:text-primary transition-colors">
+              Terms
+            </a>
+            <a href="#" className="hover:text-primary transition-colors">
+              Privacy
+            </a>
+            <a href="#" className="hover:text-primary transition-colors">
+              Contact
+            </a>
           </div>
         </div>
       </footer>

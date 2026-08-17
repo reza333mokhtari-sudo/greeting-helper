@@ -14,14 +14,17 @@ Fixing the account creation failures and enhancing sync visibility for both web 
 ## Technical Details
 
 ### Frontend (React)
+
 - **src/routes/auth.tsx**: Updated `signUp` to include `full_name` in metadata and improved error mapping for 422 (weak password) and 500 (trigger failure) responses.
 - **src/components/dungeon/MapsPanel.tsx**: Added `SyncStatus` icons and tooltips to the map list.
 - **src/integrations/supabase/client.ts**: Verified proxy logic to ensure it doesn't deadlock the boot sequence if config is temporarily missing.
 
 ### Backend (Supabase)
+
 - Verified `handle_new_user` trigger logic against incoming metadata.
 - Ensured RLS policies for `profiles` and `maps` are consistent with the `authenticated` role requirements.
 
 ### Desktop (Qt/C++)
+
 - Verified `main.cpp` uses `QApplication` for correct widget support.
 - Standardized top bar height to `56px` to match web layout.

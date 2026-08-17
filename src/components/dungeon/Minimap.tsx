@@ -1,7 +1,14 @@
 import { useEffect, useRef, useCallback, useState as useEffectState } from "react";
 import { ZoomIn, ZoomOut, Move, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { type Doc, type View, type Pt, docBounds, shapePoints, objectRadius } from "@/lib/dungeon/model";
+import {
+  type Doc,
+  type View,
+  type Pt,
+  docBounds,
+  shapePoints,
+  objectRadius,
+} from "@/lib/dungeon/model";
 
 type Props = {
   doc: Doc;
@@ -20,8 +27,8 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
   const isDraggingMap = useRef(false);
 
   const [minimapZoom, setMinimapZoom] = useEffectState(1.0);
-  const width = typeof window !== 'undefined' && window.innerWidth < 640 ? 140 : 220;
-  const height = typeof window !== 'undefined' && window.innerWidth < 640 ? 120 : 180;
+  const width = typeof window !== "undefined" && window.innerWidth < 640 ? 140 : 220;
+  const height = typeof window !== "undefined" && window.innerWidth < 640 ? 120 : 180;
   const dpr = typeof window !== "undefined" ? Math.min(window.devicePixelRatio || 1, 2) : 1;
 
   const draw = useCallback(() => {
@@ -60,7 +67,12 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
       const pts = shapePoints(s);
       ctx.beginPath();
       if (s.kind === "rect") {
-        ctx.rect(Math.min(pts[0]!.x, pts[1]!.x), Math.min(pts[0]!.y, pts[1]!.y), Math.abs(pts[1]!.x - pts[0]!.x), Math.abs(pts[1]!.y - pts[0]!.y));
+        ctx.rect(
+          Math.min(pts[0]!.x, pts[1]!.x),
+          Math.min(pts[0]!.y, pts[1]!.y),
+          Math.abs(pts[1]!.x - pts[0]!.x),
+          Math.abs(pts[1]!.y - pts[0]!.y),
+        );
       } else if (s.kind === "ellipse") {
         ctx.ellipse(
           (pts[0]!.x + pts[1]!.x) / 2,
@@ -129,9 +141,9 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
 
   const handlePointer = (e: React.PointerEvent) => {
     if (e.button !== 0 && e.type === "pointerdown") return;
-    
+
     const target = e.target as HTMLElement;
-    const isHandle = target.closest('.minimap-handle');
+    const isHandle = target.closest(".minimap-handle");
 
     if (e.type === "pointerdown") {
       if (isHandle) {
@@ -143,7 +155,7 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
       dragging.current = true;
       (e.target as Element).setPointerCapture?.(e.pointerId);
     }
-    
+
     if (e.type === "pointermove") {
       if (isDraggingMap.current && dragStartPos.current) {
         const newX = dragStartPos.current.x - e.clientX;
@@ -163,9 +175,9 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
       isDraggingMap.current = false;
       dragStartPos.current = null;
     }
-    
+
     if (e.type === "pointerdown" && !isHandle) {
-       onNavigate(toWorld(e.clientX, e.clientY));
+      onNavigate(toWorld(e.clientX, e.clientY));
     }
   };
 
@@ -173,11 +185,11 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
     <div
       ref={wrapRef}
       className="pointer-events-auto absolute z-20 overflow-hidden rounded-lg border border-border/60 bg-card/80 shadow-lg backdrop-blur sm:w-[220px] sm:h-[180px] w-[140px] h-[120px]"
-      style={{ 
-        right: pos.x, 
+      style={{
+        right: pos.x,
         top: pos.y,
-        width: typeof window !== 'undefined' && window.innerWidth < 640 ? 140 : 220,
-        height: typeof window !== 'undefined' && window.innerWidth < 640 ? 120 : 180
+        width: typeof window !== "undefined" && window.innerWidth < 640 ? 140 : 220,
+        height: typeof window !== "undefined" && window.innerWidth < 640 ? 120 : 180,
       }}
       onPointerDown={handlePointer}
       onPointerMove={handlePointer}
@@ -191,30 +203,39 @@ export function Minimap({ doc, view, onNavigate, initialPos, onPositionChange }:
           Map
         </div>
         <div className="flex items-center gap-1 pointer-events-auto">
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="h-4 w-4 bg-background/60 hover:bg-background" 
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-4 w-4 bg-background/60 hover:bg-background"
             title="Reset View"
-            onClick={(e) => { e.stopPropagation(); onNavigate({ x: 0, y: 0 }); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              onNavigate({ x: 0, y: 0 });
+            }}
           >
             <RotateCcw className="h-2.5 w-2.5" />
           </Button>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="h-4 w-4 bg-background/60 hover:bg-background" 
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-4 w-4 bg-background/60 hover:bg-background"
             title="Zoom Out"
-            onClick={(e) => { e.stopPropagation(); setMinimapZoom(z => Math.max(0.2, z - 0.2)); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setMinimapZoom((z) => Math.max(0.2, z - 0.2));
+            }}
           >
             <ZoomOut className="h-3 w-3" />
           </Button>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="h-4 w-4 bg-background/60 hover:bg-background" 
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-4 w-4 bg-background/60 hover:bg-background"
             title="Zoom In"
-            onClick={(e) => { e.stopPropagation(); setMinimapZoom(z => Math.min(5, z + 0.2)); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setMinimapZoom((z) => Math.min(5, z + 0.2));
+            }}
           >
             <ZoomIn className="h-3 w-3" />
           </Button>

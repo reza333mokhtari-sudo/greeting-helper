@@ -5,7 +5,7 @@
 export async function initSentry() {
   if (typeof window === "undefined") return;
 
-  const dsn = import.meta.env['VITE_SENTRY_DSN'];
+  const dsn = import.meta.env["VITE_SENTRY_DSN"];
   if (!dsn) {
     console.log("[Sentry] Skipping browser initialization (VITE_SENTRY_DSN not set)");
     return;
@@ -15,10 +15,7 @@ export async function initSentry() {
     const Sentry = await import("@sentry/react");
     Sentry.init({
       dsn,
-      integrations: [
-        Sentry.browserTracingIntegration(),
-        Sentry.replayIntegration(),
-      ],
+      integrations: [Sentry.browserTracingIntegration(), Sentry.replayIntegration()],
       tracesSampleRate: 1.0,
       replaysSessionSampleRate: 0.1,
       replaysOnErrorSampleRate: 1.0,

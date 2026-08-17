@@ -1,6 +1,15 @@
 import { getImage } from "./assets";
 import { fogTile, type FogStyle } from "./fogAssets";
-import { cellPolygon, objectsInDrawOrder, objectRadius, type Doc, type MapObject, type Pt, type Shape, type View } from "./model";
+import {
+  cellPolygon,
+  objectsInDrawOrder,
+  objectRadius,
+  type Doc,
+  type MapObject,
+  type Pt,
+  type Shape,
+  type View,
+} from "./model";
 import { drawAxisGuides, drawCornerAxisWidget } from "./camera";
 import { lightSources, occluders, visibilityPolygon } from "./los";
 
@@ -21,11 +30,24 @@ function applyView(ctx: CanvasRenderingContext2D, view: View, dpr: number) {
 function tracePath(ctx: CanvasRenderingContext2D, s: Shape) {
   ctx.beginPath();
   if (s.kind === "rect") {
-    ctx.rect(Math.min(s.a.x, s.b.x), Math.min(s.a.y, s.b.y), Math.abs(s.b.x - s.a.x), Math.abs(s.b.y - s.a.y));
+    ctx.rect(
+      Math.min(s.a.x, s.b.x),
+      Math.min(s.a.y, s.b.y),
+      Math.abs(s.b.x - s.a.x),
+      Math.abs(s.b.y - s.a.y),
+    );
   } else if (s.kind === "ellipse") {
     const cx = (s.a.x + s.b.x) / 2;
     const cy = (s.a.y + s.b.y) / 2;
-    ctx.ellipse(cx, cy, Math.abs(s.b.x - s.a.x) / 2, Math.abs(s.b.y - s.a.y) / 2, 0, 0, Math.PI * 2);
+    ctx.ellipse(
+      cx,
+      cy,
+      Math.abs(s.b.x - s.a.x) / 2,
+      Math.abs(s.b.y - s.a.y) / 2,
+      0,
+      0,
+      Math.PI * 2,
+    );
   } else if (s.kind === "poly") {
     s.pts.forEach((p, i) => (i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y)));
     ctx.closePath();
@@ -59,7 +81,14 @@ function drawShapes(ctx: CanvasRenderingContext2D, shapes: Shape[], color: strin
   ctx.globalCompositeOperation = "source-over";
 }
 
-function drawGrid(ctx: CanvasRenderingContext2D, doc: Doc, view: View, w: number, h: number, dpr: number) {
+function drawGrid(
+  ctx: CanvasRenderingContext2D,
+  doc: Doc,
+  view: View,
+  w: number,
+  h: number,
+  dpr: number,
+) {
   const { gridSize, gridStyle, gridColor } = doc.settings;
   if (gridStyle === "none" || gridSize * view.scale < 4) return;
   const x1 = -view.x / view.scale;
@@ -124,7 +153,14 @@ function drawGrid(ctx: CanvasRenderingContext2D, doc: Doc, view: View, w: number
 }
 
 /** Diagonal hand-drawn hatching, clipped to the wall band. */
-function hatchWalls(wc: CanvasRenderingContext2D, doc: Doc, pw: number, ph: number, dpr: number, scale: number) {
+function hatchWalls(
+  wc: CanvasRenderingContext2D,
+  doc: Doc,
+  pw: number,
+  ph: number,
+  dpr: number,
+  scale: number,
+) {
   const gap = Math.max(3, doc.settings.hatchDensity) * scale * dpr;
   wc.save();
   wc.globalCompositeOperation = "source-atop";
@@ -140,8 +176,13 @@ function hatchWalls(wc: CanvasRenderingContext2D, doc: Doc, pw: number, ph: numb
   wc.restore();
 }
 
-
-function label(ctx: CanvasRenderingContext2D, text: string, y: number, size: number, color: string) {
+function label(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  y: number,
+  size: number,
+  color: string,
+) {
   if (!text) return;
   ctx.font = `600 ${size}px ${UI_FONT}`;
   ctx.textAlign = "center";
@@ -150,7 +191,13 @@ function label(ctx: CanvasRenderingContext2D, text: string, y: number, size: num
   ctx.fillText(text, 0, y);
 }
 
-export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc, processing: boolean = false, extraScale: number = 1) {
+export function drawObject(
+  ctx: CanvasRenderingContext2D,
+  o: MapObject,
+  doc: Doc,
+  processing: boolean = false,
+  extraScale: number = 1,
+) {
   const { wallColor, floorColor, inkColor } = doc.settings;
   ctx.save();
 
@@ -165,7 +212,7 @@ export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc
     ctx.stroke();
     ctx.restore();
   }
-  
+
   if (o.filter === "pixel") {
     ctx.imageSmoothingEnabled = false;
   } else if (o.filter === "toon") {
@@ -178,7 +225,13 @@ export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc
   ctx.translate(o.x, o.y);
   ctx.scale(extraScale, extraScale);
   const rotation = o.rz ?? (o as any).angle ?? 0;
-  if (o.kind === "door" || o.kind === "stairs" || o.kind === "image" || o.kind === "npc" || o.kind === "item") {
+  if (
+    o.kind === "door" ||
+    o.kind === "stairs" ||
+    o.kind === "image" ||
+    o.kind === "npc" ||
+    o.kind === "item"
+  ) {
     ctx.rotate(rotation);
   }
   ctx.lineJoin = "round";
@@ -287,7 +340,13 @@ export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc
     ctx.fillRect(-o.w / 2, -o.h / 2, o.w, o.h);
     ctx.strokeRect(-o.w / 2, -o.h / 2, o.w, o.h);
     ctx.setLineDash([]);
-    label(ctx, (o.label || o.name || o.trigger).toUpperCase(), 0, Math.max(10, Math.min(o.w, o.h) * 0.22), o.color);
+    label(
+      ctx,
+      (o.label || o.name || o.trigger).toUpperCase(),
+      0,
+      Math.max(10, Math.min(o.w, o.h) * 0.22),
+      o.color,
+    );
   } else if (o.kind === "light") {
     ctx.strokeStyle = o.color;
     ctx.fillStyle = o.color;
@@ -312,12 +371,13 @@ export function drawObject(ctx: CanvasRenderingContext2D, o: MapObject, doc: Doc
         const oc = off.getContext("2d")!;
         oc.imageSmoothingEnabled = false;
         oc.drawImage(img, 0, 0, size, size);
-        
+
         ctx.imageSmoothingEnabled = false;
         ctx.drawImage(off, -o.w / 2, -o.h / 2, o.w, o.h);
         ctx.imageSmoothingEnabled = true;
       } else if (o.filter === "toon") {
-        ctx.filter = "contrast(1.5) saturate(2) brightness(1.1) drop-shadow(0 0 2px rgba(0,0,0,0.8))";
+        ctx.filter =
+          "contrast(1.5) saturate(2) brightness(1.1) drop-shadow(0 0 2px rgba(0,0,0,0.8))";
         ctx.drawImage(img, -o.w / 2, -o.h / 2, o.w, o.h);
         ctx.filter = "none";
       } else if (o.filter === "remove-bg") {
@@ -352,7 +412,14 @@ function hexToRgb(hex: string) {
 }
 
 /** Darkness + light pools + line-of-sight polygons. */
-function drawLighting(ctx: CanvasRenderingContext2D, doc: Doc, view: View, w: number, h: number, dpr: number) {
+function drawLighting(
+  ctx: CanvasRenderingContext2D,
+  doc: Doc,
+  view: View,
+  w: number,
+  h: number,
+  dpr: number,
+) {
   const s = doc.settings;
   if (!s.lighting && s.losMode === "off" && !s.playerView) return;
   const lights = lightSources(doc);
@@ -465,7 +532,12 @@ function drawFog(
     if (pattern) {
       const scale = Math.max(0.25, (s.fogScale ?? 1) * view.scale * dpr);
       const drift = style === "smoke" ? 0.35 : 0;
-      pattern.setTransform(new DOMMatrix().translateSelf(view.x * dpr, view.y * dpr).scaleSelf(scale).rotateSelf(drift * 30));
+      pattern.setTransform(
+        new DOMMatrix()
+          .translateSelf(view.x * dpr, view.y * dpr)
+          .scaleSelf(scale)
+          .rotateSelf(drift * 30),
+      );
       lc.fillStyle = pattern;
       lc.fillRect(0, 0, pw, ph);
     }
@@ -553,7 +625,7 @@ export function renderScene(
   const layerById = new Map(doc.layers.map((l) => [l.id, l]));
   const globalObjScale = s.objectRenderScale || 1;
   const selectedIds = new Set(opts.selectedIds ?? []);
-  
+
   for (const o of objectsInDrawOrder(doc)) {
     const layer = layerById.get(o.layerId);
     if (layer && !layer.visible) continue;
@@ -561,7 +633,7 @@ export function renderScene(
     if (o.kind === "light" && (opts.hideUi || s.playerView)) continue;
     ctx.globalAlpha = layer?.opacity ?? 1;
     const isProcessing = (opts.processingIds ?? []).includes(o.id);
-    
+
     // If something is selected, objectRenderScale only applies to selected items.
     // If nothing is selected, it applies to all.
     let extraScale = 1;
@@ -572,7 +644,7 @@ export function renderScene(
     } else {
       extraScale = globalObjScale;
     }
-    
+
     drawObject(ctx, o, doc, isProcessing, extraScale);
     ctx.globalAlpha = 1;
   }

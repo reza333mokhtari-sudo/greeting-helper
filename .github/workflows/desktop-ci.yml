@@ -2,9 +2,9 @@ name: Desktop Qt CI
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
 
 jobs:
   build-and-test:
@@ -18,11 +18,11 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
-          version: '6.5.*'
-          host: 'linux'
-          target: 'desktop'
-          arch: 'gcc_64'
-          modules: 'qtquickcontrols2 qtdeclarative'
+          version: "6.5.*"
+          host: "linux"
+          target: "desktop"
+          arch: "gcc_64"
+          modules: "qtquickcontrols2 qtdeclarative"
 
       - name: Install Dependencies
         run: |

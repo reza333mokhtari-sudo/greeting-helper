@@ -31,7 +31,7 @@ export function reportLovableError(error: unknown, context: Record<string, unkno
     extra: context,
     tags: {
       route: typeof window !== "undefined" ? window.location.pathname : "unknown",
-      boundary: String(context['boundary'] || "unknown"),
+      boundary: String(context["boundary"] || "unknown"),
     },
   });
 

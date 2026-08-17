@@ -1,38 +1,38 @@
 [
-    {
-        "id": "wall_stone",
-        "name": "Stone Wall",
-        "category": "Architecture",
-        "icon": "assets/soulslike/stone_wall.png"
-    },
-    {
-        "id": "floor_wood",
-        "name": "Wood Floor",
-        "category": "Environment",
-        "icon": "assets/soulslike/wood_floor.png"
-    },
-    {
-        "id": "torch_wall",
-        "name": "Wall Torch",
-        "category": "Architecture",
-        "icon": "assets/soulslike/torch.png"
-    },
-    {
-        "id": "pillar_gothic",
-        "name": "Gothic Pillar",
-        "category": "Architecture",
-        "icon": "assets/soulslike/pillar.png"
-    },
-    {
-        "id": "chest_iron",
-        "name": "Iron Chest",
-        "category": "Environment",
-        "icon": "assets/soulslike/chest.png"
-    },
-    {
-        "id": "door_heavy",
-        "name": "Heavy Door",
-        "category": "Architecture",
-        "icon": "assets/soulslike/door.png"
-    }
+  {
+    "id": "wall_stone",
+    "name": "Stone Wall",
+    "category": "Architecture",
+    "icon": "assets/soulslike/stone_wall.png"
+  },
+  {
+    "id": "floor_wood",
+    "name": "Wood Floor",
+    "category": "Environment",
+    "icon": "assets/soulslike/wood_floor.png"
+  },
+  {
+    "id": "torch_wall",
+    "name": "Wall Torch",
+    "category": "Architecture",
+    "icon": "assets/soulslike/torch.png"
+  },
+  {
+    "id": "pillar_gothic",
+    "name": "Gothic Pillar",
+    "category": "Architecture",
+    "icon": "assets/soulslike/pillar.png"
+  },
+  {
+    "id": "chest_iron",
+    "name": "Iron Chest",
+    "category": "Environment",
+    "icon": "assets/soulslike/chest.png"
+  },
+  {
+    "id": "door_heavy",
+    "name": "Heavy Door",
+    "category": "Architecture",
+    "icon": "assets/soulslike/door.png"
+  }
 ]

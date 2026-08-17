@@ -31,7 +31,8 @@ function maskBody(doc: Doc, stroke: number): string {
 
 function objectSvg(o: MapObject, doc: Doc, extraScale: number = 1): string {
   const { wallColor, floorColor, inkColor } = doc.settings;
-  const rot = o.kind === "door" || o.kind === "stairs" ? ` rotate(${n((o.angle * 180) / Math.PI)})` : "";
+  const rot =
+    o.kind === "door" || o.kind === "stairs" ? ` rotate(${n((o.angle * 180) / Math.PI)})` : "";
   const open = `<g transform="translate(${n(o.x)} ${n(o.y)})${rot} scale(${n(extraScale)})">`;
   const text = (t: string, y: number, size: number, fill: string, weight = 600) =>
     t
@@ -44,7 +45,8 @@ function objectSvg(o: MapObject, doc: Doc, extraScale: number = 1): string {
     const t = Math.max(6, doc.settings.wallThickness * 1.6);
     const sw = Math.max(2, doc.settings.wallThickness * 0.5);
     body = `<rect x="${n(-s / 2)}" y="${n(-t / 2)}" width="${n(s)}" height="${n(t)}" fill="${floorColor}" stroke="${wallColor}" stroke-width="${n(sw)}"/>`;
-    if (o.variant === "double") body += `<line x1="0" y1="${n(-t / 2)}" x2="0" y2="${n(t / 2)}" stroke="${wallColor}" stroke-width="${n(sw)}"/>`;
+    if (o.variant === "double")
+      body += `<line x1="0" y1="${n(-t / 2)}" x2="0" y2="${n(t / 2)}" stroke="${wallColor}" stroke-width="${n(sw)}"/>`;
     if (o.variant === "secret") body += text("S", 0, s * 0.55, wallColor, 700);
     if (o.variant === "archway")
       body = `<rect x="${n(-s / 2)}" y="${n(-t / 2)}" width="${n(s)}" height="${n(t)}" fill="${floorColor}"/><line x1="${n(-s / 2)}" y1="${n(-t / 2)}" x2="${n(-s / 2)}" y2="${n(t / 2)}" stroke="${wallColor}" stroke-width="${n(sw)}"/><line x1="${n(s / 2)}" y1="${n(-t / 2)}" x2="${n(s / 2)}" y2="${n(t / 2)}" stroke="${wallColor}" stroke-width="${n(sw)}"/>`;
@@ -61,7 +63,9 @@ function objectSvg(o: MapObject, doc: Doc, extraScale: number = 1): string {
   } else if (o.kind === "npc") {
     body =
       `<circle r="${n(o.r)}" fill="${o.color}" stroke="${o.hostile ? "#2b0b0b" : "#0b1b2b"}" stroke-width="${n(Math.max(1.5, o.r * 0.14))}"/>` +
-      (o.hostile ? `<circle r="${n(o.r * 1.28)}" fill="none" stroke="${o.color}" stroke-width="1.5" stroke-dasharray="${n(o.r * 0.4)} ${n(o.r * 0.3)}"/>` : "") +
+      (o.hostile
+        ? `<circle r="${n(o.r * 1.28)}" fill="none" stroke="${o.color}" stroke-width="1.5" stroke-dasharray="${n(o.r * 0.4)} ${n(o.r * 0.3)}"/>`
+        : "") +
       text(o.label || o.name || "", 0, o.r * 0.9, "#ffffff");
   } else if (o.kind === "item") {
     const s = o.size;
@@ -71,7 +75,12 @@ function objectSvg(o: MapObject, doc: Doc, extraScale: number = 1): string {
   } else if (o.kind === "trigger") {
     body =
       `<rect x="${n(-o.w / 2)}" y="${n(-o.h / 2)}" width="${n(o.w)}" height="${n(o.h)}" fill="${o.color}" fill-opacity="0.2" stroke="${o.color}" stroke-width="2" stroke-dasharray="8 6"/>` +
-      text((o.label || o.name || o.trigger).toUpperCase(), 0, Math.max(10, Math.min(o.w, o.h) * 0.22), o.color);
+      text(
+        (o.label || o.name || o.trigger).toUpperCase(),
+        0,
+        Math.max(10, Math.min(o.w, o.h) * 0.22),
+        o.color,
+      );
   } else if (o.kind === "light") {
     body = `<circle r="6" fill="${o.color}"/>`;
   } else if (o.kind === "image") {
@@ -168,7 +177,11 @@ export async function exportPdfFile(doc: Doc, filename = "dungeon-map.pdf") {
   const el = host.firstElementChild as SVGSVGElement;
   const w = Number(el.getAttribute("width"));
   const h = Number(el.getAttribute("height"));
-  const pdf = new jsPDF({ orientation: w >= h ? "landscape" : "portrait", unit: "pt", format: [w, h] });
+  const pdf = new jsPDF({
+    orientation: w >= h ? "landscape" : "portrait",
+    unit: "pt",
+    format: [w, h],
+  });
   try {
     await svg2pdf(el, pdf, { x: 0, y: 0, width: w, height: h });
     pdf.save(filename);

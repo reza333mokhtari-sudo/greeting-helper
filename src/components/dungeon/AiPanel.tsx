@@ -26,7 +26,10 @@ function summarise(doc: Doc): string {
     );
   const objs = doc.objects
     .slice(0, 30)
-    .map((o) => `${o.kind}${"name" in o && o.name ? `(${o.name})` : ""}@${Math.round(o.x / g)},${Math.round(o.y / g)}`);
+    .map(
+      (o) =>
+        `${o.kind}${"name" in o && o.name ? `(${o.name})` : ""}@${Math.round(o.x / g)},${Math.round(o.y / g)}`,
+    );
   return [
     `${doc.shapes.length} shapes, ${doc.objects.length} objects, ${doc.layers.length} layers, ${doc.fog.length} fogged cells`,
     rooms.length ? `rooms: ${rooms.join("; ")}` : "",
@@ -38,7 +41,7 @@ function summarise(doc: Doc): string {
     .slice(0, 5000);
 }
 
-type Message = { id: string; role: 'user' | 'assistant'; content: string };
+type Message = { id: string; role: "user" | "assistant"; content: string };
 
 type Props = {
   doc: Doc;
@@ -50,14 +53,26 @@ type Props = {
   onOpenDiagnostics?: () => void;
 };
 
-export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp, onOpenDiagnostics, isLoggedIn, onAuthRequired }: Props & { isLoggedIn?: boolean; onAuthRequired?: (reason: string) => void }) {
+export function AiPanel({
+  doc,
+  onPreview,
+  onApply,
+  staged,
+  floorName,
+  onOpenHelp,
+  onOpenDiagnostics,
+  isLoggedIn,
+  onAuthRequired,
+}: Props & { isLoggedIn?: boolean; onAuthRequired?: (reason: string) => void }) {
   const online = useOnlineStatus();
   const [engine, setEngine] = useState<AiEngine>("balanced");
   const [showEditor, setShowEditor] = useState(false);
-  const [customSystem, setCustomSystem] = useState(() => localStorage.getItem("ai-cartographer-system") || SYSTEM_PROMPT);
+  const [customSystem, setCustomSystem] = useState(
+    () => localStorage.getItem("ai-cartographer-system") || SYSTEM_PROMPT,
+  );
   const [result, setResult] = useState<AiSuggestion | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  
+
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -65,7 +80,7 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
 
   useEffect(() => {
     if (scrollRef.current) {
-      scrollRef.current.scrollIntoView({ behavior: 'smooth' });
+      scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
 
@@ -79,9 +94,9 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
 
   const ask = async (text: string) => {
     if (!online || isLoading) return;
-    
-    const userMsg: Message = { id: Date.now().toString(), role: 'user', content: text };
-    setMessages(prev => [...prev, userMsg]);
+
+    const userMsg: Message = { id: Date.now().toString(), role: "user", content: text };
+    setMessages((prev) => [...prev, userMsg]);
     setIsLoading(true);
     setResult(null);
     onPreview(null);
@@ -98,13 +113,13 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
     }, 30000);
 
     try {
-      const response = await fetch('/api/ai/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/ai/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         signal: abortController.signal,
         body: JSON.stringify({
           prompt: text,
-          history: messages.map(m => ({ role: m.role, content: m.content })),
+          history: messages.map((m) => ({ role: m.role, content: m.content })),
           summary: summarise(doc),
           engine,
           customSystem,
@@ -114,7 +129,7 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        let errorMessage = 'Chat request failed';
+        let errorMessage = "Chat request failed";
         try {
           const errorData = await response.json();
           errorMessage = errorData.error || errorMessage;
@@ -127,31 +142,35 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
       }
 
       const reader = response.body?.getReader();
-      if (!reader) throw new Error('No reader available');
+      if (!reader) throw new Error("No reader available");
 
       const assistantId = (Date.now() + 1).toString();
       let assistantContent = "";
-      
-      setMessages(prev => [...prev, { id: assistantId, role: 'assistant', content: "" }]);
+
+      setMessages((prev) => [...prev, { id: assistantId, role: "assistant", content: "" }]);
 
       const decoder = new TextDecoder();
       try {
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
-          
+
           const chunk = decoder.decode(value, { stream: true });
           assistantContent += chunk;
-          
-          setMessages(prev => prev.map(m => m.id === assistantId ? { ...m, content: assistantContent } : m));
+
+          setMessages((prev) =>
+            prev.map((m) => (m.id === assistantId ? { ...m, content: assistantContent } : m)),
+          );
         }
       } catch (streamErr: any) {
-        if (streamErr.name === 'AbortError') {
+        if (streamErr.name === "AbortError") {
           assistantContent += "\n\n*(AI Interrupted)*";
         } else {
           assistantContent += `\n\n*(Stream error: ${streamErr.message})*`;
         }
-        setMessages(prev => prev.map(m => m.id === assistantId ? { ...m, content: assistantContent } : m));
+        setMessages((prev) =>
+          prev.map((m) => (m.id === assistantId ? { ...m, content: assistantContent } : m)),
+        );
         throw streamErr;
       }
 
@@ -166,9 +185,8 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
       } catch (e) {
         console.warn("No layout found in response");
       }
-
     } catch (err: any) {
-      if (err.name === 'AbortError') {
+      if (err.name === "AbortError") {
         console.log("Request aborted");
       } else {
         toast.error(`AI Assistant Error: ${err.message}`);
@@ -193,10 +211,26 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
   };
 
   const COMMAND_PRESETS = [
-    { label: "Suggest Layout", prompt: "Suggest a layout for a small wizard's tower with a library and laboratory.", icon: <Sparkles className="h-3 w-3" /> },
-    { label: "Find Props", prompt: "I need some spooky props like skulls and candles. What should I search for?", icon: <HelpCircle className="h-3 w-3" /> },
-    { label: "Help: Pan/Zoom", prompt: "How do I move around and zoom in the editor?", icon: <Maximize2 className="h-3 w-3" /> },
-    { label: "Historical Crypt", prompt: "Suggest a crypt layout based on historical catacombs.", icon: <Sparkles className="h-3 w-3" /> },
+    {
+      label: "Suggest Layout",
+      prompt: "Suggest a layout for a small wizard's tower with a library and laboratory.",
+      icon: <Sparkles className="h-3 w-3" />,
+    },
+    {
+      label: "Find Props",
+      prompt: "I need some spooky props like skulls and candles. What should I search for?",
+      icon: <HelpCircle className="h-3 w-3" />,
+    },
+    {
+      label: "Help: Pan/Zoom",
+      prompt: "How do I move around and zoom in the editor?",
+      icon: <Maximize2 className="h-3 w-3" />,
+    },
+    {
+      label: "Historical Crypt",
+      prompt: "Suggest a crypt layout based on historical catacombs.",
+      icon: <Sparkles className="h-3 w-3" />,
+    },
   ];
 
   return (
@@ -256,32 +290,51 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
       </div>
 
       <div className="flex flex-col gap-2 p-1">
-        <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-tight">AI Model</label>
-        <select 
-          value={engine} 
+        <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-tight">
+          AI Model
+        </label>
+        <select
+          value={engine}
           onChange={(e) => setEngine(e.target.value as AiEngine)}
           className="w-full bg-background border border-border/50 rounded px-2 py-1 text-[11px] outline-none focus:border-accent/50"
         >
           {Object.entries(AI_ENGINES).map(([key, config]) => (
-            <option key={key} value={key as AiEngine}>{config.label}</option>
+            <option key={key} value={key as AiEngine}>
+              {config.label}
+            </option>
           ))}
         </select>
       </div>
 
       {showEditor && (
         <div className="space-y-2 rounded-md border border-accent/30 bg-accent/5 p-2 animate-in fade-in slide-in-from-top-1">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-accent">System Instructions</p>
+          <p className="text-[10px] font-bold uppercase tracking-wider text-accent">
+            System Instructions
+          </p>
           <Textarea
             value={customSystem}
             onChange={(e) => setCustomSystem(e.target.value)}
             className="min-h-[120px] font-mono text-[9px] leading-tight"
           />
           <div className="flex justify-end gap-2">
-            <Button size="sm" variant="ghost" className="h-6 text-[10px]" onClick={() => setCustomSystem(SYSTEM_PROMPT)}>Reset</Button>
-            <Button size="sm" className="h-6 text-[10px]" onClick={() => {
-              localStorage.setItem("ai-cartographer-system", customSystem);
-              toast.success("Settings saved");
-            }}>Save</Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              className="h-6 text-[10px]"
+              onClick={() => setCustomSystem(SYSTEM_PROMPT)}
+            >
+              Reset
+            </Button>
+            <Button
+              size="sm"
+              className="h-6 text-[10px]"
+              onClick={() => {
+                localStorage.setItem("ai-cartographer-system", customSystem);
+                toast.success("Settings saved");
+              }}
+            >
+              Save
+            </Button>
           </div>
         </div>
       )}
@@ -314,16 +367,19 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
           )}
 
           {messages.map((m) => (
-            <div key={m.id} className={`flex flex-col gap-1 ${m.role === "user" ? "items-end" : "items-start"}`}>
-              <div className={`max-w-[90%] rounded-lg px-2.5 py-2 text-[11px] leading-relaxed shadow-sm ${
-                m.role === "user" 
-                  ? "bg-primary text-primary-foreground" 
-                  : "bg-muted/80 text-foreground border border-border/40"
-              }`}>
+            <div
+              key={m.id}
+              className={`flex flex-col gap-1 ${m.role === "user" ? "items-end" : "items-start"}`}
+            >
+              <div
+                className={`max-w-[90%] rounded-lg px-2.5 py-2 text-[11px] leading-relaxed shadow-sm ${
+                  m.role === "user"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted/80 text-foreground border border-border/40"
+                }`}
+              >
                 <div className="prose prose-invert prose-xs max-w-none prose-p:leading-relaxed prose-pre:bg-black/20 prose-code:text-accent">
-                  <ReactMarkdown>
-                    {DOMPurify.sanitize(m.content)}
-                  </ReactMarkdown>
+                  <ReactMarkdown>{DOMPurify.sanitize(m.content)}</ReactMarkdown>
                 </div>
               </div>
             </div>
@@ -331,13 +387,25 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
 
           {result && (
             <div className="space-y-2 rounded-lg border border-border/60 bg-card/60 p-2.5 animate-in fade-in zoom-in-95">
-              {result.notes && <div className="text-[11px] leading-relaxed text-muted-foreground whitespace-pre-wrap">{result.notes}</div>}
-              
-              {(result.rooms.length > 0 || result.corridors.length > 0 || result.objects.length > 0) && !staged && (
-                <Button size="sm" variant="secondary" className="h-7 w-full gap-1.5 text-[10px]" onClick={() => onPreview(result)}>
-                  <Maximize2 className="h-3 w-3" /> Preview suggestion on map
-                </Button>
+              {result.notes && (
+                <div className="text-[11px] leading-relaxed text-muted-foreground whitespace-pre-wrap">
+                  {result.notes}
+                </div>
               )}
+
+              {(result.rooms.length > 0 ||
+                result.corridors.length > 0 ||
+                result.objects.length > 0) &&
+                !staged && (
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    className="h-7 w-full gap-1.5 text-[10px]"
+                    onClick={() => onPreview(result)}
+                  >
+                    <Maximize2 className="h-3 w-3" /> Preview suggestion on map
+                  </Button>
+                )}
 
               {staged && (
                 <div className="space-y-2 rounded-md border border-accent/40 bg-accent/5 p-2">
@@ -373,8 +441,8 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
               )}
             </div>
           )}
-          
-          {isLoading && messages[messages.length - 1]?.role !== 'assistant' && (
+
+          {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
             <div className="flex items-center gap-2 text-[10px] text-muted-foreground animate-pulse">
               <Loader2 className="h-3 w-3 animate-spin" /> Thinking...
             </div>
@@ -398,19 +466,30 @@ export function AiPanel({ doc, onPreview, onApply, staged, floorName, onOpenHelp
             rows={1}
             className="min-h-[40px] resize-none pr-10 text-[11px] focus-visible:ring-accent/30"
           />
-          <Button 
-            size="icon" 
+          <Button
+            size="icon"
             type={isLoading ? "button" : "submit"}
-            className={`absolute right-1.5 top-1.5 size-7 rounded-md transition-all ${isLoading ? "bg-destructive hover:bg-destructive/80" : ""}`} 
-            disabled={(!isLoading && (!inputValue.trim() || !online || !isLoggedIn))}
+            className={`absolute right-1.5 top-1.5 size-7 rounded-md transition-all ${isLoading ? "bg-destructive hover:bg-destructive/80" : ""}`}
+            disabled={!isLoading && (!inputValue.trim() || !online || !isLoggedIn)}
             onClick={isLoading ? stopLoading : undefined}
             title={isLoading ? "Stop generating" : "Send message"}
           >
-            {isLoading ? <span className="flex items-center justify-center relative"><Loader2 className="h-3.5 w-3.5 animate-spin absolute opacity-20" /><span className="h-2 w-2 bg-white rounded-sm" /></span> : <Send className="h-3.5 w-3.5" />}
+            {isLoading ? (
+              <span className="flex items-center justify-center relative">
+                <Loader2 className="h-3.5 w-3.5 animate-spin absolute opacity-20" />
+                <span className="h-2 w-2 bg-white rounded-sm" />
+              </span>
+            ) : (
+              <Send className="h-3.5 w-3.5" />
+            )}
           </Button>
         </div>
         <p className="text-center text-[9px] text-muted-foreground">
-          {!online ? "You are offline" : !isLoggedIn ? "Please sign in to chat" : "Press Enter to send"}
+          {!online
+            ? "You are offline"
+            : !isLoggedIn
+              ? "Please sign in to chat"
+              : "Press Enter to send"}
         </p>
       </form>
     </section>

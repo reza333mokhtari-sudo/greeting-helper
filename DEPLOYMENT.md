@@ -16,7 +16,9 @@ When importing your repository to Vercel, use these settings:
 Configure these in the Vercel Dashboard (**Settings > Environment Variables**).
 
 ### Lovable Cloud (Supabase) Integration
+
 These are required for database access, authentication, and cloud syncing.
+
 - `VITE_SUPABASE_URL`: `https://wliwiswcollinbaomzqr.supabase.co`
 - `VITE_SUPABASE_PUBLISHABLE_KEY`: `sb_publishable_RgebDk1weJQL8DCgUNttxQ_FWT2p2rW`
 - `SUPABASE_URL`: (Same as VITE_SUPABASE_URL)
@@ -24,6 +26,7 @@ These are required for database access, authentication, and cloud syncing.
 - `SUPABASE_SERVICE_ROLE_KEY`: **CRITICAL** - Required for server functions to bypass RLS for admin tasks. Found in your Lovable Cloud / Supabase settings.
 
 ### AI Assistant & Error Logging (AI Gateway / Sentry)
+
 - `LOVABLE_API_KEY`: Required for AI Cartographer and Grok/O3 integration.
 - `VITE_SENTRY_DSN`: Required for client-side error tracking.
 - `SENTRY_DSN`: Required for server-side error tracking (Edge/Serverless).
@@ -31,19 +34,24 @@ These are required for database access, authentication, and cloud syncing.
 ## 3. Deployment Troubleshooting
 
 ### Black Screen / Hydration Error
+
 - **Cause**: TanStack Start SSR fails if environment variables are missing at build time.
 - **Fix**: Ensure all `VITE_` variables are set in Vercel **before** triggering a new deployment.
 
 ### Server Function 404/500
+
 - **Cause**: Incorrect Nitro preset or missing `SUPABASE_SERVICE_ROLE_KEY`.
 - **Fix**: The build automatically targets the correct runtime. Check the "Functions" tab in Vercel for specific runtime logs.
 
 ### AI Timeout
+
 - **Execution Time**: AI generation can exceed 10s.
 - **Fix**: If you encounter timeouts, increase the "Function Max Duration" in `vercel.json` or Vercel settings (requires Pro plan for >10s).
 
 ## 4. Local Production Test
+
 Always run this before pushing to verify the build is stable:
+
 ```bash
 npm run build && npm run preview
 ```

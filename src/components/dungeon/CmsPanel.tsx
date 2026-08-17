@@ -23,11 +23,13 @@ export function CmsPanel() {
 
   useEffect(() => {
     const checkAdmin = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) return;
-      const { data: role } = await supabase.rpc("has_role", { 
-        _user_id: user.id, 
-        _role: "admin" 
+      const { data: role } = await supabase.rpc("has_role", {
+        _user_id: user.id,
+        _role: "admin",
       });
       setIsAdmin(!!role);
     };
@@ -53,8 +55,8 @@ export function CmsPanel() {
 
   const openPage = async (page: Page) => {
     if (!page.published && !isAdmin) {
-       toast.error("This page is private.");
-       return;
+      toast.error("This page is private.");
+      return;
     }
 
     await dialog.open({
@@ -62,22 +64,26 @@ export function CmsPanel() {
       message: (
         <div className="space-y-4 pt-2">
           <div className="flex items-center gap-2">
-             <Badge variant={page.published ? "default" : "outline"}>
-                {page.published ? <Globe className="mr-1 h-3 w-3" /> : <Lock className="mr-1 h-3 w-3" />}
-                {page.published ? "Public" : "Private (Admin Only)"}
-             </Badge>
-             <span className="text-[10px] text-muted-foreground">
-               Last updated: {new Date(page.updated_at).toLocaleDateString()}
-             </span>
+            <Badge variant={page.published ? "default" : "outline"}>
+              {page.published ? (
+                <Globe className="mr-1 h-3 w-3" />
+              ) : (
+                <Lock className="mr-1 h-3 w-3" />
+              )}
+              {page.published ? "Public" : "Private (Admin Only)"}
+            </Badge>
+            <span className="text-[10px] text-muted-foreground">
+              Last updated: {new Date(page.updated_at).toLocaleDateString()}
+            </span>
           </div>
           <div className="max-h-[60vh] overflow-auto rounded-md border border-border/40 bg-muted/20 p-4 text-sm leading-relaxed whitespace-pre-wrap">
             {page.body}
           </div>
           <div className="flex justify-end gap-2 pt-2">
             <Button size="sm" variant="outline" asChild>
-               <a href={`/p/${page.slug}`} target="_blank" rel="noreferrer">
-                  <ExternalLink className="mr-1 h-3 w-3" /> View standalone
-               </a>
+              <a href={`/p/${page.slug}`} target="_blank" rel="noreferrer">
+                <ExternalLink className="mr-1 h-3 w-3" /> View standalone
+              </a>
             </Button>
           </div>
         </div>
@@ -85,7 +91,7 @@ export function CmsPanel() {
     });
   };
 
-  const visiblePages = pages.filter(p => p.published || isAdmin);
+  const visiblePages = pages.filter((p) => p.published || isAdmin);
 
   if (loading) {
     return (

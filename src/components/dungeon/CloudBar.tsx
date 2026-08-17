@@ -1,6 +1,15 @@
 import { useCallback, useEffect, useState, useMemo } from "react";
 import { Link } from "@tanstack/react-router";
-import { Cloud, CloudUpload, FolderOpen, LogOut, Trash2, CheckCircle2, AlertCircle, RefreshCw } from "lucide-react";
+import {
+  Cloud,
+  CloudUpload,
+  FolderOpen,
+  LogOut,
+  Trash2,
+  CheckCircle2,
+  AlertCircle,
+  RefreshCw,
+} from "lucide-react";
 
 import { toast } from "sonner";
 
@@ -11,11 +20,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ShareDialog } from "./ShareDialog";
-
 
 type Props = {
   doc: Doc;
@@ -25,9 +39,13 @@ type Props = {
   saveStatus?: "idle" | "saving" | "saved" | "error";
 };
 
-export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus: externalSaveStatus }: Props) {
-
-
+export function CloudBar({
+  doc,
+  thumbnail,
+  onLoadDoc,
+  onAuthRequired,
+  saveStatus: externalSaveStatus,
+}: Props) {
   const [email, setEmail] = useState<string | null>(null);
   const [maps, setMaps] = useState<MapRow[]>([]);
   const [open, setOpen] = useState(false);
@@ -35,15 +53,18 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
   const [name, setName] = useState("Untitled map");
   const [busy, setBusy] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [internalSyncStatus, setInternalSyncStatus] = useState<"idle" | "saving" | "synced" | "error">("idle");
-  const syncStatus = externalSaveStatus === "saved" ? "synced" : (externalSaveStatus || internalSyncStatus);
+  const [internalSyncStatus, setInternalSyncStatus] = useState<
+    "idle" | "saving" | "synced" | "error"
+  >("idle");
+  const syncStatus =
+    externalSaveStatus === "saved" ? "synced" : externalSaveStatus || internalSyncStatus;
   const [localLastSaved, setLocalLastSaved] = useState<number | null>(null);
-
-
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }: any) => setEmail(data.session?.user.email ?? null));
-    const { data: sub } = supabase.auth.onAuthStateChange((_e: any, s: any) => setEmail(s?.user.email ?? null));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e: any, s: any) =>
+      setEmail(s?.user.email ?? null),
+    );
     return () => sub.subscription.unsubscribe();
   }, []);
 
@@ -55,10 +76,11 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
     }
     supabase.auth.getUser().then(({ data }: any) => {
       if (!data.user) return;
-      supabase.rpc("has_role", { _user_id: data.user.id, _role: "admin" }).then(({ data: ok }: any) => setIsAdmin(!!ok));
+      supabase
+        .rpc("has_role", { _user_id: data.user.id, _role: "admin" })
+        .then(({ data: ok }: any) => setIsAdmin(!!ok));
     });
   }, [email]);
-
 
   const refresh = useCallback(() => {
     listMaps()
@@ -73,7 +95,9 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
 
   const save = async () => {
     // Check auth status every save to ensure we aren't using a stale state
-    const { data: { session } } = await supabase.auth.getSession();
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
     if (!session) {
       // Manual save for local users
       setInternalSyncStatus("saving");
@@ -111,8 +135,6 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
     setBusy(false);
   };
 
-
-
   const open_ = async (row: MapRow) => {
     try {
       const { name: n, doc: d } = await loadMap(row.id);
@@ -131,7 +153,6 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
     setMaps((m) => m.map((x) => (x.id === row.id ? { ...x, is_public: value } : x)));
     if (current?.id === row.id) setCurrent((c) => (c ? { ...c, is_public: value } : c));
   };
-
 
   const statusIndicator = useMemo(() => {
     let content;
@@ -186,7 +207,9 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
                 Last saved: {new Date(localLastSaved).toLocaleTimeString()}
               </p>
             )}
-            {syncStatus === "saving" && <p className="text-blue-500 animate-pulse mt-0.5">Uploading data...</p>}
+            {syncStatus === "saving" && (
+              <p className="text-blue-500 animate-pulse mt-0.5">Uploading data...</p>
+            )}
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -195,12 +218,7 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
 
   if (!email) {
     return (
-      <Button 
-        size="sm" 
-        variant="outline" 
-        className="h-7 text-xs"
-        onClick={onAuthRequired}
-      >
+      <Button size="sm" variant="outline" className="h-7 text-xs" onClick={onAuthRequired}>
         <Cloud className="mr-1 h-3.5 w-3.5" /> Cloud Storage
       </Button>
     );
@@ -233,7 +251,12 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
         </Tooltip>
       </TooltipProvider>
 
-      <Input value={name} onChange={(e) => setName(e.target.value)} className="h-7 w-40 text-xs" placeholder="Map name" />
+      <Input
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        className="h-7 w-40 text-xs"
+        placeholder="Map name"
+      />
       <Button size="sm" className="h-7 text-xs" disabled={busy} onClick={save}>
         <CloudUpload className="mr-1 h-3.5 w-3.5" /> Save
       </Button>
@@ -250,17 +273,28 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
           </DialogHeader>
           <ScrollArea className="max-h-[60vh] pr-3">
             <div className="space-y-2">
-              {maps.length === 0 && <p className="text-xs text-muted-foreground">No saved maps yet.</p>}
+              {maps.length === 0 && (
+                <p className="text-xs text-muted-foreground">No saved maps yet.</p>
+              )}
               {maps.map((m) => (
-                <div key={m.id} className="flex items-center gap-3 rounded-lg border border-border/60 bg-card/60 p-2">
+                <div
+                  key={m.id}
+                  className="flex items-center gap-3 rounded-lg border border-border/60 bg-card/60 p-2"
+                >
                   {m.thumbnail_url ? (
                     <img src={m.thumbnail_url} alt="" className="h-10 w-14 rounded object-cover" />
                   ) : (
                     <div className="h-10 w-14 rounded bg-muted" />
                   )}
-                  <button type="button" className="min-w-0 flex-1 text-left" onClick={() => open_(m)}>
+                  <button
+                    type="button"
+                    className="min-w-0 flex-1 text-left"
+                    onClick={() => open_(m)}
+                  >
                     <p className="truncate text-xs font-medium">{m.name}</p>
-                    <p className="text-[10px] text-muted-foreground">{new Date(m.updated_at).toLocaleString()}</p>
+                    <p className="text-[10px] text-muted-foreground">
+                      {new Date(m.updated_at).toLocaleString()}
+                    </p>
                   </button>
                   <div className="flex items-center gap-1.5">
                     <Badge variant={m.is_public ? "default" : "secondary"} className="text-[9px]">
@@ -280,7 +314,6 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </Button>
-
                   </div>
                 </div>
               ))}
@@ -296,7 +329,6 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
       )}
 
       {/* LogOut hidden in favor of ProfileMenu in TopMenuBar */}
-
     </div>
   );
 }

@@ -1,11 +1,11 @@
 export type DocSection = {
-  slug: string
-  title: string
-  description: string
-  order: number
-  file: string
-  keywords?: string[]
-}
+  slug: string;
+  title: string;
+  description: string;
+  order: number;
+  file: string;
+  keywords?: string[];
+};
 
 export const docSections: DocSection[] = [
   {
@@ -95,4 +95,4 @@ export const docSections: DocSection[] = [
     order: 12,
     file: "faq.mdx",
   },
-]
+];

@@ -18,8 +18,17 @@ type Props = {
   online: boolean;
 };
 
-function Row({ label, value, tone }: { label: string; value: string; tone?: "good" | "warn" | "bad" }) {
-  const color = tone === "bad" ? "text-destructive" : tone === "warn" ? "text-accent" : "text-foreground";
+function Row({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: string;
+  tone?: "good" | "warn" | "bad";
+}) {
+  const color =
+    tone === "bad" ? "text-destructive" : tone === "warn" ? "text-accent" : "text-foreground";
   return (
     <div className="flex items-center justify-between gap-2 text-[11px]">
       <span className="text-muted-foreground">{label}</span>
@@ -63,11 +72,22 @@ export function DiagnosticsPanel(props: Props) {
       </div>
 
       <div className="space-y-1.5 rounded-md border border-border/60 bg-card/60 p-2">
-        <Row label="Frames per second" value={stats.fps ? stats.fps.toFixed(0) : "—"} tone={fpsTone} />
-        <Row label="Frame interval" value={stats.frameMs ? `${stats.frameMs.toFixed(1)} ms` : "—"} />
+        <Row
+          label="Frames per second"
+          value={stats.fps ? stats.fps.toFixed(0) : "—"}
+          tone={fpsTone}
+        />
+        <Row
+          label="Frame interval"
+          value={stats.frameMs ? `${stats.frameMs.toFixed(1)} ms` : "—"}
+        />
         <Row label="Render time (avg)" value={`${stats.drawMs.toFixed(2)} ms`} tone={drawTone} />
         <Row label="Render time (peak)" value={`${stats.drawMaxMs.toFixed(2)} ms`} />
-        <Row label="Slow frames (>33ms)" value={`${stats.longFrames} / ${stats.totalFrames}`} tone={stats.longFrames > stats.totalFrames * 0.1 ? "warn" : "good"} />
+        <Row
+          label="Slow frames (>33ms)"
+          value={`${stats.longFrames} / ${stats.totalFrames}`}
+          tone={stats.longFrames > stats.totalFrames * 0.1 ? "warn" : "good"}
+        />
       </div>
 
       <Separator />
@@ -87,20 +107,36 @@ export function DiagnosticsPanel(props: Props) {
       <Separator />
 
       <div className="space-y-1.5">
-        <Row label="Document size" value={`${(props.docBytes / 1024).toFixed(1)} KB`} tone={props.docBytes > 3_000_000 ? "warn" : "good"} />
-        <Row label="Autosave duration" value={props.saveMs == null ? "—" : `${props.saveMs.toFixed(1)} ms`} />
-        <Row label="Last autosave" value={props.savedAt ? new Date(props.savedAt).toLocaleTimeString() : "—"} />
-        <Row label="JS heap" value={stats.heapMb == null ? "n/a" : `${stats.heapMb.toFixed(1)} MB`} />
+        <Row
+          label="Document size"
+          value={`${(props.docBytes / 1024).toFixed(1)} KB`}
+          tone={props.docBytes > 3_000_000 ? "warn" : "good"}
+        />
+        <Row
+          label="Autosave duration"
+          value={props.saveMs == null ? "—" : `${props.saveMs.toFixed(1)} ms`}
+        />
+        <Row
+          label="Last autosave"
+          value={props.savedAt ? new Date(props.savedAt).toLocaleTimeString() : "—"}
+        />
+        <Row
+          label="JS heap"
+          value={stats.heapMb == null ? "n/a" : `${stats.heapMb.toFixed(1)} MB`}
+        />
         <Row label="Pixel ratio" value={`${stats.dpr}×`} />
       </div>
 
-      <Badge variant={props.online ? "secondary" : "destructive"} className="w-full justify-center text-[10px]">
+      <Badge
+        variant={props.online ? "secondary" : "destructive"}
+        className="w-full justify-center text-[10px]"
+      >
         {props.online ? "Online — cloud sync available" : "Offline — working locally"}
       </Badge>
 
       <p className="text-[10px] leading-relaxed text-muted-foreground">
-        Tip: heavy hatching, high roughness and large fog areas cost the most render time. Hide layers you are not editing to
-        recover frames.
+        Tip: heavy hatching, high roughness and large fog areas cost the most render time. Hide
+        layers you are not editing to recover frames.
       </p>
     </section>
   );

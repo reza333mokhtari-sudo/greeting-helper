@@ -15,7 +15,8 @@ export const getPage = createServerFn({ method: "GET" })
       global: {
         fetch: (input, init) => {
           const h = new Headers(init?.headers);
-          if (key.startsWith("sb_") && h.get("Authorization") === `Bearer ${key}`) h.delete("Authorization");
+          if (key.startsWith("sb_") && h.get("Authorization") === `Bearer ${key}`)
+            h.delete("Authorization");
           h.set("apikey", key);
           return fetch(input, { ...init, headers: h });
         },
@@ -39,15 +40,24 @@ export const Route = createFileRoute("/p/$slug")({
   head: ({ loaderData }) => ({
     meta: [
       { title: `${loaderData?.title ?? "Page"} — Dungeon Scrawl Map Maker` },
-      { name: "description", content: (loaderData?.body ?? "").slice(0, 150) || "A content page from the Dungeon Scrawl map maker." },
+      {
+        name: "description",
+        content:
+          (loaderData?.body ?? "").slice(0, 150) ||
+          "A content page from the Dungeon Scrawl map maker.",
+      },
       { property: "og:title", content: loaderData?.title ?? "Page" },
       { property: "og:description", content: (loaderData?.body ?? "").slice(0, 150) },
       { property: "og:type", content: "article" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  errorComponent: () => <Shell title="Something went wrong">An unexpected error occurred on the server.</Shell>,
-  notFoundComponent: () => <Shell title="Page not found">That page doesn't exist or isn't published yet.</Shell>,
+  errorComponent: () => (
+    <Shell title="Something went wrong">An unexpected error occurred on the server.</Shell>
+  ),
+  notFoundComponent: () => (
+    <Shell title="Page not found">That page doesn't exist or isn't published yet.</Shell>
+  ),
   component: PageView,
 });
 
@@ -68,8 +78,12 @@ function PageView() {
   return (
     <main className="mx-auto max-w-2xl px-6 py-14">
       <h1 className="mb-2 text-3xl font-semibold text-arcane">{page.title}</h1>
-      <p className="mb-8 text-xs text-muted-foreground">Updated {new Date(page.updated_at).toLocaleDateString()}</p>
-      <article className="whitespace-pre-wrap text-sm leading-relaxed text-foreground/90">{page.body}</article>
+      <p className="mb-8 text-xs text-muted-foreground">
+        Updated {new Date(page.updated_at).toLocaleDateString()}
+      </p>
+      <article className="whitespace-pre-wrap text-sm leading-relaxed text-foreground/90">
+        {page.body}
+      </article>
       <Link to="/" className="mt-10 inline-block text-sm text-primary underline">
         Return Home
       </Link>

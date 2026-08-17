@@ -16,19 +16,23 @@ const errorMiddleware = createMiddleware().server(async ({ next }) => {
     return await next();
   } catch (error) {
     // If it's a planned TanStack redirect or response, re-throw it
-    if (error != null && typeof error === "object" && ("statusCode" in error || "status" in error)) {
+    if (
+      error != null &&
+      typeof error === "object" &&
+      ("statusCode" in error || "status" in error)
+    ) {
       throw error;
     }
-    
+
     console.error("[Start] Server Runtime Error:", error);
     captureServerException(error);
-    
+
     // Return a structured error response that the client can handle
     return new Response(renderErrorPage(), {
       status: 500,
-      headers: { 
+      headers: {
         "Content-Type": "text/html; charset=utf-8",
-        "Cache-Control": "no-store" 
+        "Cache-Control": "no-store",
       },
     });
   }

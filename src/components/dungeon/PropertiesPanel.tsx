@@ -6,8 +6,24 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, X, Trash2, Crown, Maximize2, Upload, Box, Image as ImageIcon, Link2 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Plus,
+  X,
+  Trash2,
+  Crown,
+  Maximize2,
+  Upload,
+  Box,
+  Image as ImageIcon,
+  Link2,
+} from "lucide-react";
 
 type Props = {
   doc: Doc;
@@ -38,8 +54,16 @@ function NumSlider({
 }) {
   return (
     <>
-      <Slider value={[value]} min={min} max={max} onValueChange={([v]) => onChange(v ?? value)} className="w-24" />
-      <span className="w-8 text-right text-xs tabular-nums text-foreground/80">{Math.round(value)}</span>
+      <Slider
+        value={[value]}
+        min={min}
+        max={max}
+        onValueChange={([v]) => onChange(v ?? value)}
+        className="w-24"
+      />
+      <span className="w-8 text-right text-xs tabular-nums text-foreground/80">
+        {Math.round(value)}
+      </span>
     </>
   );
 }
@@ -86,7 +110,10 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
         <h2 className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
           <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_8px_var(--primary)]" />
           Properties
-          <Badge variant="outline" className="h-4 border-primary/20 bg-primary/5 px-1.5 text-[9px] uppercase tracking-wider text-primary">
+          <Badge
+            variant="outline"
+            className="h-4 border-primary/20 bg-primary/5 px-1.5 text-[9px] uppercase tracking-wider text-primary"
+          >
             {o.kind}
           </Badge>
         </h2>
@@ -126,10 +153,20 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
         </Select>
       </Row>
       <Row label="X">
-        <Input type="number" className={numInput} value={Math.round(o.x)} onChange={(e) => patch({ x: Number(e.target.value) })} />
+        <Input
+          type="number"
+          className={numInput}
+          value={Math.round(o.x)}
+          onChange={(e) => patch({ x: Number(e.target.value) })}
+        />
       </Row>
       <Row label="Y">
-        <Input type="number" className={numInput} value={Math.round(o.y)} onChange={(e) => patch({ y: Number(e.target.value) })} />
+        <Input
+          type="number"
+          className={numInput}
+          value={Math.round(o.y)}
+          onChange={(e) => patch({ y: Number(e.target.value) })}
+        />
       </Row>
 
       {o.kind === "image" && (
@@ -139,7 +176,7 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
               <Box className="size-3" />
               Source & Texture
             </div>
-            
+
             <div className="flex flex-col gap-2">
               <Button
                 variant="outline"
@@ -163,7 +200,7 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
                 Upload Image
               </Button>
 
-              <div 
+              <div
                 className="group relative flex h-24 w-full cursor-default items-center justify-center rounded-md border border-dashed border-primary/30 bg-background/50 transition-colors hover:bg-primary/5"
                 onDragOver={(e) => {
                   e.preventDefault();
@@ -175,7 +212,7 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
                 onDrop={(e) => {
                   e.preventDefault();
                   e.currentTarget.classList.remove("bg-primary/10", "border-primary");
-                  
+
                   // Handle file drop
                   const file = e.dataTransfer.files[0];
                   if (file && file.type.startsWith("image/")) {
@@ -186,7 +223,10 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
 
                   // Handle props/texture panel drop (using URL from dataTransfer)
                   const url = e.dataTransfer.getData("text/plain");
-                  if (url && (url.startsWith("http") || url.startsWith("blob:") || url.startsWith("/"))) {
+                  if (
+                    url &&
+                    (url.startsWith("http") || url.startsWith("blob:") || url.startsWith("/"))
+                  ) {
                     patch({ url } as Partial<MapObject>);
                   }
                 }}
@@ -215,40 +255,52 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
 
           <div className="space-y-1">
             <Row label="Width">
-              <NumSlider value={o.w} min={8} max={2000} onChange={(v) => patch({ w: v } as Partial<MapObject>)} />
+              <NumSlider
+                value={o.w}
+                min={8}
+                max={2000}
+                onChange={(v) => patch({ w: v } as Partial<MapObject>)}
+              />
             </Row>
             <Row label="Height">
-              <NumSlider value={o.h} min={8} max={2000} onChange={(v) => patch({ h: v } as Partial<MapObject>)} />
+              <NumSlider
+                value={o.h}
+                min={8}
+                max={2000}
+                onChange={(v) => patch({ h: v } as Partial<MapObject>)}
+              />
             </Row>
             <Row label="Rotation°">
               <Input
                 type="number"
                 className={numInput}
-                value={Math.round((o.rz ?? 0) * 180 / Math.PI)}
-                onChange={(e) => patch({ rz: (Number(e.target.value) * Math.PI) / 180 } as Partial<MapObject>)}
+                value={Math.round(((o.rz ?? 0) * 180) / Math.PI)}
+                onChange={(e) =>
+                  patch({ rz: (Number(e.target.value) * Math.PI) / 180 } as Partial<MapObject>)
+                }
               />
             </Row>
             <Row label="Corner Radius">
-                <div className="grid grid-cols-2 gap-2 w-32">
-                  <div className="flex flex-col gap-1">
-                    <span className="text-[8px] text-muted-foreground">Top-Left</span>
-                    <Input 
-                      type="number" 
-                      className="h-6 text-[10px]" 
-                      value={o.rx ?? 0} 
-                      onChange={(e) => patch({ rx: Number(e.target.value) } as Partial<MapObject>)} 
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <span className="text-[8px] text-muted-foreground">Top-Right</span>
-                    <Input 
-                      type="number" 
-                      className="h-6 text-[10px]" 
-                      value={o.ry ?? 0} 
-                      onChange={(e) => patch({ ry: Number(e.target.value) } as Partial<MapObject>)} 
-                    />
-                  </div>
+              <div className="grid grid-cols-2 gap-2 w-32">
+                <div className="flex flex-col gap-1">
+                  <span className="text-[8px] text-muted-foreground">Top-Left</span>
+                  <Input
+                    type="number"
+                    className="h-6 text-[10px]"
+                    value={o.rx ?? 0}
+                    onChange={(e) => patch({ rx: Number(e.target.value) } as Partial<MapObject>)}
+                  />
                 </div>
+                <div className="flex flex-col gap-1">
+                  <span className="text-[8px] text-muted-foreground">Top-Right</span>
+                  <Input
+                    type="number"
+                    className="h-6 text-[10px]"
+                    value={o.ry ?? 0}
+                    onChange={(e) => patch({ ry: Number(e.target.value) } as Partial<MapObject>)}
+                  />
+                </div>
+              </div>
             </Row>
           </div>
         </>
@@ -259,14 +311,19 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
             type="number"
             className={numInput}
             value={Math.round((o.angle * 180) / Math.PI)}
-            onChange={(e) => patch({ angle: (Number(e.target.value) * Math.PI) / 180 } as Partial<MapObject>)}
+            onChange={(e) =>
+              patch({ angle: (Number(e.target.value) * Math.PI) / 180 } as Partial<MapObject>)
+            }
           />
         </Row>
       )}
       {o.kind === "door" && (
         <>
           <Row label="Variant">
-            <Select value={o.variant} onValueChange={(v) => patch({ variant: v } as Partial<MapObject>)}>
+            <Select
+              value={o.variant}
+              onValueChange={(v) => patch({ variant: v } as Partial<MapObject>)}
+            >
               <SelectTrigger className="h-7 w-32 text-xs">
                 <SelectValue />
               </SelectTrigger>
@@ -289,26 +346,47 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
       {o.kind === "npc" && (
         <>
           <Row label="Label">
-            <Input className={numInput} value={o.label} onChange={(e) => patch({ label: e.target.value } as Partial<MapObject>)} />
+            <Input
+              className={numInput}
+              value={o.label}
+              onChange={(e) => patch({ label: e.target.value } as Partial<MapObject>)}
+            />
           </Row>
           <Row label="Token size">
-            <NumSlider value={o.r} min={6} max={64} onChange={(v) => patch({ r: v } as Partial<MapObject>)} />
+            <NumSlider
+              value={o.r}
+              min={6}
+              max={64}
+              onChange={(v) => patch({ r: v } as Partial<MapObject>)}
+            />
           </Row>
           <Row label="Colour">
             <Color value={o.color} onChange={(v) => patch({ color: v } as Partial<MapObject>)} />
           </Row>
           <Row label="Hostile">
-            <Switch checked={o.hostile} onCheckedChange={(v) => patch({ hostile: v } as Partial<MapObject>)} />
+            <Switch
+              checked={o.hostile}
+              onCheckedChange={(v) => patch({ hostile: v } as Partial<MapObject>)}
+            />
           </Row>
         </>
       )}
       {o.kind === "item" && (
         <>
           <Row label="Label">
-            <Input className={numInput} value={o.label} onChange={(e) => patch({ label: e.target.value } as Partial<MapObject>)} />
+            <Input
+              className={numInput}
+              value={o.label}
+              onChange={(e) => patch({ label: e.target.value } as Partial<MapObject>)}
+            />
           </Row>
           <Row label="Size">
-            <NumSlider value={o.size} min={8} max={64} onChange={(v) => patch({ size: v } as Partial<MapObject>)} />
+            <NumSlider
+              value={o.size}
+              min={8}
+              max={64}
+              onChange={(v) => patch({ size: v } as Partial<MapObject>)}
+            />
           </Row>
           <Row label="Colour">
             <Color value={o.color} onChange={(v) => patch({ color: v } as Partial<MapObject>)} />
@@ -318,10 +396,17 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
       {o.kind === "trigger" && (
         <>
           <Row label="Label">
-            <Input className={numInput} value={o.label} onChange={(e) => patch({ label: e.target.value } as Partial<MapObject>)} />
+            <Input
+              className={numInput}
+              value={o.label}
+              onChange={(e) => patch({ label: e.target.value } as Partial<MapObject>)}
+            />
           </Row>
           <Row label="Type">
-            <Select value={o.trigger} onValueChange={(v) => patch({ trigger: v as TriggerKind } as Partial<MapObject>)}>
+            <Select
+              value={o.trigger}
+              onValueChange={(v) => patch({ trigger: v as TriggerKind } as Partial<MapObject>)}
+            >
               <SelectTrigger className="h-7 w-32 text-xs">
                 <SelectValue />
               </SelectTrigger>
@@ -335,10 +420,20 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
             </Select>
           </Row>
           <Row label="Width">
-            <Input type="number" className={numInput} value={Math.round(o.w)} onChange={(e) => patch({ w: Number(e.target.value) } as Partial<MapObject>)} />
+            <Input
+              type="number"
+              className={numInput}
+              value={Math.round(o.w)}
+              onChange={(e) => patch({ w: Number(e.target.value) } as Partial<MapObject>)}
+            />
           </Row>
           <Row label="Height">
-            <Input type="number" className={numInput} value={Math.round(o.h)} onChange={(e) => patch({ h: Number(e.target.value) } as Partial<MapObject>)} />
+            <Input
+              type="number"
+              className={numInput}
+              value={Math.round(o.h)}
+              onChange={(e) => patch({ h: Number(e.target.value) } as Partial<MapObject>)}
+            />
           </Row>
           <Row label="Colour">
             <Color value={o.color} onChange={(v) => patch({ color: v } as Partial<MapObject>)} />
@@ -348,7 +443,12 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
       {o.kind === "light" && (
         <>
           <Row label="Radius">
-            <NumSlider value={o.radius} min={20} max={800} onChange={(v) => patch({ radius: v } as Partial<MapObject>)} />
+            <NumSlider
+              value={o.radius}
+              min={20}
+              max={800}
+              onChange={(v) => patch({ radius: v } as Partial<MapObject>)}
+            />
           </Row>
           <Row label="Intensity">
             <NumSlider
@@ -366,25 +466,49 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
       {o.kind === "text" && (
         <>
           <Row label="Text">
-            <Input className={numInput} value={o.text} onChange={(e) => patch({ text: e.target.value } as Partial<MapObject>)} />
+            <Input
+              className={numInput}
+              value={o.text}
+              onChange={(e) => patch({ text: e.target.value } as Partial<MapObject>)}
+            />
           </Row>
           <Row label="Font size">
-            <NumSlider value={o.size} min={8} max={96} onChange={(v) => patch({ size: v } as Partial<MapObject>)} />
+            <NumSlider
+              value={o.size}
+              min={8}
+              max={96}
+              onChange={(v) => patch({ size: v } as Partial<MapObject>)}
+            />
           </Row>
         </>
       )}
       {o.kind === "pillar" && (
         <Row label="Radius">
-          <NumSlider value={o.r} min={2} max={48} onChange={(v) => patch({ r: v } as Partial<MapObject>)} />
+          <NumSlider
+            value={o.r}
+            min={2}
+            max={48}
+            onChange={(v) => patch({ r: v } as Partial<MapObject>)}
+          />
         </Row>
       )}
       {o.kind === "stairs" && (
         <>
           <Row label="Size">
-            <NumSlider value={o.size} min={16} max={200} onChange={(v) => patch({ size: v } as Partial<MapObject>)} />
+            <NumSlider
+              value={o.size}
+              min={16}
+              max={200}
+              onChange={(v) => patch({ size: v } as Partial<MapObject>)}
+            />
           </Row>
           <Row label="Steps">
-            <NumSlider value={o.steps} min={2} max={20} onChange={(v) => patch({ steps: v } as Partial<MapObject>)} />
+            <NumSlider
+              value={o.steps}
+              min={2}
+              max={20}
+              onChange={(v) => patch({ steps: v } as Partial<MapObject>)}
+            />
           </Row>
         </>
       )}
@@ -408,21 +532,35 @@ export function PropertiesPanel({ doc, object: o, onChange, onDelete }: Props) {
             size="icon"
             className="size-6"
             aria-label="Add field"
-            onClick={() => patch({ props: [...props, { key: "", value: "" }] } as Partial<MapObject>)}
+            onClick={() =>
+              patch({ props: [...props, { key: "", value: "" }] } as Partial<MapObject>)
+            }
           >
             <Plus className="size-3.5" />
           </Button>
         </div>
         {props.map((pr, i) => (
           <div key={i} className="mb-1 flex items-center gap-1">
-            <Input value={pr.key} placeholder="key" onChange={(e) => setProp(i, e.target.value, pr.value)} className="h-7 w-1/2 text-[11px]" />
-            <Input value={pr.value} placeholder="value" onChange={(e) => setProp(i, pr.key, e.target.value)} className="h-7 w-1/2 text-[11px]" />
+            <Input
+              value={pr.key}
+              placeholder="key"
+              onChange={(e) => setProp(i, e.target.value, pr.value)}
+              className="h-7 w-1/2 text-[11px]"
+            />
+            <Input
+              value={pr.value}
+              placeholder="value"
+              onChange={(e) => setProp(i, pr.key, e.target.value)}
+              className="h-7 w-1/2 text-[11px]"
+            />
             <Button
               variant="ghost"
               size="icon"
               className="size-6 text-destructive hover:bg-destructive/10 hover:text-destructive"
               aria-label="Remove field"
-              onClick={() => patch({ props: props.filter((_, j) => j !== i) } as Partial<MapObject>)}
+              onClick={() =>
+                patch({ props: props.filter((_, j) => j !== i) } as Partial<MapObject>)
+              }
             >
               <X className="size-3.5" />
             </Button>

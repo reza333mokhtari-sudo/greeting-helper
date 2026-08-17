@@ -29,7 +29,7 @@ export function FullscreenModal({
         <DialogPrimitive.Content
           className={cn(
             "fixed inset-0 z-[101] flex flex-col bg-sidebar text-foreground p-6 shadow-2xl transition-all duration-300 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
-            className
+            className,
           )}
           onPointerDownOutside={(e) => {
             // Check if we're clicking the overlay
@@ -47,10 +47,8 @@ export function FullscreenModal({
               <span className="sr-only">Close</span>
             </DialogPrimitive.Close>
           </div>
-          
-          <div className="flex-1 min-h-0">
-            {children}
-          </div>
+
+          <div className="flex-1 min-h-0">{children}</div>
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
     </DialogPrimitive.Root>

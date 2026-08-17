@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { 
-  Search, 
-  ChevronLeft, 
-  ChevronRight, 
-  ChevronsLeft, 
+import {
+  Search,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
   ChevronsRight,
   ArrowUp,
   ArrowDown,
@@ -12,26 +12,26 @@ import {
   Trash2,
   Edit,
   Eye,
-  Columns
+  Columns,
 } from "lucide-react";
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { 
-  DropdownMenu, 
-  DropdownMenuCheckboxItem, 
-  DropdownMenuContent, 
-  DropdownMenuLabel, 
-  DropdownMenuSeparator, 
-  DropdownMenuTrigger 
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -83,16 +83,16 @@ export function AdminDataTable({
   onView,
   tableName,
   onExport,
-  actions
+  actions,
 }: AdminDataTableProps) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [visibleColumns, setVisibleColumns] = useState<string[]>(columns.map(c => c.key));
+  const [visibleColumns, setVisibleColumns] = useState<string[]>(columns.map((c) => c.key));
 
   const totalPages = Math.ceil(count / pageSize);
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
-      setSelectedIds(rows.map(r => r.id));
+      setSelectedIds(rows.map((r) => r.id));
     } else {
       setSelectedIds([]);
     }
@@ -100,9 +100,9 @@ export function AdminDataTable({
 
   const handleSelectRow = (id: string, checked: boolean) => {
     if (checked) {
-      setSelectedIds(prev => [...prev, id]);
+      setSelectedIds((prev) => [...prev, id]);
     } else {
-      setSelectedIds(prev => prev.filter(i => i !== id));
+      setSelectedIds((prev) => prev.filter((i) => i !== id));
     }
   };
 
@@ -120,15 +120,24 @@ export function AdminDataTable({
 
   const exportToCsv = () => {
     if (!rows.length) return;
-    const headers = columns.filter(c => visibleColumns.includes(c.key)).map(c => c.header).join(",");
-    const csvData = rows.map(row => 
-      columns.filter(c => visibleColumns.includes(c.key))
-        .map(c => {
-          const val = row[c.key];
-          return typeof val === 'object' ? `"${JSON.stringify(val).replace(/"/g, '""')}"` : `"${String(val).replace(/"/g, '""')}"`;
-        }).join(",")
-    ).join("\n");
-    
+    const headers = columns
+      .filter((c) => visibleColumns.includes(c.key))
+      .map((c) => c.header)
+      .join(",");
+    const csvData = rows
+      .map((row) =>
+        columns
+          .filter((c) => visibleColumns.includes(c.key))
+          .map((c) => {
+            const val = row[c.key];
+            return typeof val === "object"
+              ? `"${JSON.stringify(val).replace(/"/g, '""')}"`
+              : `"${String(val).replace(/"/g, '""')}"`;
+          })
+          .join(","),
+      )
+      .join("\n");
+
     const blob = new Blob([`${headers}\n${csvData}`], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
@@ -150,11 +159,11 @@ export function AdminDataTable({
             className="pl-9"
           />
         </div>
-        
+
         <div className="flex items-center gap-2">
           {selectedIds.length > 0 && onDelete && (
-            <Button 
-              variant="destructive" 
+            <Button
+              variant="destructive"
               size="sm"
               onClick={() => {
                 onDelete(selectedIds);
@@ -176,13 +185,13 @@ export function AdminDataTable({
             <DropdownMenuContent align="end" className="w-48">
               <DropdownMenuLabel>Toggle Columns</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {columns.map(col => (
+              {columns.map((col) => (
                 <DropdownMenuCheckboxItem
                   key={col.key}
                   checked={visibleColumns.includes(col.key)}
                   onCheckedChange={(checked) => {
-                    setVisibleColumns(prev => 
-                      checked ? [...prev, col.key] : prev.filter(k => k !== col.key)
+                    setVisibleColumns((prev) =>
+                      checked ? [...prev, col.key] : prev.filter((k) => k !== col.key),
                     );
                   }}
                 >
@@ -204,30 +213,36 @@ export function AdminDataTable({
           <TableHeader>
             <TableRow>
               <TableHead className="w-12">
-                <Checkbox 
+                <Checkbox
                   checked={rows.length > 0 && selectedIds.length === rows.length}
                   onCheckedChange={handleSelectAll}
                 />
               </TableHead>
-              {columns.filter(c => visibleColumns.includes(c.key)).map(col => (
-                <TableHead key={col.key} className="whitespace-nowrap">
-                  {col.sortable !== false ? (
-                    <button
-                      className="flex items-center gap-1 hover:text-foreground transition-colors"
-                      onClick={() => handleSort(col.key)}
-                    >
-                      {col.header}
-                      {sort?.column === col.key ? (
-                        sort.ascending ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />
-                      ) : (
-                        <ChevronsUpDown className="h-3 w-3 opacity-50" />
-                      )}
-                    </button>
-                  ) : (
-                    col.header
-                  )}
-                </TableHead>
-              ))}
+              {columns
+                .filter((c) => visibleColumns.includes(c.key))
+                .map((col) => (
+                  <TableHead key={col.key} className="whitespace-nowrap">
+                    {col.sortable !== false ? (
+                      <button
+                        className="flex items-center gap-1 hover:text-foreground transition-colors"
+                        onClick={() => handleSort(col.key)}
+                      >
+                        {col.header}
+                        {sort?.column === col.key ? (
+                          sort.ascending ? (
+                            <ArrowUp className="h-3 w-3" />
+                          ) : (
+                            <ArrowDown className="h-3 w-3" />
+                          )
+                        ) : (
+                          <ChevronsUpDown className="h-3 w-3 opacity-50" />
+                        )}
+                      </button>
+                    ) : (
+                      col.header
+                    )}
+                  </TableHead>
+                ))}
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -235,50 +250,73 @@ export function AdminDataTable({
             {loading ? (
               Array.from({ length: 5 }).map((_, i) => (
                 <TableRow key={i}>
-                  <TableCell><Skeleton className="h-4 w-4" /></TableCell>
-                  {columns.filter(c => visibleColumns.includes(c.key)).map(col => (
-                    <TableCell key={col.key}><Skeleton className="h-4 w-full" /></TableCell>
-                  ))}
-                  <TableCell className="text-right"><Skeleton className="h-8 w-20 ml-auto" /></TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-4" />
+                  </TableCell>
+                  {columns
+                    .filter((c) => visibleColumns.includes(c.key))
+                    .map((col) => (
+                      <TableCell key={col.key}>
+                        <Skeleton className="h-4 w-full" />
+                      </TableCell>
+                    ))}
+                  <TableCell className="text-right">
+                    <Skeleton className="h-8 w-20 ml-auto" />
+                  </TableCell>
                 </TableRow>
               ))
             ) : rows.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={visibleColumns.length + 2} className="h-24 text-center text-muted-foreground">
+                <TableCell
+                  colSpan={visibleColumns.length + 2}
+                  className="h-24 text-center text-muted-foreground"
+                >
                   No records found.
                 </TableCell>
               </TableRow>
             ) : (
-              rows.map(row => (
+              rows.map((row) => (
                 <TableRow key={row.id}>
                   <TableCell>
-                    <Checkbox 
+                    <Checkbox
                       checked={selectedIds.includes(row.id)}
                       onCheckedChange={(checked) => handleSelectRow(row.id, checked as boolean)}
                     />
                   </TableCell>
-                  {columns.filter(c => visibleColumns.includes(c.key)).map(col => (
-                    <TableCell key={col.key} className="max-w-xs truncate">
-                      {renderCell(row[col.key], col.type)}
-                    </TableCell>
-                  ))}
+                  {columns
+                    .filter((c) => visibleColumns.includes(c.key))
+                    .map((col) => (
+                      <TableCell key={col.key} className="max-w-xs truncate">
+                        {renderCell(row[col.key], col.type)}
+                      </TableCell>
+                    ))}
                   <TableCell className="text-right">
                     <div className="flex justify-end items-center gap-1">
                       {actions?.(row)}
                       {onView && (
-                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => onView(row)}>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={() => onView(row)}
+                        >
                           <Eye className="h-4 w-4" />
                         </Button>
                       )}
                       {onEdit && (
-                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => onEdit(row)}>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={() => onEdit(row)}
+                        >
                           <Edit className="h-4 w-4" />
                         </Button>
                       )}
                       {onDelete && (
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
+                        <Button
+                          variant="ghost"
+                          size="icon"
                           className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
                           onClick={() => onDelete([row.id])}
                         >
@@ -298,7 +336,7 @@ export function AdminDataTable({
         <div className="text-sm text-muted-foreground">
           Showing {rows.length} of {count} records
         </div>
-        
+
         <div className="flex items-center gap-6 lg:gap-8">
           <div className="flex items-center gap-2">
             <p className="text-sm font-medium">Rows per page</p>
@@ -314,11 +352,11 @@ export function AdminDataTable({
               ))}
             </select>
           </div>
-          
+
           <div className="flex w-[100px] items-center justify-center text-sm font-medium">
             Page {page + 1} of {totalPages || 1}
           </div>
-          
+
           <div className="flex items-center space-x-2">
             <Button
               variant="outline"
@@ -360,19 +398,20 @@ export function AdminDataTable({
 }
 
 function renderCell(value: any, type?: string) {
-  if (value === null || value === undefined) return <span className="text-muted-foreground italic">null</span>;
-  
+  if (value === null || value === undefined)
+    return <span className="text-muted-foreground italic">null</span>;
+
   switch (type) {
     case "boolean":
-      return (
-        <Badge variant={value ? "default" : "secondary"}>
-          {value ? "True" : "False"}
-        </Badge>
-      );
+      return <Badge variant={value ? "default" : "secondary"}>{value ? "True" : "False"}</Badge>;
     case "date":
       return new Date(value).toLocaleDateString();
     case "json":
-      return <code className="text-[10px] bg-muted px-1 rounded">{JSON.stringify(value).slice(0, 50)}...</code>;
+      return (
+        <code className="text-[10px] bg-muted px-1 rounded">
+          {JSON.stringify(value).slice(0, 50)}...
+        </code>
+      );
     default:
       return String(value);
   }

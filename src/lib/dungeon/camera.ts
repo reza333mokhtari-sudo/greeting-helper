@@ -6,13 +6,21 @@ import { type Settings, type Pt, type View } from "./model";
  * using the camera settings and the current canvas size.
  */
 export function getCamera(s: Settings, width: number, height: number): THREE.Camera {
-  const camera = s.cameraProjection === "perspective" 
-    ? new THREE.PerspectiveCamera(s.cameraFov, width / height, 1, s.maxDrawDistance)
-    : new THREE.OrthographicCamera(-width / 2, width / 2, height / 2, -height / 2, 1, s.maxDrawDistance);
+  const camera =
+    s.cameraProjection === "perspective"
+      ? new THREE.PerspectiveCamera(s.cameraFov, width / height, 1, s.maxDrawDistance)
+      : new THREE.OrthographicCamera(
+          -width / 2,
+          width / 2,
+          height / 2,
+          -height / 2,
+          1,
+          s.maxDrawDistance,
+        );
 
   const yaw = THREE.MathUtils.degToRad(s.cameraYaw);
   const pitch = THREE.MathUtils.degToRad(s.cameraPitch);
-  
+
   const pos = new THREE.Vector3();
   pos.x = s.cameraTarget.x + s.cameraDistance * Math.cos(pitch) * Math.cos(yaw);
   pos.y = s.cameraTarget.y + s.cameraDistance * Math.cos(pitch) * Math.sin(yaw);
@@ -29,14 +37,14 @@ export function project3D(
   p: { x: number; y: number; z: number },
   s: Settings,
   width: number,
-  height: number
+  height: number,
 ): { x: number; y: number; z: number } | null {
   const camera = getCamera(s, width, height);
   const vector = new THREE.Vector3(p.x, p.y, p.z);
   vector.project(camera);
 
-  const x = (vector.x + 1) * width / 2;
-  const y = (-vector.y + 1) * height / 2;
+  const x = ((vector.x + 1) * width) / 2;
+  const y = ((-vector.y + 1) * height) / 2;
 
   if (vector.z < 0 || vector.z > 1) return null;
   return { x, y, z: vector.z };
@@ -50,23 +58,19 @@ export function unprojectToPlane(
   s: Settings,
   width: number,
   height: number,
-  view: View
+  view: View,
 ): Pt {
   const camera = getCamera(s, width, height);
-  
+
   // Normalized device coordinates
-  const ndc = new THREE.Vector3(
-    (screen.x / width) * 2 - 1,
-    -(screen.y / height) * 2 + 1,
-    0.5
-  );
+  const ndc = new THREE.Vector3((screen.x / width) * 2 - 1, -(screen.y / height) * 2 + 1, 0.5);
 
   // In 3D mode, the "standard" 2D view state (panning/zooming) should usually be ignored
-  // or combined. For now, since cameraMode is active, the 2D view.x/y/scale are 
+  // or combined. For now, since cameraMode is active, the 2D view.x/y/scale are
   // effectively bypassed by the THREE.js projection.
-  // However, if we want to support a "2D pan" on top of 3D (like an offset), 
+  // However, if we want to support a "2D pan" on top of 3D (like an offset),
   // we'd need to adjust ndc.
-  
+
   // No changes needed to ndc calculation for pure 3D world unprojection.
 
   const raycaster = new THREE.Raycaster();
@@ -79,22 +83,16 @@ export function unprojectToPlane(
   return { x: target.x, y: target.y };
 }
 
-export function drawAxisGuides(
-  ctx: CanvasRenderingContext2D,
-  s: Settings,
-  w: number,
-  h: number
-) {
+export function drawAxisGuides(ctx: CanvasRenderingContext2D, s: Settings, w: number, h: number) {
   // Function disabled per user request to remove duplicate lines from middle of editor
   return;
 }
-
 
 export function drawCornerAxisWidget(
   ctx: CanvasRenderingContext2D,
   s: Settings,
   w: number,
-  h: number
+  h: number,
 ) {
   if (!s.cameraMode || !s.showAxes) return;
 
@@ -109,7 +107,7 @@ export function drawCornerAxisWidget(
   const pitch = THREE.MathUtils.degToRad(s.cameraPitch);
 
   const rotationMatrix = new THREE.Matrix4().makeRotationFromEuler(
-    new THREE.Euler(pitch - Math.PI/2, 0, -yaw, 'ZXY')
+    new THREE.Euler(pitch - Math.PI / 2, 0, -yaw, "ZXY"),
   );
 
   const project = (v: THREE.Vector3) => {
@@ -117,7 +115,7 @@ export function drawCornerAxisWidget(
     return {
       x: centerX + v.x * (widgetSize / 2.5),
       y: centerY - v.y * (widgetSize / 2.5),
-      z: v.z
+      z: v.z,
     };
   };
 
@@ -142,7 +140,7 @@ export function drawCornerAxisWidget(
   const axes = [
     { label: "X", color: "#ff4d4d", end: xEnd },
     { label: "Y", color: "#4dff4d", end: yEnd },
-    { label: "Z", color: "#4d4dff", end: zEnd }
+    { label: "Z", color: "#4d4dff", end: zEnd },
   ].sort((a, b) => a.end.z - b.end.z);
 
   for (const axis of axes) {
