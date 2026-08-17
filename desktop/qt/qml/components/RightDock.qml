@@ -21,12 +21,12 @@ Rectangle {
             id: dockTabs
             Layout.fillWidth: true
             background: Rectangle { color: "#2d2d2d" }
-            TabButton { text: qsTr("Assets") }
-            TabButton { text: qsTr("Insp") }
-            TabButton { text: qsTr("Objs") }
+            TabButton { text: qsTr("Browser") }
+            TabButton { text: qsTr("Attrib") }
+            TabButton { text: qsTr("Tool") }
             TabButton { text: qsTr("Layers") }
-            TabButton { text: qsTr("Settings") }
-            TabButton { text: qsTr("CMS") }
+            TabButton { text: qsTr("Gen") }
+            TabButton { text: qsTr("Fog") }
         }
 
         StackLayout {
@@ -34,9 +34,9 @@ Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            AssetLibrary {
+            AssetBrowser {
                 id: assetLibrary
-                model: assetModel
+                assetModel: assetModel
                 document: document
                 canvas: canvas
             }
@@ -46,10 +46,9 @@ Rectangle {
                 document: document
             }
             
-            ObjectsPanel {
-                id: objectsPanel
+            SettingsPanel {
+                id: toolSettings
                 document: document
-                onObjectSelected: (id) => canvas.selectedId = id
             }
             
             LayersPanel {
@@ -57,14 +56,15 @@ Rectangle {
                 document: document
             }
             
-            SettingsPanel {
-                id: settingsPanel
+            CmsPanel {
+                id: proceduralGen
                 document: document
             }
 
-            CmsPanel {
-                id: cmsPanel
-                document: document
+            Rectangle {
+                id: fogTools
+                color: "#252526"
+                Label { text: "Fog Tools Panel"; anchors.centerIn: parent; color: "#666" }
             }
         }
 

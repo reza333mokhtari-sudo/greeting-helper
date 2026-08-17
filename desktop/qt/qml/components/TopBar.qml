@@ -84,6 +84,9 @@ Rectangle {
                 MenuSeparator {}
                 MenuItem { text: qsTr("Save"); onTriggered: saveDialog.open() }
                 MenuItem { text: qsTr("Export PNG") }
+                MenuSeparator {}
+                MenuItem { text: qsTr("Preferences..."); onTriggered: preferencesDialog.open() }
+                MenuItem { text: qsTr("Exit"); onTriggered: Qt.quit() }
             }
             Menu {
                 title: qsTr("Edit")
@@ -91,10 +94,34 @@ Rectangle {
                 MenuItem { text: qsTr("Redo"); enabled: document && document.canRedo; onTriggered: document.undoStack.redo() }
             }
             Menu {
+                title: qsTr("Create")
+                MenuItem { text: qsTr("Room") }
+                MenuItem { text: qsTr("Corridor") }
+                MenuItem { text: qsTr("Prop...") }
+            }
+            Menu {
+                title: qsTr("Tools")
+                MenuItem { text: qsTr("Procedural Generator") }
+                MenuItem { text: qsTr("Fog Editor") }
+            }
+            Menu {
                 title: qsTr("View")
                 MenuItem { text: qsTr("Zoom In"); onTriggered: canvas.zoomIn() }
                 MenuItem { text: qsTr("Zoom Out"); onTriggered: canvas.zoomOut() }
                 MenuItem { text: qsTr("Fit to Screen"); onTriggered: canvas.fitToScreen() }
+                MenuSeparator {}
+                MenuItem { text: qsTr("Fullscreen Viewport"); shortcut: "Ctrl+Space" }
+            }
+            Menu {
+                title: qsTr("Window")
+                MenuItem { text: qsTr("Outliner") }
+                MenuItem { text: qsTr("Asset Browser") }
+                MenuItem { text: qsTr("Ai Panel") }
+            }
+            Menu {
+                title: qsTr("Help")
+                MenuItem { text: qsTr("Documentation") }
+                MenuItem { text: qsTr("About Dungeon Scrawl") }
             }
         }
 
