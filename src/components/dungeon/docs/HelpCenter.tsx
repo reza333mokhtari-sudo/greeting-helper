@@ -2,54 +2,19 @@ import React from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
-import { Search, ChevronRight, Book, HelpCircle, X } from "lucide-react";
+import { Search, ChevronRight, Book, HelpCircle } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus, vs } from "react-syntax-highlighter/dist/esm/styles/prism";
 
-import { docSections, DocSection } from "@/docs/meta";
+import { DOCS_DATA } from "./docsData";
 import { docsConfig } from "@/docs/config";
 
-// Simulated MDX loader since we're using static files in this environment
-const useMdxContent = (slug: string) => {
-  const [content, setContent] = React.useState<string>("");
-  const [isLoading, setIsLoading] = React.useState(true);
-  
-  React.useEffect(() => {
-    setIsLoading(true);
-    // Try both absolute and relative paths to be safe
-    const paths = [
-      `/src/docs/content/${slug}.mdx`,
-      `src/docs/content/${slug}.mdx`,
-      `./src/docs/content/${slug}.mdx`
-    ];
-
-    const tryFetch = async (index: number) => {
-      const currentPath = paths[index];
-      if (!currentPath || index >= paths.length) {
-        setContent("# Not Found\nThe requested documentation section could not be loaded.");
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        const res = await fetch(currentPath);
-        if (!res.ok) throw new Error("Failed to load");
-        const text = await res.text();
-        // Simple frontmatter removal for display
-        const cleaned = text.replace(/^---[\s\S]*?---/, "");
-        setContent(cleaned);
-        setIsLoading(false);
-      } catch (err) {
-        tryFetch(index + 1);
-      }
-    };
-
-    tryFetch(0);
-  }, [slug]);
-
-  return { content, isLoading };
+// Using static data from docsData.ts to avoid fetch errors during hydration
+const useStaticDocs = (id: string) => {
+  const section = DOCS_DATA.find(s => s.id === id) || DOCS_DATA[0];
+  return { content: section?.content || "", isLoading: false };
 };
 
 interface HelpCenterProps {
@@ -85,14 +50,13 @@ export const HelpCenter = ({ isOpen, onOpenChange, initialSectionId }: HelpCente
     }
   }, [initialSectionId]);
 
-  const filteredSections = docSections.filter(section => 
+  const filteredSections = DOCS_DATA.filter(section => 
     section.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    section.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
     section.keywords?.some(k => k.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
-  const activeSection = docSections.find(s => s.slug === activeId) || docSections[0];
-  const { content: markdown, isLoading } = useMdxContent(activeSection?.slug || docsConfig.defaultSection);
+  const activeSection = DOCS_DATA.find(s => s.id === activeId) || DOCS_DATA[0];
+  const { content: markdown } = useStaticDocs(activeSection?.id || docsConfig.defaultSection);
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -119,10 +83,10 @@ export const HelpCenter = ({ isOpen, onOpenChange, initialSectionId }: HelpCente
             <div className="space-y-1">
               {filteredSections.map((section) => (
                 <button
-                  key={section.slug}
-                  onClick={() => setActiveId(section.slug)}
+                  key={section.id}
+                  onClick={() => setActiveId(section.id)}
                   className={`w-full text-left px-3 py-2 rounded-md transition-colors flex items-center justify-between group ${
-                    activeId === section.slug 
+                    activeId === section.id 
                       ? "bg-primary text-primary-foreground" 
                       : "hover:bg-muted"
                   }`}
@@ -130,7 +94,7 @@ export const HelpCenter = ({ isOpen, onOpenChange, initialSectionId }: HelpCente
                   <div className="flex flex-col">
                     <span className="text-sm font-medium">{section.title}</span>
                   </div>
-                  {activeId === section.slug && <ChevronRight className="w-4 h-4" />}
+                  {activeId === section.id && <ChevronRight className="w-4 h-4" />}
                 </button>
               ))}
             </div>
