@@ -40,12 +40,6 @@ const errorMiddleware = createMiddleware().server(async ({ next }) => {
  */
 const csrfMiddleware = createCsrfMiddleware({
   filter: (ctx) => ctx.handlerType === "serverFn",
-  cookie: {
-    name: "x-csrf-token",
-    httpOnly: true,
-    sameSite: "strict",
-    secure: process.env.NODE_ENV === "production",
-  },
 });
 
 export const startInstance = createStart(() => ({
