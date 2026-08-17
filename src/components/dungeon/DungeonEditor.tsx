@@ -593,7 +593,7 @@ export function DungeonEditor() {
       }
       ctx.restore();
     }
-  }, [doc, view, preview, selected, polyPts, cursor, aiPreview]);
+  }, [doc, view, preview, selected, polyPts, cursor, aiPreview, menuTarget.processingIds]);
 
   useEffect(() => {
     const raf = requestAnimationFrame(draw);
