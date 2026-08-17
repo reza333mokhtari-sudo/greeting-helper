@@ -363,7 +363,7 @@ function AdminConsole() {
         </DropdownMenuItem>
         {userStats[row.id] !== undefined && (
           <div className="px-2 py-1.5 text-xs text-muted-foreground border-t mt-1">
-            Maps created: {userStats[row.id].mapCount}
+            Maps created: {userStats[row.id]?.mapCount ?? 0}
           </div>
         )}
         <DropdownMenuSeparator />
