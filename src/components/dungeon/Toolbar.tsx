@@ -68,12 +68,12 @@ export function Toolbar(props: Props) {
     <TooltipProvider delayDuration={200}>
       <div 
         data-animation={intensity}
-        className={`pointer-events-auto flex ${props.vertical ? "flex-col border-0 bg-transparent px-1 shadow-none backdrop-blur-0" : "items-center gap-1 rounded-2xl border border-border bg-card/90 px-2 py-1.5 shadow-[var(--shadow-arcane)] backdrop-blur"}`}
+        className={`pointer-events-auto flex ${props.vertical ? "flex-col border-0 bg-transparent px-1 shadow-none backdrop-blur-0" : "items-center gap-0.5 rounded-lg border border-border bg-card/95 px-1.5 py-1 shadow-sm backdrop-blur"}`}
       >
 
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" className="size-9" aria-label="Undo" disabled={!props.canUndo} onClick={props.onUndo}>
+            <Button variant="ghost" size="icon" className="size-8" aria-label="Undo" disabled={!props.canUndo} onClick={props.onUndo}>
               <Undo2 className="size-4" />
             </Button>
           </TooltipTrigger>
@@ -81,7 +81,7 @@ export function Toolbar(props: Props) {
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" className="size-9" aria-label="Redo" disabled={!props.canRedo} onClick={props.onRedo}>
+            <Button variant="ghost" size="icon" className="size-8" aria-label="Redo" disabled={!props.canRedo} onClick={props.onRedo}>
               <Redo2 className="size-4" />
             </Button>
           </TooltipTrigger>
@@ -102,11 +102,11 @@ export function Toolbar(props: Props) {
                   aria-label={t.label}
                   aria-pressed={active}
                   onClick={() => props.onTool(t.id)}
-                  className={`size-9 group relative transition-all duration-300 ${active ? "shadow-[var(--shadow-arcane)] scale-110" : "text-foreground/70 hover:text-foreground hover:bg-muted"}`}
+                  className={`size-8 group relative transition-all duration-200 ${active ? "bg-primary/10 text-primary border border-primary/20" : "text-foreground/60 hover:text-foreground hover:bg-muted/50"}`}
                 >
                   <svg
                     viewBox="0 0 24 24"
-                    className={`size-[18px] animated-icon transition-transform duration-500 group-hover:scale-110 group-active:scale-95 ${active ? "animate-icon-pulse" : ""}`}
+                    className={`size-[16px] animated-icon transition-transform duration-300 group-hover:scale-105 group-active:scale-95 ${active ? "animate-icon-pulse" : ""}`}
                     fill="none"
                     stroke="currentColor"
                     strokeWidth={1.7}
@@ -139,7 +139,7 @@ export function Toolbar(props: Props) {
 
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" className="size-9" aria-label="Zoom out" onClick={() => props.onZoom(-1)}>
+            <Button variant="ghost" size="icon" className="size-8" aria-label="Zoom out" onClick={() => props.onZoom(-1)}>
               <ZoomOut className="size-4" />
             </Button>
           </TooltipTrigger>
@@ -155,7 +155,7 @@ export function Toolbar(props: Props) {
 
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" className="size-9" aria-label="Zoom in" onClick={() => props.onZoom(1)}>
+            <Button variant="ghost" size="icon" className="size-8" aria-label="Zoom in" onClick={() => props.onZoom(1)}>
               <ZoomIn className="size-4" />
             </Button>
           </TooltipTrigger>

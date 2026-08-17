@@ -56,10 +56,10 @@ export function LeftRail({ active, onSelect, animationIntensity = 2, isLoggedIn,
                   aria-label={p.label}
                   aria-pressed={on}
                   onClick={() => handleSelect(p)}
-                  className={`size-9 group transition-all duration-300 ${on ? "text-primary bg-primary/10 shadow-[0_0_15px_rgba(var(--primary),0.2)]" : "text-foreground/60 hover:text-foreground hover:bg-muted"} ${!isLoggedIn && (p.id === "ai" || p.id === "props" || p.id === "maps") ? "opacity-50" : ""}`}
+                  className={`size-8 group transition-all duration-200 ${on ? "text-primary bg-primary/10 shadow-[0_0_12px_rgba(var(--primary),0.15)]" : "text-foreground/50 hover:text-foreground hover:bg-muted/50"} ${!isLoggedIn && (p.id === "ai" || p.id === "props" || p.id === "maps") ? "opacity-40" : ""}`}
                 >
 
-                  <Icon className={`size-[18px] transition-all duration-500 ease-out group-hover:scale-110 group-hover:rotate-[5deg] group-active:scale-95 ${on ? "animate-in fade-in zoom-in duration-500 spin-in-6" : ""}`} />
+                  <Icon className={`size-[16px] transition-all duration-300 ease-out group-hover:scale-105 group-hover:rotate-[2deg] group-active:scale-95 ${on ? "animate-in fade-in zoom-in duration-300" : ""}`} />
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="right" className="flex items-center gap-2">
