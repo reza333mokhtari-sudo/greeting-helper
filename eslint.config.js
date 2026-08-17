@@ -38,8 +38,6 @@ export default tseslint.config(
       "@typescript-eslint/no-empty-object-type": "warn",
       "@typescript-eslint/no-wrapper-object-types": "warn",
       "@typescript-eslint/no-unsafe-function-type": "warn",
-      "@typescript-eslint/no-empty-interface": "warn",
-      "@typescript-eslint/ban-types": "warn",
     },
   },
   eslintPluginPrettier,
