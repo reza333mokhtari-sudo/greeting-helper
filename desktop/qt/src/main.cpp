@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QIcon>
+#include <QQuickStyle>
 #include <QtQml/qqml.h>
 #include <QDebug>
 
