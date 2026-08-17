@@ -157,27 +157,12 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
 
-  // Guard against React.use() / TanStack Awaited runtime error in older React versions
-  // or mismatch between SSR/Client hydration states.
-  if (typeof React.use !== 'function') {
-    (React as any).use = (promise: any) => {
-      if (promise.status === 'fulfilled') return promise.value;
-      if (promise.status === 'rejected') throw promise.reason;
-      if (promise.status === 'pending') throw promise;
-      promise.status = 'pending';
-      promise.then(
-        (v: any) => {
-          promise.status = 'fulfilled';
-          promise.value = v;
-        },
-        (e: any) => {
-          promise.status = 'rejected';
-          promise.reason = e;
-        }
-      );
-      throw promise;
-    };
-  }
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Outlet />
+    </QueryClientProvider>
+  );
+}
 
   return (
     <QueryClientProvider client={queryClient}>
