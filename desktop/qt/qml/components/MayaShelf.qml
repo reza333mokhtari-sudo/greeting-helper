@@ -90,8 +90,19 @@ Rectangle {
             RowLayout {
                 Layout.leftMargin: 10
                 spacing: 12
-                ToolButton { text: "History"; display: AbstractButton.TextUnderIcon }
-                ToolButton { text: "Outliner"; display: AbstractButton.TextUnderIcon }
+                ToolButton { 
+                    contentItem: RowLayout {
+                        AppIcon { icon: "status/history"; size: 20 }
+                        Label { text: "History"; color: "#aaa"; font.pixelSize: 11 }
+                    }
+                }
+                ToolButton { 
+                    contentItem: RowLayout {
+                        AppIcon { icon: "panels/layers"; size: 20 }
+                        Label { text: "Outliner"; color: "#aaa"; font.pixelSize: 11 }
+                    }
+                }
+
                 ToolButton { text: "CMS"; display: AbstractButton.TextUnderIcon }
             }
 
