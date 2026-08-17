@@ -105,6 +105,13 @@ export const getAdminSchema = createServerFn({ method: "GET" })
           deletable: true,
         },
         {
+          name: "unverified_users",
+          pk: "id",
+          columns: ["id", "email", "created_at", "last_sign_in_at"],
+          editable: [],
+          deletable: true,
+        },
+        {
           name: "admin_audit_logs",
           pk: "id",
           columns: ["id", "admin_id", "action", "table_name", "row_id", "payload", "created_at"],
