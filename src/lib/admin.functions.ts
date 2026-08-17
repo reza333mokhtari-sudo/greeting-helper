@@ -174,9 +174,6 @@ export const adminTableQuery = createServerFn({ method: "POST" })
       };
     }
 
-      return { rows: mappedRows, count };
-    }
-
     let query = (supabaseAdmin.from(table as PublicTable) as any).select("*", { count: "exact" });
 
     if (data.search) {
