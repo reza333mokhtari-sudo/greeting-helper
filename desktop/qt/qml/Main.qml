@@ -135,6 +135,7 @@ ApplicationWindow {
                 color: "#2d2d2d"
             }
 
+
             // 4. Left Tool Box
             MayaToolBox {
                 id: toolBox
