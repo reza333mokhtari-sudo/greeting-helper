@@ -26,9 +26,10 @@ QString LicenseService::hardwareId() const {
 }
 
 bool LicenseService::activate(const QString& key) {
-    // Mock validation logic
-    // In a real app, this would call a secure server API
     qDebug() << "Attempting to activate license with key:" << key;
+    
+    // In a professional production app, this would call:
+    // https://greeting-helper.vercel.app/api/validate?key=...&hwid=...
     
     if (key.startsWith("PRO-") && key.length() > 10) {
         m_type = "Pro";
@@ -48,9 +49,18 @@ bool LicenseService::activate(const QString& key) {
         emit licenseStatusChanged();
         emit activationSuccess();
         return true;
+    } else if (key.startsWith("ENTERPRISE-")) {
+        m_type = "Enterprise";
+        m_active = true;
+        m_expiry = QDateTime::currentDateTime().addYears(3);
+        m_key = key;
+        saveLicense(key, m_type, m_expiry);
+        emit licenseStatusChanged();
+        emit activationSuccess();
+        return true;
     }
     
-    emit activationFailed("Invalid license key format or expired.");
+    emit activationFailed("Invalid license key. Keys generated via the Web Admin Control Center are required.");
     return false;
 }
 

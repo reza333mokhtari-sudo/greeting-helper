@@ -91,6 +91,13 @@ export const getAdminSchema = createServerFn({ method: "GET" }).handler(async ({
         deletable: true,
       },
       {
+        name: "licenses",
+        pk: "id",
+        columns: ["id", "user_id", "key", "type", "expires_at", "created_at"],
+        editable: ["type", "expires_at"],
+        deletable: true,
+      },
+      {
         name: "map_assets",
         pk: "id",
         columns: [
@@ -143,9 +150,11 @@ export const getAdminSchema = createServerFn({ method: "GET" }).handler(async ({
       {
         name: "unverified_users",
         pk: "id",
-        columns: ["id", "email", "created_at", "last_sign_in_at"],
+        columns: ["id", "email", "created_at", "last_sign_in_at", "email_confirmed_at"],
         editable: [],
         deletable: true,
+        isVirtual: true,
+        baseTable: "auth.users",
       },
       {
         name: "admin_audit_logs",
@@ -153,15 +162,6 @@ export const getAdminSchema = createServerFn({ method: "GET" }).handler(async ({
         columns: ["id", "admin_id", "action", "table_name", "row_id", "payload", "created_at"],
         editable: [],
         deletable: false,
-      },
-      {
-        name: "unverified_users",
-        pk: "id",
-        columns: ["id", "email", "created_at", "last_sign_in_at", "email_confirmed_at"],
-        editable: [],
-        deletable: true,
-        isVirtual: true,
-        baseTable: "auth.users",
       },
     ],
   };
@@ -433,4 +433,48 @@ export const getUserTickets = createServerFn({ method: "GET" })
 
     if (error) throw new Error(error.message);
     return data;
+  });
+
+export const adminGenerateLicense = createServerFn({ method: "POST" })
+  .inputValidator((d) =>
+    z.object({ userId: z.string(), type: z.enum(["trial", "pro", "enterprise"]) }).parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    const { userId: adminId } = context as any;
+    await checkAdminAccess();
+
+    // 1. Generate key (automatic format compatible with desktop app)
+    const prefix = data.type.toUpperCase();
+    const random = Math.random().toString(36).substring(2, 10).toUpperCase();
+    const key = `${prefix}-${random}`;
+
+    // 2. Set expiry
+    const expiresAt = new Date();
+    if (data.type === "trial") expiresAt.setDate(expiresAt.getDate() + 30);
+    else expiresAt.setFullYear(expiresAt.getFullYear() + 1);
+
+    // 3. Save to DB
+    const { data: license, error } = await supabaseAdmin
+      .from("licenses")
+      .insert({
+        user_id: data.userId,
+        key: key,
+        type: data.type,
+        expires_at: expiresAt.toISOString(),
+      })
+      .select()
+      .single();
+
+    if (error) throw new Error(error.message);
+
+    // 4. Create notification/popup data for user (simulated via metadata or separate table)
+    await (supabaseAdmin.from("admin_audit_logs") as any).insert({
+      admin_id: adminId,
+      action: "GENERATE_LICENSE",
+      table_name: "licenses",
+      row_id: license.id,
+      payload: { key, userId: data.userId, type: data.type },
+    });
+
+    return { success: true, key };
   });
