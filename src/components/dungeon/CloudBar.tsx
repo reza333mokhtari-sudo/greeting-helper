@@ -95,18 +95,18 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
     try {
       if (current) {
         await updateMap(current.id, { name, doc, thumbnail_url: thumbnail() });
-        toast.success("Map saved to the cloud");
+        toast.success("Changes synced to cloud");
       } else {
         const row = await createMap(name, doc, thumbnail());
         setCurrent(row);
-        toast.success("Map saved to the cloud");
+        toast.success("Map created in cloud");
       }
       setInternalSyncStatus("synced");
-      setTimeout(() => setInternalSyncStatus("idle"), 2000);
+      setTimeout(() => setInternalSyncStatus("idle"), 3000);
       refresh();
     } catch (e) {
       setInternalSyncStatus("error");
-      toast.error(e instanceof Error ? e.message : "Save failed");
+      toast.error(e instanceof Error ? e.message : "Cloud sync failed");
     }
     setBusy(false);
   };
