@@ -229,8 +229,8 @@ export function DungeonEditor() {
   }, [isLoggedIn]);
 
   // Hotkeys
-  useHotkeys('ctrl+z, cmd+z', (e) => { e.preventDefault(); undo(); }, { enableOnFormTags: false });
-  useHotkeys('ctrl+y, cmd+y, ctrl+shift+z, cmd+shift+z', (e) => { e.preventDefault(); redo(); }, { enableOnFormTags: false });
+  useHotkeys('ctrl+z, cmd+z', (e) => { e.preventDefault(); undo(); });
+  useHotkeys('ctrl+y, cmd+y, ctrl+shift+z, cmd+shift+z', (e) => { e.preventDefault(); redo(); });
   useHotkeys('backspace, delete', () => {
     if (selected.length) {
       commit((d) => ({ ...d, objects: d.objects.filter(o => !selected.includes(o.id)) }), "Delete objects");
