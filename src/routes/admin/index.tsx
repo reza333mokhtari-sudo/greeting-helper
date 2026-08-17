@@ -13,8 +13,24 @@ import {
   FileText,
   Map,
   History,
-  AlertTriangle
+  AlertTriangle,
+  BarChart3,
+  TrendingUp,
+  Clock
 } from "lucide-react";
+
+import { 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip as RechartsTooltip, 
+  ResponsiveContainer,
+  Cell,
+  PieChart,
+  Pie
+} from "recharts";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -27,7 +43,9 @@ import {
   adminTableUpdate, 
   adminTableDelete 
 } from "@/lib/admin.functions";
+import { getAdminStats } from "@/lib/admin-stats.functions";
 import { AdminDataTable } from "@/components/admin/AdminDataTable";
+
 import { RowDetailDrawer } from "@/components/admin/RowDetailDrawer";
 import { EntityForm } from "@/components/admin/EntityForm";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
