@@ -62,11 +62,11 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
 
   return (
     <header className="relative flex h-14 shrink-0 items-center gap-2 border-b border-border bg-sidebar px-3">
-      <Link to="/" className="flex items-center gap-2 px-3 py-1.5 hover:bg-accent/50 rounded-md transition-colors mr-2">
+      <Link to={user ? "/editor" : "/"} className="flex items-center gap-2 px-3 py-1.5 hover:bg-accent/50 rounded-md transition-colors mr-2">
         <div className="size-6 bg-primary rounded flex items-center justify-center">
           <Map className="size-4 text-primary-foreground" />
         </div>
-        <span className="font-bold text-sm tracking-tight text-foreground">DUNGEON SCRAWL</span>
+        <span className="font-bold text-sm tracking-tight text-foreground uppercase tracking-wider">DUNGEON SCRAWL</span>
       </Link>
 
 
