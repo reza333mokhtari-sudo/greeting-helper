@@ -190,11 +190,11 @@ function LandingPage() {
             <section className="relative overflow-hidden py-24 px-6 text-center">
               <div className="absolute inset-0 -z-10 bg-[radial-gradient(45%_45%_at_50%_50%,rgba(59,130,246,0.1),transparent)]" />
               <h1 className="mx-auto max-w-4xl text-5xl font-extrabold tracking-tight sm:text-7xl">
-                Create Epic Maps <br />
-                <span className="text-primary">In Seconds.</span>
+                Professional RPG <br />
+                <span className="text-primary">Map Engine.</span>
               </h1>
               <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-                Professional RPG mapping tools powered by AI. Design, share, and play your adventures with the ultimate dungeon editor.
+                High-fidelity TTRPG mapping tools powered by AI. Design, simulate, and render your adventures with a professional-grade editor.
               </p>
               <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
                 <Button size="lg" className="h-12 px-8 text-base shadow-xl shadow-primary/20" asChild>
