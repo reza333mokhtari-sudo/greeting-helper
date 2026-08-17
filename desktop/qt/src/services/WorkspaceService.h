@@ -2,10 +2,9 @@
 #define WORKSPACESERVICE_H
 
 #include <QObject>
-#include <QString>
+#include <QStringList>
 #include <QVariantMap>
 #include <QtQml/qqmlregistration.h>
-
 
 class WorkspaceService : public QObject {
     Q_OBJECT
@@ -16,4 +15,6 @@ public:
     Q_INVOKABLE void saveLayout(const QString& name, const QVariantMap& layout);
     Q_INVOKABLE QVariantMap loadLayout(const QString& name);
     Q_INVOKABLE QStringList listLayouts() const;
+};
+
 #endif // WORKSPACESERVICE_H
