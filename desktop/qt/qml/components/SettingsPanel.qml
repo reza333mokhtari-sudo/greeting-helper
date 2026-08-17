@@ -25,13 +25,13 @@ Rectangle {
             ColumnLayout {
                 CheckBox {
                     text: qsTr("Show Grid")
-                    checked: document ? document.gridVisible : true
+                    checked: !!(document && document.gridVisible)
                     onToggled: if (document) document.gridVisible = checked
                     palette.windowText: "white"
                 }
                 CheckBox {
                     text: qsTr("Snap to Grid")
-                    checked: document ? document.snapEnabled : true
+                    checked: !!(document && typeof document.snapEnabled !== "undefined" ? document.snapEnabled : true)
                     onToggled: if (document) document.snapEnabled = checked
                     palette.windowText: "white"
                 }

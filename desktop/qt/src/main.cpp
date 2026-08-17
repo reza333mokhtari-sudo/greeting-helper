@@ -31,6 +31,9 @@ int main(int argc, char *argv[])
     qmlRegisterType<LicenseService>("DungeonEditor.Services", 1, 0, "LicenseService");
     qmlRegisterType<FileService>("DungeonEditor.Services", 1, 0, "FileService");
 
+    // Standardized QML Component Registration
+    qmlRegisterType<Document>("DungeonEditor.Components", 1, 0, "Document");
+
     // Icon path updated for resource prefix
     app.setWindowIcon(QIcon(":/assets/icon.png"));
 
