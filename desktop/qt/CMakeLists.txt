@@ -5,7 +5,7 @@ project(DungeonEditor VERSION 1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Gui Qml Quick Network QuickControls2 Concurrent Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick Network QuickControls2 Concurrent Widgets)
 
 qt_standard_project_setup()
 

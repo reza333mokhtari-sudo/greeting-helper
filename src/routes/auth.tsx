@@ -159,8 +159,8 @@ function AuthPage() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-background p-6">
       <div className="w-full max-w-sm rounded-xl border border-border/60 bg-card/70 p-6 shadow-lg backdrop-blur">
-        <h1 className="mb-1 text-xl font-semibold text-arcane">Dungeon Scrawl</h1>
-        <p className="mb-5 text-xs text-muted-foreground">Sign in to save maps to the cloud and share them.</p>
+        <h1 className="mb-1 text-xl font-bold tracking-tight text-foreground">DUNGEON SCRAWL</h1>
+        <p className="mb-5 text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Authentication Gateway</p>
 
         <Button variant="outline" className="mb-4 w-full" onClick={google}>
           Continue with Google
@@ -234,7 +234,7 @@ function AuthPage() {
         </Tabs>
 
         <p className="mt-4 text-center text-[11px] text-muted-foreground">
-          <button type="button" className="underline hover:text-foreground" onClick={() => navigate({ to: "/" })}>
+          <button type="button" className="underline hover:text-foreground" onClick={() => navigate({ to: "/editor" })}>
             Continue as guest
           </button>
         </p>
