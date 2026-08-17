@@ -444,7 +444,7 @@ function AdminConsole() {
                 <p className="text-muted-foreground">Accounts waiting for email verification</p>
               </div>
             </div>
-            <AdminDataTable table="unverified_users" />
+            <AdminDataTable table={activeTable} />
           </div>
         )}
         

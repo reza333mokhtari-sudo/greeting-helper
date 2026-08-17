@@ -156,7 +156,7 @@ export const adminTableQuery = createServerFn({ method: "POST" })
       if (error) throw new Error(error.message);
       
       // Map profiles to the expected virtual schema
-      const mappedRows = (rows || []).map(r => ({
+      const mappedRows = (rows || []).map((r: any) => ({
         ...r,
         email_confirmed_at: null, // Simulated unverified state
         last_sign_in_at: r.created_at
