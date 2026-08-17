@@ -336,9 +336,17 @@ export function ProfileMenu({ onAuthRequired }: { onAuthRequired?: ((reason: str
     <>
       <DropdownMenu onOpenChange={(open) => open && performCheck()}>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-10 w-10 rounded-full p-0 hover:bg-primary/10 transition-colors border border-border/40 shadow-sm">
+          <Button variant="ghost" className="h-10 w-10 rounded-full p-0 hover:bg-primary/10 transition-colors border border-border/40 shadow-sm overflow-hidden">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-tr from-primary/20 to-primary/5 text-xs font-medium text-primary">
-              <User className="h-5 w-5" />
+              {user?.user_metadata?.avatar_url || user?.user_metadata?.picture ? (
+                <img 
+                  src={user.user_metadata.avatar_url || user.user_metadata.picture} 
+                  alt="Avatar" 
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <User className="h-5 w-5" />
+              )}
             </div>
           </Button>
         </DropdownMenuTrigger>
