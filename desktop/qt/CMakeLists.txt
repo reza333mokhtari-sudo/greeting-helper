@@ -30,12 +30,6 @@ qt_add_executable(appDungeonEditor
     src/services/LicenseService.h src/services/LicenseService.cpp
 )
 
-# Manual resource handling for assets
-qt_add_resources(appDungeonEditor "asset_resources"
-    PREFIX "/assets"
-    FILES
-        assets/icon.png
-)
 
 
 # Manual resource handling instead of qt_add_qml_module to avoid broken type registration
@@ -67,6 +61,12 @@ qt_add_resources(appDungeonEditor "qml_resources"
         qml/dialogs/HelpWindow.qml
         qml/dialogs/PreferencesDialog.qml
         assets/icon.png
+        assets/icons/general/undo.svg
+        assets/icons/general/redo.svg
+        assets/icons/status/engine_ready.svg
+        assets/icons/status/help.svg
+        assets/icons/tools/grid.svg
+
 )
 
 target_include_directories(appDungeonEditor PRIVATE 

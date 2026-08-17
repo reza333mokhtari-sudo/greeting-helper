@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<FileService>("DungeonEditor.Services", 1, 0, "FileService");
 
     // Icon path updated for resource prefix
-    app.setWindowIcon(QIcon(":/assets/assets/icon.png"));
+    app.setWindowIcon(QIcon(":/assets/icon.png"));
 
     QQmlApplicationEngine engine;
     
