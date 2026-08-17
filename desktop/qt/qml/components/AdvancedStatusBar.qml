@@ -23,11 +23,16 @@ Rectangle {
         anchors.rightMargin: 10
         spacing: 15
 
-        Label {
-            text: qsTr("Ready")
-            color: "#aaa"
-            font.pixelSize: 11
+        RowLayout {
+            spacing: 8
+            AppIcon { icon: "status/engine_ready"; size: 12; color: "#10b981" }
+            Label {
+                text: qsTr("Engine Ready")
+                color: "#aaa"
+                font.pixelSize: 11
+            }
         }
+
 
         Rectangle { width: 1; height: 14; color: "#333" }
 
@@ -43,17 +48,15 @@ Rectangle {
         // Performance / Stats
         RowLayout {
             spacing: 12
-            Label {
-                text: "FPS: 60"
-                color: "#666"
-                font.pixelSize: 10
-                font.family: "Monospace"
+            RowLayout {
+                spacing: 4
+                AppIcon { icon: "status/performance"; size: 12; color: "#666" }
+                Label { text: "FPS: 60"; color: "#666"; font.pixelSize: 10; font.family: "Monospace" }
             }
-            Label {
-                text: "MEM: 128MB"
-                color: "#666"
-                font.pixelSize: 10
-                font.family: "Monospace"
+            RowLayout {
+                spacing: 4
+                AppIcon { icon: "status/performance"; size: 12; color: "#666" }
+                Label { text: "MEM: 128MB"; color: "#666"; font.pixelSize: 10; font.family: "Monospace" }
             }
             Label {
                 text: "VULKAN"
@@ -62,6 +65,7 @@ Rectangle {
                 font.bold: true
             }
         }
+
 
         Rectangle { width: 1; height: 14; color: "#333" }
 
