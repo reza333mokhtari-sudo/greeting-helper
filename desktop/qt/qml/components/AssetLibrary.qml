@@ -31,7 +31,7 @@ Rectangle {
             placeholderText: qsTr("Search assets...")
             Layout.fillWidth: true
             color: "white"
-            background: Rectangle { color: "#3c3c3c"; radius: 4 }
+
             onTextChanged: root.model.searchQuery = text
         }
         
