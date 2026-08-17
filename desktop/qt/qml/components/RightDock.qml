@@ -23,13 +23,17 @@ Rectangle {
             id: dockTabs
             Layout.fillWidth: true
             background: Rectangle { color: "#2d2d2d" }
-            TabButton { text: qsTr("Browser") }
+            TabButton { 
+                text: qsTr("Browser")
+                onPressAndHold: { /* Implement tear-off */ }
+            }
             TabButton { text: qsTr("Attrib") }
             TabButton { text: qsTr("Tool") }
             TabButton { text: qsTr("Layers") }
             TabButton { text: qsTr("Gen") }
             TabButton { text: qsTr("Fog") }
         }
+
 
         StackLayout {
             currentIndex: dockTabs.currentIndex
@@ -63,11 +67,12 @@ Rectangle {
                 document: document
             }
 
-            Rectangle {
+            FogTools {
                 id: fogTools
-                color: "#252526"
-                Label { text: "Fog Tools Panel"; anchors.centerIn: parent; color: "#666" }
+                document: document
+                canvas: canvas
             }
+
         }
 
         AiPanel {
