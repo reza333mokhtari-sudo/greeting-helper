@@ -27,19 +27,16 @@ int main(int argc, char *argv[])
     qmlRegisterType<LicenseService>("DungeonEditor.Services", 1, 0, "LicenseService");
     qmlRegisterType<FileService>("DungeonEditor.Services", 1, 0, "FileService");
 
-    // Icon path updated for Qt 6 resource prefix
-    app.setWindowIcon(QIcon(":/qt/qml/DungeonEditor/assets/icon.png"));
+    // Icon path updated for resource prefix
+    app.setWindowIcon(QIcon(":/assets/icon.png"));
 
     QQmlApplicationEngine engine;
     
-    // Register "components" relative to the resource root
-    engine.addImportPath("qrc:/qt/qml/DungeonEditor");
-    engine.addImportPath("qrc:/DungeonEditor");
+    // Register "qml" root
+    engine.addImportPath("qrc:/qml");
     engine.addImportPath("qrc:/");
     
     const QStringList resourcePaths = {
-        "qrc:/qt/qml/DungeonEditor/qml/Main.qml",
-        "qrc:/DungeonEditor/qml/Main.qml",
         "qrc:/qml/Main.qml"
     };
 

@@ -13,7 +13,7 @@ BaseFloatingWindow {
         spacing: 20
         
         Image {
-            source: "../../assets/icon.png"
+            source: "qrc:/assets/icon.png"
             Layout.preferredWidth: 80
             Layout.preferredHeight: 80
             Layout.alignment: Qt.AlignHCenter

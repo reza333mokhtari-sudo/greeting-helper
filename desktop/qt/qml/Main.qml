@@ -90,13 +90,13 @@ ApplicationWindow {
                 spacing: 4
                 
                 ToolButton {
-                    icon.source: "../../assets/icons/general/undo.svg"
+                    icon.source: "qrc:/assets/icons/general/undo.svg"
                     display: AbstractButton.IconOnly
                     enabled: mapDoc.canUndo
                     onClicked: mapDoc.undo()
                 }
                 ToolButton {
-                    icon.source: "../../assets/icons/general/redo.svg"
+                    icon.source: "qrc:/assets/icons/general/redo.svg"
                     display: AbstractButton.IconOnly
                     enabled: mapDoc.canRedo
                     onClicked: mapDoc.redo()
