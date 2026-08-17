@@ -4,110 +4,67 @@ import QtQuick.Controls
 
 Rectangle {
     id: root
-    width: 50
-    color: "#252526"
+    width: 48
+    color: "#1e1e1e"
     
     property var canvas: null
-    property string activeTool: "select"
+    property string activeTool: canvas ? canvas.activeTool : "select"
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.topMargin: 10
-        spacing: 4
+        anchors.topMargin: 8
+        spacing: 2
 
-        ToolButton {
-            id: selectBtn
-            Layout.alignment: Qt.AlignHCenter
-            contentItem: AppIcon {
-                icon: "tools/select"
-                active: canvas ? canvas.activeTool === "select" : true
-                size: 20
+        Repeater {
+            model: [
+                { id: "select", icon: "tools/select", tip: "Select (Q)" },
+                { id: "move", icon: "tools/move", tip: "Move (W)" },
+                { id: "room", icon: "tools/draw_room", tip: "Draw Room (R)" },
+                { id: "corridor", icon: "tools/draw_corridor", tip: "Draw Corridor (D)" },
+                { id: "prop", icon: "tools/place_prop", tip: "Place Prop (P)" },
+                { id: "texture", icon: "tools/texture_brush", tip: "Texture Brush (T)" },
+                { id: "fog", icon: "tools/fog_brush", tip: "Fog Brush (F)" },
+                { id: "erase", icon: "tools/eraser", tip: "Eraser (E)" },
+                { id: "measure", icon: "tools/measure", tip: "Measure (M)" }
+            ]
+
+            delegate: ToolButton {
+                id: btn
+                Layout.preferredWidth: 36
+                Layout.preferredHeight: 36
+                Layout.alignment: Qt.AlignHCenter
+                checkable: true
+                checked: root.activeTool === modelData.id
+                
+                contentItem: AppIcon {
+                    icon: modelData.icon
+                    size: 20
+                    active: btn.checked
+                }
+                
+                background: Rectangle {
+                    color: btn.checked ? "#2d2d2d" : (btn.hovered ? "#252526" : "transparent")
+                    radius: 4
+                    border.color: btn.checked ? "#3b82f6" : "transparent"
+                }
+
+                onClicked: {
+                    if (canvas) canvas.activeTool = modelData.id
+                }
+                
+                ToolTip.visible: hovered
+                ToolTip.text: modelData.tip
             }
-            onClicked: if (canvas) canvas.activeTool = "select"
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Select Tool (Q)")
         }
 
+        Item { Layout.fillHeight: true }
+        
         ToolButton {
-            id: moveBtn
+            Layout.preferredWidth: 36
+            Layout.preferredHeight: 36
             Layout.alignment: Qt.AlignHCenter
-            contentItem: AppIcon {
-                icon: "tools/move"
-                active: canvas ? canvas.activeTool === "move" : false
-                size: 20
-            }
-            onClicked: if (canvas) canvas.activeTool = "move"
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Move Tool (W)")
-        }
-
-        ToolButton {
-            id: drawBtn
-            Layout.alignment: Qt.AlignHCenter
-            contentItem: AppIcon {
-                icon: "tools/draw_room"
-                active: canvas ? canvas.activeTool === "draw" : false
-                size: 20
-            }
-            onClicked: if (canvas) canvas.activeTool = "draw"
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Draw Room (D)")
-        }
-
-        ToolButton {
-            id: propBtn
-            Layout.alignment: Qt.AlignHCenter
-            contentItem: AppIcon {
-                icon: "tools/place_prop"
-                active: canvas ? canvas.activeTool === "place_prop" : false
-                size: 20
-            }
-            onClicked: if (canvas) canvas.activeTool = "place_prop"
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Place Prop")
-        }
-
-        Rectangle {
-            Layout.fillWidth: true
-            Layout.preferredHeight: 1
-            color: "#3e3e42"
-            Layout.margins: 4
-        }
-
-        ToolButton {
-            id: brushBtn
-            Layout.alignment: Qt.AlignHCenter
-            contentItem: AppIcon {
-                icon: "tools/texture_brush"
-                active: canvas ? canvas.activeTool === "texture_brush" : false
-                size: 20
-            }
-            onClicked: if (canvas) canvas.activeTool = "texture_brush"
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Texture Brush")
-        }
-
-        ToolButton {
-            id: eraserBtn
-            Layout.alignment: Qt.AlignHCenter
-            contentItem: AppIcon {
-                icon: "tools/eraser"
-                active: canvas ? canvas.activeTool === "eraser" : false
-                size: 20
-            }
-            onClicked: if (canvas) canvas.activeTool = "eraser"
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Eraser Tool")
-        }
-
-
-
-        ToolButton {
-            Layout.alignment: Qt.AlignHCenter
-            text: "L"
-            onClicked: { /* Toggle Outliner */ }
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Toggle Outliner")
+            contentItem: AppIcon { icon: "general/settings"; size: 18 }
+            onClicked: preferencesDialog.open()
         }
     }
 }

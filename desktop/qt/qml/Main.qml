@@ -24,7 +24,6 @@ ApplicationWindow {
     WorkspaceService { id: workspaceService }
     AiClient { id: aiClient }
 
-
     PreferencesDialog {
         id: preferencesDialog
     }
@@ -53,12 +52,11 @@ ApplicationWindow {
         }
     }
 
-
     ColumnLayout {
         anchors.fill: parent
         spacing: 0
         
-        // Maya Top Bar (Menu)
+        // 1. Menu Bar
         TopBar {
             id: topBar
             Layout.fillWidth: true
@@ -66,7 +64,48 @@ ApplicationWindow {
             canvas: canvas
         }
 
-        // Maya Shelf & Status Line
+        // 2. Status Line (History/Undo/Redo & Engine Status)
+        Rectangle {
+            Layout.fillWidth: true
+            height: 32
+            color: "#1e1e1e"
+            border.color: "#2d2d2d"
+            
+            RowLayout {
+                anchors.fill: parent
+                anchors.leftMargin: 8
+                anchors.rightMargin: 8
+                spacing: 4
+                
+                ToolButton {
+                    icon.source: "../../assets/icons/general/undo.svg"
+                    display: AbstractButton.IconOnly
+                    enabled: mapDoc.canUndo
+                    onClicked: mapDoc.undo()
+                }
+                ToolButton {
+                    icon.source: "../../assets/icons/general/redo.svg"
+                    display: AbstractButton.IconOnly
+                    enabled: mapDoc.canRedo
+                    onClicked: mapDoc.redo()
+                }
+                
+                Rectangle { width: 1; height: 16; color: "#333"; Layout.leftMargin: 4; Layout.rightMargin: 4 }
+
+                Label {
+                    text: mapDoc.dirty ? "Modified" : "Ready"
+                    font.pixelSize: 11
+                    color: mapDoc.dirty ? "#f59e0b" : "#666"
+                }
+
+                Item { Layout.fillWidth: true }
+                
+                AppIcon { icon: "status/engine_ready"; size: 14; color: "#10b981" }
+                Label { text: "Renderer: Vulkan"; font.pixelSize: 10; color: "#888" }
+            }
+        }
+
+        // 3. Shelf
         MayaShelf {
             id: shelf
             Layout.fillWidth: true
@@ -80,15 +119,15 @@ ApplicationWindow {
             orientation: Qt.Horizontal
             
             handle: Rectangle {
-                implicitWidth: 2
-                color: SplitView.isPressed ? "#3b82f6" : "#222"
+                implicitWidth: 1
+                color: "#2d2d2d"
             }
 
-            // Maya Tool Box
+            // 4. Left Tool Box
             MayaToolBox {
                 id: toolBox
-                SplitView.minimumWidth: 50
-                SplitView.preferredWidth: 50
+                SplitView.minimumWidth: 48
+                SplitView.preferredWidth: 48
                 canvas: canvas
             }
             
@@ -101,23 +140,31 @@ ApplicationWindow {
                     id: viewportToolbar
                     z: 10
                     width: parent.width
-                    height: 28
-                    color: "#cc1e1e1e"
+                    height: 32
+                    color: "#cc161616"
                     RowLayout {
                         anchors.fill: parent
                         anchors.leftMargin: 10
-                        spacing: 8
-                        ToolButton { text: "Cam"; font.pixelSize: 10 }
+                        spacing: 12
+                        
+                        RowLayout {
+                            spacing: 4
+                            AppIcon { icon: "status/help"; size: 14; color: "#aaa" }
+                            Label { text: "Perspective"; color: "#ccc"; font.pixelSize: 11; font.bold: true }
+                        }
+
+                        Rectangle { width: 1; height: 16; color: "#333" }
+
                         ToolButton { 
-                            text: "Grid"
-                            font.pixelSize: 10
+                            contentItem: AppIcon { icon: "tools/grid"; size: 14; active: mapDoc.gridVisible }
                             checkable: true
                             checked: mapDoc.gridVisible
                             onToggled: mapDoc.gridVisible = checked
                         }
-                        ToolButton { text: "Light"; font.pixelSize: 10 }
+                        
                         Item { Layout.fillWidth: true }
-                        Label { text: "[ Perspective ]"; color: "#aaa"; font.pixelSize: 10 }
+                        
+                        Label { text: "60 FPS"; color: "#10b981"; font.pixelSize: 10; font.family: "Monospace" }
                     }
                 }
 
@@ -132,16 +179,18 @@ ApplicationWindow {
                 }
             }
             
+            // 5. Right Docks
             RightDock {
                 id: rightDock
-                SplitView.minimumWidth: 320
-                SplitView.preferredWidth: 380
+                SplitView.minimumWidth: 300
+                SplitView.preferredWidth: 360
                 document: mapDoc
                 canvas: canvas
                 assetModel: assetModel
             }
         }
         
+        // 6. Advanced Status Bar
         AdvancedStatusBar {
             Layout.fillWidth: true
             canvas: canvas
@@ -149,3 +198,4 @@ ApplicationWindow {
         }
     }
 }
+
