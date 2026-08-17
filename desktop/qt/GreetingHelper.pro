@@ -2,7 +2,9 @@ QT += core gui widgets webenginewidgets
 
 CONFIG += c++17
 
-SOURCES += main.cpp
+SOURCES += \
+    main.cpp \
+    src/main.cpp
 
 TARGET = GreetingHelper
 TEMPLATE = app
@@ -16,3 +18,13 @@ DEFINES += QT_NO_KEYWORDS
 # Deployment
 target.path = $$[QT_INSTALL_BINS]
 INSTALLS += target
+
+HEADERS += \
+    main.h
+
+RESOURCES += \
+    resources.qrc
+
+DISTFILES += \
+    CMakeLists.txt \
+    tst_dd.md

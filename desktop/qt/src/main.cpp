@@ -23,16 +23,16 @@ int main(int argc, char *argv[])
     qmlRegisterType<FileService>("DungeonEditor.Services", 1, 0, "FileService");
 
     QQmlApplicationEngine engine;
-    
+
     // Load the main entry point from QRC
     const QUrl url(QStringLiteral("qrc:/DungeonEditor/qml/Main.qml"));
-    
+
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
-        if (!obj && url == objUrl)
-            QCoreApplication::exit(-1);
-    }, Qt::QueuedConnection);
-    
+                         if (!obj && url == objUrl)
+                             QCoreApplication::exit(-1);
+                     }, Qt::QueuedConnection);
+
     engine.load(url);
 
     return app.exec();

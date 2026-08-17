@@ -36,10 +36,10 @@ qt_add_qml_module(appDungeonEditor
         qml/components/SettingsPanel.qml
 )
 
-target_link_libraries(appDungeonEditor PRIVATE 
-    Qt6::Gui 
-    Qt6::Qml 
-    Qt6::Quick 
+target_link_libraries(appDungeonEditor PRIVATE
+    Qt6::Gui
+    Qt6::Qml
+    Qt6::Quick
     Qt6::Network
     Qt6::QuickControls2
     Qt6::Concurrent
