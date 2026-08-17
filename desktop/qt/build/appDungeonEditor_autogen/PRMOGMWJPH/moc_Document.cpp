@@ -74,7 +74,8 @@ template <> constexpr inline auto Document::qt_create_metaobjectdata<qt_meta_tag
         "dirty",
         "gridVisible",
         "snapEnabled",
-        "floors"
+        "floors",
+        "layers"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -142,8 +143,8 @@ template <> constexpr inline auto Document::qt_create_metaobjectdata<qt_meta_tag
         QtMocHelpers::PropertyData<bool>(35, QMetaType::Bool, QMC::DefaultPropertyFlags | QMC::Writable | QMC::StdCppSet, 5),
         // property 'floors'
         QtMocHelpers::PropertyData<QJsonArray>(36, 0x80000000 | 28, QMC::DefaultPropertyFlags | QMC::EnumOrFlag, 6),
-        // property 'floors'
-        QtMocHelpers::PropertyData<QJsonArray>(36, 0x80000000 | 28, QMC::DefaultPropertyFlags | QMC::EnumOrFlag, 7),
+        // property 'layers'
+        QtMocHelpers::PropertyData<QJsonArray>(37, 0x80000000 | 28, QMC::DefaultPropertyFlags | QMC::EnumOrFlag, 7),
     };
     QtMocHelpers::UintData qt_enums {
     };

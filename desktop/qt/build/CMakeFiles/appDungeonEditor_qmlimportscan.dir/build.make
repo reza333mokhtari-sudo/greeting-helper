@@ -69,21 +69,7 @@ include CMakeFiles/appDungeonEditor_qmlimportscan.dir/progress.make
 CMakeFiles/appDungeonEditor_qmlimportscan: .qt/qml_imports/appDungeonEditor_build.cmake
 
 .qt/qml_imports/appDungeonEditor_build.cmake: /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlimportscanner
-.qt/qml_imports/appDungeonEditor_build.cmake: .qt/rcc/qmake_DungeonEditor.qrc
-.qt/qml_imports/appDungeonEditor_build.cmake: .qt/rcc/appDungeonEditor_raw_qml_0.qrc
-.qt/qml_imports/appDungeonEditor_build.cmake: .qt/rcc/appDungeonEditor_raw_res_0.qrc
-.qt/qml_imports/appDungeonEditor_build.cmake: /dev-server/desktop/qt/qml/Main.qml
-.qt/qml_imports/appDungeonEditor_build.cmake: /dev-server/desktop/qt/qml/components/TopBar.qml
-.qt/qml_imports/appDungeonEditor_build.cmake: /dev-server/desktop/qt/qml/components/ToolRail.qml
-.qt/qml_imports/appDungeonEditor_build.cmake: /dev-server/desktop/qt/qml/components/AssetLibrary.qml
-.qt/qml_imports/appDungeonEditor_build.cmake: /dev-server/desktop/qt/qml/components/AiPanel.qml
-.qt/qml_imports/appDungeonEditor_build.cmake: /dev-server/desktop/qt/qml/components/InspectorPanel.qml
-.qt/qml_imports/appDungeonEditor_build.cmake: /dev-server/desktop/qt/qml/components/LayersPanel.qml
-.qt/qml_imports/appDungeonEditor_build.cmake: /dev-server/desktop/qt/qml/components/StatusBar.qml
-.qt/qml_imports/appDungeonEditor_build.cmake: /dev-server/desktop/qt/qml/components/ObjectsPanel.qml
-.qt/qml_imports/appDungeonEditor_build.cmake: /dev-server/desktop/qt/qml/components/SettingsPanel.qml
-.qt/qml_imports/appDungeonEditor_build.cmake: /dev-server/desktop/qt/qml/components/CmsPanel.qml
-.qt/qml_imports/appDungeonEditor_build.cmake: /dev-server/desktop/qt/qml/components/RightDock.qml
+.qt/qml_imports/appDungeonEditor_build.cmake: .qt/rcc/qml_resources.qrc
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Running qmlimportscanner for appDungeonEditor"
 	cd /dev-server/desktop/qt && /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlimportscanner @/dev-server/desktop/qt/build/.qt/qml_imports/appDungeonEditor_build.rsp
 

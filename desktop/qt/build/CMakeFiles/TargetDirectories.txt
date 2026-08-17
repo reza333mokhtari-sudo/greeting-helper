@@ -1,17 +1,4 @@
 /dev-server/desktop/qt/build/CMakeFiles/appDungeonEditor.dir
-/dev-server/desktop/qt/build/CMakeFiles/appDungeonEditor_qmltyperegistration.dir
-/dev-server/desktop/qt/build/CMakeFiles/all_qmltyperegistrations.dir
-/dev-server/desktop/qt/build/CMakeFiles/appDungeonEditor_qmllint.dir
-/dev-server/desktop/qt/build/CMakeFiles/appDungeonEditor_qmllint_json.dir
-/dev-server/desktop/qt/build/CMakeFiles/appDungeonEditor_qmllint_module.dir
-/dev-server/desktop/qt/build/CMakeFiles/all_qmllint.dir
-/dev-server/desktop/qt/build/CMakeFiles/all_qmllint_json.dir
-/dev-server/desktop/qt/build/CMakeFiles/all_qmllint_module.dir
-/dev-server/desktop/qt/build/CMakeFiles/appDungeonEditor_copy_qml.dir
-/dev-server/desktop/qt/build/CMakeFiles/appDungeonEditor_copy_res.dir
-/dev-server/desktop/qt/build/CMakeFiles/generate_qmlls_build_ini_file.dir
-/dev-server/desktop/qt/build/CMakeFiles/module_appDungeonEditor_aotstats_target.dir
-/dev-server/desktop/qt/build/CMakeFiles/all_aotstats.dir
 /dev-server/desktop/qt/build/CMakeFiles/appDungeonEditor_qmlimportscan.dir
 /dev-server/desktop/qt/build/CMakeFiles/edit_cache.dir
 /dev-server/desktop/qt/build/CMakeFiles/rebuild_cache.dir

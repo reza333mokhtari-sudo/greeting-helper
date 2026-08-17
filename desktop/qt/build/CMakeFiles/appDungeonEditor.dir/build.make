@@ -69,245 +69,23 @@ include CMakeFiles/appDungeonEditor.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/appDungeonEditor.dir/flags.make
 
-meta_types/qt6appdungeoneditor_metatypes.json.gen: /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/libexec/moc
-meta_types/qt6appdungeoneditor_metatypes.json.gen: meta_types/appDungeonEditor_json_file_list.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Running moc --collect-json for target appDungeonEditor"
-	/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/libexec/moc -o /dev-server/desktop/qt/build/meta_types/qt6appdungeoneditor_metatypes.json.gen --collect-json @/dev-server/desktop/qt/build/meta_types/appDungeonEditor_json_file_list.txt
-	/nix/store/dx1zhzy951phnqyixy0z77s0gcp6wc2z-cmake-4.1.2/bin/cmake -E copy_if_different /dev-server/desktop/qt/build/meta_types/qt6appdungeoneditor_metatypes.json.gen /dev-server/desktop/qt/build/meta_types/qt6appdungeoneditor_metatypes.json
-
-appdungeoneditor_qmltyperegistrations.cpp: qmltypes/appDungeonEditor_foreign_types.txt
-appdungeoneditor_qmltyperegistrations.cpp: meta_types/qt6appdungeoneditor_metatypes.json
-appdungeoneditor_qmltyperegistrations.cpp: /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmltyperegistrar
-appdungeoneditor_qmltyperegistrations.cpp: /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/metatypes/qt6core_metatypes.json
-appdungeoneditor_qmltyperegistrations.cpp: /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/metatypes/qt6qml_metatypes.json
-appdungeoneditor_qmltyperegistrations.cpp: /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/metatypes/qt6network_metatypes.json
-appdungeoneditor_qmltyperegistrations.cpp: /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/metatypes/qt6gui_metatypes.json
-appdungeoneditor_qmltyperegistrations.cpp: /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/metatypes/qt6quick_metatypes.json
-appdungeoneditor_qmltyperegistrations.cpp: /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/metatypes/qt6opengl_metatypes.json
-appdungeoneditor_qmltyperegistrations.cpp: /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/metatypes/qt6quickcontrols2_metatypes.json
-appdungeoneditor_qmltyperegistrations.cpp: /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/metatypes/qt6concurrent_metatypes.json
-appdungeoneditor_qmltyperegistrations.cpp: /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/metatypes/qt6widgets_metatypes.json
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Automatic QML type registration for target appDungeonEditor"
-	/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmltyperegistrar --generate-qmltypes=/dev-server/desktop/qt/build/DungeonEditor/appDungeonEditor.qmltypes --import-name=DungeonEditor --major-version=1 --minor-version=0 @/dev-server/desktop/qt/build/qmltypes/appDungeonEditor_foreign_types.txt -o /dev-server/desktop/qt/build/appdungeoneditor_qmltyperegistrations.cpp /dev-server/desktop/qt/build/meta_types/qt6appdungeoneditor_metatypes.json
-	/nix/store/dx1zhzy951phnqyixy0z77s0gcp6wc2z-cmake-4.1.2/bin/cmake -E make_directory /dev-server/desktop/qt/build/.qt/qmltypes
-	/nix/store/dx1zhzy951phnqyixy0z77s0gcp6wc2z-cmake-4.1.2/bin/cmake -E touch /dev-server/desktop/qt/build/.qt/qmltypes/appDungeonEditor.qmltypes
-
-DungeonEditor/appDungeonEditor.qmltypes: appdungeoneditor_qmltyperegistrations.cpp
-	@$(CMAKE_COMMAND) -E touch_nocreate DungeonEditor/appDungeonEditor.qmltypes
-
-.qt/rcc/qrc_qmake_DungeonEditor.cpp: DungeonEditor/qmldir
-.qt/rcc/qrc_qmake_DungeonEditor.cpp: .qt/rcc/qmake_DungeonEditor.qrc
-.qt/rcc/qrc_qmake_DungeonEditor.cpp: /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/libexec/rcc
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Running rcc for resource qmake_DungeonEditor"
-	/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/libexec/rcc --output /dev-server/desktop/qt/build/.qt/rcc/qrc_qmake_DungeonEditor.cpp --name qmake_DungeonEditor /dev-server/desktop/qt/build/.qt/rcc/qmake_DungeonEditor.qrc
-
-.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp: /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen
-.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp: .rcc/qmlcache/appDungeonEditor_qml_loader_file_list.rsp
-.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp: .qt/rcc/qmake_DungeonEditor.qrc
-.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp: .qt/rcc/appDungeonEditor_raw_qml_0.qrc
-.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp: .qt/rcc/appDungeonEditor_raw_res_0.qrc
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Generating .rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp"
-	/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen --resource-name qmlcache_appDungeonEditor -o /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp @/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml_loader_file_list.rsp
-
-.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp: /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen
-.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp: /dev-server/desktop/qt/qml/Main.qml
-.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp: .qt/rcc/qmake_DungeonEditor.qrc
-.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp: .qt/rcc/appDungeonEditor_raw_qml_0.qrc
-.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp: .qt/rcc/appDungeonEditor_raw_res_0.qrc
-.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp: DungeonEditor/appDungeonEditor.qmltypes
-.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp: DungeonEditor/qmldir
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Generating .rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp, .rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp.aotstats"
-	/nix/store/dx1zhzy951phnqyixy0z77s0gcp6wc2z-cmake-4.1.2/bin/cmake -E make_directory /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml
-	/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen --bare --resource-path /qt/qml/DungeonEditor/DungeonEditor/qml/Main.qml -I /dev-server/desktop/qt/build -I /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/qt-6/qml -i /dev-server/desktop/qt/build/DungeonEditor/qmldir --resource /dev-server/desktop/qt/build/.qt/rcc/qmake_DungeonEditor.qrc --resource /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_qml_0.qrc --resource /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_res_0.qrc --dump-aot-stats "--module-id=DungeonEditor(appDungeonEditor)" -o /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp /dev-server/desktop/qt/qml/Main.qml
-
-.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp.aotstats: .rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp
-	@$(CMAKE_COMMAND) -E touch_nocreate .rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp.aotstats
-
-.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp: /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen
-.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp: /dev-server/desktop/qt/qml/components/TopBar.qml
-.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp: .qt/rcc/qmake_DungeonEditor.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp: .qt/rcc/appDungeonEditor_raw_qml_0.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp: .qt/rcc/appDungeonEditor_raw_res_0.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp: DungeonEditor/appDungeonEditor.qmltypes
-.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp: DungeonEditor/qmldir
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Generating .rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp, .rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp.aotstats"
-	/nix/store/dx1zhzy951phnqyixy0z77s0gcp6wc2z-cmake-4.1.2/bin/cmake -E make_directory /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components
-	/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen --bare --resource-path /qt/qml/DungeonEditor/DungeonEditor/qml/components/TopBar.qml -I /dev-server/desktop/qt/build -I /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/qt-6/qml -i /dev-server/desktop/qt/build/DungeonEditor/qmldir --resource /dev-server/desktop/qt/build/.qt/rcc/qmake_DungeonEditor.qrc --resource /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_qml_0.qrc --resource /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_res_0.qrc --dump-aot-stats "--module-id=DungeonEditor(appDungeonEditor)" -o /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp /dev-server/desktop/qt/qml/components/TopBar.qml
-
-.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp.aotstats: .rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp
-	@$(CMAKE_COMMAND) -E touch_nocreate .rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp.aotstats
-
-.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp: /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen
-.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp: /dev-server/desktop/qt/qml/components/ToolRail.qml
-.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp: .qt/rcc/qmake_DungeonEditor.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp: .qt/rcc/appDungeonEditor_raw_qml_0.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp: .qt/rcc/appDungeonEditor_raw_res_0.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp: DungeonEditor/appDungeonEditor.qmltypes
-.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp: DungeonEditor/qmldir
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Generating .rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp, .rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp.aotstats"
-	/nix/store/dx1zhzy951phnqyixy0z77s0gcp6wc2z-cmake-4.1.2/bin/cmake -E make_directory /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components
-	/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen --bare --resource-path /qt/qml/DungeonEditor/DungeonEditor/qml/components/ToolRail.qml -I /dev-server/desktop/qt/build -I /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/qt-6/qml -i /dev-server/desktop/qt/build/DungeonEditor/qmldir --resource /dev-server/desktop/qt/build/.qt/rcc/qmake_DungeonEditor.qrc --resource /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_qml_0.qrc --resource /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_res_0.qrc --dump-aot-stats "--module-id=DungeonEditor(appDungeonEditor)" -o /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp /dev-server/desktop/qt/qml/components/ToolRail.qml
-
-.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp.aotstats: .rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp
-	@$(CMAKE_COMMAND) -E touch_nocreate .rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp.aotstats
-
-.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp: /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen
-.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp: /dev-server/desktop/qt/qml/components/AssetLibrary.qml
-.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp: .qt/rcc/qmake_DungeonEditor.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp: .qt/rcc/appDungeonEditor_raw_qml_0.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp: .qt/rcc/appDungeonEditor_raw_res_0.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp: DungeonEditor/appDungeonEditor.qmltypes
-.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp: DungeonEditor/qmldir
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Generating .rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp, .rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp.aotstats"
-	/nix/store/dx1zhzy951phnqyixy0z77s0gcp6wc2z-cmake-4.1.2/bin/cmake -E make_directory /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components
-	/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen --bare --resource-path /qt/qml/DungeonEditor/DungeonEditor/qml/components/AssetLibrary.qml -I /dev-server/desktop/qt/build -I /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/qt-6/qml -i /dev-server/desktop/qt/build/DungeonEditor/qmldir --resource /dev-server/desktop/qt/build/.qt/rcc/qmake_DungeonEditor.qrc --resource /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_qml_0.qrc --resource /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_res_0.qrc --dump-aot-stats "--module-id=DungeonEditor(appDungeonEditor)" -o /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp /dev-server/desktop/qt/qml/components/AssetLibrary.qml
-
-.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp.aotstats: .rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp
-	@$(CMAKE_COMMAND) -E touch_nocreate .rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp.aotstats
-
-.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp: /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen
-.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp: /dev-server/desktop/qt/qml/components/AiPanel.qml
-.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp: .qt/rcc/qmake_DungeonEditor.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp: .qt/rcc/appDungeonEditor_raw_qml_0.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp: .qt/rcc/appDungeonEditor_raw_res_0.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp: DungeonEditor/appDungeonEditor.qmltypes
-.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp: DungeonEditor/qmldir
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Generating .rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp, .rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp.aotstats"
-	/nix/store/dx1zhzy951phnqyixy0z77s0gcp6wc2z-cmake-4.1.2/bin/cmake -E make_directory /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components
-	/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen --bare --resource-path /qt/qml/DungeonEditor/DungeonEditor/qml/components/AiPanel.qml -I /dev-server/desktop/qt/build -I /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/qt-6/qml -i /dev-server/desktop/qt/build/DungeonEditor/qmldir --resource /dev-server/desktop/qt/build/.qt/rcc/qmake_DungeonEditor.qrc --resource /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_qml_0.qrc --resource /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_res_0.qrc --dump-aot-stats "--module-id=DungeonEditor(appDungeonEditor)" -o /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp /dev-server/desktop/qt/qml/components/AiPanel.qml
-
-.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp.aotstats: .rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp
-	@$(CMAKE_COMMAND) -E touch_nocreate .rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp.aotstats
-
-.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp: /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen
-.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp: /dev-server/desktop/qt/qml/components/InspectorPanel.qml
-.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp: .qt/rcc/qmake_DungeonEditor.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp: .qt/rcc/appDungeonEditor_raw_qml_0.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp: .qt/rcc/appDungeonEditor_raw_res_0.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp: DungeonEditor/appDungeonEditor.qmltypes
-.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp: DungeonEditor/qmldir
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Generating .rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp, .rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp.aotstats"
-	/nix/store/dx1zhzy951phnqyixy0z77s0gcp6wc2z-cmake-4.1.2/bin/cmake -E make_directory /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components
-	/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen --bare --resource-path /qt/qml/DungeonEditor/DungeonEditor/qml/components/InspectorPanel.qml -I /dev-server/desktop/qt/build -I /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/qt-6/qml -i /dev-server/desktop/qt/build/DungeonEditor/qmldir --resource /dev-server/desktop/qt/build/.qt/rcc/qmake_DungeonEditor.qrc --resource /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_qml_0.qrc --resource /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_res_0.qrc --dump-aot-stats "--module-id=DungeonEditor(appDungeonEditor)" -o /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp /dev-server/desktop/qt/qml/components/InspectorPanel.qml
-
-.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp.aotstats: .rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp
-	@$(CMAKE_COMMAND) -E touch_nocreate .rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp.aotstats
-
-.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp: /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen
-.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp: /dev-server/desktop/qt/qml/components/LayersPanel.qml
-.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp: .qt/rcc/qmake_DungeonEditor.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp: .qt/rcc/appDungeonEditor_raw_qml_0.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp: .qt/rcc/appDungeonEditor_raw_res_0.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp: DungeonEditor/appDungeonEditor.qmltypes
-.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp: DungeonEditor/qmldir
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Generating .rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp, .rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp.aotstats"
-	/nix/store/dx1zhzy951phnqyixy0z77s0gcp6wc2z-cmake-4.1.2/bin/cmake -E make_directory /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components
-	/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen --bare --resource-path /qt/qml/DungeonEditor/DungeonEditor/qml/components/LayersPanel.qml -I /dev-server/desktop/qt/build -I /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/qt-6/qml -i /dev-server/desktop/qt/build/DungeonEditor/qmldir --resource /dev-server/desktop/qt/build/.qt/rcc/qmake_DungeonEditor.qrc --resource /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_qml_0.qrc --resource /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_res_0.qrc --dump-aot-stats "--module-id=DungeonEditor(appDungeonEditor)" -o /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp /dev-server/desktop/qt/qml/components/LayersPanel.qml
-
-.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp.aotstats: .rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp
-	@$(CMAKE_COMMAND) -E touch_nocreate .rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp.aotstats
-
-.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp: /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen
-.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp: /dev-server/desktop/qt/qml/components/StatusBar.qml
-.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp: .qt/rcc/qmake_DungeonEditor.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp: .qt/rcc/appDungeonEditor_raw_qml_0.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp: .qt/rcc/appDungeonEditor_raw_res_0.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp: DungeonEditor/appDungeonEditor.qmltypes
-.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp: DungeonEditor/qmldir
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Generating .rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp, .rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp.aotstats"
-	/nix/store/dx1zhzy951phnqyixy0z77s0gcp6wc2z-cmake-4.1.2/bin/cmake -E make_directory /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components
-	/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen --bare --resource-path /qt/qml/DungeonEditor/DungeonEditor/qml/components/StatusBar.qml -I /dev-server/desktop/qt/build -I /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/qt-6/qml -i /dev-server/desktop/qt/build/DungeonEditor/qmldir --resource /dev-server/desktop/qt/build/.qt/rcc/qmake_DungeonEditor.qrc --resource /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_qml_0.qrc --resource /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_res_0.qrc --dump-aot-stats "--module-id=DungeonEditor(appDungeonEditor)" -o /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp /dev-server/desktop/qt/qml/components/StatusBar.qml
-
-.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp.aotstats: .rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp
-	@$(CMAKE_COMMAND) -E touch_nocreate .rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp.aotstats
-
-.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp: /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen
-.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp: /dev-server/desktop/qt/qml/components/ObjectsPanel.qml
-.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp: .qt/rcc/qmake_DungeonEditor.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp: .qt/rcc/appDungeonEditor_raw_qml_0.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp: .qt/rcc/appDungeonEditor_raw_res_0.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp: DungeonEditor/appDungeonEditor.qmltypes
-.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp: DungeonEditor/qmldir
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Generating .rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp, .rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp.aotstats"
-	/nix/store/dx1zhzy951phnqyixy0z77s0gcp6wc2z-cmake-4.1.2/bin/cmake -E make_directory /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components
-	/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen --bare --resource-path /qt/qml/DungeonEditor/DungeonEditor/qml/components/ObjectsPanel.qml -I /dev-server/desktop/qt/build -I /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/qt-6/qml -i /dev-server/desktop/qt/build/DungeonEditor/qmldir --resource /dev-server/desktop/qt/build/.qt/rcc/qmake_DungeonEditor.qrc --resource /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_qml_0.qrc --resource /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_res_0.qrc --dump-aot-stats "--module-id=DungeonEditor(appDungeonEditor)" -o /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp /dev-server/desktop/qt/qml/components/ObjectsPanel.qml
-
-.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp.aotstats: .rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp
-	@$(CMAKE_COMMAND) -E touch_nocreate .rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp.aotstats
-
-.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp: /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen
-.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp: /dev-server/desktop/qt/qml/components/SettingsPanel.qml
-.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp: .qt/rcc/qmake_DungeonEditor.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp: .qt/rcc/appDungeonEditor_raw_qml_0.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp: .qt/rcc/appDungeonEditor_raw_res_0.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp: DungeonEditor/appDungeonEditor.qmltypes
-.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp: DungeonEditor/qmldir
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Generating .rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp, .rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp.aotstats"
-	/nix/store/dx1zhzy951phnqyixy0z77s0gcp6wc2z-cmake-4.1.2/bin/cmake -E make_directory /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components
-	/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen --bare --resource-path /qt/qml/DungeonEditor/DungeonEditor/qml/components/SettingsPanel.qml -I /dev-server/desktop/qt/build -I /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/qt-6/qml -i /dev-server/desktop/qt/build/DungeonEditor/qmldir --resource /dev-server/desktop/qt/build/.qt/rcc/qmake_DungeonEditor.qrc --resource /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_qml_0.qrc --resource /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_res_0.qrc --dump-aot-stats "--module-id=DungeonEditor(appDungeonEditor)" -o /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp /dev-server/desktop/qt/qml/components/SettingsPanel.qml
-
-.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp.aotstats: .rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp
-	@$(CMAKE_COMMAND) -E touch_nocreate .rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp.aotstats
-
-.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp: /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen
-.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp: /dev-server/desktop/qt/qml/components/CmsPanel.qml
-.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp: .qt/rcc/qmake_DungeonEditor.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp: .qt/rcc/appDungeonEditor_raw_qml_0.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp: .qt/rcc/appDungeonEditor_raw_res_0.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp: DungeonEditor/appDungeonEditor.qmltypes
-.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp: DungeonEditor/qmldir
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Generating .rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp, .rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp.aotstats"
-	/nix/store/dx1zhzy951phnqyixy0z77s0gcp6wc2z-cmake-4.1.2/bin/cmake -E make_directory /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components
-	/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen --bare --resource-path /qt/qml/DungeonEditor/DungeonEditor/qml/components/CmsPanel.qml -I /dev-server/desktop/qt/build -I /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/qt-6/qml -i /dev-server/desktop/qt/build/DungeonEditor/qmldir --resource /dev-server/desktop/qt/build/.qt/rcc/qmake_DungeonEditor.qrc --resource /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_qml_0.qrc --resource /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_res_0.qrc --dump-aot-stats "--module-id=DungeonEditor(appDungeonEditor)" -o /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp /dev-server/desktop/qt/qml/components/CmsPanel.qml
-
-.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp.aotstats: .rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp
-	@$(CMAKE_COMMAND) -E touch_nocreate .rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp.aotstats
-
-.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp: /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen
-.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp: /dev-server/desktop/qt/qml/components/RightDock.qml
-.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp: .qt/rcc/qmake_DungeonEditor.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp: .qt/rcc/appDungeonEditor_raw_qml_0.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp: .qt/rcc/appDungeonEditor_raw_res_0.qrc
-.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp: DungeonEditor/appDungeonEditor.qmltypes
-.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp: DungeonEditor/qmldir
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Generating .rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp, .rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp.aotstats"
-	/nix/store/dx1zhzy951phnqyixy0z77s0gcp6wc2z-cmake-4.1.2/bin/cmake -E make_directory /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components
-	/nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/libexec/qmlcachegen --bare --resource-path /qt/qml/DungeonEditor/DungeonEditor/qml/components/RightDock.qml -I /dev-server/desktop/qt/build -I /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/qt-6/qml -i /dev-server/desktop/qt/build/DungeonEditor/qmldir --resource /dev-server/desktop/qt/build/.qt/rcc/qmake_DungeonEditor.qrc --resource /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_qml_0.qrc --resource /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_res_0.qrc --dump-aot-stats "--module-id=DungeonEditor(appDungeonEditor)" -o /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp /dev-server/desktop/qt/qml/components/RightDock.qml
-
-.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp.aotstats: .rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp
-	@$(CMAKE_COMMAND) -E touch_nocreate .rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp.aotstats
-
-.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp: /dev-server/desktop/qt/qml/Main.qml
-.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp: /dev-server/desktop/qt/qml/components/TopBar.qml
-.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp: /dev-server/desktop/qt/qml/components/ToolRail.qml
-.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp: /dev-server/desktop/qt/qml/components/AssetLibrary.qml
-.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp: /dev-server/desktop/qt/qml/components/AiPanel.qml
-.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp: /dev-server/desktop/qt/qml/components/InspectorPanel.qml
-.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp: /dev-server/desktop/qt/qml/components/LayersPanel.qml
-.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp: /dev-server/desktop/qt/qml/components/StatusBar.qml
-.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp: /dev-server/desktop/qt/qml/components/ObjectsPanel.qml
-.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp: /dev-server/desktop/qt/qml/components/SettingsPanel.qml
-.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp: /dev-server/desktop/qt/qml/components/CmsPanel.qml
-.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp: /dev-server/desktop/qt/qml/components/RightDock.qml
-.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp: .qt/rcc/appDungeonEditor_raw_qml_0.qrc
-.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp: /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/libexec/rcc
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Running rcc for resource appDungeonEditor_raw_qml_0"
-	/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/libexec/rcc --output /dev-server/desktop/qt/build/.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp --name appDungeonEditor_raw_qml_0 /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_qml_0.qrc
-
-.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp: /dev-server/desktop/qt/assets/icon.png
-.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp: .qt/rcc/appDungeonEditor_raw_res_0.qrc
-.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp: /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/libexec/rcc
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Running rcc for resource appDungeonEditor_raw_res_0"
-	/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/libexec/rcc --output /dev-server/desktop/qt/build/.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp --name appDungeonEditor_raw_res_0 /dev-server/desktop/qt/build/.qt/rcc/appDungeonEditor_raw_res_0.qrc
-
-meta_types/appDungeonEditor_json_file_list.txt: /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/libexec/cmake_automoc_parser
-meta_types/appDungeonEditor_json_file_list.txt: appDungeonEditor_autogen/timestamp
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Running AUTOMOC file extraction for target appDungeonEditor"
-	/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/libexec/cmake_automoc_parser --cmake-autogen-cache-file /dev-server/desktop/qt/build/CMakeFiles/appDungeonEditor_autogen.dir/ParseCache.txt --cmake-autogen-info-file /dev-server/desktop/qt/build/CMakeFiles/appDungeonEditor_autogen.dir/AutogenInfo.json --output-file-path /dev-server/desktop/qt/build/meta_types/appDungeonEditor_json_file_list.txt --timestamp-file-path /dev-server/desktop/qt/build/meta_types/appDungeonEditor_json_file_list.txt.timestamp --cmake-autogen-include-dir-path /dev-server/desktop/qt/build/appDungeonEditor_autogen/include
-
-meta_types/qt6appdungeoneditor_metatypes.json: meta_types/qt6appdungeoneditor_metatypes.json.gen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Generating meta_types/qt6appdungeoneditor_metatypes.json"
-	/nix/store/dx1zhzy951phnqyixy0z77s0gcp6wc2z-cmake-4.1.2/bin/cmake -E true
+.qt/rcc/qrc_qml_resources.cpp: /dev-server/desktop/qt/qml/Main.qml
+.qt/rcc/qrc_qml_resources.cpp: /dev-server/desktop/qt/qml/components/TopBar.qml
+.qt/rcc/qrc_qml_resources.cpp: /dev-server/desktop/qt/qml/components/ToolRail.qml
+.qt/rcc/qrc_qml_resources.cpp: /dev-server/desktop/qt/qml/components/AssetLibrary.qml
+.qt/rcc/qrc_qml_resources.cpp: /dev-server/desktop/qt/qml/components/AiPanel.qml
+.qt/rcc/qrc_qml_resources.cpp: /dev-server/desktop/qt/qml/components/InspectorPanel.qml
+.qt/rcc/qrc_qml_resources.cpp: /dev-server/desktop/qt/qml/components/LayersPanel.qml
+.qt/rcc/qrc_qml_resources.cpp: /dev-server/desktop/qt/qml/components/StatusBar.qml
+.qt/rcc/qrc_qml_resources.cpp: /dev-server/desktop/qt/qml/components/ObjectsPanel.qml
+.qt/rcc/qrc_qml_resources.cpp: /dev-server/desktop/qt/qml/components/SettingsPanel.qml
+.qt/rcc/qrc_qml_resources.cpp: /dev-server/desktop/qt/qml/components/CmsPanel.qml
+.qt/rcc/qrc_qml_resources.cpp: /dev-server/desktop/qt/qml/components/RightDock.qml
+.qt/rcc/qrc_qml_resources.cpp: /dev-server/desktop/qt/assets/icon.png
+.qt/rcc/qrc_qml_resources.cpp: .qt/rcc/qml_resources.qrc
+.qt/rcc/qrc_qml_resources.cpp: /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/libexec/rcc
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Running rcc for resource qml_resources"
+	/nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/libexec/rcc --output /dev-server/desktop/qt/build/.qt/rcc/qrc_qml_resources.cpp --name qml_resources /dev-server/desktop/qt/build/.qt/rcc/qml_resources.qrc
 
 CMakeFiles/appDungeonEditor.dir/codegen:
 .PHONY : CMakeFiles/appDungeonEditor.dir/codegen
@@ -315,7 +93,7 @@ CMakeFiles/appDungeonEditor.dir/codegen:
 CMakeFiles/appDungeonEditor.dir/appDungeonEditor_autogen/mocs_compilation.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
 CMakeFiles/appDungeonEditor.dir/appDungeonEditor_autogen/mocs_compilation.cpp.o: appDungeonEditor_autogen/mocs_compilation.cpp
 CMakeFiles/appDungeonEditor.dir/appDungeonEditor_autogen/mocs_compilation.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/appDungeonEditor.dir/appDungeonEditor_autogen/mocs_compilation.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/appDungeonEditor.dir/appDungeonEditor_autogen/mocs_compilation.cpp.o"
 	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/appDungeonEditor_autogen/mocs_compilation.cpp.o -MF CMakeFiles/appDungeonEditor.dir/appDungeonEditor_autogen/mocs_compilation.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/appDungeonEditor_autogen/mocs_compilation.cpp.o -c /dev-server/desktop/qt/build/appDungeonEditor_autogen/mocs_compilation.cpp
 
 CMakeFiles/appDungeonEditor.dir/appDungeonEditor_autogen/mocs_compilation.cpp.i: cmake_force
@@ -329,7 +107,7 @@ CMakeFiles/appDungeonEditor.dir/appDungeonEditor_autogen/mocs_compilation.cpp.s:
 CMakeFiles/appDungeonEditor.dir/src/main.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
 CMakeFiles/appDungeonEditor.dir/src/main.cpp.o: /dev-server/desktop/qt/src/main.cpp
 CMakeFiles/appDungeonEditor.dir/src/main.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object CMakeFiles/appDungeonEditor.dir/src/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/appDungeonEditor.dir/src/main.cpp.o"
 	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/src/main.cpp.o -MF CMakeFiles/appDungeonEditor.dir/src/main.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/src/main.cpp.o -c /dev-server/desktop/qt/src/main.cpp
 
 CMakeFiles/appDungeonEditor.dir/src/main.cpp.i: cmake_force
@@ -343,7 +121,7 @@ CMakeFiles/appDungeonEditor.dir/src/main.cpp.s: cmake_force
 CMakeFiles/appDungeonEditor.dir/src/core/Document.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
 CMakeFiles/appDungeonEditor.dir/src/core/Document.cpp.o: /dev-server/desktop/qt/src/core/Document.cpp
 CMakeFiles/appDungeonEditor.dir/src/core/Document.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object CMakeFiles/appDungeonEditor.dir/src/core/Document.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/appDungeonEditor.dir/src/core/Document.cpp.o"
 	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/src/core/Document.cpp.o -MF CMakeFiles/appDungeonEditor.dir/src/core/Document.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/src/core/Document.cpp.o -c /dev-server/desktop/qt/src/core/Document.cpp
 
 CMakeFiles/appDungeonEditor.dir/src/core/Document.cpp.i: cmake_force
@@ -357,7 +135,7 @@ CMakeFiles/appDungeonEditor.dir/src/core/Document.cpp.s: cmake_force
 CMakeFiles/appDungeonEditor.dir/src/canvas/MapCanvasItem.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
 CMakeFiles/appDungeonEditor.dir/src/canvas/MapCanvasItem.cpp.o: /dev-server/desktop/qt/src/canvas/MapCanvasItem.cpp
 CMakeFiles/appDungeonEditor.dir/src/canvas/MapCanvasItem.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object CMakeFiles/appDungeonEditor.dir/src/canvas/MapCanvasItem.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/appDungeonEditor.dir/src/canvas/MapCanvasItem.cpp.o"
 	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/src/canvas/MapCanvasItem.cpp.o -MF CMakeFiles/appDungeonEditor.dir/src/canvas/MapCanvasItem.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/src/canvas/MapCanvasItem.cpp.o -c /dev-server/desktop/qt/src/canvas/MapCanvasItem.cpp
 
 CMakeFiles/appDungeonEditor.dir/src/canvas/MapCanvasItem.cpp.i: cmake_force
@@ -371,7 +149,7 @@ CMakeFiles/appDungeonEditor.dir/src/canvas/MapCanvasItem.cpp.s: cmake_force
 CMakeFiles/appDungeonEditor.dir/src/models/AssetLibraryModel.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
 CMakeFiles/appDungeonEditor.dir/src/models/AssetLibraryModel.cpp.o: /dev-server/desktop/qt/src/models/AssetLibraryModel.cpp
 CMakeFiles/appDungeonEditor.dir/src/models/AssetLibraryModel.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object CMakeFiles/appDungeonEditor.dir/src/models/AssetLibraryModel.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/appDungeonEditor.dir/src/models/AssetLibraryModel.cpp.o"
 	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/src/models/AssetLibraryModel.cpp.o -MF CMakeFiles/appDungeonEditor.dir/src/models/AssetLibraryModel.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/src/models/AssetLibraryModel.cpp.o -c /dev-server/desktop/qt/src/models/AssetLibraryModel.cpp
 
 CMakeFiles/appDungeonEditor.dir/src/models/AssetLibraryModel.cpp.i: cmake_force
@@ -385,7 +163,7 @@ CMakeFiles/appDungeonEditor.dir/src/models/AssetLibraryModel.cpp.s: cmake_force
 CMakeFiles/appDungeonEditor.dir/src/services/AiClient.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
 CMakeFiles/appDungeonEditor.dir/src/services/AiClient.cpp.o: /dev-server/desktop/qt/src/services/AiClient.cpp
 CMakeFiles/appDungeonEditor.dir/src/services/AiClient.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object CMakeFiles/appDungeonEditor.dir/src/services/AiClient.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/appDungeonEditor.dir/src/services/AiClient.cpp.o"
 	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/src/services/AiClient.cpp.o -MF CMakeFiles/appDungeonEditor.dir/src/services/AiClient.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/src/services/AiClient.cpp.o -c /dev-server/desktop/qt/src/services/AiClient.cpp
 
 CMakeFiles/appDungeonEditor.dir/src/services/AiClient.cpp.i: cmake_force
@@ -399,7 +177,7 @@ CMakeFiles/appDungeonEditor.dir/src/services/AiClient.cpp.s: cmake_force
 CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
 CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.o: /dev-server/desktop/qt/src/services/FileService.cpp
 CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.o"
 	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.o -MF CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.o -c /dev-server/desktop/qt/src/services/FileService.cpp
 
 CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.i: cmake_force
@@ -410,243 +188,19 @@ CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.s"
 	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /dev-server/desktop/qt/src/services/FileService.cpp -o CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.s
 
-CMakeFiles/appDungeonEditor.dir/appdungeoneditor_qmltyperegistrations.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
-CMakeFiles/appDungeonEditor.dir/appdungeoneditor_qmltyperegistrations.cpp.o: appdungeoneditor_qmltyperegistrations.cpp
-CMakeFiles/appDungeonEditor.dir/appdungeoneditor_qmltyperegistrations.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object CMakeFiles/appDungeonEditor.dir/appdungeoneditor_qmltyperegistrations.cpp.o"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/appdungeoneditor_qmltyperegistrations.cpp.o -MF CMakeFiles/appDungeonEditor.dir/appdungeoneditor_qmltyperegistrations.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/appdungeoneditor_qmltyperegistrations.cpp.o -c /dev-server/desktop/qt/build/appdungeoneditor_qmltyperegistrations.cpp
+CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
+CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.o: .qt/rcc/qrc_qml_resources.cpp
+CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.o"
+	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.o -MF CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.o -c /dev-server/desktop/qt/build/.qt/rcc/qrc_qml_resources.cpp
 
-CMakeFiles/appDungeonEditor.dir/appdungeoneditor_qmltyperegistrations.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/appDungeonEditor.dir/appdungeoneditor_qmltyperegistrations.cpp.i"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /dev-server/desktop/qt/build/appdungeoneditor_qmltyperegistrations.cpp > CMakeFiles/appDungeonEditor.dir/appdungeoneditor_qmltyperegistrations.cpp.i
+CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.i"
+	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /dev-server/desktop/qt/build/.qt/rcc/qrc_qml_resources.cpp > CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.i
 
-CMakeFiles/appDungeonEditor.dir/appdungeoneditor_qmltyperegistrations.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/appDungeonEditor.dir/appdungeoneditor_qmltyperegistrations.cpp.s"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /dev-server/desktop/qt/build/appdungeoneditor_qmltyperegistrations.cpp -o CMakeFiles/appDungeonEditor.dir/appdungeoneditor_qmltyperegistrations.cpp.s
-
-CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qmake_DungeonEditor.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
-CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qmake_DungeonEditor.cpp.o: .qt/rcc/qrc_qmake_DungeonEditor.cpp
-CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qmake_DungeonEditor.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qmake_DungeonEditor.cpp.o"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qmake_DungeonEditor.cpp.o -MF CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qmake_DungeonEditor.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qmake_DungeonEditor.cpp.o -c /dev-server/desktop/qt/build/.qt/rcc/qrc_qmake_DungeonEditor.cpp
-
-CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qmake_DungeonEditor.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qmake_DungeonEditor.cpp.i"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /dev-server/desktop/qt/build/.qt/rcc/qrc_qmake_DungeonEditor.cpp > CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qmake_DungeonEditor.cpp.i
-
-CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qmake_DungeonEditor.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qmake_DungeonEditor.cpp.s"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /dev-server/desktop/qt/build/.qt/rcc/qrc_qmake_DungeonEditor.cpp -o CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qmake_DungeonEditor.cpp.s
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp.o: .rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building CXX object CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp.o"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp.o -MF CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp.o -c /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp.i"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp > CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp.i
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp.s"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp.s
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp.o: .rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building CXX object CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp.o"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp.o -MF CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp.o -c /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp.i"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp > CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp.i
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp.s"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp.s
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp.o: .rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building CXX object CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp.o"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp.o -MF CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp.o -c /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp.i"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp > CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp.i
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp.s"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp.s
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp.o: .rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building CXX object CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp.o"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp.o -MF CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp.o -c /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp.i"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp > CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp.i
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp.s"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp.s
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp.o: .rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp.o"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp.o -MF CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp.o -c /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp.i"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp > CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp.i
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp.s"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp.s
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp.o: .rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building CXX object CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp.o"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp.o -MF CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp.o -c /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp.i"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp > CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp.i
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp.s"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp.s
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp.o: .rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building CXX object CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp.o"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp.o -MF CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp.o -c /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp.i"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp > CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp.i
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp.s"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp.s
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp.o: .rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building CXX object CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp.o"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp.o -MF CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp.o -c /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp.i"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp > CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp.i
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp.s"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp.s
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp.o: .rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building CXX object CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp.o"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp.o -MF CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp.o -c /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp.i"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp > CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp.i
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp.s"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp.s
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp.o: .rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building CXX object CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp.o"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp.o -MF CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp.o -c /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp.i"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp > CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp.i
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp.s"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp.s
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp.o: .rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp.o"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp.o -MF CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp.o -c /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp.i"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp > CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp.i
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp.s"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp.s
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp.o: .rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building CXX object CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp.o"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp.o -MF CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp.o -c /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp.i"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp > CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp.i
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp.s"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp.s
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp.o: .rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building CXX object CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp.o"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp.o -MF CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp.o -c /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp.i"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp > CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp.i
-
-CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp.s"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp -o CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp.s
-
-CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
-CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp.o: .qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp
-CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building CXX object CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp.o"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp.o -MF CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp.o -c /dev-server/desktop/qt/build/.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp
-
-CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp.i"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /dev-server/desktop/qt/build/.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp > CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp.i
-
-CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp.s"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /dev-server/desktop/qt/build/.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp -o CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp.s
-
-CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
-CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp.o: .qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp
-CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building CXX object CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp.o"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp.o -MF CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp.o -c /dev-server/desktop/qt/build/.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp
-
-CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp.i"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /dev-server/desktop/qt/build/.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp > CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp.i
-
-CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp.s"
-	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /dev-server/desktop/qt/build/.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp -o CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp.s
+CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.s"
+	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /dev-server/desktop/qt/build/.qt/rcc/qrc_qml_resources.cpp -o CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.s
 
 # Object files for target appDungeonEditor
 appDungeonEditor_OBJECTS = \
@@ -657,23 +211,7 @@ appDungeonEditor_OBJECTS = \
 "CMakeFiles/appDungeonEditor.dir/src/models/AssetLibraryModel.cpp.o" \
 "CMakeFiles/appDungeonEditor.dir/src/services/AiClient.cpp.o" \
 "CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.o" \
-"CMakeFiles/appDungeonEditor.dir/appdungeoneditor_qmltyperegistrations.cpp.o" \
-"CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qmake_DungeonEditor.cpp.o" \
-"CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp.o" \
-"CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp.o" \
-"CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp.o" \
-"CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp.o" \
-"CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp.o" \
-"CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp.o" \
-"CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp.o" \
-"CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp.o" \
-"CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp.o" \
-"CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp.o" \
-"CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp.o" \
-"CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp.o" \
-"CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp.o" \
-"CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp.o" \
-"CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp.o"
+"CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.o"
 
 # External object files for target appDungeonEditor
 appDungeonEditor_EXTERNAL_OBJECTS =
@@ -685,23 +223,7 @@ appDungeonEditor: CMakeFiles/appDungeonEditor.dir/src/canvas/MapCanvasItem.cpp.o
 appDungeonEditor: CMakeFiles/appDungeonEditor.dir/src/models/AssetLibraryModel.cpp.o
 appDungeonEditor: CMakeFiles/appDungeonEditor.dir/src/services/AiClient.cpp.o
 appDungeonEditor: CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.o
-appDungeonEditor: CMakeFiles/appDungeonEditor.dir/appdungeoneditor_qmltyperegistrations.cpp.o
-appDungeonEditor: CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qmake_DungeonEditor.cpp.o
-appDungeonEditor: CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp.o
-appDungeonEditor: CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp.o
-appDungeonEditor: CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp.o
-appDungeonEditor: CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp.o
-appDungeonEditor: CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp.o
-appDungeonEditor: CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp.o
-appDungeonEditor: CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp.o
-appDungeonEditor: CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp.o
-appDungeonEditor: CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp.o
-appDungeonEditor: CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp.o
-appDungeonEditor: CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp.o
-appDungeonEditor: CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp.o
-appDungeonEditor: CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp.o
-appDungeonEditor: CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp.o
-appDungeonEditor: CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp.o
+appDungeonEditor: CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.o
 appDungeonEditor: CMakeFiles/appDungeonEditor.dir/build.make
 appDungeonEditor: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
 appDungeonEditor: /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/libQt6QuickControls2.so.6.10.1
@@ -716,7 +238,7 @@ appDungeonEditor: /nix/store/44iwa5fdrx4hgzf3l9j9q9y5zffwgigy-libglvnd-1.7.0/lib
 appDungeonEditor: /nix/store/44iwa5fdrx4hgzf3l9j9q9y5zffwgigy-libglvnd-1.7.0/lib/libOpenGL.so
 appDungeonEditor: /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/lib/libQt6Core.so.6.10.1
 appDungeonEditor: CMakeFiles/appDungeonEditor.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Linking CXX executable appDungeonEditor"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable appDungeonEditor"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/appDungeonEditor.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -727,39 +249,7 @@ CMakeFiles/appDungeonEditor.dir/clean:
 	$(CMAKE_COMMAND) -P CMakeFiles/appDungeonEditor.dir/cmake_clean.cmake
 .PHONY : CMakeFiles/appDungeonEditor.dir/clean
 
-CMakeFiles/appDungeonEditor.dir/depend: .qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp
-CMakeFiles/appDungeonEditor.dir/depend: .qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp
-CMakeFiles/appDungeonEditor.dir/depend: .qt/rcc/qrc_qmake_DungeonEditor.cpp
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp.aotstats
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp.aotstats
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp.aotstats
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp.aotstats
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp.aotstats
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp.aotstats
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp.aotstats
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp.aotstats
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp.aotstats
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp.aotstats
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp.aotstats
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp.aotstats
-CMakeFiles/appDungeonEditor.dir/depend: .rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp
-CMakeFiles/appDungeonEditor.dir/depend: DungeonEditor/appDungeonEditor.qmltypes
-CMakeFiles/appDungeonEditor.dir/depend: appdungeoneditor_qmltyperegistrations.cpp
-CMakeFiles/appDungeonEditor.dir/depend: meta_types/appDungeonEditor_json_file_list.txt
-CMakeFiles/appDungeonEditor.dir/depend: meta_types/qt6appdungeoneditor_metatypes.json
-CMakeFiles/appDungeonEditor.dir/depend: meta_types/qt6appdungeoneditor_metatypes.json.gen
+CMakeFiles/appDungeonEditor.dir/depend: .qt/rcc/qrc_qml_resources.cpp
 	cd /dev-server/desktop/qt/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /dev-server/desktop/qt /dev-server/desktop/qt /dev-server/desktop/qt/build /dev-server/desktop/qt/build /dev-server/desktop/qt/build/CMakeFiles/appDungeonEditor.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/appDungeonEditor.dir/depend
 

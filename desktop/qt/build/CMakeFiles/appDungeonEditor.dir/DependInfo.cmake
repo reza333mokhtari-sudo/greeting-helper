@@ -9,23 +9,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/dev-server/desktop/qt/build/appDungeonEditor_autogen/mocs_compilation.cpp" "CMakeFiles/appDungeonEditor.dir/appDungeonEditor_autogen/mocs_compilation.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/appDungeonEditor_autogen/mocs_compilation.cpp.o.d"
-  "/dev-server/desktop/qt/build/appdungeoneditor_qmltyperegistrations.cpp" "CMakeFiles/appDungeonEditor.dir/appdungeoneditor_qmltyperegistrations.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/appdungeoneditor_qmltyperegistrations.cpp.o.d"
-  "/dev-server/desktop/qt/build/.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp" "CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_qml_0.cpp.o.d"
-  "/dev-server/desktop/qt/build/.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp" "CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_appDungeonEditor_raw_res_0.cpp.o.d"
-  "/dev-server/desktop/qt/build/.qt/rcc/qrc_qmake_DungeonEditor.cpp" "CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qmake_DungeonEditor.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qmake_DungeonEditor.cpp.o.d"
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp.o.d"
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp.o.d"
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp.o.d"
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp.o.d"
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp.o.d"
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp.o.d"
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp.o.d"
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp.o.d"
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp.o.d"
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp.o.d"
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp.o.d"
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp.o.d"
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/build/.rcc/qmlcache/appDungeonEditor_qmlcache_loader.cpp.o.d"
+  "/dev-server/desktop/qt/build/.qt/rcc/qrc_qml_resources.cpp" "CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.o.d"
   "/dev-server/desktop/qt/src/canvas/MapCanvasItem.cpp" "CMakeFiles/appDungeonEditor.dir/src/canvas/MapCanvasItem.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/src/canvas/MapCanvasItem.cpp.o.d"
   "/dev-server/desktop/qt/src/core/Document.cpp" "CMakeFiles/appDungeonEditor.dir/src/core/Document.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/src/core/Document.cpp.o.d"
   "/dev-server/desktop/qt/src/main.cpp" "CMakeFiles/appDungeonEditor.dir/src/main.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/src/main.cpp.o.d"
@@ -34,24 +18,6 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/dev-server/desktop/qt/src/services/FileService.cpp" "CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.o" "gcc" "CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.o.d"
   "" "appDungeonEditor" "gcc" "CMakeFiles/appDungeonEditor.dir/link.d"
   )
-
-# Pairs of files generated by the same build rule.
-set(CMAKE_MULTIPLE_OUTPUT_PAIRS
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp.aotstats" "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/Main_qml.cpp"
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp.aotstats" "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/AiPanel_qml.cpp"
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp.aotstats" "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/AssetLibrary_qml.cpp"
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp.aotstats" "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/CmsPanel_qml.cpp"
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp.aotstats" "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/InspectorPanel_qml.cpp"
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp.aotstats" "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/LayersPanel_qml.cpp"
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp.aotstats" "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/ObjectsPanel_qml.cpp"
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp.aotstats" "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/RightDock_qml.cpp"
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp.aotstats" "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/SettingsPanel_qml.cpp"
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp.aotstats" "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/StatusBar_qml.cpp"
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp.aotstats" "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/ToolRail_qml.cpp"
-  "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp.aotstats" "/dev-server/desktop/qt/build/.rcc/qmlcache/appDungeonEditor_qml/components/TopBar_qml.cpp"
-  "/dev-server/desktop/qt/build/DungeonEditor/appDungeonEditor.qmltypes" "/dev-server/desktop/qt/build/appdungeoneditor_qmltyperegistrations.cpp"
-  )
-
 
 # Targets to which this target links which contain Fortran sources.
 set(CMAKE_Fortran_TARGET_LINKED_INFO_FILES
