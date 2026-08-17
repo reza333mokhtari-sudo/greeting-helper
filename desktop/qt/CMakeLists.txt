@@ -32,7 +32,7 @@ qt_add_executable(appDungeonEditor
 # We are NOT using SOURCES in qt_add_qml_module to avoid the automated 
 # qmlRegisterTypes which is currently failing due to missing includes in generated code.
 # Instead, we will register types manually in main.cpp.
-qt_add_qml_module(appDungeonEditor NO_GENERATE_PLUGIN_SOURCE
+qt_add_qml_module(appDungeonEditor
     URI DungeonEditor
     VERSION 1.0
     RESOURCE_PREFIX "/qt/qml/DungeonEditor"
@@ -52,6 +52,9 @@ qt_add_qml_module(appDungeonEditor NO_GENERATE_PLUGIN_SOURCE
     RESOURCES
         assets/icon.png
 )
+# NO_GENERATE_PLUGIN_SOURCE didn't prevent registration, let's try 
+# to just not call qt_add_qml_module or change how we use it.
+# Actually, let's just use qt6_add_resources for QML and skip the module logic.
 
 target_include_directories(appDungeonEditor PRIVATE 
     ${CMAKE_CURRENT_SOURCE_DIR}/src
