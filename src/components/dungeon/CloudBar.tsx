@@ -133,20 +133,6 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
   };
 
 
-  if (!email) {
-    return (
-      <Button 
-        size="sm" 
-        variant="outline" 
-        className="h-7 text-xs"
-        onClick={onAuthRequired}
-      >
-        <Cloud className="mr-1 h-3.5 w-3.5" /> Sign in to save
-      </Button>
-    );
-  }
-
-
   const statusIndicator = useMemo(() => {
     let content;
     switch (syncStatus) {
@@ -207,6 +193,18 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
     );
   }, [syncStatus, email, localLastSaved]);
 
+  if (!email) {
+    return (
+      <Button 
+        size="sm" 
+        variant="outline" 
+        className="h-7 text-xs"
+        onClick={onAuthRequired}
+      >
+        <Cloud className="mr-1 h-3.5 w-3.5" /> Sign in to save
+      </Button>
+    );
+  }
 
   return (
     <div className="flex items-center gap-2">
