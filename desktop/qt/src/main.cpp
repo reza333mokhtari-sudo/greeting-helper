@@ -3,6 +3,8 @@
 #include <QQmlContext>
 #include <QIcon>
 #include <QtQml/qqml.h>
+#include <QDebug>
+
 
 #include <core/Document.h>
 #include <canvas/MapCanvasItem.h>
