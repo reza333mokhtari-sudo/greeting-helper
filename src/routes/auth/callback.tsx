@@ -20,7 +20,7 @@ function AuthCallback() {
     });
     
     // Fallback: check session immediately if onAuthStateChange doesn't fire fast enough
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session } }: any) => {
       if (session) {
         const next = search.next || "/editor";
         navigate({ to: next, replace: true });
