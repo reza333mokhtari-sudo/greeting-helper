@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, redirect, useNavigate, useSearch } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { AlertCircle, RefreshCcw } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
@@ -8,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 type Search = { next?: string | undefined };
 
@@ -50,6 +52,7 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }: any) => {
@@ -71,21 +74,24 @@ function AuthPage() {
   const signIn = async () => {
     const bad = invalid();
     if (bad) {
-      toast.error(bad);
+      setError(bad);
       return;
     }
     setBusy(true);
+    setError(null);
     const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
     setBusy(false);
     if (error) {
       const m = error.message.toLowerCase();
-      toast.error(
-        m.includes("not confirmed")
-          ? "Your email isn't confirmed yet — check your inbox or resend the link."
-          : m.includes("invalid login")
-            ? "Wrong email or password."
-            : error.message,
-      );
+      if (m.includes("not confirmed")) {
+        setError("Your email isn't confirmed yet. Please check your inbox for an activation link.");
+      } else if (m.includes("invalid login")) {
+        setError("Incorrect email or password. Please double-check your credentials and try again.");
+      } else if (m.includes("network")) {
+        setError("Network error. Please check your internet connection and try again.");
+      } else {
+        setError(error.message);
+      }
       return;
     }
     toast.success("Welcome back!");
@@ -94,10 +100,11 @@ function AuthPage() {
   const signUp = async () => {
     const bad = invalid();
     if (bad) {
-      toast.error(bad);
+      setError(bad);
       return;
     }
     setBusy(true);
+    setError(null);
     const { data, error } = await supabase.auth.signUp({
       email: email.trim(),
       password,
@@ -107,11 +114,10 @@ function AuthPage() {
     if (error) {
       const m = error.message.toLowerCase();
       if (m.includes("already registered") || m.includes("already been registered")) {
-        toast.error("That email already has an account — sign in instead.");
-        setTab("in");
+        setError("That email already has an account. Would you like to sign in instead?");
         return;
       }
-      toast.error(error.message);
+      setError(error.message);
       return;
     }
     if (!data.session) toast.success("Check your email to confirm your account.");
@@ -156,17 +162,46 @@ function AuthPage() {
     if (result.error) toast.error("Google sign-in failed");
   };
 
+  const ErrorDisplay = () => {
+    if (!error) return null;
+    return (
+      <Alert variant="destructive" className="mb-4 py-2 px-3">
+        <div className="flex items-start gap-2">
+          <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+          <div className="flex-1">
+            <AlertDescription className="text-xs font-medium leading-relaxed">
+              {error}
+            </AlertDescription>
+            <Button 
+              variant="link" 
+              className="h-auto p-0 text-[10px] text-destructive-foreground/80 hover:text-destructive-foreground flex items-center gap-1 mt-1 font-bold uppercase tracking-wider"
+              onClick={() => {
+                setError(null);
+                if (tab === "in") void signIn();
+                else void signUp();
+              }}
+            >
+              <RefreshCcw className="h-2.5 w-2.5" /> Retry
+            </Button>
+          </div>
+        </div>
+      </Alert>
+    );
+  };
+
   return (
     <main className="flex min-h-screen items-center justify-center bg-background p-6">
       <div className="w-full max-w-sm rounded-xl border border-border/60 bg-card/70 p-6 shadow-lg backdrop-blur">
         <h1 className="mb-1 text-xl font-bold tracking-tight text-foreground">DUNGEON SCRAWL</h1>
         <p className="mb-5 text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Authentication Gateway</p>
 
-        <Button variant="outline" className="mb-4 w-full" onClick={google}>
+        <ErrorDisplay />
+
+        <Button variant="outline" className="mb-4 w-full" onClick={google} disabled={busy}>
           Continue with Google
         </Button>
 
-        <Tabs value={tab} onValueChange={(v) => setTab(v as "in" | "up")}>
+        <Tabs value={tab} onValueChange={(v) => { setTab(v as "in" | "up"); setError(null); }}>
           <TabsList className="mb-3 w-full">
             <TabsTrigger className="flex-1" value="in">
               Sign in
