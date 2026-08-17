@@ -1,4 +1,4 @@
-#include "MapCanvasItem.h"
+#include <MapCanvasItem.h>
 #include <QPainter>
 #include <QMouseEvent>
 #include <QWheelEvent>

@@ -2,7 +2,7 @@
 #include <QQuickPaintedItem>
 #include <QPointF>
 #include <QJsonObject>
-#include "Document.h"
+#include <Document.h>
 
 class MapCanvasItem : public QQuickPaintedItem {
     Q_OBJECT

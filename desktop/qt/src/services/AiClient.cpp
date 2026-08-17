@@ -1,4 +1,4 @@
-#include "AiClient.h"
+#include <AiClient.h>
 #include <QNetworkRequest>
 #include <QJsonObject>
 #include <QJsonDocument>
