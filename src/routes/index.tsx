@@ -47,7 +47,7 @@ function LandingPage() {
               <Link to="/editor">Get Started for Free</Link>
             </Button>
             <Button size="lg" variant="outline" className="h-12 px-8 text-base" asChild>
-              <Link to="/auth?tab=up">Create Pro Account</Link>
+              <Link to="/auth" search={{ tab: "up" } as any}>Create Pro Account</Link>
             </Button>
           </div>
           

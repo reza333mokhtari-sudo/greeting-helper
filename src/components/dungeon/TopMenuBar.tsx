@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import { Link } from "@tanstack/react-router";
+import { Map } from "lucide-react";
 import { ProfileMenu } from "./ProfileMenu";
 import { HealthCheckIndicator } from "./HealthCheckIndicator";
 import {
@@ -40,11 +42,14 @@ type Props = {
 export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => void }) {
   return (
     <header className="relative flex h-14 shrink-0 items-center gap-2 border-b border-border bg-sidebar px-3">
-      <span className="px-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-arcane">
-        Scrawl
-      </span>
-      <Menubar className="h-8 border-0 bg-transparent p-0 shadow-none">
+      <Link to="/" className="flex items-center gap-2 px-3 py-1.5 hover:bg-accent/50 rounded-md transition-colors mr-2">
+        <div className="size-6 bg-primary rounded flex items-center justify-center">
+          <Map className="size-4 text-primary-foreground" />
+        </div>
+        <span className="font-bold text-sm tracking-tight text-foreground">DUNGEON SCRAWL</span>
+      </Link>
 
+      <Menubar className="h-8 border-0 bg-transparent p-0 shadow-none">
         <MenubarMenu>
           <MenubarTrigger className="h-8 px-3 text-xs">File</MenubarTrigger>
           <MenubarContent>
