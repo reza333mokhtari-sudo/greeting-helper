@@ -32,15 +32,11 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     
-    // Register "components" relative to the resource root
-    engine.addImportPath("qrc:/qt/qml/DungeonEditor/qml");
-    engine.addImportPath("qrc:/qt/qml/DungeonEditor");
-    engine.addImportPath("qrc:/DungeonEditor");
+    // Register "qml" root
+    engine.addImportPath("qrc:/qml");
     engine.addImportPath("qrc:/");
     
     const QStringList resourcePaths = {
-        "qrc:/qt/qml/DungeonEditor/qml/Main.qml",
-        "qrc:/DungeonEditor/qml/Main.qml",
         "qrc:/qml/Main.qml"
     };
 
