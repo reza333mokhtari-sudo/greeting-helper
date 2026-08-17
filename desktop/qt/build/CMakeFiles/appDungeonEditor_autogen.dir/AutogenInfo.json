@@ -893,6 +893,12 @@
 			"MU",
 			"GQ6NBGVJMG/moc_FileService.cpp",
 			null
+		],
+		[
+			"/dev-server/desktop/qt/src/services/WorkspaceService.h",
+			"MU",
+			"GQ6NBGVJMG/moc_WorkspaceService.cpp",
+			null
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
@@ -1050,7 +1056,12 @@
 		[ "/dev-server/desktop/qt/src/main.cpp", "MU", null ],
 		[ "/dev-server/desktop/qt/src/models/AssetLibraryModel.cpp", "MU", null ],
 		[ "/dev-server/desktop/qt/src/services/AiClient.cpp", "MU", null ],
-		[ "/dev-server/desktop/qt/src/services/FileService.cpp", "MU", null ]
+		[ "/dev-server/desktop/qt/src/services/FileService.cpp", "MU", null ],
+		[
+			"/dev-server/desktop/qt/src/services/WorkspaceService.cpp",
+			"MU",
+			null
+		]
 	],
 	"UIC_OPTIONS" : [],
 	"UIC_SEARCH_PATHS" : [],

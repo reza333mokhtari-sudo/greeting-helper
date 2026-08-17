@@ -1,9 +1,10 @@
+#pragma once
+
 #include <QObject>
 #include <QString>
 #include <QVariantMap>
 #include <QtQml/qqmlregistration.h>
 
-#pragma once
 
 class WorkspaceService : public QObject {
     Q_OBJECT

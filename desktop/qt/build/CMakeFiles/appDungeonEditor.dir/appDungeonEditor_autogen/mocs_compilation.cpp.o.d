@@ -645,4 +645,10 @@ CMakeFiles/appDungeonEditor.dir/appDungeonEditor_autogen/mocs_compilation.cpp.o:
  /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtNetwork/QSslError \
  /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtNetwork/qsslerror.h \
  /dev-server/desktop/qt/build/appDungeonEditor_autogen/GQ6NBGVJMG/moc_FileService.cpp \
- /dev-server/desktop/qt/build/appDungeonEditor_autogen/GQ6NBGVJMG/../../../src/services/FileService.h
+ /dev-server/desktop/qt/build/appDungeonEditor_autogen/GQ6NBGVJMG/../../../src/services/FileService.h \
+ /dev-server/desktop/qt/build/appDungeonEditor_autogen/GQ6NBGVJMG/moc_WorkspaceService.cpp \
+ /dev-server/desktop/qt/build/appDungeonEditor_autogen/GQ6NBGVJMG/../../../src/services/WorkspaceService.h \
+ /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/QVariantMap \
+ /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qvariantmap.h \
+ /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/QMap \
+ /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qmap.h

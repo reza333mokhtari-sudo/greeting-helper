@@ -9,6 +9,7 @@ appDungeonEditor: \
   CMakeFiles/appDungeonEditor.dir/src/models/AssetLibraryModel.cpp.o \
   CMakeFiles/appDungeonEditor.dir/src/services/AiClient.cpp.o \
   CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.o \
+  CMakeFiles/appDungeonEditor.dir/src/services/WorkspaceService.cpp.o \
   CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.o \
   /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/lib/libQt6QuickControls2.so.6.10.1 \
   /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/lib/libQt6Concurrent.so.6.10.1 \
@@ -140,6 +141,8 @@ CMakeFiles/appDungeonEditor.dir/src/models/AssetLibraryModel.cpp.o:
 CMakeFiles/appDungeonEditor.dir/src/services/AiClient.cpp.o:
 
 CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.o:
+
+CMakeFiles/appDungeonEditor.dir/src/services/WorkspaceService.cpp.o:
 
 CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.o:
 
