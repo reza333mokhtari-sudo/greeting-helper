@@ -8,6 +8,8 @@ Rectangle {
     property var document: null
     property var canvas: null
     property var assetModel: null
+    property alias aiPanelHeight: aiPanel.Layout.preferredHeight
+
 
     function updateInspector(id) {
         inspectorPanel.updateSelection(id)
@@ -21,13 +23,17 @@ Rectangle {
             id: dockTabs
             Layout.fillWidth: true
             background: Rectangle { color: "#2d2d2d" }
-            TabButton { text: qsTr("Browser") }
+            TabButton { 
+                text: qsTr("Browser")
+                onPressAndHold: { /* Implement tear-off */ }
+            }
             TabButton { text: qsTr("Attrib") }
             TabButton { text: qsTr("Tool") }
             TabButton { text: qsTr("Layers") }
             TabButton { text: qsTr("Gen") }
             TabButton { text: qsTr("Fog") }
         }
+
 
         StackLayout {
             currentIndex: dockTabs.currentIndex
@@ -61,17 +67,20 @@ Rectangle {
                 document: document
             }
 
-            Rectangle {
+            FogTools {
                 id: fogTools
-                color: "#252526"
-                Label { text: "Fog Tools Panel"; anchors.centerIn: parent; color: "#666" }
+                document: document
+                canvas: canvas
             }
+
         }
 
         AiPanel {
+            id: aiPanel
             Layout.fillWidth: true
             Layout.preferredHeight: 250
             SplitView.minimumHeight: 150
         }
+
     }
 }

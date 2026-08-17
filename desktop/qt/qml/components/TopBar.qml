@@ -114,10 +114,20 @@ Rectangle {
             }
             Menu {
                 title: qsTr("Window")
+                Menu {
+                    title: qsTr("Workspaces")
+                    MenuItem { text: qsTr("Save Current Workspace..."); onTriggered: window.saveWorkspace("Default") }
+                    MenuItem { text: qsTr("Reset to Default"); onTriggered: window.loadWorkspace("Default") }
+                    MenuSeparator {}
+                    MenuItem { text: qsTr("Maya Classic") }
+                    MenuItem { text: qsTr("Expert Layout") }
+                }
+                MenuSeparator {}
                 MenuItem { text: qsTr("Outliner") }
                 MenuItem { text: qsTr("Asset Browser") }
                 MenuItem { text: qsTr("Ai Panel") }
             }
+
             Menu {
                 title: qsTr("Help")
                 MenuItem { text: qsTr("Documentation") }

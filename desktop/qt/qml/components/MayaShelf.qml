@@ -104,14 +104,45 @@ Rectangle {
                 ToolButton { text: "Wall"; display: AbstractButton.TextUnderIcon }
             }
 
-            // Other shelves placeholders
-            Repeater {
-                model: 5
-                RowLayout {
-                    Layout.leftMargin: 10
-                    Label { text: "Shelf category items..."; color: "#666" }
-                }
+            // Props Shelf
+            RowLayout {
+                Layout.leftMargin: 10
+                spacing: 12
+                ToolButton { text: "Place Prop"; onClicked: canvas.activeTool = "place_prop" }
+                ToolButton { text: "Texture Brush"; onClicked: canvas.activeTool = "texture_brush" }
             }
+
+            // Procedural Shelf
+            RowLayout {
+                Layout.leftMargin: 10
+                spacing: 12
+                ToolButton { text: "Generate All"; onClicked: shelfTabs.currentIndex = 3 }
+            }
+
+            // Fog Shelf
+            RowLayout {
+                Layout.leftMargin: 10
+                spacing: 12
+                ToolButton { text: "Fog Brush"; onClicked: canvas.activeTool = "fog_add" }
+                ToolButton { text: "Clear Fog"; onClicked: canvas.activeTool = "fog_remove" }
+            }
+
+            // Camera Shelf
+            RowLayout {
+                Layout.leftMargin: 10
+                spacing: 12
+                ToolButton { text: "Orbit"; onClicked: canvas.activeTool = "camera_orbit" }
+                ToolButton { text: "Measure"; onClicked: canvas.activeTool = "measure" }
+            }
+
+            // Help Shelf
+            RowLayout {
+                Layout.leftMargin: 10
+                spacing: 12
+                ToolButton { text: "Shortcuts" }
+                ToolButton { text: "Docs" }
+            }
+
         }
 
         // Bottom border

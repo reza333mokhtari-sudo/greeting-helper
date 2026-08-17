@@ -21,7 +21,9 @@ ApplicationWindow {
     Document { id: mapDoc }
     AssetLibraryModel { id: assetModel }
     FileService { id: fileService }
+    WorkspaceService { id: workspaceService }
     AiClient { id: aiClient }
+
 
     PreferencesDialog {
         id: preferencesDialog
@@ -30,7 +32,27 @@ ApplicationWindow {
     Component.onCompleted: {
         console.log("Dungeon Scrawl Desktop Shell Initialized");
         assetModel.loadManifest("assets/soulslike/manifest.json");
+        loadWorkspace("Default");
     }
+
+    function saveWorkspace(name) {
+        let layout = {
+            "toolBoxWidth": toolBox.width,
+            "rightDockWidth": rightDock.width,
+            "aiPanelHeight": rightDock.aiPanelHeight
+        };
+        workspaceService.saveLayout(name, layout);
+    }
+
+    function loadWorkspace(name) {
+        let layout = workspaceService.loadLayout(name);
+        if (Object.keys(layout).length > 0) {
+            toolBox.width = layout.toolBoxWidth || 50;
+            rightDock.width = layout.rightDockWidth || 380;
+            rightDock.aiPanelHeight = layout.aiPanelHeight || 250;
+        }
+    }
+
 
     ColumnLayout {
         anchors.fill: parent

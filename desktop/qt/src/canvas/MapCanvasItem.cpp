@@ -251,17 +251,32 @@ void MapCanvasItem::wheelEvent(QWheelEvent *event) {
 void MapCanvasItem::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace) {
         if (!m_selectedId.isEmpty()) m_document->removeObject(m_selectedId);
-    } else if (event->key() == Qt::Key_V) {
+    } 
+    // Maya Style Shortcuts
+    else if (event->key() == Qt::Key_Q) {
         setActiveTool("select");
+    } else if (event->key() == Qt::Key_W) {
+        setActiveTool("move");
+    } else if (event->key() == Qt::Key_E) {
+        setActiveTool("rotate");
     } else if (event->key() == Qt::Key_R) {
+        setActiveTool("scale");
+    } else if (event->key() == Qt::Key_D) {
         setActiveTool("draw");
     } else if (event->key() == Qt::Key_H) {
         setActiveTool("pan");
-    } else if (event->key() == Qt::Key_Z && (event->modifiers() & Qt::ControlModifier)) {
+    } 
+    // Legacy mapping support
+    else if (event->key() == Qt::Key_V) {
+        setActiveTool("select");
+    }
+    // Undo/Redo
+    else if (event->key() == Qt::Key_Z && (event->modifiers() & Qt::ControlModifier)) {
         if (event->modifiers() & Qt::ShiftModifier) m_document->undoStack()->redo();
         else m_document->undoStack()->undo();
     }
 }
+
 
 void MapCanvasItem::setActiveTool(const QString& tool) {
     if (m_activeTool == tool) return;

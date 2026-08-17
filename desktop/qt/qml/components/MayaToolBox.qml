@@ -20,8 +20,8 @@ Rectangle {
             Layout.alignment: Qt.AlignHCenter
             text: "S"
             checkable: true
-            checked: activeTool === "select"
-            onClicked: activeTool = "select"
+            checked: canvas ? canvas.activeTool === "select" : activeTool === "select"
+            onClicked: if (canvas) canvas.activeTool = "select"
             ToolTip.visible: hovered
             ToolTip.text: qsTr("Select Tool (Q)")
         }
@@ -31,8 +31,8 @@ Rectangle {
             Layout.alignment: Qt.AlignHCenter
             text: "M"
             checkable: true
-            checked: activeTool === "move"
-            onClicked: activeTool = "move"
+            checked: canvas ? canvas.activeTool === "move" : activeTool === "move"
+            onClicked: if (canvas) canvas.activeTool = "move"
             ToolTip.visible: hovered
             ToolTip.text: qsTr("Move Tool (W)")
         }
@@ -42,8 +42,8 @@ Rectangle {
             Layout.alignment: Qt.AlignHCenter
             text: "R"
             checkable: true
-            checked: activeTool === "rotate"
-            onClicked: activeTool = "rotate"
+            checked: canvas ? canvas.activeTool === "rotate" : activeTool === "rotate"
+            onClicked: if (canvas) canvas.activeTool = "rotate"
             ToolTip.visible: hovered
             ToolTip.text: qsTr("Rotate Tool (E)")
         }
@@ -53,8 +53,8 @@ Rectangle {
             Layout.alignment: Qt.AlignHCenter
             text: "Sc"
             checkable: true
-            checked: activeTool === "scale"
-            onClicked: activeTool = "scale"
+            checked: canvas ? canvas.activeTool === "scale" : activeTool === "scale"
+            onClicked: if (canvas) canvas.activeTool = "scale"
             ToolTip.visible: hovered
             ToolTip.text: qsTr("Scale Tool (R)")
         }
@@ -70,13 +70,22 @@ Rectangle {
             Layout.alignment: Qt.AlignHCenter
             text: "Dr"
             checkable: true
-            checked: activeTool === "draw"
-            onClicked: activeTool = "draw"
+            checked: canvas ? canvas.activeTool === "draw" : activeTool === "draw"
+            onClicked: if (canvas) canvas.activeTool = "draw"
             ToolTip.visible: hovered
             ToolTip.text: qsTr("Draw Room (D)")
         }
 
-        Item { Layout.fillHeight: true }
+        ToolButton {
+            Layout.alignment: Qt.AlignHCenter
+            text: "Er"
+            checkable: true
+            checked: canvas ? canvas.activeTool === "eraser" : false
+            onClicked: if (canvas) canvas.activeTool = "eraser"
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Eraser Tool")
+        }
+
 
         ToolButton {
             Layout.alignment: Qt.AlignHCenter
