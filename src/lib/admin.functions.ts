@@ -252,10 +252,7 @@ export const adminResendVerification = createServerFn({ method: "POST" })
     await checkAdminAccess();
     
     // Using service role to trigger otp email
-    const { error } = await supabaseAdmin.auth.admin.resend({
-      type: 'signup',
-      email: data.email,
-    });
+    const { error } = await supabaseAdmin.auth.admin.inviteUserByEmail(data.email);
 
     if (error) throw new Error(error.message);
     return { success: true };
