@@ -19,6 +19,9 @@ int main(int argc, char *argv[])
     app.setOrganizationName("DungeonEditor");
     app.setApplicationName("DungeonEditorNative");
 
+    // Force Fusion style for professional DCC look and to support customization
+    QQuickStyle::setStyle("Fusion");
+
     qmlRegisterType<Document>("DungeonEditor.Core", 1, 0, "Document");
     qmlRegisterType<MapCanvasItem>("DungeonEditor.Canvas", 1, 0, "MapCanvasItem");
     qmlRegisterType<AssetLibraryModel>("DungeonEditor.Models", 1, 0, "AssetLibraryModel");
