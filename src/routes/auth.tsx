@@ -207,9 +207,15 @@ function AuthPage() {
               variant="link" 
               className="h-auto p-0 text-[10px] text-destructive-foreground/80 hover:text-destructive-foreground flex items-center gap-1 mt-1 font-bold uppercase tracking-wider"
               onClick={() => {
+                const prevError = error;
                 setError(null);
-                if (tab === "in") void signIn();
-                else void signUp();
+                if (prevError?.toLowerCase().includes("google")) {
+                  void google();
+                } else if (tab === "in") {
+                  void signIn();
+                } else {
+                  void signUp();
+                }
               }}
             >
               <RefreshCcw className="h-2.5 w-2.5" /> Retry
