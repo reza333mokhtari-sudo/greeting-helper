@@ -64,8 +64,16 @@ Rectangle {
             }
             Menu {
                 title: qsTr("Edit")
-                MenuItem { text: qsTr("Undo"); shortcut: "Ctrl+Z" }
-                MenuItem { text: qsTr("Redo"); shortcut: "Ctrl+Y" }
+                MenuItem { 
+                    text: qsTr("Undo")
+                    shortcut: StandardKey.Undo
+                    onTriggered: document.undo() 
+                }
+                MenuItem { 
+                    text: qsTr("Redo")
+                    shortcut: StandardKey.Redo
+                    onTriggered: document.redo() 
+                }
             }
             Menu {
                 title: qsTr("Modify")
