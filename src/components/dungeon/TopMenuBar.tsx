@@ -42,6 +42,14 @@ type Props = {
 };
 
 export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => void }) {
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user);
+    });
+  }, []);
+
   return (
     <header className="relative flex h-14 shrink-0 items-center gap-2 border-b border-border bg-sidebar px-3">
       <Link to="/" className="flex items-center gap-2 px-3 py-1.5 hover:bg-accent/50 rounded-md transition-colors mr-2">
@@ -50,6 +58,7 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
         </div>
         <span className="font-bold text-sm tracking-tight text-foreground">DUNGEON SCRAWL</span>
       </Link>
+
 
       <Menubar className="h-8 border-0 bg-transparent p-0 shadow-none">
         <MenubarMenu>
@@ -131,8 +140,20 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
 
       <div className="ml-auto flex items-center gap-3">
         {props.right}
-        <ProfileMenu onAuthRequired={props.onAuthRequired} />
+        {user ? (
+          <ProfileMenu onAuthRequired={props.onAuthRequired} />
+        ) : (
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="h-8 px-3 text-xs font-bold uppercase tracking-wider shadow-sm hover:bg-primary/5 hover:text-primary transition-all"
+            asChild
+          >
+            <Link to="/auth">Sign In</Link>
+          </Button>
+        )}
       </div>
+
     </header>
   );
 }
