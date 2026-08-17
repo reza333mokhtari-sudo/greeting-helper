@@ -44,20 +44,29 @@ type Props = {
 
 export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => void }) {
   const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }: any) => {
       setUser(data.user);
+      setLoading(false);
     });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   return (
     <header className="relative flex h-14 shrink-0 items-center gap-2 border-b border-border bg-sidebar px-3">
-      <Link to="/" className="flex items-center gap-2 px-3 py-1.5 hover:bg-accent/50 rounded-md transition-colors mr-2">
+      <Link to={user ? "/editor" : "/"} className="flex items-center gap-2 px-3 py-1.5 hover:bg-accent/50 rounded-md transition-colors mr-2">
         <div className="size-6 bg-primary rounded flex items-center justify-center">
           <Map className="size-4 text-primary-foreground" />
         </div>
-        <span className="font-bold text-sm tracking-tight text-foreground">DUNGEON SCRAWL</span>
+        <span className="font-bold text-sm tracking-tight text-foreground uppercase tracking-wider">DUNGEON SCRAWL</span>
       </Link>
 
 
@@ -143,16 +152,9 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
         {props.right}
         {user ? (
           <ProfileMenu onAuthRequired={props.onAuthRequired} />
-        ) : (
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="h-8 px-3 text-xs font-bold uppercase tracking-wider shadow-sm hover:bg-primary/5 hover:text-primary transition-all"
-            asChild
-          >
-            <Link to="/auth">Sign In</Link>
-          </Button>
-        )}
+        ) : loading ? (
+          <div className="h-8 w-8 animate-pulse rounded-full bg-muted" />
+        ) : null}
       </div>
 
     </header>

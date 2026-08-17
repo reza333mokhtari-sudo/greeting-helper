@@ -295,9 +295,7 @@ export function CloudBar({ doc, thumbnail, onLoadDoc, onAuthRequired, saveStatus
         </Button>
       )}
 
-      <Button size="icon" variant="ghost" className="h-7 w-7" title={email} onClick={() => supabase.auth.signOut()}>
-        <LogOut className="h-3.5 w-3.5" />
-      </Button>
+      {/* LogOut hidden in favor of ProfileMenu in TopMenuBar */}
 
     </div>
   );
