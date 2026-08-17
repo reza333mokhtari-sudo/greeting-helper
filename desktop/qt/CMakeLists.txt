@@ -18,7 +18,7 @@ find_package(Qt6 REQUIRED COMPONENTS
 
 qt_standard_project_setup()
 
-# Define the QML module and executable
+# Define the executable
 qt_add_executable(appDungeonEditor
     src/main.cpp
     src/core/Document.h src/core/Document.cpp
@@ -28,15 +28,10 @@ qt_add_executable(appDungeonEditor
     src/services/FileService.h src/services/FileService.cpp
 )
 
-# Qt 6.2+ way of handling QML modules
-# We are NOT using SOURCES in qt_add_qml_module to avoid the automated 
-# qmlRegisterTypes which is currently failing due to missing includes in generated code.
-# Instead, we will register types manually in main.cpp.
-qt_add_qml_module(appDungeonEditor
-    URI DungeonEditor
-    VERSION 1.0
-    RESOURCE_PREFIX "/qt/qml/DungeonEditor"
-    QML_FILES
+# Manual resource handling instead of qt_add_qml_module to avoid broken type registration
+qt_add_resources(appDungeonEditor "qml_resources"
+    PREFIX "/qt/qml/DungeonEditor"
+    FILES
         qml/Main.qml
         qml/components/TopBar.qml
         qml/components/ToolRail.qml
@@ -49,12 +44,8 @@ qt_add_qml_module(appDungeonEditor
         qml/components/SettingsPanel.qml
         qml/components/CmsPanel.qml
         qml/components/RightDock.qml
-    RESOURCES
         assets/icon.png
 )
-# NO_GENERATE_PLUGIN_SOURCE didn't prevent registration, let's try 
-# to just not call qt_add_qml_module or change how we use it.
-# Actually, let's just use qt6_add_resources for QML and skip the module logic.
 
 target_include_directories(appDungeonEditor PRIVATE 
     ${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -76,4 +67,3 @@ install(TARGETS appDungeonEditor
     BUNDLE DESTINATION .
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-
