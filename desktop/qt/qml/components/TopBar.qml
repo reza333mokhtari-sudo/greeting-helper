@@ -103,8 +103,15 @@ Rectangle {
             }
             Menu {
                 title: qsTr("Edit")
-                MenuItem { text: qsTr("Undo"); enabled: document && document.canUndo; onTriggered: document.undoStack.undo() }
-                MenuItem { text: qsTr("Redo"); enabled: document && document.canRedo; onTriggered: document.undoStack.redo() }
+                MenuItem { 
+                    text: qsTr("Undo"); enabled: document && document.canUndo; onTriggered: document.undoStack.undo()
+                    icon.source: "../../assets/icons/general/undo.svg"
+                }
+                MenuItem { 
+                    text: qsTr("Redo"); enabled: document && document.canRedo; onTriggered: document.undoStack.redo()
+                    icon.source: "../../assets/icons/general/redo.svg"
+                }
+
             }
             Menu {
                 title: qsTr("Create")
