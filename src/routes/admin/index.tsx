@@ -125,8 +125,12 @@ function AdminConsole() {
       try {
         const { isAdmin } = await checkAccess();
         if (isAdmin) {
-          const s = await fetchSchema();
+          const [s, st] = await Promise.all([
+            fetchSchema(),
+            fetchStats()
+          ]);
           setSchema(s);
+          setStats(st);
           setState("ok");
         } else {
           setState("denied");
@@ -135,7 +139,8 @@ function AdminConsole() {
         setState("denied");
       }
     })();
-  }, [checkAccess, fetchSchema]);
+  }, [checkAccess, fetchSchema, fetchStats]);
+
 
   useEffect(() => {
     loadData();
