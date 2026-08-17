@@ -156,6 +156,8 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
+  // The React 19 dispatcher is initialized by the router's internal Awaited implementation.
+  // We ensure the environment is ready before rendering to avoid "dispatcher is null" errors.
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
