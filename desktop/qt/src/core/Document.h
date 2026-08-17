@@ -3,9 +3,11 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QUndoStack>
+#include <QtQml/qqmlregistration.h>
 
 class Document : public QObject {
     Q_OBJECT
+    QML_ELEMENT
     Q_PROPERTY(QJsonArray objects READ objects NOTIFY objectsChanged)
     Q_PROPERTY(QUndoStack* undoStack READ undoStack CONSTANT)
     Q_PROPERTY(bool canUndo READ canUndo NOTIFY canUndoChanged)

@@ -3,13 +3,11 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QString>
-
-/**
- * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
- */
+#include <QtQml/qqmlregistration.h>
 
 class AiClient : public QObject {
     Q_OBJECT
+    QML_ELEMENT
     Q_PROPERTY(bool isLoading READ isLoading NOTIFY isLoadingChanged)
 
 public:

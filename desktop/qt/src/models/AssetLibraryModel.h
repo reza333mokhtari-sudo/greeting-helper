@@ -4,6 +4,7 @@
 #include <QString>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QtQml/qqmlregistration.h>
 
 /**
  * Asset Library List Model
@@ -19,6 +20,7 @@ struct Asset {
 
 class AssetLibraryModel : public QAbstractListModel {
     Q_OBJECT
+    QML_ELEMENT
     Q_PROPERTY(QString searchQuery READ searchQuery WRITE setSearchQuery NOTIFY searchQueryChanged)
     Q_PROPERTY(QString activeCategory READ activeCategory WRITE setActiveCategory NOTIFY activeCategoryChanged)
 
