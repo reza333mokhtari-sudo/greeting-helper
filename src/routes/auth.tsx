@@ -74,21 +74,24 @@ function AuthPage() {
   const signIn = async () => {
     const bad = invalid();
     if (bad) {
-      toast.error(bad);
+      setError(bad);
       return;
     }
     setBusy(true);
+    setError(null);
     const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
     setBusy(false);
     if (error) {
       const m = error.message.toLowerCase();
-      toast.error(
-        m.includes("not confirmed")
-          ? "Your email isn't confirmed yet — check your inbox or resend the link."
-          : m.includes("invalid login")
-            ? "Wrong email or password."
-            : error.message,
-      );
+      if (m.includes("not confirmed")) {
+        setError("Your email isn't confirmed yet. Please check your inbox for an activation link.");
+      } else if (m.includes("invalid login")) {
+        setError("Incorrect email or password. Please double-check your credentials and try again.");
+      } else if (m.includes("network")) {
+        setError("Network error. Please check your internet connection and try again.");
+      } else {
+        setError(error.message);
+      }
       return;
     }
     toast.success("Welcome back!");
@@ -97,10 +100,11 @@ function AuthPage() {
   const signUp = async () => {
     const bad = invalid();
     if (bad) {
-      toast.error(bad);
+      setError(bad);
       return;
     }
     setBusy(true);
+    setError(null);
     const { data, error } = await supabase.auth.signUp({
       email: email.trim(),
       password,
@@ -110,11 +114,10 @@ function AuthPage() {
     if (error) {
       const m = error.message.toLowerCase();
       if (m.includes("already registered") || m.includes("already been registered")) {
-        toast.error("That email already has an account — sign in instead.");
-        setTab("in");
+        setError("That email already has an account. Would you like to sign in instead?");
         return;
       }
-      toast.error(error.message);
+      setError(error.message);
       return;
     }
     if (!data.session) toast.success("Check your email to confirm your account.");
