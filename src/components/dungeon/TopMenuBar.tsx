@@ -152,8 +152,6 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
         {props.right}
         {loading ? (
           <div className="h-9 w-9 animate-pulse rounded-full bg-muted border border-border/40 shadow-sm" />
-        ) : user ? (
-          <ProfileMenu onAuthRequired={props.onAuthRequired} />
         ) : (
           <ProfileMenu onAuthRequired={props.onAuthRequired} />
         )}
