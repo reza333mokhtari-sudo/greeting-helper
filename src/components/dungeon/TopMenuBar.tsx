@@ -1,12 +1,14 @@
-import type { ReactNode } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { Map } from "lucide-react";
+import { Map, User } from "lucide-react";
 import { ProfileMenu } from "./ProfileMenu";
 import { HealthCheckIndicator } from "./HealthCheckIndicator";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Menubar,
   MenubarContent,
   MenubarItem,
+
   MenubarMenu,
   MenubarSeparator,
   MenubarShortcut,
