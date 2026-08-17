@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Map, Shield, Zap, Layout, Plus, ArrowRight, User } from "lucide-react";
+import { Sparkles, Map, Shield, Zap, Layout, Plus, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { listLocalMaps, listCloudMaps } from "@/lib/dungeon/storage";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
+import { ProfileMenu } from "@/components/dungeon/ProfileMenu";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -57,26 +57,17 @@ function LandingPage() {
     <div className="flex min-h-screen flex-col bg-background text-foreground">
       {/* Nav */}
       <header className="flex h-16 items-center justify-between border-b border-border/40 px-6 backdrop-blur sticky top-0 z-50 bg-background/80">
-        <div className="flex items-center gap-2">
+        <Link to={user ? "/editor" : "/"} className="flex items-center gap-2 group hover:opacity-80 transition-opacity">
           <div className="size-8 rounded bg-primary flex items-center justify-center">
             <Map className="size-5 text-primary-foreground" />
           </div>
-          <span className="text-xl font-bold tracking-tight">DUNGEON SCRAWL</span>
-        </div>
+          <span className="text-xl font-bold tracking-tight uppercase tracking-wider">DUNGEON SCRAWL</span>
+        </Link>
         <nav className="flex items-center gap-4">
-          {user && (
-            <Link to="/editor" className="flex items-center gap-2 group">
-               <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 overflow-hidden">
-                {user.user_metadata?.avatar_url ? (
-                  <img src={user.user_metadata.avatar_url} alt="Avatar" className="size-full object-cover" />
-                ) : (
-                  <User className="size-4 text-primary" />
-                )}
-               </div>
-               <span className="text-sm font-medium hidden sm:inline-block group-hover:text-primary transition-colors">
-                 {user.user_metadata?.display_name || user.email?.split('@')[0]}
-               </span>
-            </Link>
+          {loading ? (
+            <div className="h-9 w-9 animate-pulse rounded-full bg-muted border border-border/40" />
+          ) : (
+            <ProfileMenu />
           )}
           <Button asChild size="sm" className="shadow-lg shadow-primary/20">
             <Link to="/editor">Launch Editor</Link>
