@@ -6,7 +6,7 @@ import { checkAdminAccess } from "./admin.functions";
  * Fetches aggregate statistics for the admin dashboard.
  */
 export const getAdminStats = createServerFn({ method: "GET" })
-  .handler(async ({ context }) => {
+  .handler(async () => {
     await checkAdminAccess();
 
     const [
@@ -22,12 +22,16 @@ export const getAdminStats = createServerFn({ method: "GET" })
     ]);
 
     // Aggregate audit actions for visualization
-    const auditStats = recentAudit?.reduce((acc: any, log: any) => {
-      acc[log.action] = (acc[log.action] || 0) + 1;
+    const auditStats = (recentAudit || []).reduce((acc: Record<string, number>, log: any) => {
+      const action = String(log.action || "UNKNOWN");
+      acc[action] = (acc[action] || 0) + 1;
       return acc;
     }, {});
 
-    const chartData = Object.entries(auditStats || {}).map(([name, value]) => ({ name, value }));
+    const chartData = Object.entries(auditStats).map(([name, value]) => ({ 
+      name, 
+      value: Number(value) 
+    }));
 
     return {
       stats: [
@@ -36,6 +40,12 @@ export const getAdminStats = createServerFn({ method: "GET" })
         { label: "Asset Library", value: assetsCount || 0, trend: "+8%" }
       ],
       chartData,
-      recentAudit: recentAudit || []
+      recentAudit: (recentAudit || []).map(log => ({
+        id: String(log.id),
+        action: String(log.action),
+        table_name: String(log.table_name || ""),
+        created_at: String(log.created_at)
+      }))
     };
   });
+
