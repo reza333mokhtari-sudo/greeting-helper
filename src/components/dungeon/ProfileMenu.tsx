@@ -81,7 +81,7 @@ export function ProfileMenu({ onAuthRequired }: { onAuthRequired?: ((reason: str
       }
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
       setUser(session?.user ?? null);
       setAuthStatus(session ? 'authenticated' : 'unauthenticated');
     });
