@@ -53,10 +53,11 @@ Rectangle {
 
             Menu {
                 title: qsTr("File")
-                MenuItem { text: qsTr("New"); icon.source: "../../assets/icons/menu/new.svg"; onTriggered: document.clear() }
-                MenuItem { text: qsTr("Open..."); icon.source: "../../assets/icons/menu/open.svg"; onTriggered: openDialog.open() }
+                MenuItem { text: qsTr("New"); icon.source: "qrc:/assets/icons/menu/new.svg"; onTriggered: document.clear() }
+                MenuItem { text: qsTr("Open..."); icon.source: "qrc:/assets/icons/menu/open.svg"; onTriggered: openDialog.open() }
+
                 MenuSeparator {}
-                MenuItem { text: qsTr("Save"); icon.source: "../../assets/icons/menu/save.svg"; onTriggered: document.save() }
+                MenuItem { text: qsTr("Save"); icon.source: "qrc:/assets/icons/menu/save.svg"; onTriggered: document.save() }
                 MenuItem { text: qsTr("Preferences..."); onTriggered: preferencesDialog.open() }
                 MenuSeparator {}
                 MenuItem { text: qsTr("Quit"); onTriggered: Qt.quit() }
