@@ -4,16 +4,17 @@ import { Map, User } from "lucide-react";
 import { ProfileMenu } from "./ProfileMenu";
 import { HealthCheckIndicator } from "./HealthCheckIndicator";
 import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
 import {
   Menubar,
   MenubarContent,
   MenubarItem,
-
   MenubarMenu,
   MenubarSeparator,
   MenubarShortcut,
   MenubarTrigger,
 } from "@/components/ui/menubar";
+
 
 type Props = {
   title: string;
