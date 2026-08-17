@@ -11,6 +11,7 @@
 #include <services/AiClient.h>
 #include <services/FileService.h>
 #include <services/WorkspaceService.h>
+#include <services/LicenseService.h>
 
 int main(int argc, char *argv[])
 {
@@ -23,6 +24,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<AssetLibraryModel>("DungeonEditor.Models", 1, 0, "AssetLibraryModel");
     qmlRegisterType<WorkspaceService>("DungeonEditor.Services", 1, 0, "WorkspaceService");
     qmlRegisterType<AiClient>("DungeonEditor.Services", 1, 0, "AiClient");
+    qmlRegisterType<LicenseService>("DungeonEditor.Services", 1, 0, "LicenseService");
     qmlRegisterType<FileService>("DungeonEditor.Services", 1, 0, "FileService");
 
     // Icon path updated for Qt 6 resource prefix
