@@ -46,11 +46,17 @@ qt_add_resources(appDungeonEditor "qml_resources"
         qml/components/SettingsPanel.qml
         qml/components/CmsPanel.qml
         qml/components/RightDock.qml
+        qml/components/AdvancedStatusBar.qml
+        qml/components/AppIcon.qml
+        qml/components/MayaShelf.qml
+        qml/components/MayaToolBox.qml
+        qml/panels/AssetBrowser.qml
         qml/dialogs/BaseFloatingWindow.qml
         qml/dialogs/WelcomeWindow.qml
         qml/dialogs/AboutWindow.qml
         qml/dialogs/LicenseWindow.qml
         qml/dialogs/HelpWindow.qml
+        qml/dialogs/PreferencesDialog.qml
         assets/icon.png
 )
 

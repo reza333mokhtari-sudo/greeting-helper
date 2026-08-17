@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     
     // Register "components" relative to the resource root
+    engine.addImportPath("qrc:/qt/qml/DungeonEditor/qml");
     engine.addImportPath("qrc:/qt/qml/DungeonEditor");
     engine.addImportPath("qrc:/DungeonEditor");
     engine.addImportPath("qrc:/");
