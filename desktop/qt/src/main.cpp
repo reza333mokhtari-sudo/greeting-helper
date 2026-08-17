@@ -27,8 +27,8 @@ int main(int argc, char *argv[])
     qmlRegisterType<LicenseService>("DungeonEditor.Services", 1, 0, "LicenseService");
     qmlRegisterType<FileService>("DungeonEditor.Services", 1, 0, "FileService");
 
-    // Icon path updated for Qt 6 resource prefix
-    app.setWindowIcon(QIcon(":/qt/qml/DungeonEditor/assets/icon.png"));
+    // Icon path updated for resource prefix
+    app.setWindowIcon(QIcon(":/assets/assets/icon.png"));
 
     QQmlApplicationEngine engine;
     

@@ -30,6 +30,14 @@ qt_add_executable(appDungeonEditor
     src/services/LicenseService.h src/services/LicenseService.cpp
 )
 
+# Manual resource handling for assets
+qt_add_resources(appDungeonEditor "asset_resources"
+    PREFIX "/assets"
+    FILES
+        assets/icon.png
+)
+
+
 # Manual resource handling instead of qt_add_qml_module to avoid broken type registration
 qt_add_resources(appDungeonEditor "qml_resources"
     PREFIX "/qt/qml/DungeonEditor"
