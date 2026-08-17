@@ -120,6 +120,13 @@ function AdminConsole() {
   const deleteFromTable = useServerFn(adminTableDelete);
   const checkAccess = useServerFn(checkAdminAccess);
   const fetchStats = useServerFn(getAdminStats);
+  const resendVerification = useServerFn(adminResendVerification);
+  const verifyUser = useServerFn(adminVerifyUser);
+  const getUserStats = useServerFn(adminGetUserStats);
+  const deleteUser = useServerFn(adminDeleteUser);
+
+  const [userStats, setUserStats] = useState<Record<string, { mapCount: number }>>({});
+  const [isVerifying, setIsVerifying] = useState(false);
 
 
   const loadData = useCallback(async () => {
@@ -286,6 +293,91 @@ function AdminConsole() {
   };
 
   const currentTableConfig = schema?.tables.find((t: any) => t.name === activeTable);
+
+  const handleResendVerification = async (email: string) => {
+    try {
+      await resendVerification({ data: { email } });
+      toast.success("Verification email resent successfully");
+    } catch (e: any) {
+      toast.error(`Failed to resend: ${e.message}`);
+    }
+  };
+
+  const handleManualVerify = async (userId: string) => {
+    setIsVerifying(true);
+    try {
+      await verifyUser({ data: { userId } });
+      toast.success("User verified successfully");
+      loadData();
+    } catch (e: any) {
+      toast.error(`Failed to verify: ${e.message}`);
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
+  const handleFetchUserStats = async (userId: string) => {
+    try {
+      const stats = await getUserStats({ data: { userId } });
+      setUserStats(prev => ({ ...prev, [userId]: stats }));
+    } catch (e: any) {
+      console.error("Failed to fetch user stats", e);
+    }
+  };
+
+  const handleDeleteUser = async (userId: string) => {
+    const confirmed = await dialog.confirm({
+      title: "Delete User Account",
+      message: "This will permanently delete the user account and all associated data. This action is irreversible.",
+      confirmText: "Delete User",
+      variant: "danger"
+    });
+
+    if (confirmed) {
+      try {
+        await deleteUser({ data: { userId } });
+        toast.success("User deleted successfully");
+        loadData();
+      } catch (e: any) {
+        toast.error(`Delete failed: ${e.message}`);
+      }
+    }
+  };
+
+  const renderUnverifiedActions = (row: any) => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon" className="h-8 w-8">
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuLabel>User Actions</DropdownMenuLabel>
+        <DropdownMenuItem onClick={() => handleResendVerification(row.email)}>
+          <Mail className="mr-2 h-4 w-4" /> Resend Verification
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => handleManualVerify(row.id)}>
+          <UserCheck className="mr-2 h-4 w-4" /> Verify Account
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => handleFetchUserStats(row.id)}>
+          <Info className="mr-2 h-4 w-4" /> About this account
+        </DropdownMenuItem>
+        {userStats[row.id] !== undefined && (
+          <div className="px-2 py-1.5 text-xs text-muted-foreground border-t mt-1">
+            Maps created: {userStats[row.id].mapCount}
+          </div>
+        )}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem 
+          className="text-destructive focus:text-destructive focus:bg-destructive/10"
+          onClick={() => handleDeleteUser(row.id)}
+        >
+          <UserMinus className="mr-2 h-4 w-4" /> Delete User
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 
   return (
     <div className="flex h-screen bg-slate-50 dark:bg-slate-950 overflow-hidden font-sans">
