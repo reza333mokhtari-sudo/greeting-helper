@@ -155,11 +155,31 @@ function AuthPage() {
     else toast.success("Activation email sent again.");
   };
 
-  const google = async () => {
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: `${window.location.origin}${dest}`,
-    });
-    if (result.error) toast.error("Google sign-in failed");
+  const ErrorDisplay = () => {
+    if (!error) return null;
+    return (
+      <Alert variant="destructive" className="mb-4 py-2 px-3">
+        <div className="flex items-start gap-2">
+          <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+          <div className="flex-1">
+            <AlertDescription className="text-xs font-medium leading-relaxed">
+              {error}
+            </AlertDescription>
+            <Button 
+              variant="link" 
+              className="h-auto p-0 text-[10px] text-destructive-foreground/80 hover:text-destructive-foreground flex items-center gap-1 mt-1 font-bold uppercase tracking-wider"
+              onClick={() => {
+                setError(null);
+                if (tab === "in") void signIn();
+                else void signUp();
+              }}
+            >
+              <RefreshCcw className="h-2.5 w-2.5" /> Retry
+            </Button>
+          </div>
+        </div>
+      </Alert>
+    );
   };
 
   return (
@@ -168,7 +188,9 @@ function AuthPage() {
         <h1 className="mb-1 text-xl font-bold tracking-tight text-foreground">DUNGEON SCRAWL</h1>
         <p className="mb-5 text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Authentication Gateway</p>
 
-        <Button variant="outline" className="mb-4 w-full" onClick={google}>
+        <ErrorDisplay />
+
+        <Button variant="outline" className="mb-4 w-full" onClick={google} disabled={busy}>
           Continue with Google
         </Button>
 
