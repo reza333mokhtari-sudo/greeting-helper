@@ -41,15 +41,13 @@ import {
   getAdminSchema, 
   adminTableQuery, 
   adminTableUpdate, 
-  adminTableDelete 
+  adminTableDelete,
+  adminResendVerification,
+  adminVerifyUser,
+  adminGetUserStats,
+  adminDeleteUser
 } from "@/lib/admin.functions";
-import { 
-  getAdminStats, 
-  adminResendVerification, 
-  adminVerifyUser, 
-  adminGetUserStats, 
-  adminDeleteUser 
-} from "@/lib/admin-stats.functions";
+import { getAdminStats } from "@/lib/admin-stats.functions";
 import { AdminDataTable } from "@/components/admin/AdminDataTable";
 import { 
   MoreHorizontal, 
@@ -498,7 +496,7 @@ function AdminConsole() {
                             />
                             <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                               {(stats?.chartData || []).map((entry: any, index: number) => (
-                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length] || '#3b82f6'} />
+                                <Cell key={`cell-${index}`} fill={COLORS[index % (COLORS.length || 1)] || '#3b82f6'} />
                               ))}
                             </Bar>
                           </BarChart>
