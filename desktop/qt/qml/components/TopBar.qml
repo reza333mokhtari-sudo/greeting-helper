@@ -28,12 +28,13 @@ Rectangle {
         spacing: 0
         
         Image {
-            source: "../../assets/icons/general/settings.svg" // Placeholder for Logo
+            source: "qrc:/assets/icons/general/settings.svg"
             sourceSize.width: 16
             sourceSize.height: 16
             Layout.alignment: Qt.AlignVCenter
             Layout.rightMargin: 8
         }
+
 
         MenuBar {
             id: menuBar
