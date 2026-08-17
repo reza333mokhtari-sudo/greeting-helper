@@ -1,4 +1,4 @@
-#include <services/WorkspaceService.h>
+#include "WorkspaceService.h"
 #include <QStandardPaths>
 #include <QDir>
 #include <QFile>
