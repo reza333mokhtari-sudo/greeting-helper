@@ -41,7 +41,7 @@ Rectangle {
         Button {
             text: qsTr("Add Floor")
             Layout.fillWidth: true
-            onClicked: document.addFloor("New Floor")
+            onClicked: if (document) document.addFloor("New Floor")
         }
 
         ToolSeparator { Layout.fillWidth: true; orientation: Qt.Horizontal }

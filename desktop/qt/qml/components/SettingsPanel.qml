@@ -26,13 +26,13 @@ Rectangle {
                 CheckBox {
                     text: qsTr("Show Grid")
                     checked: document ? document.gridVisible : true
-                    onToggled: document.gridVisible = checked
+                    onToggled: if (document) document.gridVisible = checked
                     palette.windowText: "white"
                 }
                 CheckBox {
                     text: qsTr("Snap to Grid")
                     checked: document ? document.snapEnabled : true
-                    onToggled: document.snapEnabled = checked
+                    onToggled: if (document) document.snapEnabled = checked
                     palette.windowText: "white"
                 }
             }
