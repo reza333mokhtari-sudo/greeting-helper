@@ -137,13 +137,34 @@ function AuthPage() {
         return;
       }
       if (!m || m === "{}") {
-        setError("Account creation failed. This can happen if the database is busy. Please try again.");
+        setError("Signup failed. Please try again or use a different email.");
         return;
       }
       setError(error.message || "An error occurred during sign up. Please try again.");
       return;
     }
+
+    // Since we removed the trigger (which was causing 500 errors), 
+    // we now attempt to create the profile row manually if we have a session.
+    if (data.user) {
+      const { error: profileError } = await supabase
+        .from("profiles")
+        .upsert({
+          id: data.user.id,
+          email: data.user.email!,
+          display_name: name.trim() || data.user.email!.split("@")[0]
+        });
+      
+      if (profileError) {
+        console.warn("Profile creation deferred:", profileError);
+        // Note: We don't block the user here because their auth account WAS created.
+        // The profile will be created on their first login/visit if missing.
+      }
+    }
+
     if (!data.session) toast.success("Check your email to confirm your account.");
+    else navigate({ to: dest, replace: true });
+
   };
 
   /** Send a password-reset email pointing at the /reset-password page. */
