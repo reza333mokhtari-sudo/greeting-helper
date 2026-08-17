@@ -35,9 +35,10 @@ function LandingPage() {
           ]);
           
           const combined = [
-            ...cloud.map(m => ({ ...m, isCloud: true })),
-            ...local.map(m => ({ ...m, isCloud: false, updated_at: new Date(m.lastModified).toISOString() }))
+            ...cloud.map((m: any) => ({ ...m, isCloud: true })),
+            ...local.map((m: any) => ({ ...m, isCloud: false, updated_at: new Date(m.lastModified).toISOString() }))
           ].sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
+
           
           setMaps(combined.slice(0, 4));
         } catch (err) {
