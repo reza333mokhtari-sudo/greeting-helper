@@ -310,9 +310,9 @@ export function DungeonEditor() {
       setPreview(null);
       setPolyPts([]);
       setAiPreview(null);
-      commit((d) => switchFloor(d, id), "Switch floor");
+      setDocState((d) => switchFloor(d, id));
     },
-    [commit],
+    [],
   );
 
 
@@ -346,6 +346,16 @@ export function DungeonEditor() {
   // load / autosave
   useEffect(() => {
     try {
+      // Check if we have a specific map ID in the URL to load
+      const params = new URLSearchParams(window.location.search);
+      const mapId = params.get("id");
+      const isCloud = params.get("cloud") === "true";
+
+      if (mapId) {
+         // Logic for loading specific map would go here
+         // For now we still default to the last session if not implemented
+      }
+
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw) as Partial<Doc>;
