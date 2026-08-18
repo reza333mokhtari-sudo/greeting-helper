@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedEditorRouteImport } from './routes/_authenticated/editor'
 import { Route as AuthIndexRouteImport } from './routes/auth/index'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
@@ -24,10 +25,14 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedEditorRoute = AuthenticatedEditorRouteImport.update({
-  id: '/_authenticated/editor',
-  path: '/editor',
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedEditorRoute = AuthenticatedEditorRouteImport.update({
+  id: '/editor',
+  path: '/editor',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthIndexRoute = AuthIndexRouteImport.update({
   id: '/auth/',
@@ -55,9 +60,9 @@ const PSlugRoute = PSlugRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
-  id: '/_authenticated/admin/',
+  id: '/admin/',
   path: '/admin/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 const ApiAiChatRoute = ApiAiChatRouteImport.update({
   id: '/api/ai/chat',
@@ -90,6 +95,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_authenticated/editor': typeof AuthenticatedEditorRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
@@ -125,6 +131,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/_authenticated/editor'
     | '/auth/callback'
     | '/auth/reset-password'
@@ -137,14 +144,13 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuthenticatedEditorRoute: typeof AuthenticatedEditorRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthCallbackRoute: typeof AuthCallbackRoute
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute
   MSlugRoute: typeof MSlugRoute
   PSlugRoute: typeof PSlugRoute
   AuthIndexRoute: typeof AuthIndexRoute
   ApiAiChatRoute: typeof ApiAiChatRoute
-  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -156,12 +162,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/editor': {
       id: '/_authenticated/editor'
       path: '/editor'
       fullPath: '/editor'
       preLoaderRoute: typeof AuthenticatedEditorRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/auth/': {
       id: '/auth/'
@@ -203,7 +216,7 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin/'
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/api/ai/chat': {
       id: '/api/ai/chat'
@@ -215,16 +228,29 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedEditorRoute: typeof AuthenticatedEditorRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedEditorRoute: AuthenticatedEditorRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthenticatedEditorRoute: AuthenticatedEditorRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthCallbackRoute: AuthCallbackRoute,
   AuthResetPasswordRoute: AuthResetPasswordRoute,
   MSlugRoute: MSlugRoute,
   PSlugRoute: PSlugRoute,
   AuthIndexRoute: AuthIndexRoute,
   ApiAiChatRoute: ApiAiChatRoute,
-  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
