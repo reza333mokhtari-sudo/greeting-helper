@@ -19,6 +19,7 @@ Dialog {
         id: settings
         category: "Graphics"
         property string backend: "Auto"
+        property string rhiBackend: "Auto"
     }
 
     background: Rectangle {
@@ -177,18 +178,26 @@ Dialog {
                 background: null
                 ColumnLayout {
                     Label { text: qsTr("Graphics / Viewport"); color: "white"; font.bold: true; font.pixelSize: 16 }
+                    Label { text: qsTr("Current Active API: ") + (styleManager ? styleManager.activeGraphicsApi() : "Unknown"); color: "#f39c12"; font.pixelSize: 11 }
                     Label { text: qsTr("Rendering Backend:"); color: "#aaa" }
                     ComboBox {
                         id: backendCombo
-                        model: ["Auto", "OpenGL", "Vulkan", "Software"]
-                        currentIndex: model.indexOf(settings.backend)
+                        model: ["Auto", "OpenGL", "Vulkan", "Metal", "Direct3D 11", "Software"]
+                        currentIndex: Math.max(0, model.indexOf(settings.rhiBackend))
                         Layout.fillWidth: true
-                        onActivated: settings.backend = currentText
+                        onActivated: settings.rhiBackend = currentText
                     }
                     Label { 
                         text: qsTr("Requires application restart to take effect."); 
                         color: "#ef4444"; 
                         font.pixelSize: 11 
+                    }
+                    Button {
+                        text: qsTr("Restart Now to Apply Graphics Changes")
+                        visible: settings.rhiBackend !== "Auto" // Simplification for UI
+                        onClicked: if (styleManager) styleManager.restartApplication()
+                        palette.buttonText: "#ef4444"
+                        Layout.fillWidth: true
                     }
                     CheckBox { text: qsTr("Enable Anti-aliasing (MSAA)"); checked: true }
                     CheckBox { text: qsTr("Vertical Sync (VSync)"); checked: true }

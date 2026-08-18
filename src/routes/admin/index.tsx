@@ -346,10 +346,15 @@ function AdminConsole() {
     }
   };
 
-  const handleGenerateLicense = async (userId: string, type: "trial" | "pro" | "enterprise") => {
+  const handleGenerateLicense = async (
+    userId: string,
+    type: "trial" | "pro" | "enterprise",
+    months?: number,
+  ) => {
     try {
-      const res = await generateLicense({ data: { userId, type } });
+      const res = await generateLicense({ data: { userId, type, months } });
       toast.success(`License key generated: ${res.key}`);
+      if (activeTable === "licenses") loadData();
     } catch (e: any) {
       toast.error(`Failed to generate: ${e.message}`);
     }
@@ -383,11 +388,14 @@ function AdminConsole() {
         <DropdownMenuLabel className="text-[10px] uppercase font-bold text-muted-foreground px-2 py-1">
           Generate License
         </DropdownMenuLabel>
-        <DropdownMenuItem onClick={() => handleGenerateLicense(row.id, "trial")}>
-          <Key className="mr-2 h-4 w-4" /> 30-Day Trial
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleGenerateLicense(row.id, "pro")}>
-          <Key className="mr-2 h-4 w-4" /> Pro Annual
+        {[1, 3, 5, 7, 9, 12, 15].map((m) => (
+          <DropdownMenuItem key={m} onClick={() => handleGenerateLicense(row.id, "pro", m)}>
+            <Key className="mr-2 h-4 w-4" /> {m} Month{m > 1 ? "s" : ""} Pro
+          </DropdownMenuItem>
+        ))}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => handleGenerateLicense(row.id, "enterprise")}>
+          <Key className="mr-2 h-4 w-4" /> Enterprise (1 Year)
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
