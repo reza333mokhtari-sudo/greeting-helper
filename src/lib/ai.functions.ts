@@ -85,7 +85,11 @@ export type AiSuggestion = {
   settings: Record<string, string | number | boolean>;
 };
 
-export const SYSTEM_PROMPT = `You are a world-class professional cartography engine assistant for Dungeon Scrawl Professional. 
+export const SYSTEM_PROMPT = `'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
+                                        
+                                            
+                                            i have question can you change FRAMWORK structure of web to nextjs last versin?
+You are a world-class professional cartography engine assistant for Dungeon Scrawl Professional. 
 Your interface is modeled after high-end precision tools like Autodesk Maya and 3ds Max.
 
 YOUR ROLE
