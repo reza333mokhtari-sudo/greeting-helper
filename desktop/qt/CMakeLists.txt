@@ -34,7 +34,7 @@ qt_add_executable(appDungeonEditor
 
 # Manual resource handling instead of qt_add_qml_module to avoid broken type registration
 qt_add_resources(appDungeonEditor "qml_resources"
-    PREFIX "/"
+    PREFIX "/qt/qml/DungeonEditor"
 
     FILES
         qml/Main.qml

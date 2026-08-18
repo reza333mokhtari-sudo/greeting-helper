@@ -28,7 +28,7 @@ Rectangle {
         spacing: 0
         
         Image {
-            source: "qrc:/assets/icons/general/settings.svg"
+            source: "qrc:/qt/qml/DungeonEditor/assets/icons/general/settings.svg"
             sourceSize.width: 16
             sourceSize.height: 16
             Layout.alignment: Qt.AlignVCenter
@@ -53,11 +53,11 @@ Rectangle {
 
             Menu {
                 title: qsTr("File")
-                MenuItem { text: qsTr("New"); icon.source: "qrc:/assets/icons/menu/new.svg"; onTriggered: document.clear() }
-                MenuItem { text: qsTr("Open..."); icon.source: "qrc:/assets/icons/menu/open.svg"; onTriggered: openDialog.open() }
+                MenuItem { text: qsTr("New"); icon.source: "qrc:/qt/qml/DungeonEditor/assets/icons/menu/new.svg"; onTriggered: document.clear() }
+                MenuItem { text: qsTr("Open..."); icon.source: "qrc:/qt/qml/DungeonEditor/assets/icons/menu/open.svg"; onTriggered: openDialog.open() }
 
                 MenuSeparator {}
-                MenuItem { text: qsTr("Save"); icon.source: "qrc:/assets/icons/menu/save.svg"; onTriggered: document.save() }
+                MenuItem { text: qsTr("Save"); icon.source: "qrc:/qt/qml/DungeonEditor/assets/icons/menu/save.svg"; onTriggered: document.save() }
                 MenuItem { text: qsTr("Preferences..."); onTriggered: preferencesDialog.open() }
                 MenuSeparator {}
                 MenuItem { text: qsTr("Quit"); onTriggered: Qt.quit() }

@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import "qrc:/qml/components"
+import "qrc:/qt/qml/DungeonEditor/qml/components"
 
 Rectangle {
     id: root
@@ -42,7 +42,7 @@ Rectangle {
             }
             
             ToolButton {
-                icon.source: "qrc:/assets/icons/general/settings.svg"
+                icon.source: "qrc:/qt/qml/DungeonEditor/assets/icons/general/settings.svg"
                 ToolTip.visible: hovered; ToolTip.text: qsTr("Grid Settings")
             }
         }

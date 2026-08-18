@@ -166,16 +166,16 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("styleManager", &styleManager);
 
     // Register "qml" root correctly for internal imports
-    engine.addImportPath("qrc:/");
-    engine.addImportPath("qrc:/qml");
-    engine.addImportPath("qrc:/qml/components");
-    engine.addImportPath("qrc:/qml/dialogs");
-    engine.addImportPath("qrc:/qml/panels");
+    engine.addImportPath("qrc:/qt/qml/DungeonEditor");
+    engine.addImportPath("qrc:/qt/qml/DungeonEditor/qml");
+    engine.addImportPath("qrc:/qt/qml/DungeonEditor/qml/components");
+    engine.addImportPath("qrc:/qt/qml/DungeonEditor/qml/dialogs");
+    engine.addImportPath("qrc:/qt/qml/DungeonEditor/qml/panels");
 
 
     
     const QStringList resourcePaths = {
-        "qrc:/qml/Main.qml"
+        "qrc:/qt/qml/DungeonEditor/qml/Main.qml"
     };
 
     bool loaded = false;

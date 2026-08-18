@@ -5,9 +5,9 @@ import DungeonEditor.Core 1.0
 import DungeonEditor.Canvas 1.0
 import DungeonEditor.Models 1.0
 import DungeonEditor.Services 1.0
-import "qrc:/qml/components"
-import "qrc:/qml/panels"
-import "qrc:/qml/dialogs"
+import "qrc:/qt/qml/DungeonEditor/qml/components"
+import "qrc:/qt/qml/DungeonEditor/qml/panels"
+import "qrc:/qt/qml/DungeonEditor/qml/dialogs"
 
 ApplicationWindow {
     id: window
@@ -90,13 +90,13 @@ ApplicationWindow {
                 spacing: 4
                 
                 ToolButton {
-                    icon.source: "qrc:/assets/icons/general/undo.svg"
+                    icon.source: "qrc:/qt/qml/DungeonEditor/assets/icons/general/undo.svg"
                     display: AbstractButton.IconOnly
                     enabled: mapDoc.canUndo
                     onClicked: mapDoc.undo()
                 }
                 ToolButton {
-                    icon.source: "qrc:/assets/icons/general/redo.svg"
+                    icon.source: "qrc:/qt/qml/DungeonEditor/assets/icons/general/redo.svg"
                     display: AbstractButton.IconOnly
                     enabled: mapDoc.canRedo
                     onClicked: mapDoc.redo()
