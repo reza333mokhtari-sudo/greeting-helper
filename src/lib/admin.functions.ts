@@ -19,7 +19,7 @@ export const checkAdminAccess = createServerFn({ method: "GET" })
     }
 
     try {
-      const { data: isAdmin, error } = await supabase.rpc("has_role", {
+      const { data: isAdmin, error } = await supabaseAdmin.rpc("has_role", {
         _user_id: userId,
         _role: "admin",
       });
