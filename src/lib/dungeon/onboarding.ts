@@ -1,33 +1,32 @@
 export const ONBOARDING_STEPS = [
   {
-    title:
-      "now debug all model AI assist and enhance them (if CLIENT want make 2d ICON as 15px-15px(only) and other )\n\nmake sure has BIG update",
+    title: "Professional Cartography",
     content:
-      "Dungeon Scrawl is a minimalist map maker. Everything you draw is automatically merged into a hand-drawn style.",
+      "Dungeon Scrawl Professional is a minimalist yet powerful map maker. Everything you draw is automatically merged into a hand-drawn style with professional-grade precision.",
     image: "M3 5h18v14H3z", // Rectangle icon
   },
   {
-    title: "Start Drawing",
+    title: "Precision Drawing",
     content:
-      "The Rectangle tool (R) is selected. Drag on the canvas to create your first room. Drag from inside a room to expand it.",
+      "The Rectangle tool (R) is selected. Drag on the canvas to create your first room. The engine handles complex wall merging and geometry optimization automatically.",
     image: "M4 19c4-1 4-6 8-8s6-6 8-7c-1 4-4 7-6 9s-6 3-8 7z", // Brush icon
   },
   {
-    title: "Doors & Stairs",
+    title: "Architectural Elements",
     content:
-      "Press (D) to place doors or (S) for stairs. They auto-snap to walls and align correctly.",
+      "Press (D) to place doors or (S) for stairs. These elements auto-snap to wall segments and maintain perfect alignment with the underlying grid.",
     image: "M6 3h12v18H6zM14 12h1.6", // Door icon
   },
   {
-    title: "The Eraser",
+    title: "Geometric Subtraction",
     content:
-      "Hold (E) or press (X) to erase. Erasing near a wall creates a corridor opening, while erasing in open space removes floors.",
+      "Hold (E) or press (X) to enter Erase mode. Subtracting from rooms creates openings, while erasing in empty space refines your floor plans.",
     image: "M3 15l8-8 8 8-4 4H7z", // Eraser icon
   },
   {
-    title: "Save Your Work",
+    title: "Persistent Storage",
     content:
-      "Free users: Use Ctrl/Cmd+S often to save .ds files. Pro users enjoy automatic cloud saving.",
+      "Cloud users enjoy automatic, real-time synchronization. Free tier users can use Ctrl+S to export .ds save files for local archival.",
     image: "M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z", // Save icon
   },
 ];
