@@ -13,7 +13,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 type Search = { next?: string | undefined };
 
-export const Route = createFileRoute("/auth")({
+export const Route = createFileRoute("/auth/")({
   // Session lives in localStorage, so the check must run on the client only.
   ssr: false,
   validateSearch: (s: Record<string, unknown>): Search => ({
