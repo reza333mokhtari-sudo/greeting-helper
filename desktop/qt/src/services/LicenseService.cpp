@@ -3,6 +3,11 @@
 #include <QCryptographicHash>
 #include <QSysInfo>
 #include <QDebug>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 LicenseService::LicenseService(QObject *parent) : QObject(parent) {
     m_hwid = generateHardwareId();

@@ -32,8 +32,11 @@ public:
     bool isActive() const;
     QDateTime expiryDate() const;
     QString hardwareId() const;
+    int monthsDuration() const;
+    QDateTime lastSyncTime() const;
+    bool isSyncing() const;
 
-    Q_INVOKABLE bool activate(const QString& key);
+    Q_INVOKABLE void activate(const QString& key);
     Q_INVOKABLE void deactivate();
     Q_INVOKABLE int daysRemaining() const;
 
@@ -41,6 +44,7 @@ signals:
     void licenseStatusChanged();
     void activationSuccess();
     void activationFailed(const QString& reason);
+    void isSyncingChanged();
 
 private:
     void loadLicense();
@@ -50,7 +54,10 @@ private:
     QString m_key;
     QString m_type = "Free";
     QDateTime m_expiry;
+    int m_months = 0;
+    QDateTime m_lastSync;
     bool m_active = false;
+    bool m_isSyncing = false;
     QString m_hwid;
 };
 
