@@ -3,9 +3,14 @@
 #include <QQmlContext>
 #include <QIcon>
 #include <QQuickStyle>
+#include <QQuickWindow>
+#include <QSettings>
 #include <QtQml/qqml.h>
 #include <QDebug>
 #include <QProcess>
+#include <QSurfaceFormat>
+#include <QSGRendererInterface>
+
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -30,6 +35,18 @@ public:
         : QObject(parent), m_engine(engine) {
         m_currentStyle = QQuickStyle::name();
         if (m_currentStyle.isEmpty()) m_currentStyle = "Fusion";
+    }
+
+    Q_INVOKABLE QString activeGraphicsApi() const {
+        auto api = QQuickWindow::graphicsApi();
+        switch (api) {
+            case QSGRendererInterface::OpenGL: return "OpenGL";
+            case QSGRendererInterface::Vulkan: return "Vulkan";
+            case QSGRendererInterface::Metal: return "Metal";
+            case QSGRendererInterface::Direct3D11: return "Direct3D 11";
+            case QSGRendererInterface::Software: return "Software";
+            default: return "Auto (Let Qt decide)";
+        }
     }
 
     QString currentStyle() const { return m_currentStyle; }
@@ -84,8 +101,44 @@ private:
 #include "main.moc"
 
 int main(int argc, char *argv[])
-
 {
+    // Early RHI selection before QGuiApplication construction
+    {
+        QSettings settings("DungeonEditor", "DungeonEditorNative");
+        QString backend = settings.value("Graphics/RHIBackend", "Auto").toString();
+        
+        // Environment variable override
+        QByteArray envBackend = qgetenv("QSG_RHI_BACKEND");
+        if (!envBackend.isEmpty()) {
+            backend = QString::fromLocal8Bit(envBackend);
+            qInfo() << "Using QSG_RHI_BACKEND override:" << backend;
+        }
+
+        qInfo() << "Target Graphics Backend:" << backend;
+
+        if (backend == "OpenGL") {
+            QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
+        } else if (backend == "Vulkan") {
+            QQuickWindow::setGraphicsApi(QSGRendererInterface::Vulkan);
+        } else if (backend == "Metal") {
+#ifdef Q_OS_DARWIN
+            QQuickWindow::setGraphicsApi(QSGRendererInterface::Metal);
+#else
+            qWarning() << "Metal is only supported on macOS. Falling back to Auto.";
+#endif
+        } else if (backend == "Direct3D 11") {
+#ifdef Q_OS_WIN
+            QQuickWindow::setGraphicsApi(QSGRendererInterface::Direct3D11);
+#else
+            qWarning() << "Direct3D 11 is only supported on Windows. Falling back to Auto.";
+#endif
+        } else if (backend == "Software") {
+            QQuickWindow::setGraphicsApi(QSGRendererInterface::Software);
+        } else {
+            // Auto
+        }
+    }
+
     QApplication app(argc, argv);
     app.setOrganizationName("DungeonEditor");
     app.setApplicationName("DungeonEditorNative");

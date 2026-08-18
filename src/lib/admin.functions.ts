@@ -437,7 +437,13 @@ export const getUserTickets = createServerFn({ method: "GET" })
 
 export const adminGenerateLicense = createServerFn({ method: "POST" })
   .inputValidator((d) =>
-    z.object({ userId: z.string(), type: z.enum(["trial", "pro", "enterprise"]) }).parse(d),
+    z
+      .object({
+        userId: z.string(),
+        type: z.enum(["trial", "pro", "enterprise"]),
+        months: z.number().optional(), // 1, 3, 5, 7, 9, 12, 15
+      })
+      .parse(d),
   )
   .handler(async ({ data, context }) => {
     const { userId: adminId } = context as any;
@@ -450,8 +456,13 @@ export const adminGenerateLicense = createServerFn({ method: "POST" })
 
     // 2. Set expiry
     const expiresAt = new Date();
-    if (data.type === "trial") expiresAt.setDate(expiresAt.getDate() + 30);
-    else expiresAt.setFullYear(expiresAt.getFullYear() + 1);
+    if (data.months) {
+      expiresAt.setMonth(expiresAt.getMonth() + data.months);
+    } else if (data.type === "trial") {
+      expiresAt.setDate(expiresAt.getDate() + 30);
+    } else {
+      expiresAt.setFullYear(expiresAt.getFullYear() + 1);
+    }
 
     // 3. Save to DB
     const { data: license, error } = await supabaseAdmin
