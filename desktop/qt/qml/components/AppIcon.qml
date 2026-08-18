@@ -29,7 +29,7 @@ Item {
     Image {
         id: image
         anchors.fill: parent
-        source: icon.startsWith("qrc:/") || icon.startsWith("file:/") ? icon : "qrc:/assets/icons/" + icon + ".svg"
+        source: icon.startsWith("qrc:/") || icon.startsWith("file:/") ? icon : "qrc:/qt/qml/DungeonEditor/assets/icons/" + icon + ".svg"
         sourceSize.width: size
         sourceSize.height: size
         fillMode: Image.PreserveAspectFit

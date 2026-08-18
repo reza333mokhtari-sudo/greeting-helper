@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import "qrc:/qml/components"
+import "qrc:/qt/qml/DungeonEditor/qml/components"
 
 Rectangle {
     id: root
