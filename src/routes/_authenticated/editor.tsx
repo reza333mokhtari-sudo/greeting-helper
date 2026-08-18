@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { DungeonEditor } from "@/components/dungeon/DungeonEditor";
 
-export const Route = createFileRoute("/editor")({
+export const Route = createFileRoute("/_authenticated/editor")({
   head: () => ({
     meta: [
       { title: "Editor — Dungeon Scrawl Map Maker" },

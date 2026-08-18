@@ -13,7 +13,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 type Search = { next?: string | undefined };
 
-export const Route = createFileRoute("/auth")({
+export const Route = createFileRoute("/auth/")({
   // Session lives in localStorage, so the check must run on the client only.
   ssr: false,
   validateSearch: (s: Record<string, unknown>): Search => ({
@@ -56,7 +56,7 @@ function safeNext(next?: string) {
 
 function AuthPage() {
   const navigate = useNavigate();
-  const { next } = useSearch({ from: "/auth" });
+  const { next } = useSearch({ from: "/auth/" });
   const dest = safeNext(next);
   const [tab, setTab] = useState<"in" | "up">("in");
   const [email, setEmail] = useState("");
@@ -111,6 +111,7 @@ function AuthPage() {
       return;
     }
     toast.success("Welcome back!");
+    navigate({ to: dest, replace: true });
   };
 
   const signUp = async () => {
