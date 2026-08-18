@@ -111,6 +111,7 @@ function AuthPage() {
       return;
     }
     toast.success("Welcome back!");
+    navigate({ to: dest, replace: true });
   };
 
   const signUp = async () => {
