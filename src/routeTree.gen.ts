@@ -11,12 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
-import { Route as EditorRouteImport } from './routes/editor'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AuthenticatedEditorRouteImport } from './routes/_authenticated/editor'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
-import { Route as MSlugRouteImport } from './routes/m.$slug'
-import { Route as PSlugRouteImport } from './routes/p.$slug'
+import { Route as MSlugRouteImport } from './routes/m/$slug'
+import { Route as PSlugRouteImport } from './routes/p/$slug'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as ApiAiChatRouteImport } from './routes/api/ai/chat'
 
 const IndexRoute = IndexRouteImport.update({
@@ -29,19 +29,14 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EditorRoute = EditorRouteImport.update({
-  id: '/editor',
-  path: '/editor',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminIndexRoute = AdminIndexRouteImport.update({
-  id: '/admin/',
-  path: '/admin/',
+const AuthenticatedEditorRoute = AuthenticatedEditorRouteImport.update({
+  id: '/_authenticated/editor',
+  path: '/editor',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthCallbackRoute = AuthCallbackRouteImport.update({
@@ -59,6 +54,11 @@ const PSlugRoute = PSlugRouteImport.update({
   path: '/p/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/_authenticated/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAiChatRoute = ApiAiChatRouteImport.update({
   id: '/api/ai/chat',
   path: '/api/ai/chat',
@@ -68,82 +68,82 @@ const ApiAiChatRoute = ApiAiChatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
-  '/editor': typeof EditorRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/editor': typeof AuthenticatedEditorRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/m/$slug': typeof MSlugRoute
   '/p/$slug': typeof PSlugRoute
-  '/admin/': typeof AdminIndexRoute
   '/api/ai/chat': typeof ApiAiChatRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
-  '/editor': typeof EditorRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/editor': typeof AuthenticatedEditorRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/m/$slug': typeof MSlugRoute
   '/p/$slug': typeof PSlugRoute
-  '/admin': typeof AdminIndexRoute
   '/api/ai/chat': typeof ApiAiChatRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
-  '/editor': typeof EditorRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/editor': typeof AuthenticatedEditorRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/m/$slug': typeof MSlugRoute
   '/p/$slug': typeof PSlugRoute
-  '/admin/': typeof AdminIndexRoute
   '/api/ai/chat': typeof ApiAiChatRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/auth'
-    | '/editor'
     | '/reset-password'
+    | '/editor'
     | '/auth/callback'
     | '/m/$slug'
     | '/p/$slug'
-    | '/admin/'
     | '/api/ai/chat'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
-    | '/editor'
     | '/reset-password'
+    | '/editor'
     | '/auth/callback'
     | '/m/$slug'
     | '/p/$slug'
-    | '/admin'
     | '/api/ai/chat'
+    | '/admin'
   id:
     | '__root__'
     | '/'
     | '/auth'
-    | '/editor'
     | '/reset-password'
+    | '/_authenticated/editor'
     | '/auth/callback'
     | '/m/$slug'
     | '/p/$slug'
-    | '/admin/'
     | '/api/ai/chat'
+    | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRouteWithChildren
-  EditorRoute: typeof EditorRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  AuthenticatedEditorRoute: typeof AuthenticatedEditorRoute
   MSlugRoute: typeof MSlugRoute
   PSlugRoute: typeof PSlugRoute
-  AdminIndexRoute: typeof AdminIndexRoute
   ApiAiChatRoute: typeof ApiAiChatRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -162,13 +162,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/editor': {
-      id: '/editor'
-      path: '/editor'
-      fullPath: '/editor'
-      preLoaderRoute: typeof EditorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/reset-password': {
       id: '/reset-password'
       path: '/reset-password'
@@ -176,11 +169,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/': {
-      id: '/admin/'
-      path: '/admin'
-      fullPath: '/admin/'
-      preLoaderRoute: typeof AdminIndexRouteImport
+    '/_authenticated/editor': {
+      id: '/_authenticated/editor'
+      path: '/editor'
+      fullPath: '/editor'
+      preLoaderRoute: typeof AuthenticatedEditorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/callback': {
@@ -202,6 +195,13 @@ declare module '@tanstack/react-router' {
       path: '/p/$slug'
       fullPath: '/p/$slug'
       preLoaderRoute: typeof PSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/ai/chat': {
@@ -227,12 +227,12 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRouteWithChildren,
-  EditorRoute: EditorRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  AuthenticatedEditorRoute: AuthenticatedEditorRoute,
   MSlugRoute: MSlugRoute,
   PSlugRoute: PSlugRoute,
-  AdminIndexRoute: AdminIndexRoute,
   ApiAiChatRoute: ApiAiChatRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
