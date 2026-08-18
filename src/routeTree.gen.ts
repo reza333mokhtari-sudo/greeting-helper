@@ -40,9 +40,9 @@ const AuthIndexRoute = AuthIndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthCallbackRoute = AuthCallbackRouteImport.update({
-  id: '/auth/callback',
-  path: '/auth/callback',
-  getParentRoute: () => rootRouteImport,
+  id: '/callback',
+  path: '/callback',
+  getParentRoute: () => AuthRoute,
 } as any)
 const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
   id: '/auth/reset-password',
@@ -145,7 +145,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
-  AuthCallbackRoute: typeof AuthCallbackRoute
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute
   MSlugRoute: typeof MSlugRoute
   PSlugRoute: typeof PSlugRoute
@@ -185,10 +184,10 @@ declare module '@tanstack/react-router' {
     }
     '/auth/callback': {
       id: '/auth/callback'
-      path: '/auth/callback'
+      path: '/callback'
       fullPath: '/auth/callback'
       preLoaderRoute: typeof AuthCallbackRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AuthRoute
     }
     '/auth/reset-password': {
       id: '/auth/reset-password'
@@ -245,7 +244,6 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
-  AuthCallbackRoute: AuthCallbackRoute,
   AuthResetPasswordRoute: AuthResetPasswordRoute,
   MSlugRoute: MSlugRoute,
   PSlugRoute: PSlugRoute,
@@ -255,3 +253,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
