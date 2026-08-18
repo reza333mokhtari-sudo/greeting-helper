@@ -1,11 +1,14 @@
 import { createServerFn } from "@tanstack/react-start";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { checkAdminAccess } from "./admin.functions";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 /**
  * Fetches aggregate statistics for the admin dashboard.
  */
-export const getAdminStats = createServerFn({ method: "GET" }).handler(async () => {
+export const getAdminStats = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async () => {
   await checkAdminAccess();
 
   const [
