@@ -24,7 +24,7 @@ BaseFloatingWindow {
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 40
-        spacing: 25
+        spacing: 20
         
         ColumnLayout {
             spacing: 5
@@ -35,7 +35,7 @@ BaseFloatingWindow {
             }
             Rectangle {
                 Layout.fillWidth: true
-                height: 60
+                height: 80
                 color: "#161616"
                 border.color: "#2d2d2d"
                 radius: 4
@@ -44,53 +44,105 @@ BaseFloatingWindow {
                     anchors.fill: parent
                     anchors.margins: 15
                     
-                    Label {
-                        text: licenseService.licenseType.toUpperCase()
-                        font.pixelSize: 20
-                        font.bold: true
-                        color: licenseService.isActive ? "#3b82f6" : "#666"
+                    ColumnLayout {
+                        spacing: 2
+                        Label {
+                            text: licenseService.licenseType.toUpperCase()
+                            font.pixelSize: 22
+                            font.bold: true
+                            color: licenseService.isActive ? "#3b82f6" : "#666"
+                        }
+                        Label {
+                            text: licenseService.isActive ? 
+                                  "Duration: " + licenseService.monthsDuration + " Month(s)" : 
+                                  "No active subscription"
+                            font.pixelSize: 11
+                            color: "#888"
+                        }
                     }
                     
                     Item { Layout.fillWidth: true }
                     
-                    Label {
-                        text: licenseService.isActive ? 
-                              licenseService.daysRemaining + " days remaining" : 
-                              "Inactive"
-                        color: "#888"
+                    ColumnLayout {
+                        Layout.alignment: Qt.AlignRight
+                        spacing: 2
+                        Label {
+                            text: licenseService.isActive ? 
+                                  licenseService.daysRemaining + " days remaining" : 
+                                  "Inactive"
+                            color: licenseService.daysRemaining < 7 ? "#ef4444" : "#10b981"
+                            font.bold: true
+                        }
+                        Label {
+                            text: "Expires: " + (licenseService.isActive ? licenseService.expiryDate.toLocaleDateString() : "N/A")
+                            font.pixelSize: 10
+                            color: "#666"
+                            Layout.alignment: Qt.AlignRight
+                        }
                     }
                 }
             }
         }
-        
+
         ColumnLayout {
-            spacing: 10
+            spacing: 8
             Label {
                 text: "Activate License Key"
                 font.bold: true
                 color: "#888"
             }
-            TextField {
-                id: keyInput
+            RowLayout {
                 Layout.fillWidth: true
-                placeholderText: "XXXX-XXXX-XXXX-XXXX"
-                color: "#eee"
-                background: Rectangle {
-                    color: "#161616"
-                    border.color: keyInput.activeFocus ? "#3b82f6" : "#2d2d2d"
+                spacing: 10
+                TextField {
+                    id: keyInput
+                    Layout.fillWidth: true
+                    placeholderText: "XXXX-XXXX-XXXX-XXXX"
+                    color: "#eee"
+                    font.family: "JetBrains Mono"
+                    background: Rectangle {
+                        color: "#161616"
+                        border.color: keyInput.activeFocus ? "#3b82f6" : "#2d2d2d"
+                        radius: 4
+                    }
+                }
+                Button {
+                    text: "Paste"
+                    onClicked: keyInput.text = "PRO-SAMPLE" // In real app use Clipboard
+                    visible: false // Hidden as shortcut
                 }
             }
             Button {
-                text: "Activate"
+                text: licenseService.isSyncing ? "Verifying..." : "Save & Verify"
                 Layout.fillWidth: true
                 highlighted: true
+                enabled: !licenseService.isSyncing && keyInput.text.length > 5
                 onClicked: licenseService.activate(keyInput.text)
+                
+                contentItem: RowLayout {
+                    spacing: 8
+                    Item { Layout.fillWidth: true }
+                    Label {
+                        text: parent.parent.text
+                        color: "#fff"
+                        font.bold: true
+                    }
+                    BusyIndicator {
+                        running: licenseService.isSyncing
+                        visible: running
+                        implicitWidth: 16
+                        implicitHeight: 16
+                    }
+                    Item { Layout.fillWidth: true }
+                }
             }
         }
         
         Label {
             id: statusLabel
-            text: "Hardware ID: " + licenseService.hardwareId
+            text: licenseService.isActive ? 
+                  "Last sync: " + licenseService.lastSyncTime.toLocaleString() :
+                  "Hardware ID: " + licenseService.hardwareId
             font.pixelSize: 11
             color: "#666"
             Layout.alignment: Qt.AlignHCenter
@@ -104,6 +156,11 @@ BaseFloatingWindow {
             visible: licenseService.isActive
             onClicked: licenseService.deactivate()
             Layout.alignment: Qt.AlignHCenter
+            contentItem: Label {
+                text: "Deactivate License"
+                color: "#ef4444"
+                font.underline: true
+            }
         }
     }
 }
