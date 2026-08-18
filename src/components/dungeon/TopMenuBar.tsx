@@ -174,8 +174,17 @@ export function TopMenuBar(props: Props & { onOpenHelp: (sectionId?: string) => 
         <div className="h-4 w-px bg-border mx-1" />
         {loading ? (
           <div className="h-8 w-8 animate-pulse rounded-full bg-muted border border-border/40" />
-        ) : (
+        ) : user ? (
           <ProfileMenu onAuthRequired={props.onAuthRequired} />
+        ) : (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="font-bold uppercase tracking-widest text-[10px]"
+            asChild
+          >
+            <Link to="/auth">Sign In</Link>
+          </Button>
         )}
       </div>
     </header>
