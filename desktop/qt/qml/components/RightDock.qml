@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import "qrc:/qml/components"
+import "qrc:/qt/qml/DungeonEditor/qml/components"
 
 Rectangle {
     color: "#252526"
