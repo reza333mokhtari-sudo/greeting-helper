@@ -119,7 +119,7 @@ The AI Assistant is a specialized language model fine-tuned for professional dun
 - **Tool Grounding**: It understands the specific constraints of the "Arcane Autodesk" engine. Ask "How do I optimize render scale?" for technical guidance.
 - **Diagnostics**: Use **AI > Diagnostics** in the top menu to view the reasoning tokens and performance metrics for the current session.
 
-**Stability Note**: The web engine is optimized for high-performance 2D rendering. For deployment issues on Vercel, refer to the project's root \`DEPLOYMENT.md\` for environment variable requirements.`,
+**Stability Note**: The web engine is optimized for high-performance 2D rendering. If you experience performance issues, check the **Graphics Settings** panel to adjust render quality or anti-aliasing.`,
   },
   {
     id: "admin-control",
