@@ -56,7 +56,7 @@ function safeNext(next?: string) {
 
 function AuthPage() {
   const navigate = useNavigate();
-  const { next } = useSearch({ from: "/auth" });
+  const { next } = useSearch({ from: "/auth/" });
   const dest = safeNext(next);
   const [tab, setTab] = useState<"in" | "up">("in");
   const [email, setEmail] = useState("");
