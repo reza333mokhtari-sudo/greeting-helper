@@ -91,7 +91,7 @@ function LandingPage() {
           to={user ? "/editor" : "/"}
           className="flex items-center gap-2 group hover:opacity-80 transition-opacity"
         >
-          <div className="size-8 rounded bg-primary flex items-center justify-center">
+          <div className="size-8 rounded bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
             <Map className="size-5 text-primary-foreground" />
           </div>
           <span className="text-xl font-bold tracking-tight uppercase tracking-wider">
@@ -99,12 +99,18 @@ function LandingPage() {
           </span>
         </Link>
         <nav className="flex items-center gap-4">
+          <ThemeToggle />
+          <div className="h-4 w-px bg-border mx-1" />
           {loading ? (
             <div className="h-9 w-9 animate-pulse rounded-full bg-muted border border-border/40" />
-          ) : (
+          ) : user ? (
             <ProfileMenu />
+          ) : (
+            <Button asChild variant="ghost" size="sm" className="font-bold uppercase tracking-widest text-[10px]">
+              <Link to="/auth">Sign In</Link>
+            </Button>
           )}
-          <Button asChild size="sm" className="shadow-lg shadow-primary/20">
+          <Button asChild size="sm" className="shadow-lg shadow-primary/20 font-bold uppercase tracking-wider text-[10px] h-9 px-4">
             <Link to="/editor">Launch Editor</Link>
           </Button>
         </nav>
