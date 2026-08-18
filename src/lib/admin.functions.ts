@@ -19,7 +19,7 @@ export const checkAdminAccess = createServerFn({ method: "GET" })
     }
 
     try {
-      const { data: isAdmin, error } = await supabase.rpc("has_role", {
+      const { data: isAdmin, error } = await supabaseAdmin.rpc("has_role", {
         _user_id: userId,
         _role: "admin",
       });
@@ -56,8 +56,10 @@ export const checkAdminAccess = createServerFn({ method: "GET" })
 /**
  * Lists all manageable tables from the public schema.
  */
-export const getAdminSchema = createServerFn({ method: "GET" }).handler(async ({ context }) => {
-  await checkAdminAccess();
+export const getAdminSchema = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await checkAdminAccess();
 
   return {
     tables: [
@@ -171,6 +173,7 @@ export const getAdminSchema = createServerFn({ method: "GET" }).handler(async ({
  * Generic CRUD operations for admin.
  */
 export const adminTableQuery = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d) =>
     z
       .object({
@@ -251,6 +254,7 @@ export const adminTableQuery = createServerFn({ method: "POST" })
   });
 
 export const adminTableUpdate = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d) =>
     z
       .object({
@@ -286,6 +290,7 @@ export const adminTableUpdate = createServerFn({ method: "POST" })
   });
 
 export const adminTableDelete = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d) =>
     z
       .object({
@@ -316,6 +321,7 @@ export const adminTableDelete = createServerFn({ method: "POST" })
   });
 
 export const adminResendVerification = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d) => z.object({ email: z.string().email() }).parse(d))
   .handler(async ({ data }) => {
     await checkAdminAccess();
@@ -328,6 +334,7 @@ export const adminResendVerification = createServerFn({ method: "POST" })
   });
 
 export const adminVerifyUser = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d) => z.object({ userId: z.string() }).parse(d))
   .handler(async ({ data, context }) => {
     const { userId: adminId } = context as any;
@@ -358,6 +365,7 @@ export const adminVerifyUser = createServerFn({ method: "POST" })
   });
 
 export const adminGetUserStats = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d) => z.object({ userId: z.string() }).parse(d))
   .handler(async ({ data }) => {
     await checkAdminAccess();
@@ -372,6 +380,7 @@ export const adminGetUserStats = createServerFn({ method: "GET" })
   });
 
 export const adminDeleteUser = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d) => z.object({ userId: z.string() }).parse(d))
   .handler(async ({ data, context }) => {
     const { userId: adminId } = context as any;
@@ -442,6 +451,7 @@ export const getUserTickets = createServerFn({ method: "GET" })
   });
 
 export const adminGenerateLicense = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d) =>
     z
       .object({
