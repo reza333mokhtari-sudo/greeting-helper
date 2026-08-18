@@ -710,9 +710,10 @@ function AdminConsole() {
                     search={search}
                     onSearchChange={setSearch}
                     onView={setSelectedRow}
-                    onEdit={setEditingRow}
-                    onDelete={handleDelete}
+                    onEdit={currentTableConfig?.editable?.length ? setEditingRow : undefined}
+                    onDelete={currentTableConfig?.deletable ? handleDelete : undefined}
                     onExport={handleExport}
+                    actions={activeTable === "unverified_users" ? renderUnverifiedActions : undefined}
                   />
                 )}
               </div>
