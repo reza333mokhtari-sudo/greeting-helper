@@ -9,8 +9,8 @@ import DungeonEditor.Core 1.0
  */
 Rectangle {
     id: root
-    height: 56 // h-14 equivalent
-    color: "#121212"
+    height: 36
+    color: "#2d2d2d"
     
     property var document: null
     property var canvas: null
@@ -19,135 +19,100 @@ Rectangle {
         anchors.bottom: parent.bottom
         width: parent.width
         height: 1
-        color: "#2d2d2d"
-    }
-
-    FileDialog {
-        id: saveDialog
-        title: "Save Map"
-        fileMode: FileDialog.SaveFile
-        nameFilters: ["Map files (*.json)"]
-        onAccepted: document.save(selectedFile)
-    }
-
-    FileDialog {
-        id: openDialog
-        title: "Open Map"
-        fileMode: FileDialog.OpenFile
-        nameFilters: ["Map files (*.json)"]
-        onAccepted: document.load(selectedFile)
+        color: "#1e1e1e"
     }
 
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: 16
-        anchors.rightMargin: 16
-        spacing: 12
+        anchors.leftMargin: 8
+        spacing: 0
         
-        // Brand Area
-        RowLayout {
-            spacing: 10
+        Image {
+            source: "qrc:/assets/icons/general/settings.svg"
+            sourceSize.width: 16
+            sourceSize.height: 16
             Layout.alignment: Qt.AlignVCenter
-            
-            Rectangle {
-                width: 28; height: 28; radius: 4
-                color: "#3b82f6" // Primary
-                Label {
-                    anchors.centerIn: parent
-                    text: "M"
-                    color: "white"
-                    font.bold: true
-                }
-            }
-            
-            Label {
-                text: "DUNGEON SCRAWL"
-                color: "white"
-                font.pixelSize: 14
-                font.bold: true
-                font.letterSpacing: 0.5
-            }
+            Layout.rightMargin: 8
         }
 
-        Rectangle { width: 1; height: 24; color: "#333"; Layout.leftMargin: 8; Layout.rightMargin: 8 }
 
-        // Menu Bar
         MenuBar {
             id: menuBar
             Layout.alignment: Qt.AlignVCenter
-            background: Item {}
             
+            delegate: MenuBarItem {
+                id: barItem
+                contentItem: Label {
+                    text: barItem.text
+                    font.pixelSize: 11
+                    color: barItem.highlighted ? "white" : "#ccc"
+                    verticalAlignment: Text.AlignVCenter
+                }
+            }
+
+
             Menu {
                 title: qsTr("File")
-                MenuItem { text: qsTr("New Map"); onTriggered: document.clear() }
-                MenuItem { text: qsTr("Open..."); onTriggered: openDialog.open() }
+                MenuItem { text: qsTr("New"); icon.source: "qrc:/assets/icons/menu/new.svg"; onTriggered: document.clear() }
+                MenuItem { text: qsTr("Open..."); icon.source: "qrc:/assets/icons/menu/open.svg"; onTriggered: openDialog.open() }
+
                 MenuSeparator {}
-                MenuItem { text: qsTr("Save"); onTriggered: saveDialog.open() }
-                MenuItem { text: qsTr("Export PNG") }
+                MenuItem { text: qsTr("Save"); icon.source: "qrc:/assets/icons/menu/save.svg"; onTriggered: document.save() }
+                MenuItem { text: qsTr("Preferences..."); onTriggered: preferencesDialog.open() }
+                MenuSeparator {}
+                MenuItem { text: qsTr("Quit"); onTriggered: Qt.quit() }
             }
             Menu {
                 title: qsTr("Edit")
-                MenuItem { text: qsTr("Undo"); enabled: document && document.canUndo; onTriggered: document.undoStack.undo() }
-                MenuItem { text: qsTr("Redo"); enabled: document && document.canRedo; onTriggered: document.undoStack.redo() }
+                MenuItem { 
+                    text: qsTr("Undo")
+                    shortcut: StandardKey.Undo
+                    onTriggered: document.undo() 
+                }
+                MenuItem { 
+                    text: qsTr("Redo")
+                    shortcut: StandardKey.Redo
+                    onTriggered: document.redo() 
+                }
             }
             Menu {
-                title: qsTr("View")
-                MenuItem { text: qsTr("Zoom In"); onTriggered: canvas.zoomIn() }
-                MenuItem { text: qsTr("Zoom Out"); onTriggered: canvas.zoomOut() }
-                MenuItem { text: qsTr("Fit to Screen"); onTriggered: canvas.fitToScreen() }
+                title: qsTr("Modify")
+                MenuItem { text: qsTr("Reset Transformations") }
+            }
+            Menu {
+                title: qsTr("Create")
+                MenuItem { text: qsTr("Polygon Primitive") }
+            }
+            Menu {
+                title: qsTr("Windows")
+                MenuItem { text: qsTr("Outliner") }
+                MenuItem { text: qsTr("Asset Browser") }
+                MenuItem { text: qsTr("Attributes Editor") }
+            }
+            Menu {
+                title: qsTr("Help")
+                MenuItem { text: qsTr("Welcome Screen"); onTriggered: welcomeWindow.show() }
+                MenuItem { text: qsTr("Documentation"); onTriggered: helpWindow.show() }
+                MenuItem { text: qsTr("License Management..."); onTriggered: licenseWindow.show() }
+                MenuSeparator {}
+                MenuItem { text: qsTr("Check for Updates...") }
+                MenuItem { text: qsTr("About Dungeon Scrawl"); onTriggered: aboutWindow.show() }
             }
         }
 
         Item { Layout.fillWidth: true }
         
-        // Status & User
         RowLayout {
-            spacing: 16
+            Layout.rightMargin: 8
+            spacing: 12
             
-            RowLayout {
-                spacing: 6
-                Rectangle {
-                    width: 8; height: 8; radius: 4
-                    color: (document && document.dirty) ? "#f59e0b" : "#10b981"
-                }
-                Label {
-                    text: (document && document.dirty) ? "UNSAVED" : "SYNCED"
-                    color: (document && document.dirty) ? "#f59e0b" : "#10b981"
-                    font.pixelSize: 10
-                    font.bold: true
-                }
-            }
-            
-            Button {
-                text: "Sign In"
+            ComboBox {
+                model: ["Default Workspace", "Maya Classic", "Expert"]
                 flat: true
-                contentItem: Label {
-                    text: parent.text
-                    color: "#3b82f6"
-                    font.bold: true
-                    font.pixelSize: 12
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
+                Layout.preferredHeight: 24
             }
             
-            Button {
-                text: "Export"
-                background: Rectangle {
-                    implicitWidth: 80
-                    implicitHeight: 32
-                    radius: 6
-                    color: "#3b82f6"
-                }
-                contentItem: Label {
-                    text: parent.text
-                    color: "white"
-                    font.bold: true
-                    font.pixelSize: 12
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
+            AppIcon { icon: "status/help"; size: 16; color: "#888" }
         }
     }
 }

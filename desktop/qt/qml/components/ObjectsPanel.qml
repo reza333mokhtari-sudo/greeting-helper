@@ -22,7 +22,8 @@ Rectangle {
             id: searchField
             placeholderText: qsTr("Search objects...")
             Layout.fillWidth: true
-            background: Rectangle { color: "#3c3c3c"; radius: 4 }
+            color: "white"
+
             color: "white"
         }
 

@@ -1,11 +1,14 @@
 import { createServerFn } from "@tanstack/react-start";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { checkAdminAccess } from "./admin.functions";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 /**
  * Fetches aggregate statistics for the admin dashboard.
  */
-export const getAdminStats = createServerFn({ method: "GET" }).handler(async () => {
+export const getAdminStats = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async () => {
   await checkAdminAccess();
 
   const [
@@ -43,7 +46,7 @@ export const getAdminStats = createServerFn({ method: "GET" }).handler(async () 
       { label: "Asset Library", value: assetsCount || 0, trend: "+8%" },
     ],
     chartData,
-    recentAudit: (recentAudit || []).map((log) => ({
+    recentAudit: (recentAudit || []).map((log: any) => ({
       id: String(log.id),
       action: String(log.action),
       table_name: String(log.table_name || ""),

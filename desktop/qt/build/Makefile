@@ -405,6 +405,30 @@ src/services/FileService.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/appDungeonEditor.dir/build.make CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.s
 .PHONY : src/services/FileService.cpp.s
 
+src/services/WorkspaceService.o: src/services/WorkspaceService.cpp.o
+.PHONY : src/services/WorkspaceService.o
+
+# target to build an object file
+src/services/WorkspaceService.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/appDungeonEditor.dir/build.make CMakeFiles/appDungeonEditor.dir/src/services/WorkspaceService.cpp.o
+.PHONY : src/services/WorkspaceService.cpp.o
+
+src/services/WorkspaceService.i: src/services/WorkspaceService.cpp.i
+.PHONY : src/services/WorkspaceService.i
+
+# target to preprocess a source file
+src/services/WorkspaceService.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/appDungeonEditor.dir/build.make CMakeFiles/appDungeonEditor.dir/src/services/WorkspaceService.cpp.i
+.PHONY : src/services/WorkspaceService.cpp.i
+
+src/services/WorkspaceService.s: src/services/WorkspaceService.cpp.s
+.PHONY : src/services/WorkspaceService.s
+
+# target to generate assembly for a file
+src/services/WorkspaceService.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/appDungeonEditor.dir/build.make CMakeFiles/appDungeonEditor.dir/src/services/WorkspaceService.cpp.s
+.PHONY : src/services/WorkspaceService.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -445,6 +469,9 @@ help:
 	@echo "... src/services/FileService.o"
 	@echo "... src/services/FileService.i"
 	@echo "... src/services/FileService.s"
+	@echo "... src/services/WorkspaceService.o"
+	@echo "... src/services/WorkspaceService.i"
+	@echo "... src/services/WorkspaceService.s"
 .PHONY : help
 
 

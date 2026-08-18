@@ -129,9 +129,10 @@ export function DiagnosticsPanel(props: Props) {
 
       <Badge
         variant={props.online ? "secondary" : "destructive"}
-        className="w-full justify-center text-[10px]"
+        className={`w-full justify-center text-[10px] transition-colors duration-500 ${props.online ? "bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20" : "bg-destructive/10 text-destructive"}`}
       >
-        {props.online ? "Online — cloud sync available" : "Offline — working locally"}
+        <span className={`mr-1.5 h-1.5 w-1.5 rounded-full ${props.online ? "animate-pulse bg-emerald-500" : "bg-destructive"}`} />
+        {props.online ? "Backend Online — Cloud Sync Active" : "Offline Mode — Working Locally"}
       </Badge>
 
       <p className="text-[10px] leading-relaxed text-muted-foreground">

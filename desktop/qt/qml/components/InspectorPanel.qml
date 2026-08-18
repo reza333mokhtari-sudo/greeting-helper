@@ -10,14 +10,17 @@ Rectangle {
 
     function updateSelection(id) {
         selectedId = id;
-        if (id === "") {
+        if (id === "" || !document || typeof document.objects === "undefined") {
             selectedObject = null;
         } else {
             let objs = document.objects;
-            for (let i = 0; i < objs.length; i++) {
-                if (objs[i].id === id) {
-                    selectedObject = objs[i];
-                    break;
+            selectedObject = null;
+            if (objs) {
+                for (let i = 0; i < objs.length; i++) {
+                    if (objs[i] && objs[i].id === id) {
+                        selectedObject = objs[i];
+                        break;
+                    }
                 }
             }
         }

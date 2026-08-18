@@ -19,7 +19,7 @@ export const checkAdminAccess = createServerFn({ method: "GET" })
     }
 
     try {
-      const { data: isAdmin, error } = await supabase.rpc("has_role", {
+      const { data: isAdmin, error } = await supabaseAdmin.rpc("has_role", {
         _user_id: userId,
         _role: "admin",
       });
@@ -56,8 +56,10 @@ export const checkAdminAccess = createServerFn({ method: "GET" })
 /**
  * Lists all manageable tables from the public schema.
  */
-export const getAdminSchema = createServerFn({ method: "GET" }).handler(async ({ context }) => {
-  await checkAdminAccess();
+export const getAdminSchema = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await checkAdminAccess();
 
   return {
     tables: [
@@ -88,6 +90,23 @@ export const getAdminSchema = createServerFn({ method: "GET" }).handler(async ({
         pk: "id",
         columns: ["id", "user_id", "role", "created_at"],
         editable: ["role"],
+        deletable: true,
+      },
+      {
+        name: "licenses",
+        pk: "id",
+        columns: [
+          "id",
+          "user_id",
+          "key",
+          "type",
+          "months_duration",
+          "hardware_id",
+          "redeemed_at",
+          "expires_at",
+          "created_at",
+        ],
+        editable: ["type", "expires_at"],
         deletable: true,
       },
       {
@@ -143,9 +162,11 @@ export const getAdminSchema = createServerFn({ method: "GET" }).handler(async ({
       {
         name: "unverified_users",
         pk: "id",
-        columns: ["id", "email", "created_at", "last_sign_in_at"],
+        columns: ["id", "email", "created_at", "last_sign_in_at", "email_confirmed_at"],
         editable: [],
         deletable: true,
+        isVirtual: true,
+        baseTable: "auth.users",
       },
       {
         name: "admin_audit_logs",
@@ -153,15 +174,6 @@ export const getAdminSchema = createServerFn({ method: "GET" }).handler(async ({
         columns: ["id", "admin_id", "action", "table_name", "row_id", "payload", "created_at"],
         editable: [],
         deletable: false,
-      },
-      {
-        name: "unverified_users",
-        pk: "id",
-        columns: ["id", "email", "created_at", "last_sign_in_at", "email_confirmed_at"],
-        editable: [],
-        deletable: true,
-        isVirtual: true,
-        baseTable: "auth.users",
       },
     ],
   };
@@ -171,6 +183,7 @@ export const getAdminSchema = createServerFn({ method: "GET" }).handler(async ({
  * Generic CRUD operations for admin.
  */
 export const adminTableQuery = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d) =>
     z
       .object({
@@ -199,14 +212,14 @@ export const adminTableQuery = createServerFn({ method: "POST" })
       } = await query;
       if (error) throw new Error(error.message);
 
-      const unverifiedUsers = users.filter((u) => !u.email_confirmed_at);
+      const unverifiedUsers = users.filter((u: any) => !u.email_confirmed_at);
 
       const from = data.page * data.pageSize;
       const to = from + data.pageSize;
       const slicedUsers = unverifiedUsers.slice(from, to);
 
       return {
-        rows: slicedUsers.map((u) => ({
+        rows: slicedUsers.map((u: any) => ({
           id: u.id,
           email: u.email,
           created_at: u.created_at,
@@ -217,17 +230,26 @@ export const adminTableQuery = createServerFn({ method: "POST" })
       };
     }
 
-    let query = (supabaseAdmin.from(table as PublicTable) as any).select("*", { count: "exact" });
+    // We cast to PostgrestFilterBuilder to ensure all builder methods like range() are recognized
+    // by the compiler and present at runtime.
+    const tableRef = supabaseAdmin.from(table as PublicTable);
+    let query = tableRef.select("*", { count: "exact" });
 
     if (data.search) {
-      query = query.or(
-        `name.ilike.%${data.search}%,title.ilike.%${data.search}%,subject.ilike.%${data.search}%`,
-      );
+      // We filter searchable columns. Note: 'profiles' uses 'display_name' instead of 'name'
+      const searchColumns =
+        table === "profiles"
+          ? ["display_name", "email"]
+          : ["name", "title", "subject", "email"];
+      const filter = searchColumns
+        .map((col) => `${col}.ilike.%${data.search}%`)
+        .join(",");
+      query = query.or(filter);
     }
 
     const from = data.page * data.pageSize;
     const to = from + data.pageSize - 1;
-    query = query.range(from, to);
+    query = (query as any).range(from, to);
 
     if (data.sort) {
       query = query.order(data.sort.column, { ascending: data.sort.ascending });
@@ -242,6 +264,7 @@ export const adminTableQuery = createServerFn({ method: "POST" })
   });
 
 export const adminTableUpdate = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d) =>
     z
       .object({
@@ -277,6 +300,7 @@ export const adminTableUpdate = createServerFn({ method: "POST" })
   });
 
 export const adminTableDelete = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d) =>
     z
       .object({
@@ -307,6 +331,7 @@ export const adminTableDelete = createServerFn({ method: "POST" })
   });
 
 export const adminResendVerification = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d) => z.object({ email: z.string().email() }).parse(d))
   .handler(async ({ data }) => {
     await checkAdminAccess();
@@ -319,6 +344,7 @@ export const adminResendVerification = createServerFn({ method: "POST" })
   });
 
 export const adminVerifyUser = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d) => z.object({ userId: z.string() }).parse(d))
   .handler(async ({ data, context }) => {
     const { userId: adminId } = context as any;
@@ -349,6 +375,7 @@ export const adminVerifyUser = createServerFn({ method: "POST" })
   });
 
 export const adminGetUserStats = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d) => z.object({ userId: z.string() }).parse(d))
   .handler(async ({ data }) => {
     await checkAdminAccess();
@@ -363,6 +390,7 @@ export const adminGetUserStats = createServerFn({ method: "GET" })
   });
 
 export const adminDeleteUser = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((d) => z.object({ userId: z.string() }).parse(d))
   .handler(async ({ data, context }) => {
     const { userId: adminId } = context as any;
@@ -430,4 +458,124 @@ export const getUserTickets = createServerFn({ method: "GET" })
 
     if (error) throw new Error(error.message);
     return data;
+  });
+
+export const adminGenerateLicense = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) =>
+    z
+      .object({
+        userId: z.string(),
+        type: z.enum(["trial", "pro", "enterprise"]),
+        months: z.number().optional(), // 1, 3, 5, 7, 9, 12, 15
+      })
+      .parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    const { userId: adminId } = context as any;
+    await checkAdminAccess();
+
+    // 1. Generate key (automatic format compatible with desktop app)
+    const prefix = data.type.toUpperCase();
+    const random = Math.random().toString(36).substring(2, 10).toUpperCase();
+    const key = `${prefix}-${random}`;
+
+    // 2. Set expiry
+    const expiresAt = new Date();
+    if (data.months) {
+      expiresAt.setMonth(expiresAt.getMonth() + data.months);
+    } else if (data.type === "trial") {
+      expiresAt.setDate(expiresAt.getDate() + 30);
+    } else {
+      expiresAt.setFullYear(expiresAt.getFullYear() + 1);
+    }
+
+    // 3. Save to DB
+    const { data: license, error } = await supabaseAdmin
+      .from("licenses")
+      .insert({
+        user_id: data.userId,
+        key: key,
+        type: data.type,
+        expires_at: expiresAt.toISOString(),
+        months_duration: data.months || (data.type === "trial" ? 1 : 12),
+      })
+      .select()
+      .single();
+
+    if (error) throw new Error(error.message);
+
+    // 4. Create notification/popup data for user (simulated via metadata or separate table)
+    await (supabaseAdmin.from("admin_audit_logs") as any).insert({
+      admin_id: adminId,
+      action: "GENERATE_LICENSE",
+      table_name: "licenses",
+      row_id: license.id,
+      payload: { key, userId: data.userId, type: data.type },
+    });
+
+    return { success: true, key };
+  });
+
+export const validateLicense = createServerFn({ method: "POST" })
+  .inputValidator((d) =>
+    z
+      .object({
+        key: z.string(),
+        hardwareId: z.string(),
+      })
+      .parse(d),
+  )
+  .handler(async ({ data }) => {
+    // We use supabaseAdmin to verify and update the license status
+    const { data: license, error } = await supabaseAdmin
+      .from("licenses")
+      .select("*")
+      .eq("key", data.key)
+      .single();
+
+    if (error || !license) {
+      throw new Error("Invalid license key");
+    }
+
+    const now = new Date();
+    const expiry = new Date(license.expires_at);
+
+    if (expiry < now) {
+      throw new Error("License has expired");
+    }
+
+    // Check if key is already tied to another hardware ID
+    if (license.hardware_id && license.hardware_id !== data.hardwareId) {
+      throw new Error("License key already tied to another device");
+    }
+
+    // Update license with hardware ID and redemption timestamp if first time
+    const updates: any = { hardware_id: data.hardwareId };
+    if (!license.redeemed_at) {
+      updates.redeemed_at = now.toISOString();
+    }
+
+    const { error: updateError } = await supabaseAdmin
+      .from("licenses")
+      .update(updates)
+      .eq("id", license.id);
+
+    if (updateError) throw new Error("Failed to activate license");
+
+    // Log the audit trail
+    await (supabaseAdmin.from("admin_audit_logs") as any).insert({
+      admin_id: license.user_id, // Attributed to the user who redeemed it
+      action: "LICENSE_REDEEMED",
+      table_name: "licenses",
+      row_id: license.id,
+      payload: { key: data.key, hardwareId: data.hardwareId, type: license.type },
+    });
+
+    return {
+      isValid: true,
+      type: license.type,
+      expiry: license.expires_at,
+      months: license.months_duration,
+    };
   });

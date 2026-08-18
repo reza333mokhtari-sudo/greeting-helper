@@ -1788,6 +1788,7 @@ CMakeFiles/appDungeonEditor.dir/src/main.cpp.o
  /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQuick/qtquickexports.h
  /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQuick/qtquickglobal.h
  /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/QAbstractListModel
+ /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/QDebug
  /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/QFlags
  /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/QIODevice
  /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/QJsonArray

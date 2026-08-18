@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import "qrc:/qml/components"
 
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
@@ -41,7 +42,13 @@ Rectangle {
         Button {
             text: qsTr("Add Floor")
             Layout.fillWidth: true
-            onClicked: document.addFloor("New Floor")
+            onClicked: {
+                if (document && typeof document.addFloor === "function") {
+                    document.addFloor("New Floor");
+                } else {
+                    console.error("Document or addFloor method not available");
+                }
+            }
         }
 
         ToolSeparator { Layout.fillWidth: true; orientation: Qt.Horizontal }

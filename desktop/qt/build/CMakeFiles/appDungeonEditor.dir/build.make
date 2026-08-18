@@ -188,10 +188,24 @@ CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.s"
 	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /dev-server/desktop/qt/src/services/FileService.cpp -o CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.s
 
+CMakeFiles/appDungeonEditor.dir/src/services/WorkspaceService.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
+CMakeFiles/appDungeonEditor.dir/src/services/WorkspaceService.cpp.o: /dev-server/desktop/qt/src/services/WorkspaceService.cpp
+CMakeFiles/appDungeonEditor.dir/src/services/WorkspaceService.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/appDungeonEditor.dir/src/services/WorkspaceService.cpp.o"
+	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/src/services/WorkspaceService.cpp.o -MF CMakeFiles/appDungeonEditor.dir/src/services/WorkspaceService.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/src/services/WorkspaceService.cpp.o -c /dev-server/desktop/qt/src/services/WorkspaceService.cpp
+
+CMakeFiles/appDungeonEditor.dir/src/services/WorkspaceService.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/appDungeonEditor.dir/src/services/WorkspaceService.cpp.i"
+	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /dev-server/desktop/qt/src/services/WorkspaceService.cpp > CMakeFiles/appDungeonEditor.dir/src/services/WorkspaceService.cpp.i
+
+CMakeFiles/appDungeonEditor.dir/src/services/WorkspaceService.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/appDungeonEditor.dir/src/services/WorkspaceService.cpp.s"
+	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /dev-server/desktop/qt/src/services/WorkspaceService.cpp -o CMakeFiles/appDungeonEditor.dir/src/services/WorkspaceService.cpp.s
+
 CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.o: CMakeFiles/appDungeonEditor.dir/flags.make
 CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.o: .qt/rcc/qrc_qml_resources.cpp
 CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.o: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.o"
 	/nix/store/0j1ajvl2qwwb9n5a91hzd0j98fk9fa3k-gcc-wrapper-14.3.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.o -MF CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.o.d -o CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.o -c /dev-server/desktop/qt/build/.qt/rcc/qrc_qml_resources.cpp
 
 CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.i: cmake_force
@@ -211,6 +225,7 @@ appDungeonEditor_OBJECTS = \
 "CMakeFiles/appDungeonEditor.dir/src/models/AssetLibraryModel.cpp.o" \
 "CMakeFiles/appDungeonEditor.dir/src/services/AiClient.cpp.o" \
 "CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.o" \
+"CMakeFiles/appDungeonEditor.dir/src/services/WorkspaceService.cpp.o" \
 "CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.o"
 
 # External object files for target appDungeonEditor
@@ -223,6 +238,7 @@ appDungeonEditor: CMakeFiles/appDungeonEditor.dir/src/canvas/MapCanvasItem.cpp.o
 appDungeonEditor: CMakeFiles/appDungeonEditor.dir/src/models/AssetLibraryModel.cpp.o
 appDungeonEditor: CMakeFiles/appDungeonEditor.dir/src/services/AiClient.cpp.o
 appDungeonEditor: CMakeFiles/appDungeonEditor.dir/src/services/FileService.cpp.o
+appDungeonEditor: CMakeFiles/appDungeonEditor.dir/src/services/WorkspaceService.cpp.o
 appDungeonEditor: CMakeFiles/appDungeonEditor.dir/build/.qt/rcc/qrc_qml_resources.cpp.o
 appDungeonEditor: CMakeFiles/appDungeonEditor.dir/build.make
 appDungeonEditor: CMakeFiles/appDungeonEditor.dir/compiler_depend.ts
@@ -238,7 +254,7 @@ appDungeonEditor: /nix/store/44iwa5fdrx4hgzf3l9j9q9y5zffwgigy-libglvnd-1.7.0/lib
 appDungeonEditor: /nix/store/44iwa5fdrx4hgzf3l9j9q9y5zffwgigy-libglvnd-1.7.0/lib/libOpenGL.so
 appDungeonEditor: /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/lib/libQt6Core.so.6.10.1
 appDungeonEditor: CMakeFiles/appDungeonEditor.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable appDungeonEditor"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/dev-server/desktop/qt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX executable appDungeonEditor"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/appDungeonEditor.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

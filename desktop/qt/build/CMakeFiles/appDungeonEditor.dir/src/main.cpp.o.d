@@ -550,6 +550,8 @@ CMakeFiles/appDungeonEditor.dir/src/main.cpp.o: \
  /nix/store/a2gyv1xdsji6yjwgwb2gy7h43lyy453z-qtdeclarative-6.10.1/include/QtQml/qqmlcontext.h \
  /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/QIcon \
  /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtGui/qicon.h \
+ /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/QDebug \
+ /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qdebug.h \
  /dev-server/desktop/qt/src/core/Document.h \
  /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/QObject \
  /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qobject.h \
@@ -653,4 +655,9 @@ CMakeFiles/appDungeonEditor.dir/src/main.cpp.o: \
  /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtNetwork/QNetworkRequest \
  /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtNetwork/qnetworkrequest.h \
  /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtNetwork/QNetworkAccessManager \
- /dev-server/desktop/qt/src/services/FileService.h
+ /dev-server/desktop/qt/src/services/FileService.h \
+ /dev-server/desktop/qt/src/services/WorkspaceService.h \
+ /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/QVariantMap \
+ /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qvariantmap.h \
+ /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/QMap \
+ /nix/store/cqwvfg776qvsy5lf8r8i6agislip69a6-qtbase-6.10.1/include/QtCore/qmap.h

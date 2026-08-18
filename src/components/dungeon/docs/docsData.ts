@@ -107,19 +107,19 @@ Right-click any prop or map area for advanced options:
 - **Tools Not Working**: Ensure you're on a visible layer and not in "Player View" mode.`,
   },
   {
-    id: "ai-assist",
+    id: "ai-assistant",
     category: "advanced",
-    title: "AI Assistant",
-    keywords: ["ai", "help", "guide", "suggest", "chat"],
-    content: `### Your Map Co-Pilot
-The AI Assistant is designed to help you build maps faster.
+    title: "AI Cartographer Assistant",
+    keywords: ["ai", "help", "guide", "suggest", "chat", "automation"],
+    content: `### Your Professional AI Co-Pilot
+The AI Assistant is a specialized language model fine-tuned for professional dungeon design and procedural architecture.
 
-- **How to use**: Type questions in the AI panel (Sparkles icon).
-- **Safe Mode**: The AI provides guidance and layout suggestions. It will NEVER overwrite your map without your permission.
-- **Preview**: If the AI suggests a layout, click **Preview** to see a ghost of the changes on your canvas.
-- **Grounding**: The AI is trained on this editor's tools. Ask "How do I pan?" or "What does the Poly tool do?" for instant answers.
+- **Capabilities**: Ask for layout ideas, architectural history, or help with complex tool interactions.
+- **Safety Lock**: The AI is strictly advisory. It cannot modify your map geometry directly without your explicit approval through a "Ghost Preview".
+- **Tool Grounding**: It understands the specific constraints of the "Arcane Autodesk" engine. Ask "How do I optimize render scale?" for technical guidance.
+- **Diagnostics**: Use **AI > Diagnostics** in the top menu to view the reasoning tokens and performance metrics for the current session.
 
-**Production Status**: Stabilized web build. Use standard \`npm run build\` for production. To debug Vercel deployment errors, check \`DEPLOYMENT.md\` in the project root for a full guide on environment variables and runtime constraints.`,
+**Stability Note**: The web engine is optimized for high-performance 2D rendering. For deployment issues on Vercel, refer to the project's root \`DEPLOYMENT.md\` for environment variable requirements.`,
   },
   {
     id: "admin-control",
