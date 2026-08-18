@@ -223,9 +223,15 @@ export const adminTableQuery = createServerFn({ method: "POST" })
     let query = tableRef.select("*", { count: "exact" });
 
     if (data.search) {
-      query = query.or(
-        `name.ilike.%${data.search}%,title.ilike.%${data.search}%,subject.ilike.%${data.search}%`,
-      );
+      // We filter searchable columns. Note: 'profiles' uses 'display_name' instead of 'name'
+      const searchColumns =
+        table === "profiles"
+          ? ["display_name", "email"]
+          : ["name", "title", "subject", "email"];
+      const filter = searchColumns
+        .map((col) => `${col}.ilike.%${data.search}%`)
+        .join(",");
+      query = query.or(filter);
     }
 
     const from = data.page * data.pageSize;
