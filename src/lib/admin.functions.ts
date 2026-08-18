@@ -488,6 +488,7 @@ export const adminGenerateLicense = createServerFn({ method: "POST" })
         key: key,
         type: data.type,
         expires_at: expiresAt.toISOString(),
+        months_duration: data.months || (data.type === "trial" ? 1 : 12),
       })
       .select()
       .single();
