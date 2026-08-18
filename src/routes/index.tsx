@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { listLocalMaps, listCloudMaps } from "@/lib/dungeon/storage";
 import { Badge } from "@/components/ui/badge";
 import { ProfileMenu } from "@/components/dungeon/ProfileMenu";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/")({
