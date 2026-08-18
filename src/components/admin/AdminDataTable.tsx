@@ -57,9 +57,9 @@ interface AdminDataTableProps {
   onSortChange: (sort: { column: string; ascending: boolean } | null) => void;
   search: string;
   onSearchChange: (search: string) => void;
-  onEdit?: (row: any) => void | undefined;
-  onDelete?: (ids: string[]) => void | undefined;
-  onView?: (row: any) => void | undefined;
+  onEdit?: ((row: any) => void) | undefined;
+  onDelete?: ((ids: string[]) => void | Promise<void>) | undefined;
+  onView?: ((row: any) => void) | undefined;
   tableName: string;
   onExport?: () => void;
   actions?: (row: any) => React.ReactNode;
