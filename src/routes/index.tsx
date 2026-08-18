@@ -307,7 +307,7 @@ function LandingPage() {
             <span className="text-sm font-bold tracking-tight">DUNGEON SCRAWL</span>
           </div>
           <span className="text-xs text-muted-foreground">
-            © 2026 Dungeon Scrawl Editor. Professional Mapping Solutions.
+            © 2026 Dungeon Scrawl Engine. Professional Mapping Studio.
           </span>
           <div className="flex gap-8 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
             <a href="#" className="hover:text-primary transition-colors">
