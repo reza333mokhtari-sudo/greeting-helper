@@ -118,6 +118,8 @@ void LicenseService::loadLicense() {
     m_key = settings.value("license/key").toString();
     m_type = settings.value("license/type", "Free").toString();
     m_expiry = settings.value("license/expiry").toDateTime();
+    m_months = settings.value("license/months", 0).toInt();
+    m_lastSync = settings.value("license/lastSync").toDateTime();
     
     if (!m_key.isEmpty() && (m_expiry.isNull() || m_expiry > QDateTime::currentDateTime())) {
         m_active = true;
