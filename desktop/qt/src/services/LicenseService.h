@@ -12,7 +12,10 @@ class LicenseService : public QObject {
     Q_PROPERTY(QString licenseType READ licenseType NOTIFY licenseStatusChanged)
     Q_PROPERTY(bool isActive READ isActive NOTIFY licenseStatusChanged)
     Q_PROPERTY(QDateTime expiryDate READ expiryDate NOTIFY licenseStatusChanged)
+    Q_PROPERTY(int monthsDuration READ monthsDuration NOTIFY licenseStatusChanged)
+    Q_PROPERTY(QDateTime lastSyncTime READ lastSyncTime NOTIFY licenseStatusChanged)
     Q_PROPERTY(QString hardwareId READ hardwareId CONSTANT)
+    Q_PROPERTY(bool isSyncing READ isSyncing NOTIFY isSyncingChanged)
 
 public:
     explicit LicenseService(QObject *parent = nullptr);
