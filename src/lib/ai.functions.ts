@@ -138,15 +138,16 @@ function qaCheck(suggestion: AiSuggestion): AiSuggestion {
     (r) => Math.abs(r.x) < MAX_COORD && Math.abs(r.y) < MAX_COORD && r.w > 0 && r.h > 0,
   );
 
-  // 2. Validate stamps/icons
+  // 2. Validate stamps/icons - professional scale enforcement
   suggestion.stamps = suggestion.stamps
     .map((s) => {
+      // Professional enforcement: client requested 15x15 default/limit for icons
       let w = s.w ?? 15;
       let h = s.h ?? 15;
 
-      // Keep within sane limits
-      w = Math.max(5, Math.min(100, w));
-      h = Math.max(5, Math.min(100, h));
+      // Rigid limit for icon consistency in professional layouts
+      w = Math.max(5, Math.min(60, w));
+      h = Math.max(5, Math.min(60, h));
 
       return { ...s, w, h };
     })
