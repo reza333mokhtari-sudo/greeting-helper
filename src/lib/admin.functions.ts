@@ -506,3 +506,66 @@ export const adminGenerateLicense = createServerFn({ method: "POST" })
 
     return { success: true, key };
   });
+
+export const validateLicense = createServerFn({ method: "POST" })
+  .inputValidator((d) =>
+    z
+      .object({
+        key: z.string(),
+        hardwareId: z.string(),
+      })
+      .parse(d),
+  )
+  .handler(async ({ data }) => {
+    // We use supabaseAdmin to verify and update the license status
+    const { data: license, error } = await supabaseAdmin
+      .from("licenses")
+      .select("*")
+      .eq("key", data.key)
+      .single();
+
+    if (error || !license) {
+      throw new Error("Invalid license key");
+    }
+
+    const now = new Date();
+    const expiry = new Date(license.expires_at);
+
+    if (expiry < now) {
+      throw new Error("License has expired");
+    }
+
+    // Check if key is already tied to another hardware ID
+    if (license.hardware_id && license.hardware_id !== data.hardwareId) {
+      throw new Error("License key already tied to another device");
+    }
+
+    // Update license with hardware ID and redemption timestamp if first time
+    const updates: any = { hardware_id: data.hardwareId };
+    if (!license.redeemed_at) {
+      updates.redeemed_at = now.toISOString();
+    }
+
+    const { error: updateError } = await supabaseAdmin
+      .from("licenses")
+      .update(updates)
+      .eq("id", license.id);
+
+    if (updateError) throw new Error("Failed to activate license");
+
+    // Log the audit trail
+    await (supabaseAdmin.from("admin_audit_logs") as any).insert({
+      admin_id: license.user_id, // Attributed to the user who redeemed it
+      action: "LICENSE_REDEEMED",
+      table_name: "licenses",
+      row_id: license.id,
+      payload: { key: data.key, hardwareId: data.hardwareId, type: license.type },
+    });
+
+    return {
+      isValid: true,
+      type: license.type,
+      expiry: license.expires_at,
+      months: license.months_duration,
+    };
+  });
