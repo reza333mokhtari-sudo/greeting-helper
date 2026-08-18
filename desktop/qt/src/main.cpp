@@ -162,6 +162,22 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     
+    // Check for critical QML modules before loading the main UI
+    bool hasQuickControls = engine.importModule("QtQuick.Controls").isValid();
+    if (!hasQuickControls) {
+        qCritical() << "CRITICAL ERROR: QtQuick.Controls (qtquickcontrols2plugin) module not found.";
+        
+#ifdef Q_OS_WIN
+        MessageBoxA(NULL, 
+            "Dungeon Scrawl Desktop requires 'QtQuick.Controls' (qtquickcontrols2plugin) to run.\n\n"
+            "This dependency is missing from the installation. Please reinstall the application or "
+            "ensure the 'Qt' plugins directory is correctly configured.", 
+            "Dependency Missing", MB_ICONERROR | MB_OK);
+#endif
+        // Even if not on Windows, we shouldn't continue as it will crash/black screen
+        return -1;
+    }
+    
     StyleManager styleManager(&engine);
     engine.rootContext()->setContextProperty("styleManager", &styleManager);
 
