@@ -61,8 +61,8 @@ interface AdminDataTableProps {
   onDelete?: ((ids: string[]) => void | Promise<void>) | undefined;
   onView?: ((row: any) => void) | undefined;
   tableName: string;
-  onExport?: () => void;
-  actions?: (row: any) => React.ReactNode;
+  onExport?: (() => void) | undefined;
+  actions?: ((row: any) => React.ReactNode) | undefined;
 }
 
 export function AdminDataTable({
