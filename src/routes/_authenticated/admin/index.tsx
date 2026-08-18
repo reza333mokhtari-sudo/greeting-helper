@@ -74,7 +74,7 @@ import { dialog } from "@/lib/dialog";
 import { useServerFn } from "@tanstack/react-start";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/_authenticated/admin/")({
+export const Route = createFileRoute("/_authenticated/admin")({
   ssr: false,
   head: () => ({
     meta: [
