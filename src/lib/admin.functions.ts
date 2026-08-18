@@ -95,7 +95,17 @@ export const getAdminSchema = createServerFn({ method: "GET" })
       {
         name: "licenses",
         pk: "id",
-        columns: ["id", "user_id", "key", "type", "expires_at", "created_at"],
+        columns: [
+          "id",
+          "user_id",
+          "key",
+          "type",
+          "months_duration",
+          "hardware_id",
+          "redeemed_at",
+          "expires_at",
+          "created_at",
+        ],
         editable: ["type", "expires_at"],
         deletable: true,
       },
