@@ -30,43 +30,71 @@ QString LicenseService::hardwareId() const {
     return m_hwid;
 }
 
-bool LicenseService::activate(const QString& key) {
-    qDebug() << "Attempting to activate license with key:" << key;
+int LicenseService::monthsDuration() const {
+    return m_months;
+}
+
+QDateTime LicenseService::lastSyncTime() const {
+    return m_lastSync;
+}
+
+bool LicenseService::isSyncing() const {
+    return m_isSyncing;
+}
+
+void LicenseService::activate(const QString& key) {
+    if (m_isSyncing) return;
     
-    // In a professional production app, this would call:
-    // https://greeting-helper.vercel.app/api/validate?key=...&hwid=...
-    
-    if (key.startsWith("PRO-") && key.length() > 10) {
-        m_type = "Pro";
-        m_active = true;
-        m_expiry = QDateTime::currentDateTime().addYears(1);
-        m_key = key;
-        saveLicense(key, m_type, m_expiry);
-        emit licenseStatusChanged();
-        emit activationSuccess();
-        return true;
-    } else if (key.startsWith("TRIAL-")) {
-        m_type = "Trial";
-        m_active = true;
-        m_expiry = QDateTime::currentDateTime().addDays(30);
-        m_key = key;
-        saveLicense(key, m_type, m_expiry);
-        emit licenseStatusChanged();
-        emit activationSuccess();
-        return true;
-    } else if (key.startsWith("ENTERPRISE-")) {
-        m_type = "Enterprise";
-        m_active = true;
-        m_expiry = QDateTime::currentDateTime().addYears(3);
-        m_key = key;
-        saveLicense(key, m_type, m_expiry);
-        emit licenseStatusChanged();
-        emit activationSuccess();
-        return true;
-    }
-    
-    emit activationFailed("Invalid license key. Keys generated via the Web Admin Control Center are required.");
-    return false;
+    m_isSyncing = true;
+    emit isSyncingChanged();
+
+    QNetworkAccessManager* manager = new QNetworkAccessManager(this);
+    // The endpoint path corresponds to the validateLicense server function
+    QNetworkRequest request(QUrl("http://localhost:8080/_serverFn/eyJmaWxlIjoic3JjL2xpYi9hZG1pbi5mdW5jdGlvbnMudHMiLCJleHBvcnQiOiJ2YWxpZGF0ZUxpY2Vuc2UifQ=="));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QJsonObject data;
+    data["key"] = key;
+    data["hardwareId"] = m_hwid;
+
+    QNetworkReply* reply = manager->post(request, QJsonDocument(data).toJson());
+
+    connect(reply, &QNetworkReply::finished, [this, reply, manager, key]() {
+        m_isSyncing = false;
+        emit isSyncingChanged();
+
+        if (reply->error() == QNetworkReply::NoError) {
+            QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
+            QJsonObject obj = doc.object();
+            QJsonObject result = obj["data"].toObject();
+
+            if (result["isValid"].toBool()) {
+                m_type = result["type"].toString();
+                m_expiry = QDateTime::fromString(result["expiry"].toString(), Qt::ISODate);
+                m_months = result["months"].toInt();
+                m_active = true;
+                m_key = key;
+                m_lastSync = QDateTime::currentDateTime();
+                
+                saveLicense(key, m_type, m_expiry);
+                QSettings settings;
+                settings.setValue("license/months", m_months);
+                settings.setValue("license/lastSync", m_lastSync);
+                
+                emit licenseStatusChanged();
+                emit activationSuccess();
+            } else {
+                emit activationFailed("Invalid response from server");
+            }
+        } else {
+            QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
+            QString errorMsg = doc.object()["message"].toString();
+            if (errorMsg.isEmpty()) errorMsg = reply->errorString();
+            emit activationFailed(errorMsg);
+        }
+        reply->deleteLater();
+        manager->deleteLater();
+    });
 }
 
 void LicenseService::deactivate() {
