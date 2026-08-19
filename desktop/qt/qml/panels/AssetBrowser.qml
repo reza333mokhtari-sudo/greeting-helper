@@ -3,9 +3,8 @@ import QtQuick.Layouts
 import QtQuick.Controls
 import "qrc:/qt/qml/DungeonEditor/qml/components"
 
-ZBrushPanel {
+DccPanel {
     id: root
-    title: qsTr("ASSET BROWSER")
     
     property var document: null
     property var canvas: null
@@ -15,12 +14,20 @@ ZBrushPanel {
         anchors.fill: parent
         spacing: 0
 
+        DccLabel {
+            text: qsTr("ASSET BROWSER")
+            font.bold: true
+            color: "#f59e0b"
+            Layout.margins: 8
+            font.pixelSize: 10
+        }
+
         RowLayout {
             Layout.fillWidth: true
             Layout.margins: 4
             spacing: 8
             
-            ZBrushTextField {
+            DccTextField {
                 id: searchInput
                 Layout.fillWidth: true
                 placeholderText: qsTr("Search assets...")
@@ -36,7 +43,7 @@ ZBrushPanel {
                 }
             }
             
-            ZBrushButton {
+            DccButton {
                 text: ""
                 Layout.preferredWidth: 24
                 Layout.preferredHeight: 24
@@ -72,7 +79,7 @@ ZBrushPanel {
                             spacing: 8
                             anchors.leftMargin: 8
                             AppIcon { icon: modelData.icon; size: 12; active: hovered }
-                            ZBrushLabel {
+                            DccLabel {
                                 text: modelData.name
                                 font.pixelSize: 9
                                 font.bold: true
@@ -87,9 +94,8 @@ ZBrushPanel {
             }
 
             // Asset Grid
-            ZBrushPanel {
+            DccPanel {
                 SplitView.fillWidth: true
-                headerVisible: false
                 color: "#161616"
                 
                 ScrollView {
@@ -126,7 +132,7 @@ ZBrushPanel {
                                     HoverHandler { id: hoveredAsset }
                                 }
                                 
-                                ZBrushLabel {
+                                DccLabel {
                                     text: "PROP_" + (index + 1)
                                     Layout.preferredWidth: 64
                                     horizontalAlignment: Text.AlignHCenter
@@ -152,8 +158,8 @@ ZBrushPanel {
             Layout.fillWidth: true
             Layout.margins: 4
             spacing: 4
-            ZBrushButton { text: qsTr("IMPORT"); Layout.fillWidth: true }
-            ZBrushButton { text: qsTr("BROWSE"); Layout.fillWidth: true }
+            DccButton { text: qsTr("IMPORT"); Layout.fillWidth: true }
+            DccButton { text: qsTr("BROWSE"); Layout.fillWidth: true }
         }
     }
 }
