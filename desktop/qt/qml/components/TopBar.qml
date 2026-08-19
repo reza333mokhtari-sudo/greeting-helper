@@ -10,7 +10,9 @@ import DungeonEditor.Core 1.0
 Rectangle {
     id: root
     height: 36
-    color: "#2d2d2d"
+    color: "#2b2b2b" // Consistent ZBrush grey-charcoal
+    border.color: "#383838"
+    border.width: 1
     
     property var document: null
     property var canvas: null
@@ -19,7 +21,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         width: parent.width
         height: 1
-        color: "#1e1e1e"
+        color: "#383838"
     }
 
     RowLayout {
