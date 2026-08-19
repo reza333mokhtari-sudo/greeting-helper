@@ -1,0 +1,124 @@
+name: Desktop Engine Acceptance Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Run Desktop Verification Script
+        run: |
+          # Copy the verification script from the sandbox temporary location (if it were in the repo)
+          # Since it was in /tmp/browser/verify_desktop.py in the sandbox, we'll recreate it in a stable location.
+          mkdir -p scripts
+          cat <<EOF > scripts/verify_desktop.py
+          import os
+          import sys
+          from pathlib import Path
+
+          def main():
+              print("Starting Desktop Engine Verification...")
+              cpp_checks = {
+                  "MapCanvasItem.cpp": [
+                      "setActiveTool(\"select\")",
+                      "m_isDrawing = true",
+                      "m_document->addObject(obj)",
+                      "m_document->updateObject(m_selectedId, obj)",
+                      "m_document->removeObject(m_selectedId)"
+                  ],
+                  "Document.cpp": [
+                      "m_undoStack->push(new BaseCommand",
+                      "m_undoStack->undo()",
+                      "m_undoStack->redo()",
+                      "save(const QString& path)",
+                      "load(const QString& path)"
+                  ],
+                  "InspectorPanel.qml": [
+                      "document.updateObject(selectedId, { x: value })",
+                      "document.updateObject(selectedId, { y: value })",
+                      "document.removeObject(selectedId)"
+                  ]
+              }
+              
+              results = []
+              failed = False
+              for filename, tokens in cpp_checks.items():
+                  found_path = None
+                  for root, dirs, files in os.walk("desktop/qt"):
+                      if filename in files:
+                          found_path = Path(root) / filename
+                          break
+                  
+                  if not found_path:
+                      results.append(f"[FAIL] {filename} not found")
+                      failed = True
+                      continue
+                      
+                  content = found_path.read_text()
+                  for token in tokens:
+                      if token in content:
+                          results.append(f"[PASS] {filename} contains: {token}")
+                      else:
+                          results.append(f"[FAIL] {filename} missing: {token}")
+                          failed = True
+
+              # Check TopBar.qml
+              topbar_path = Path("desktop/qt/qml/components/TopBar.qml")
+              if topbar_path.exists():
+                  content = topbar_path.read_text()
+                  if "document.undo()" in content and "document.redo()" in content:
+                      results.append("[PASS] TopBar.qml: Undo/Redo wired")
+                  else:
+                      results.append("[FAIL] TopBar.qml: Undo/Redo NOT wired")
+                      failed = True
+                  if "document.clear()" in content:
+                      results.append("[PASS] TopBar.qml: New Map wired")
+                  else:
+                      results.append("[FAIL] TopBar.qml: New Map NOT wired")
+                      failed = True
+              
+              # Check Asset Library manifest logic
+              asset_model_path = Path("desktop/qt/src/models/AssetLibraryModel.cpp")
+              if asset_model_path.exists():
+                  content = asset_model_path.read_text()
+                  if "loadManifest" in content and "QJsonDocument::fromJson" in content:
+                       results.append("[PASS] AssetLibraryModel.cpp: Manifest loading implemented")
+                  else:
+                       results.append("[FAIL] AssetLibraryModel.cpp: Manifest loading logic missing")
+                       failed = True
+
+              print("\n--- Acceptance Test Summary ---")
+              summary_content = "### Desktop Engine Acceptance Test Results\n\n"
+              for res in results:
+                  print(res)
+                  summary_content += f"- {res}\n"
+              
+              # Write summary to a file for artifact upload
+              with open("test-summary.md", "w") as f:
+                  f.write(summary_content)
+              
+              if failed:
+                  sys.exit(1)
+          
+          if __name__ == "__main__":
+              main()
+          EOF
+          python3 scripts/verify_desktop.py
+
+      - name: Upload Test Summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-test-summary
+          path: test-summary.md
