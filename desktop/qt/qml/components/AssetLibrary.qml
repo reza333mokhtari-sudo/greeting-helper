@@ -5,12 +5,10 @@ import "qrc:/qt/qml/DungeonEditor/qml/components"
 
 /** Asset Library UI Component */
 
-Rectangle {
+DccPanel {
     id: root
-    color: "#252526"
-    border.color: "#3e3e42"
     
-    property var model: null
+    property var assetModel: null
     property var document: null
     property var canvas: null
     
@@ -19,34 +17,33 @@ Rectangle {
         anchors.margins: 10
         spacing: 10
         
-        Label {
-            text: qsTr("Asset Library")
-            color: "white"
+        DccLabel {
+            text: qsTr("ASSET LIBRARY")
             font.bold: true
+            color: "#f59e0b"
         }
         
-        TextField {
+        DccTextField {
             id: searchField
             placeholderText: qsTr("Search assets...")
             Layout.fillWidth: true
-            color: "white"
-
-            onTextChanged: root.model.searchQuery = text
+            onTextChanged: root.assetModel.searchQuery = text
         }
         
         ScrollView {
             Layout.fillWidth: true
-            Layout.preferredHeight: 40
+            Layout.preferredHeight: 32
             ScrollBar.vertical.policy: ScrollBar.AlwaysOff
             RowLayout {
                 spacing: 4
                 Repeater {
                     model: ["All", "Weapons", "Armor", "Bosses", "Architecture", "Environment"]
-                    Button {
+                    DccButton {
                         text: modelData
                         flat: true
-                        highlighted: root.model.activeCategory === modelData
-                        onClicked: root.model.activeCategory = modelData
+                        font.pixelSize: 9
+                        highlighted: root.assetModel.activeCategory === modelData
+                        onClicked: root.assetModel.activeCategory = modelData
                     }
                 }
             }
@@ -57,13 +54,13 @@ Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
             clip: true
-            cellWidth: 80
-            cellHeight: 100
-            model: root.model
+            cellWidth: grid.width / 3
+            cellHeight: 90
+            model: root.assetModel
             
             delegate: Item {
-                width: 80
-                height: 100
+                width: grid.cellWidth
+                height: 90
                 
                 ColumnLayout {
                     anchors.fill: parent
@@ -71,10 +68,11 @@ Rectangle {
                     
                     Rectangle {
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 60
-                        color: "#3e3e42"
-                        radius: 4
-                        border.color: mouseArea.containsMouse ? "#007acc" : "transparent"
+                        Layout.fillHeight: true
+                        color: "#151515"
+                        radius: 2
+                        border.color: mouseArea.containsMouse ? "#f59e0b" : "#333"
+                        border.width: 1
                         
                         Image {
                             anchors.fill: parent
@@ -84,10 +82,9 @@ Rectangle {
                             visible: icon !== ""
                         }
                         
-                        Text {
+                        DccLabel {
                             anchors.centerIn: parent
                             text: name[0]
-                            color: "white"
                             font.pixelSize: 20
                             visible: icon === ""
                         }
@@ -110,10 +107,9 @@ Rectangle {
                         }
                     }
                     
-                    Text {
+                    DccLabel {
                         text: name
-                        color: "white"
-                        font.pixelSize: 10
+                        font.pixelSize: 9
                         Layout.fillWidth: true
                         horizontalAlignment: Text.AlignHCenter
                         elide: Text.ElideRight
@@ -122,8 +118,8 @@ Rectangle {
             }
         }
         
-        Button {
-            text: qsTr("Import Asset...")
+        DccButton {
+            text: qsTr("IMPORT ASSET...")
             Layout.fillWidth: true
             onClicked: console.log("Import logic...")
         }
