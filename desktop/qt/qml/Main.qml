@@ -34,6 +34,26 @@ ApplicationWindow {
         id: preferencesDialog
     }
 
+    import QtQuick.Dialogs
+    FileDialog {
+        id: openDialog
+        title: "Open Map"
+        nameFilters: ["Map files (*.json)", "All files (*)"]
+        onAccepted: {
+            mapDoc.load(selectedFile)
+        }
+    }
+
+    FileDialog {
+        id: saveDialog
+        title: "Save Map"
+        fileMode: FileDialog.SaveFile
+        nameFilters: ["Map files (*.json)", "All files (*)"]
+        onAccepted: {
+            mapDoc.save(selectedFile)
+        }
+    }
+
     Component.onCompleted: {
         console.log("Dungeon Scrawl Desktop Shell Initialized");
         assetModel.loadManifest("qrc:/qt/qml/DungeonEditor/assets/soulslike/manifest.json");
@@ -75,24 +95,6 @@ ApplicationWindow {
             document: mapDoc
             canvas: canvas
             
-            FileDialog {
-                id: openDialog
-                title: "Open Map"
-                nameFilters: ["Map files (*.json)", "All files (*)"]
-                onAccepted: {
-                    mapDoc.load(selectedFile)
-                }
-            }
-            
-            FileDialog {
-                id: saveDialog
-                title: "Save Map"
-                fileMode: FileDialog.SaveFile
-                nameFilters: ["Map files (*.json)", "All files (*)"]
-                onAccepted: {
-                    mapDoc.save(selectedFile)
-                }
-            }
         }
 
         // 2. Performance Status Line
