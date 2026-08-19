@@ -164,9 +164,10 @@ ApplicationWindow {
                         
                         RowLayout {
                             spacing: 4
-                            AppIcon { icon: "status/help"; size: 14; color: "#aaa" }
-                            Label { text: "Perspective"; color: "#ccc"; font.pixelSize: 11; font.bold: true }
+                            AppIcon { icon: "status/help"; size: 14; color: "#f59e0b" }
+                            DccLabel { text: "PERSPECTIVE"; color: "#eee"; font.pixelSize: 10; font.bold: true }
                         }
+
 
                         Rectangle { width: 1; height: 16; color: "#333" }
 
@@ -179,7 +180,7 @@ ApplicationWindow {
                         
                         Item { Layout.fillWidth: true }
                         
-                        Label { text: "60 FPS"; color: "#10b981"; font.pixelSize: 10; font.family: "Monospace" }
+                        DccLabel { text: "60 FPS"; color: "#10b981"; font.pixelSize: 9; font.family: "Monospace"; font.bold: true }
                     }
                 }
 
