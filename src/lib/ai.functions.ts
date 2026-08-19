@@ -3,7 +3,9 @@
  * 
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  * 
- * Add a release packaging guide that explains how to produce a distributable desktop build that includes the core DLL and required Qt/QML assets.
+ * now make big update looks like zbrush(dont make any file start with z or brush and zbrush dont use this name)
+ * 
+ * also make better CORE and ENGINE
  * 
  * ==================================================
  * SKILLS
@@ -189,7 +191,9 @@ export type AiSuggestion = {
 export const SYSTEM_PROMPT = `'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
                                         
                                             
-                                            Add a release packaging guide that explains how to produce a distributable desktop build that includes the core DLL and required Qt/QML assets.
+                                            now make big update looks like zbrush(dont make any file start with z or brush and zbrush dont use this name)
+
+also make better CORE and ENGINE
                                         
                                             
 

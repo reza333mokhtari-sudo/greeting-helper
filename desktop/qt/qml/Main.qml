@@ -106,11 +106,11 @@ ApplicationWindow {
                 anchors.leftMargin: 8
                 spacing: 12
                 
-                ZBrushLabel { text: "RENDER FPS: 60"; color: "#10b981"; font.pixelSize: 9; font.bold: true }
-                ZBrushLabel { text: "|"; color: "#333" }
-                ZBrushLabel { text: "MEMORY: 242MB"; color: "#aaa"; font.pixelSize: 9 }
-                ZBrushLabel { text: "|"; color: "#333" }
-                ZBrushLabel { text: mapDoc.dirty ? "MODIFIED" : "SAVED"; color: mapDoc.dirty ? "#f59e0b" : "#666"; font.pixelSize: 9 }
+                DccLabel { text: "RENDER FPS: 60"; color: "#10b981"; font.pixelSize: 9; font.bold: true }
+                DccLabel { text: "|"; color: "#333" }
+                DccLabel { text: "MEMORY: 242MB"; color: "#aaa"; font.pixelSize: 9 }
+                DccLabel { text: "|"; color: "#333" }
+                DccLabel { text: mapDoc.dirty ? "MODIFIED" : "SAVED"; color: mapDoc.dirty ? "#f59e0b" : "#666"; font.pixelSize: 9 }
                 
                 Item { Layout.fillWidth: true }
             }

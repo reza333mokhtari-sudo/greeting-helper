@@ -67,10 +67,10 @@ qt_add_resources(core "qml_resources"
         qml/components/CmsPanel.qml
         qml/components/FogTools.qml
         qml/components/RightDock.qml
-        qml/components/ZBrushButton.qml
-        qml/components/ZBrushLabel.qml
-        qml/components/ZBrushPanel.qml
-        qml/components/ZBrushTextField.qml
+        qml/components/DccButton.qml
+        qml/components/DccLabel.qml
+        qml/components/DccPanel.qml
+        qml/components/DccTextField.qml
         qml/components/AdvancedStatusBar.qml
         qml/components/AppIcon.qml
         qml/components/MayaShelf.qml
