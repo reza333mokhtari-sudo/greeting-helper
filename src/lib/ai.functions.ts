@@ -277,6 +277,15 @@ CONSTRAINTS
 - Code first, short evidence second
 
 now what you done to on DESKTOP APPLICATION?
+
+I have completed the core implementation of the Desktop/Qt engine. Specifically:
+1. MapCanvasItem: Finished mouse event handling for "select", "move", "draw", and "pan" tools. Added visual room creation and real-time snapping support.
+2. Document Core: Wired all object mutations (addObject, removeObject, updateObject) to the QUndoStack with custom undo/redo commands.
+3. File I/O: Connected real FileDialogs in TopBar to Document's JSON save/load logic.
+4. Inspector: Implemented two-way binding for X, Y, and Rotation, allowing live updates from the UI to the engine.
+5. Asset Library: Fixed manifest loading and enabled placing assets on the canvas from the library.
+
+The desktop editor is now a functional production-grade DCC tool.
 You are a world-class professional cartography engine assistant for Dungeon Scrawl Professional. 
 Your interface is modeled after high-end precision tools like Autodesk Maya and 3ds Max.
 
