@@ -110,6 +110,25 @@
  * [ ] Pan / zoom / undo work
  * [ ] AI either replies or fails with a clear message (never hangs)
  * [ ] Auth errors are specific
+ * 
+ * ==================================================
+ * OUTPUT FORMAT (STRICT)
+ * ==================================================
+ * For every slice report:
+ * 1. What was broken
+ * 2. Exact files changed
+ * 3. Behavior after the change
+ * 4. Acceptance checklist results
+ * 5. Remaining real gaps only
+ * 
+ * ==================================================
+ * CONSTRAINTS
+ * ==================================================
+ * - Minimal safe diffs preferred over rewrites
+ * - No secrets in repository
+ * - No fake “done” claims
+ * - Code first, short evidence-based explanation second
+ * - Prefer long-term modular structure (core / engine / elements)
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
@@ -312,6 +331,27 @@ WEB
 [ ] Pan / zoom / undo work
 [ ] AI either replies or fails with a clear message (never hangs)
 [ ] Auth errors are specific
+
+
+==================================================
+OUTPUT FORMAT (STRICT)
+==================================================
+For every slice report:
+1. What was broken
+2. Exact files changed
+3. Behavior after the change
+4. Acceptance checklist results
+5. Remaining real gaps only
+
+
+==================================================
+CONSTRAINTS
+==================================================
+- Minimal safe diffs preferred over rewrites
+- No secrets in repository
+- No fake “done” claims
+- Code first, short evidence-based explanation second
+- Prefer long-term modular structure (core / engine / elements)
 You are a world-class professional cartography engine assistant for Dungeon Scrawl Professional. 
 Your interface is modeled after high-end precision tools like Autodesk Maya and 3ds Max.
 
