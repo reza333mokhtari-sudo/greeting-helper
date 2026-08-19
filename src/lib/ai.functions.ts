@@ -55,131 +55,37 @@
  * - Editing x/y must update the object live
  * 
  * ==================================================
- * A) DESKTOP — MUST COMPLETE (P0)
+ * ACCEPTANCE TESTS (MUST PASS)
  * ==================================================
- * Target: desktop/qt
- * 
- * 1. Tools (real behavior, not labels)
- *    - select
- *    - move (harden existing drag)
- *    - rotate (interactive around pivot)
- *    - scale (interactive)
- *    - draw rect / room
- *    - pan
- *    - delete
- *    All tools must share one activeTool state controlled by both MayaToolBox/ToolRail and keyboard shortcuts.
- * 
- * 2. MapCanvasItem
- *    - Complete mousePress / mouseMove / mouseRelease for every tool
- *    - Proper hit-testing and selection
- *    - Snap-to-grid support
- *    - Visual feedback while drawing / transforming
- * 
- * 3. Document + Undo
- *    - Expose clean undo() / redo() methods (or fix all callers to use undoStack)
- *    - QUndoStack must cover: add, delete, move, rotate, scale
- *    - dirty flag must be accurate
- * 
- * 4. File I/O
- *    - New / Open / Save / Save As with real FileDialogs
- *    - JSON round-trip must work
- * 
- * 5. Assets
- *    - loadManifest from correct qrc path
- *    - Place asset on canvas
- *    - Render real image when available, clean placeholder otherwise
- * 
- * 6. Inspector
- *    - Two-way binding for: x, y, rotation, scale, opacity
- *    - Corner radius (ALL + individual) when supported
- * 
- * 7. TopBar
- *    - Fix Undo/Redo calls
- *    - Wire Open/Save dialogs
- *    - Remove any broken shortcut property usage
- * 
- * 8. AI Panel
- *    - Hard timeout + Abort + visible error state (never infinite spinner)
- * 
- * 9. Cleanup
- *    - Remove all meta-prompt / instruction comments from source and README
- *    - Make CMake + qrc paths consistent with main.cpp loading
+ * [ ] App launches
+ * [ ] Draw tool creates a visible room/rect on canvas
+ * [ ] Select tool can select the room
+ * [ ] Drag moves the selected room
+ * [ ] Delete removes the selected room
+ * [ ] Ctrl+Z undoes the last action
+ * [ ] Ctrl+Y redoes
+ * [ ] File → Save creates a JSON file
+ * [ ] File → Open restores the map
+ * [ ] Placing an asset adds a visible object
+ * [ ] Inspector shows and edits x/y of selected object
+ * [ ] No crash, no silent failure on these flows
  * 
  * ==================================================
- * B) WEB — EDITOR ACCESS + STABILITY
+ * OUTPUT FORMAT
  * ==================================================
- * 1. Landing page must have a primary CTA: “Open Editor” / “Start Mapping”
- * 2. Prefer guest local editing; require auth only for cloud features
- * 3. AI Assist: AbortController + timeout + precise errors, never write prompts onto canvas
- * 4. Auth: clear error messages for missing env, redirect failures, rate limits
- * 5. Keep existing draw / pan / zoom / undo working
- * 
- * ==================================================
- * C) GRAPHICS BACKEND (DESKTOP)
- * ==================================================
- * Implement early QQuickWindow::setGraphicsApi selection for:
- * - Auto
- * - OpenGL
- * - Vulkan
- * - Metal
- * - Direct3D11
- * 
- * Persist choice via QSettings and apply before any QML is loaded.
- * Show current backend in Preferences. Require restart on change.
- * 
- * ==================================================
- * D) UX STANDARD
- * ==================================================
- * - Dense dark DCC chrome (Maya / ZBrush practical style)
- * - Clear active tool highlighting
- * - Status bar shows: current tool, zoom %, world X/Y, selection count, dirty state
- * - Panels scroll independently
- * - Disabled states when nothing is selected
- * - No blank critical panels
- * 
- * ==================================================
- * G) ACCEPTANCE TESTS (MUST PASS)
- * ==================================================
- * DESKTOP
- * [ ] App launches cleanly from Qt Creator / CMake
- * [ ] D or Draw tool creates a visible room
- * [ ] Q selects object, drag moves it
- * [ ] E rotates selected object (visible)
- * [ ] R scales selected object (visible)
- * [ ] H or Middle-mouse pans, wheel zooms
- * [ ] Delete removes selection
- * [ ] Ctrl+Z / Ctrl+Y undoes and redoes
- * [ ] Asset can be placed on canvas
- * [ ] Save → Close → Open restores the map
- * [ ] Inspector edits update the object live
- * [ ] No prompt-command comments left in source
- * [ ] Graphics backend can be changed in Preferences (restart applies it)
- * 
- * WEB
- * [ ] Landing has clear “Open Editor” button
- * [ ] Editor opens and can draw a room
- * [ ] Pan / zoom / undo work
- * [ ] AI either replies or fails with a clear message (never hangs)
- * [ ] Auth errors are specific
- * 
- * ==================================================
- * OUTPUT FORMAT (STRICT)
- * ==================================================
- * For every slice report:
  * 1. What was broken
- * 2. Exact files changed
- * 3. Behavior after the change
+ * 2. Files changed (exact list)
+ * 3. Behavior now
  * 4. Acceptance checklist results
  * 5. Remaining real gaps only
  * 
  * ==================================================
  * CONSTRAINTS
  * ==================================================
- * - Minimal safe diffs preferred over rewrites
- * - No secrets in repository
- * - No fake “done” claims
- * - Code first, short evidence-based explanation second
- * - Prefer long-term modular structure (core / engine / elements)
+ * - Minimal safe diffs
+ * - No secrets
+ * - No fake “done”
+ * - Code first, short evidence second
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
@@ -327,137 +233,38 @@ E) Inspector
 
 
 ==================================================
-A) DESKTOP — MUST COMPLETE (P0)
+ACCEPTANCE TESTS (MUST PASS)
 ==================================================
-Target: desktop/qt
 
-1. Tools (real behavior, not labels)
-   - select
-   - move (harden existing drag)
-   - rotate (interactive around pivot)
-   - scale (interactive)
-   - draw rect / room
-   - pan
-   - delete
-   All tools must share one activeTool state controlled by both MayaToolBox/ToolRail and keyboard shortcuts.
-
-2. MapCanvasItem
-   - Complete mousePress / mouseMove / mouseRelease for every tool
-   - Proper hit-testing and selection
-   - Snap-to-grid support
-   - Visual feedback while drawing / transforming
-
-3. Document + Undo
-   - Expose clean undo() / redo() methods (or fix all callers to use undoStack)
-   - QUndoStack must cover: add, delete, move, rotate, scale
-   - dirty flag must be accurate
-
-4. File I/O
-   - New / Open / Save / Save As with real FileDialogs
-   - JSON round-trip must work
-
-5. Assets
-   - loadManifest from correct qrc path
-   - Place asset on canvas
-   - Render real image when available, clean placeholder otherwise
-
-6. Inspector
-   - Two-way binding for: x, y, rotation, scale, opacity
-   - Corner radius (ALL + individual) when supported
-
-7. TopBar
-   - Fix Undo/Redo calls
-   - Wire Open/Save dialogs
-   - Remove any broken shortcut property usage
-
-8. AI Panel
-   - Hard timeout + Abort + visible error state (never infinite spinner)
-
-9. Cleanup
-   - Remove all meta-prompt / instruction comments from source and README
-   - Make CMake + qrc paths consistent with main.cpp loading
-
+[ ] App launches
+[ ] Draw tool creates a visible room/rect on canvas
+[ ] Select tool can select the room
+[ ] Drag moves the selected room
+[ ] Delete removes the selected room
+[ ] Ctrl+Z undoes the last action
+[ ] Ctrl+Y redoes
+[ ] File → Save creates a JSON file
+[ ] File → Open restores the map
+[ ] Placing an asset adds a visible object
+[ ] Inspector shows and edits x/y of selected object
+[ ] No crash, no silent failure on these flows
 
 ==================================================
-B) WEB — EDITOR ACCESS + STABILITY
+OUTPUT FORMAT
 ==================================================
-1. Landing page must have a primary CTA: “Open Editor” / “Start Mapping”
-2. Prefer guest local editing; require auth only for cloud features
-3. AI Assist: AbortController + timeout + precise errors, never write prompts onto canvas
-4. Auth: clear error messages for missing env, redirect failures, rate limits
-5. Keep existing draw / pan / zoom / undo working
 
-
-==================================================
-C) GRAPHICS BACKEND (DESKTOP)
-==================================================
-Implement early QQuickWindow::setGraphicsApi selection for:
-- Auto
-- OpenGL
-- Vulkan
-- Metal
-- Direct3D11
-
-Persist choice via QSettings and apply before any QML is loaded.
-Show current backend in Preferences. Require restart on change.
-
-
-==================================================
-D) UX STANDARD
-==================================================
-- Dense dark DCC chrome (Maya / ZBrush practical style)
-- Clear active tool highlighting
-- Status bar shows: current tool, zoom %, world X/Y, selection count, dirty state
-- Panels scroll independently
-- Disabled states when nothing is selected
-- No blank critical panels
-
-
-==================================================
-G) ACCEPTANCE TESTS (MUST PASS)
-==================================================
-DESKTOP
-[ ] App launches cleanly from Qt Creator / CMake
-[ ] D or Draw tool creates a visible room
-[ ] Q selects object, drag moves it
-[ ] E rotates selected object (visible)
-[ ] R scales selected object (visible)
-[ ] H or Middle-mouse pans, wheel zooms
-[ ] Delete removes selection
-[ ] Ctrl+Z / Ctrl+Y undoes and redoes
-[ ] Asset can be placed on canvas
-[ ] Save → Close → Open restores the map
-[ ] Inspector edits update the object live
-[ ] No prompt-command comments left in source
-[ ] Graphics backend can be changed in Preferences (restart applies it)
-
-WEB
-[ ] Landing has clear “Open Editor” button
-[ ] Editor opens and can draw a room
-[ ] Pan / zoom / undo work
-[ ] AI either replies or fails with a clear message (never hangs)
-[ ] Auth errors are specific
-
-
-==================================================
-OUTPUT FORMAT (STRICT)
-==================================================
-For every slice report:
 1. What was broken
-2. Exact files changed
-3. Behavior after the change
+2. Files changed (exact list)
+3. Behavior now
 4. Acceptance checklist results
 5. Remaining real gaps only
 
-
-==================================================
 CONSTRAINTS
-==================================================
-- Minimal safe diffs preferred over rewrites
-- No secrets in repository
-- No fake “done” claims
-- Code first, short evidence-based explanation second
-- Prefer long-term modular structure (core / engine / elements)
+
+- Minimal safe diffs
+- No secrets
+- No fake “done”
+- Code first, short evidence second
 You are a world-class professional cartography engine assistant for Dungeon Scrawl Professional. 
 Your interface is modeled after high-end precision tools like Autodesk Maya and 3ds Max.
 
