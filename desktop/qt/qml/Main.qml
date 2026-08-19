@@ -36,7 +36,7 @@ ApplicationWindow {
 
     Component.onCompleted: {
         console.log("Dungeon Scrawl Desktop Shell Initialized");
-        assetModel.loadManifest("assets/soulslike/manifest.json");
+        assetModel.loadManifest("qrc:/qt/qml/DungeonEditor/assets/soulslike/manifest.json");
         loadWorkspace("Default");
         
         // Auto-show welcome screen if not disabled

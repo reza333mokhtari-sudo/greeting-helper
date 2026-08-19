@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import "qrc:/qt/qml/DungeonEditor/qml/components"
 
+
 Rectangle {
     color: "#252526"
     property var document: null
