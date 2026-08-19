@@ -102,12 +102,12 @@ Dialog {
                             id: styleCombo
                             model: ["DungeonScrawl", "Fusion (Pro/Admin)"]
                             Layout.fillWidth: true
-                            currentIndex: (styleManager && styleManager.currentStyle === "Fusion") ? 1 : 0
+                            currentIndex: (typeof styleManager !== "undefined" && styleManager.currentStyle === "Fusion") ? 1 : 0
                             
                             delegate: ItemDelegate {
                                 width: parent.width
                                 text: modelData
-                                enabled: index === 0 || (styleManager && styleManager.isAdmin)
+                                enabled: index === 0 || (typeof styleManager !== "undefined" && styleManager.isAdmin)
                                 highlighted: ListView.isCurrentItem
                                 contentItem: DccLabel {
                                     text: modelData
@@ -117,19 +117,19 @@ Dialog {
                             }
                             
                             onActivated: {
-                                if (index === 1 && styleManager && !styleManager.isAdmin) {
+                                if (index === 1 && typeof styleManager !== "undefined" && !styleManager.isAdmin) {
                                     currentIndex = 0;
                                     return;
                                 }
                                 let newStyle = index === 1 ? "Fusion" : "Basic";
-                                if (styleManager) styleManager.currentStyle = newStyle;
+                                if (typeof styleManager !== "undefined") styleManager.currentStyle = newStyle;
                             }
                         }
                     }
 
                     DccPanel {
                         title: qsTr("DEBUG / DEV TOOLS")
-                        visible: styleManager && styleManager.isAdmin
+                        visible: typeof styleManager !== "undefined" && styleManager.isAdmin
                         Layout.fillWidth: true
                         
                         ColumnLayout {
@@ -138,9 +138,9 @@ Dialog {
                             CheckBox {
                                 id: forceFusionToggle
                                 text: qsTr("Force Fusion Engine")
-                                checked: styleManager && styleManager.currentStyle === "Fusion"
+                                checked: typeof styleManager !== "undefined" && styleManager.currentStyle === "Fusion"
                                 onToggled: {
-                                    if (styleManager) {
+                                    if (typeof styleManager !== "undefined") {
                                         styleManager.currentStyle = checked ? "Fusion" : "Basic"
                                         styleManager.reloadStyling()
                                     }
@@ -149,12 +149,12 @@ Dialog {
                             DccButton {
                                 text: qsTr("HOT RELOAD STYLING")
                                 Layout.fillWidth: true
-                                onClicked: if (styleManager) styleManager.reloadStyling()
+                                onClicked: if (typeof styleManager !== "undefined") styleManager.reloadStyling()
                             }
                             DccButton {
                                 text: qsTr("RESTART APPLICATION")
                                 Layout.fillWidth: true
-                                onClicked: if (styleManager) styleManager.restartApplication()
+                                onClicked: if (typeof styleManager !== "undefined") styleManager.restartApplication()
                             }
                         }
                     }
@@ -171,7 +171,7 @@ Dialog {
                 background: null
                 ColumnLayout {
                     DccLabel { text: qsTr("GRAPHICS / VIEWPORT"); font.bold: true; color: "#f59e0b" }
-                    DccLabel { text: qsTr("Current Active API: ") + (styleManager ? styleManager.activeGraphicsApi() : "Unknown"); color: "#f59e0b"; font.pixelSize: 11 }
+                    DccLabel { text: qsTr("Current Active API: ") + (typeof styleManager !== "undefined" ? styleManager.activeGraphicsApi() : "Unknown"); color: "#f59e0b"; font.pixelSize: 11 }
                     DccLabel { text: qsTr("Rendering Backend:"); color: "#888" }
                     ComboBox {
                         id: backendCombo
@@ -188,7 +188,7 @@ Dialog {
                     DccButton {
                         text: qsTr("RESTART NOW TO APPLY GRAPHICS CHANGES")
                         visible: settings.rhiBackend !== "Auto"
-                        onClicked: if (styleManager) styleManager.restartApplication()
+                        onClicked: if (typeof styleManager !== "undefined") styleManager.restartApplication()
                         Layout.fillWidth: true
                     }
                     CheckBox { text: qsTr("Enable Anti-aliasing (MSAA)"); checked: true }
