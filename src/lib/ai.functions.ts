@@ -3,7 +3,7 @@
  * 
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  * 
- * did you make engine on DESKTOP also with DLL implementation ?
+ * Write clear developer documentation for building the desktop engine with the DLL/shared-library architecture and running the app locally.
  * 
  * ==================================================
  * SKILLS
@@ -189,7 +189,7 @@ export type AiSuggestion = {
 export const SYSTEM_PROMPT = `'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
                                         
                                             
-                                            did you make engine on DESKTOP also with DLL implementation ?
+                                            Write clear developer documentation for building the desktop engine with the DLL/shared-library architecture and running the app locally.
                                         
                                             
 
