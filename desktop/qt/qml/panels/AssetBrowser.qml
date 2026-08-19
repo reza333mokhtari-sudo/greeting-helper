@@ -3,9 +3,9 @@ import QtQuick.Layouts
 import QtQuick.Controls
 import "qrc:/qt/qml/DungeonEditor/qml/components"
 
-Rectangle {
+ZBrushPanel {
     id: root
-    color: "#252526"
+    title: qsTr("ASSET BROWSER")
     
     property var document: null
     property var canvas: null
@@ -17,32 +17,30 @@ Rectangle {
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.margins: 12
+            Layout.margins: 4
             spacing: 8
             
-            Rectangle {
+            ZBrushTextField {
+                id: searchInput
                 Layout.fillWidth: true
-                height: 32
-                color: "#161616"
-                radius: 4
-                border.color: "#3e3e42"
+                placeholderText: qsTr("Search assets...")
+                leftPadding: 24
                 
-                RowLayout {
-                    anchors.fill: parent
-                    anchors.leftMargin: 8
-                    anchors.rightMargin: 8
-                    AppIcon { icon: "menu/open"; size: 14; color: "#666" }
-                    TextInput {
-                        Layout.fillWidth: true
-                        color: "white"
-                        font.pixelSize: 12
-                        placeholderText: qsTr("Search assets...")
-                    }
+                AppIcon {
+                    anchors.left: parent.left
+                    anchors.leftMargin: 6
+                    anchors.verticalCenter: parent.verticalCenter
+                    icon: "menu/open"
+                    size: 14
+                    color: "#666"
                 }
             }
             
-            ToolButton {
-                icon.source: "qrc:/qt/qml/DungeonEditor/assets/icons/general/settings.svg"
+            ZBrushButton {
+                text: ""
+                Layout.preferredWidth: 24
+                Layout.preferredHeight: 24
+                contentItem: AppIcon { icon: "general/settings"; size: 14; anchors.centerIn: parent }
                 ToolTip.visible: hovered; ToolTip.text: qsTr("Grid Settings")
             }
         }
@@ -52,31 +50,33 @@ Rectangle {
             Layout.fillHeight: true
             orientation: Qt.Horizontal
             
-            handle: Rectangle { implicitWidth: 1; color: "#2d2d2d" }
+            handle: Rectangle { implicitWidth: 1; color: "#222222" }
 
             // Categories (Sidebar)
             Rectangle {
-                SplitView.preferredWidth: 120
-                color: "#161616"
+                SplitView.preferredWidth: 100
+                color: "#1e1e1e"
                 ListView {
                     anchors.fill: parent
                     model: [
-                        { name: "Favorites", icon: "status/history" },
-                        { name: "All Assets", icon: "panels/asset_library" },
-                        { name: "Rooms", icon: "tools/draw_room" },
-                        { name: "Props", icon: "tools/place_prop" },
-                        { name: "Textures", icon: "tools/texture_brush" }
+                        { name: "ALL", icon: "panels/asset_library" },
+                        { name: "ROOMS", icon: "tools/draw_room" },
+                        { name: "PROPS", icon: "tools/place_prop" },
+                        { name: "TILES", icon: "tools/texture_brush" },
+                        { name: "RECENT", icon: "status/history" }
                     ]
                     delegate: ItemDelegate {
                         width: parent.width
-                        height: 36
+                        height: 32
                         contentItem: RowLayout {
                             spacing: 8
-                            AppIcon { icon: modelData.icon; size: 14; active: hovered }
-                            Label {
+                            anchors.leftMargin: 8
+                            AppIcon { icon: modelData.icon; size: 12; active: hovered }
+                            ZBrushLabel {
                                 text: modelData.name
-                                font.pixelSize: 11
-                                color: hovered ? "white" : "#aaa"
+                                font.pixelSize: 9
+                                font.bold: true
+                                color: hovered ? "#f59e0b" : "#999"
                             }
                         }
                         background: Rectangle {
@@ -87,70 +87,73 @@ Rectangle {
             }
 
             // Asset Grid
-            ScrollView {
+            ZBrushPanel {
                 SplitView.fillWidth: true
-                clip: true
+                headerVisible: false
+                color: "#161616"
                 
-                GridView {
-                    id: assetGrid
-                    width: parent.width
-                    cellWidth: 100
-                    cellHeight: 120
-                    model: 30
-                    delegate: Item {
-                        width: 100; height: 120
-                        ColumnLayout {
-                            anchors.centerIn: parent
-                            spacing: 4
-                            
-                            Rectangle {
-                                Layout.preferredWidth: 80
-                                Layout.preferredHeight: 80
-                                radius: 4
-                                color: hoveredAsset.hovered ? "#2d2d2d" : "#1e1e1e"
-                                border.color: hoveredAsset.hovered ? "#3b82f6" : "#333"
-                                border.width: 1
+                ScrollView {
+                    anchors.fill: parent
+                    clip: true
+                    
+                    GridView {
+                        id: assetGrid
+                        width: parent.width
+                        cellWidth: 80
+                        cellHeight: 90
+                        model: 30
+                        delegate: Item {
+                            width: 80; height: 90
+                            ColumnLayout {
+                                anchors.centerIn: parent
+                                spacing: 4
                                 
-                                AppIcon {
-                                    anchors.centerIn: parent
-                                    icon: "tools/place_prop"
-                                    size: 32
-                                    opacity: 0.7
+                                Rectangle {
+                                    Layout.preferredWidth: 64
+                                    Layout.preferredHeight: 64
+                                    color: hoveredAsset.hovered ? "#333333" : "#1e1e1e"
+                                    border.color: hoveredAsset.hovered ? "#f59e0b" : "#2d2d2d"
+                                    border.width: 1
+                                    radius: 1
+                                    
+                                    AppIcon {
+                                        anchors.centerIn: parent
+                                        icon: "tools/place_prop"
+                                        size: 28
+                                        opacity: 0.6
+                                    }
+                                    
+                                    HoverHandler { id: hoveredAsset }
                                 }
                                 
-                                HoverHandler { id: hoveredAsset }
-                                
-                                // Preview on hover logic would go here
+                                ZBrushLabel {
+                                    text: "PROP_" + (index + 1)
+                                    Layout.preferredWidth: 64
+                                    horizontalAlignment: Text.AlignHCenter
+                                    font.pixelSize: 9
+                                    color: hoveredAsset.hovered ? "#f59e0b" : "#666"
+                                    elide: Text.ElideRight
+                                }
                             }
                             
-                            Label {
-                                text: "Asset " + (index + 1)
-                                Layout.preferredWidth: 80
-                                horizontalAlignment: Text.AlignHCenter
-                                font.pixelSize: 10
-                                color: hoveredAsset.hovered ? "white" : "#888"
-                                elide: Text.ElideRight
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: console.log("Selected asset", index)
+                                onDoubleClicked: console.log("Placed asset", index)
                             }
-                        }
-                        
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: console.log("Selected asset", index)
-                            onDoubleClicked: console.log("Placed asset", index)
                         }
                     }
                 }
             }
         }
 
-
         // Actions
         RowLayout {
             Layout.fillWidth: true
             Layout.margins: 4
             spacing: 4
-            Button { text: qsTr("Import"); Layout.fillWidth: true; font.pixelSize: 11 }
-            Button { text: qsTr("Collection"); Layout.fillWidth: true; font.pixelSize: 11 }
+            ZBrushButton { text: qsTr("IMPORT"); Layout.fillWidth: true }
+            ZBrushButton { text: qsTr("BROWSE"); Layout.fillWidth: true }
         }
     }
 }
