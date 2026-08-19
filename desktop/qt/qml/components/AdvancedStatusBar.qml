@@ -3,10 +3,9 @@ import QtQuick.Layouts
 import QtQuick.Controls
 import "qrc:/qt/qml/DungeonEditor/qml/components"
 
-Rectangle {
+DccPanel {
     id: root
     height: 24
-    color: "#1a1a1a"
     
     property var canvas: null
     property var document: null
@@ -17,8 +16,8 @@ Rectangle {
         anchors.rightMargin: 8
         spacing: 12
 
-        ZBrushLabel {
-            text: "ZBRUSH ENGINE"
+        DccLabel {
+            text: "PRECISION CORE"
             color: "#f59e0b"
             font.bold: true
             font.pixelSize: 9
@@ -26,7 +25,7 @@ Rectangle {
 
         Rectangle { width: 1; height: 12; color: "#333" }
 
-        ZBrushLabel {
+        DccLabel {
             text: canvas ? canvas.activeTool.toUpperCase() : "READY"
             color: "#888"
             font.pixelSize: 9
@@ -34,14 +33,14 @@ Rectangle {
 
         Item { Layout.fillWidth: true }
 
-        ZBrushLabel {
+        DccLabel {
             text: "X: " + (canvas ? Math.round(canvas.cursorWorldPos.x) : 0) + " Y: " + (canvas ? Math.round(canvas.cursorWorldPos.y) : 0)
             color: "#666"
             font.pixelSize: 9
             font.family: "Monospace"
         }
 
-        ZBrushLabel {
+        DccLabel {
             text: "VULKAN RHI"
             color: "#10b981"
             font.pixelSize: 9
