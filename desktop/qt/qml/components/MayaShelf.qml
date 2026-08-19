@@ -6,7 +6,9 @@ import "qrc:/qt/qml/DungeonEditor/qml/components"
 Rectangle {
     id: root
     height: 120
-    color: "#1e1e1e"
+    color: "#2b2b2b" // ZBrush Dark UI Slate
+    border.color: "#383838"
+    border.width: 1
     
     property var document: null
     property var canvas: null

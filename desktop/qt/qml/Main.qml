@@ -16,7 +16,7 @@ ApplicationWindow {
     visible: true
     title: "DUNGEON SCRAWL - Professional Editor"
     
-    background: Rectangle { color: "#0a0a0a" }
+    background: Rectangle { color: "#1a1a1a" } // ZBrush-style deep charcoal
 
     Document { id: mapDoc }
     AssetLibraryModel { id: assetModel }

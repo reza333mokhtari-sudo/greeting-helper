@@ -5,6 +5,8 @@ import "qrc:/qt/qml/DungeonEditor/qml/components"
 
 Rectangle {
     color: "#252526"
+    border.color: "#383838"
+    border.width: 1
     
     property var document: null
     property var canvas: null
