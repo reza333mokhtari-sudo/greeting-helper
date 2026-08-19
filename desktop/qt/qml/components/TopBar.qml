@@ -83,7 +83,13 @@ Rectangle {
                 MenuItem { text: qsTr("OUTLINER") }
                 MenuItem { text: qsTr("ASSETS") }
                 MenuItem { text: qsTr("AI CONSOLE") }
+                MenuSeparator {}
+                MenuItem { text: qsTr("WELCOME SCREEN"); onTriggered: welcomeWindow.show() }
+                MenuItem { text: qsTr("ABOUT"); onTriggered: aboutWindow.show() }
+                MenuItem { text: qsTr("LICENSE"); onTriggered: licenseWindow.show() }
+                MenuItem { text: qsTr("DOCUMENTATION"); onTriggered: helpWindow.show() }
             }
+
         }
 
         Item { Layout.fillWidth: true }
