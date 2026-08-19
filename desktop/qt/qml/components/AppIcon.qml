@@ -17,7 +17,7 @@ Item {
     
     readonly property color finalColor: {
         if (disabled) return "#666666";
-        if (active) return "#3B82F6";
+        if (active) return "#f59e0b";
         if (mouseArea.containsMouse && hoverEnabled) return "#FFFFFF";
         return color;
     }
