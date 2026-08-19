@@ -60,7 +60,7 @@ ApplicationWindow {
         loadWorkspace("Default");
         
         // Auto-show welcome screen if not disabled
-        let showWelcome = workspaceService.loadLayout("Settings").showWelcome !== false;
+        let showWelcome = (typeof workspaceService !== "undefined") ? workspaceService.loadLayout("Settings").showWelcome !== false : true;
         if (showWelcome) {
             welcomeWindow.show();
         }
@@ -72,10 +72,11 @@ ApplicationWindow {
             "rightDockWidth": rightDock.width,
             "aiPanelHeight": rightDock.aiPanelHeight
         };
-        workspaceService.saveLayout(name, layout);
+        if (typeof workspaceService !== "undefined") workspaceService.saveLayout(name, layout);
     }
 
     function loadWorkspace(name) {
+        if (typeof workspaceService === "undefined") return;
         let layout = workspaceService.loadLayout(name);
         if (Object.keys(layout).length > 0) {
             toolBox.width = layout.toolBoxWidth || 50;
