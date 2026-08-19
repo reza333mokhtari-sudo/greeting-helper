@@ -3,9 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import "qrc:/qt/qml/DungeonEditor/qml/components"
 
-
-Rectangle {
-    color: "#252526"
+DccPanel {
     property var document: null
 
     ColumnLayout {
@@ -13,11 +11,10 @@ Rectangle {
         anchors.margins: 15
         spacing: 15
 
-        Label {
-            text: qsTr("Procedural Generator")
-            color: "white"
+        DccLabel {
+            text: qsTr("PROCEDURAL GENERATOR")
             font.bold: true
-            font.pixelSize: 18
+            color: "#f59e0b"
         }
 
         ScrollView {
@@ -27,68 +24,67 @@ Rectangle {
             
             ColumnLayout {
                 width: parent.width - 20
-                spacing: 20
+                spacing: 12
 
-                GroupBox {
-                    title: qsTr("Dungeon Layout")
+                DccPanel {
                     Layout.fillWidth: true
-                    palette.windowText: "#aaa"
-                    
                     ColumnLayout {
-                        spacing: 8
-                        Label { text: qsTr("Algorithm:"); color: "#888"; font.pixelSize: 11 }
+                        anchors.fill: parent
+                        anchors.margins: 8
+                        DccLabel { text: qsTr("DUNGEON LAYOUT"); font.bold: true; color: "#888" }
+                        
+                        DccLabel { text: qsTr("Algorithm:"); font.pixelSize: 11 }
                         ComboBox {
                             Layout.fillWidth: true
                             model: ["Binary Space Partitioning", "Cellular Automata", "Random Walk", "Maze"]
+                            Layout.preferredHeight: 24
                         }
                         
                         RowLayout {
-                            Label { text: qsTr("Iterations:"); color: "#888"; font.pixelSize: 11 }
-                            SpinBox { value: 5; from: 1; to: 20; Layout.fillWidth: true }
+                            DccLabel { text: qsTr("Iterations:"); font.pixelSize: 11 }
+                            SpinBox { value: 5; from: 1; to: 20; Layout.fillWidth: true; Layout.preferredHeight: 24 }
                         }
                     }
                 }
 
-                GroupBox {
-                    title: qsTr("Room Parameters")
+                DccPanel {
                     Layout.fillWidth: true
-                    palette.windowText: "#aaa"
-                    
                     ColumnLayout {
-                        spacing: 8
+                        anchors.fill: parent
+                        anchors.margins: 8
+                        DccLabel { text: qsTr("ROOM PARAMETERS"); font.bold: true; color: "#888" }
+                        
                         RowLayout {
-                            Label { text: qsTr("Min Size:"); color: "#888"; font.pixelSize: 11 }
-                            SpinBox { value: 200; stepSize: 50; from: 50; to: 1000; Layout.fillWidth: true }
+                            DccLabel { text: qsTr("Min Size:"); font.pixelSize: 11 }
+                            SpinBox { value: 200; stepSize: 50; from: 50; to: 1000; Layout.fillWidth: true; Layout.preferredHeight: 24 }
                         }
                         RowLayout {
-                            Label { text: qsTr("Max Size:"); color: "#888"; font.pixelSize: 11 }
-                            SpinBox { value: 500; stepSize: 50; from: 50; to: 2000; Layout.fillWidth: true }
+                            DccLabel { text: qsTr("Max Size:"); font.pixelSize: 11 }
+                            SpinBox { value: 500; stepSize: 50; from: 50; to: 2000; Layout.fillWidth: true; Layout.preferredHeight: 24 }
                         }
                     }
                 }
 
-                GroupBox {
-                    title: qsTr("Connectivity")
+                DccPanel {
                     Layout.fillWidth: true
-                    palette.windowText: "#aaa"
-                    
                     ColumnLayout {
-                        CheckBox { text: qsTr("Ensure Solvable"); checked: true; palette.windowText: "#ccc" }
-                        CheckBox { text: qsTr("Add Loops"); checked: false; palette.windowText: "#ccc" }
+                        anchors.fill: parent
+                        anchors.margins: 8
+                        DccLabel { text: qsTr("CONNECTIVITY"); font.bold: true; color: "#888" }
+                        
+                        CheckBox { text: qsTr("Ensure Solvable"); checked: true }
+                        CheckBox { text: qsTr("Add Loops"); checked: false }
                     }
                 }
             }
         }
 
-        Button {
-            text: qsTr("Generate Dungeon")
+        DccButton {
+            text: qsTr("GENERATE DUNGEON")
             Layout.fillWidth: true
-            highlighted: true
             onClicked: {
                 console.log("Generating procedural dungeon...")
-                // In a real impl, this would call a C++ service that adds objects to Document
             }
         }
     }
 }
-

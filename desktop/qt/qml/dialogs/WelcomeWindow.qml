@@ -1,11 +1,11 @@
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Controls
 import "qrc:/qt/qml/DungeonEditor/qml/components"
 
 BaseFloatingWindow {
     id: welcomeWindow
-    title: "Welcome to Dungeon Scrawl"
+    title: "WELCOME"
     width: 800
     height: 500
     
@@ -29,18 +29,17 @@ BaseFloatingWindow {
                     Layout.alignment: Qt.AlignHCenter
                 }
 
-                
-                Label {
+                DccLabel {
                     text: "DUNGEON SCRAWL"
-                    font.pixelSize: 24
+                    font.pixelSize: 28
                     font.bold: true
-                    color: "#3b82f6"
+                    color: "#f59e0b"
                     Layout.alignment: Qt.AlignHCenter
                 }
                 
-                Label {
-                    text: "Version 1.0.4 Professional"
-                    font.pixelSize: 12
+                DccLabel {
+                    text: "CORE ENGINE V1.0.4 PROFESSIONAL"
+                    font.pixelSize: 10
                     color: "#666"
                     Layout.alignment: Qt.AlignHCenter
                 }
@@ -53,18 +52,17 @@ BaseFloatingWindow {
             spacing: 0
             
             // Recent Files
-            Rectangle {
+            DccPanel {
                 Layout.fillHeight: true
                 Layout.preferredWidth: 300
                 color: "#0f0f0f"
-                border.color: "#1e1e1e"
                 
                 ColumnLayout {
                     anchors.fill: parent
                     anchors.margins: 20
                     
-                    Label {
-                        text: "Recent Maps"
+                    DccLabel {
+                        text: "RECENT MAPS"
                         font.bold: true
                         color: "#888"
                     }
@@ -75,10 +73,11 @@ BaseFloatingWindow {
                         model: ["Dungeon of Doom.ds", "Crystal Cave.ds", "Abandoned Outpost.ds"]
                         delegate: ItemDelegate {
                             width: parent.width
-                            contentItem: Label {
+                            contentItem: DccLabel {
                                 text: modelData
-                                color: hovered ? "#3b82f6" : "#ccc"
+                                color: hovered ? "#f59e0b" : "#ccc"
                             }
+                            background: Rectangle { color: hovered ? "#1a1a1a" : "transparent" }
                         }
                     }
                 }
@@ -97,27 +96,27 @@ BaseFloatingWindow {
                     rowSpacing: 20
                     columnSpacing: 20
                     
-                    Button {
-                        text: "New Map"
+                    DccButton {
+                        text: "NEW MAP"
                         Layout.fillWidth: true
                         Layout.preferredHeight: 80
-                        onClicked: { welcomeWindow.close(); mapDoc.clear(); }
+                        onClicked: { welcomeWindow.close(); if(mapDoc) mapDoc.clear(); }
                     }
                     
-                    Button {
-                        text: "Open Map..."
-                        Layout.fillWidth: true
-                        Layout.preferredHeight: 80
-                    }
-                    
-                    Button {
-                        text: "Open Example"
+                    DccButton {
+                        text: "OPEN MAP..."
                         Layout.fillWidth: true
                         Layout.preferredHeight: 80
                     }
                     
-                    Button {
-                        text: "Learn More"
+                    DccButton {
+                        text: "OPEN EXAMPLE"
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 80
+                    }
+                    
+                    DccButton {
+                        text: "LEARN MORE"
                         Layout.fillWidth: true
                         Layout.preferredHeight: 80
                     }
@@ -125,7 +124,7 @@ BaseFloatingWindow {
             }
         }
         
-        Rectangle {
+        DccPanel {
             Layout.fillWidth: true
             height: 40
             color: "#161616"
@@ -135,9 +134,9 @@ BaseFloatingWindow {
                 anchors.leftMargin: 20
                 anchors.verticalCenter: parent.verticalCenter
                 text: "Don't show this screen on startup"
-                contentItem: Label {
+                contentItem: DccLabel {
                     text: parent.text
-                    color: "#888"
+                    color: "#666"
                     leftPadding: parent.indicator.width + parent.spacing
                     verticalAlignment: Text.AlignVCenter
                 }

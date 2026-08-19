@@ -3,14 +3,14 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 /**
- * Native Status Bar
+ * DCC Style Status Bar
  */
 
-Rectangle {
+DccPanel {
     id: root
-    height: 28
-    color: "#1e1e1e"
-    border.color: "#333333"
+    height: 24
+    color: "#161616"
+
     
     property var canvas: null
     property var document: null
@@ -22,38 +22,38 @@ Rectangle {
         anchors.rightMargin: 15
         spacing: 15
         
-        Label {
+        DccLabel {
             text: (canvas ? canvas.activeTool.toUpperCase() : "NONE")
-            color: "#007acc"
+            color: "#f59e0b"
             font.pixelSize: 10
             font.bold: true
         }
         
-        Rectangle { width: 1; height: 14; color: "#444" }
+        Rectangle { width: 1; height: 14; color: "#333" }
 
-        Label {
+        DccLabel {
             text: qsTr("SELECTION: ") + root.selectionCount
-            color: "#aaa"
+            color: "#888"
             font.pixelSize: 10
         }
 
         Item { Layout.fillWidth: true }
         
-        Label {
+        DccLabel {
             text: qsTr("ZOOM: ") + (canvas ? (canvas.zoom * 100).toFixed(0) : "100") + "%"
-            color: "#aaa"
+            color: "#888"
             font.pixelSize: 10
         }
         
-        Rectangle { width: 1; height: 14; color: "#444" }
+        Rectangle { width: 1; height: 14; color: "#333" }
 
         RowLayout {
             spacing: 8
             Rectangle {
                 width: 8; height: 8; radius: 4
-                color: (typeof aiClient !== 'undefined' && aiClient && aiClient.isLoading) ? "#f39c12" : "#27ae60"
+                color: (typeof aiClient !== 'undefined' && aiClient && aiClient.isLoading) ? "#f59e0b" : "#10b981"
             }
-            Label {
+            DccLabel {
                 text: (typeof aiClient !== 'undefined' && aiClient && aiClient.isLoading) ? qsTr("AI PROCESSING") : qsTr("ENGINE READY")
                 color: "#ccc"
                 font.pixelSize: 10

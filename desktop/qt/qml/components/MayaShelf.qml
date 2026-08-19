@@ -3,10 +3,9 @@ import QtQuick.Layouts
 import QtQuick.Controls
 import "qrc:/qt/qml/DungeonEditor/qml/components"
 
-ZBrushPanel {
+DccPanel {
     id: root
     height: 100
-    title: "SHELF"
     
     property var document: null
     property var canvas: null
@@ -23,7 +22,7 @@ ZBrushPanel {
             
             delegate: TabButton {
                 id: tabBtn
-                contentItem: ZBrushLabel {
+                contentItem: DccLabel {
                     text: tabBtn.text
                     font.pixelSize: 9
                     font.bold: true
@@ -45,7 +44,7 @@ ZBrushPanel {
             TabButton { text: "RENDER" }
         }
 
-        Rectangle {
+        DccPanel {
             Layout.fillWidth: true
             Layout.fillHeight: true
             color: "#2b2b2b"
@@ -59,7 +58,7 @@ ZBrushPanel {
                     model: shelfTabs.currentIndex === 0 ? ["Room", "Corridor", "Wall", "Block"] : 
                            shelfTabs.currentIndex === 2 ? ["Tree", "Crate", "Barrel", "Chest"] : []
                     
-                    ZBrushButton {
+                    DccButton {
                         text: modelData.toUpperCase()
                         Layout.preferredHeight: 40
                         Layout.preferredWidth: 80

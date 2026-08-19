@@ -3,10 +3,9 @@ import QtQuick.Layouts
 import QtQuick.Controls
 import "qrc:/qt/qml/DungeonEditor/qml/components"
 
-ZBrushPanel {
+DccPanel {
     id: root
     width: 50
-    title: "TOOLS"
     
     property var canvas: null
     property string activeTool: canvas ? canvas.activeTool : "select"
@@ -16,6 +15,8 @@ ZBrushPanel {
         anchors.topMargin: 4
         spacing: 4
 
+        DccLabel { text: "TOOLS"; font.bold: true; color: "#f59e0b"; Layout.alignment: Qt.AlignHCenter; font.pixelSize: 8 }
+
         Repeater {
             model: [
                 { id: "select", icon: "tools/select" },
@@ -23,13 +24,13 @@ ZBrushPanel {
                 { id: "rotate", icon: "tools/rotate" },
                 { id: "scale", icon: "tools/scale" },
                 { id: "room", icon: "tools/draw_room" },
-                { id: "corridor", icon: "tools/draw_room" }, // Reusing room icon for now or a generic one
+                { id: "corridor", icon: "tools/draw_room" },
                 { id: "prop", icon: "tools/place_prop" },
                 { id: "texture", icon: "tools/texture_brush" },
                 { id: "fog", icon: "tools/fog_brush" }
             ]
 
-            ZBrushButton {
+            DccButton {
                 id: btn
                 Layout.preferredWidth: 38
                 Layout.preferredHeight: 38

@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import "qrc:/qt/qml/DungeonEditor/qml/components"
 
 ApplicationWindow {
     id: root
@@ -14,39 +15,48 @@ ApplicationWindow {
 
     background: Rectangle {
         color: "#0a0a0a"
-        border.color: "#2d2d2d"
+        border.color: "#383838"
         border.width: 1
     }
 
     header: Rectangle {
         height: 32
-        color: "#1e1e1e"
+        color: "#1a1a1a"
         
         RowLayout {
             anchors.fill: parent
             anchors.leftMargin: 12
             anchors.rightMargin: 4
             
-            Label {
+            DccLabel {
                 id: titleLabel
                 text: root.title
-                color: "#eee"
-                font.pixelSize: 12
+                color: "#f59e0b"
+                font.pixelSize: 11
                 font.bold: true
                 Layout.fillWidth: true
             }
             
-            ToolButton {
+            DccButton {
                 text: "✕"
                 flat: true
+                Layout.preferredWidth: 28
+                Layout.preferredHeight: 28
                 onClicked: root.close()
-                contentItem: Label {
+                contentItem: DccLabel {
                     text: "✕"
-                    color: parent.hovered ? "#ef4444" : "#888"
+                    color: parent.hovered ? "#ef4444" : "#666"
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }
             }
+        }
+        
+        Rectangle {
+            anchors.bottom: parent.bottom
+            width: parent.width
+            height: 1
+            color: "#383838"
         }
     }
 

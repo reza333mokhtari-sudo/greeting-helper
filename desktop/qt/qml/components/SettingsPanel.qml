@@ -3,52 +3,50 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import "qrc:/qt/qml/DungeonEditor/qml/components"
 
-
-Rectangle {
-    color: "#252526"
-    property var document
+DccPanel {
+    property var document: null
 
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 10
         spacing: 15
 
-        Label {
-            text: qsTr("Editor Settings")
-            color: "white"
+        DccLabel {
+            text: qsTr("EDITOR SETTINGS")
             font.bold: true
+            color: "#f59e0b"
         }
 
-        GroupBox {
-            title: qsTr("Grid")
+        DccPanel {
             Layout.fillWidth: true
-            palette.windowText: "white"
-            
             ColumnLayout {
+                anchors.fill: parent
+                anchors.margins: 4
+                DccLabel { text: qsTr("GRID"); font.bold: true; color: "#888" }
+                
                 CheckBox {
                     text: qsTr("Show Grid")
                     checked: !!(document && document.gridVisible)
                     onToggled: if (document) document.gridVisible = checked
-                    palette.windowText: "white"
                 }
                 CheckBox {
                     text: qsTr("Snap to Grid")
-                    checked: !!(document && typeof document.snapEnabled !== "undefined" ? document.snapEnabled : true)
+                    checked: !!(document && document.snapEnabled)
                     onToggled: if (document) document.snapEnabled = checked
-                    palette.windowText: "white"
                 }
             }
         }
 
-        GroupBox {
-            title: qsTr("Canvas")
+        DccPanel {
             Layout.fillWidth: true
-            palette.windowText: "white"
-            
             ColumnLayout {
+                anchors.fill: parent
+                anchors.margins: 4
+                DccLabel { text: qsTr("CANVAS"); font.bold: true; color: "#888" }
+                
                 RowLayout {
-                    Label { text: qsTr("Grid Size:"); color: "white" }
-                    SpinBox { value: 50; editable: false }
+                    DccLabel { text: qsTr("Grid Size:") }
+                    SpinBox { value: 50; editable: false; Layout.preferredHeight: 22 }
                 }
             }
         }

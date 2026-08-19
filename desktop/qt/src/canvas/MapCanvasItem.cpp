@@ -171,6 +171,11 @@ void MapCanvasItem::mouseMoveEvent(QMouseEvent *event) {
                         newX = snap(newX);
                         newY = snap(newY);
                     }
+                    
+                    // Optimization: Block redundant updates
+                    if (std::abs(newX - obj["x"].toDouble()) < 0.001 && std::abs(newY - obj["y"].toDouble()) < 0.001) {
+                        return;
+                    }
 
                     if (std::abs(newX - obj["x"].toDouble()) > 0.1 || std::abs(newY - obj["y"].toDouble()) > 0.1) {
                         obj["x"] = newX;

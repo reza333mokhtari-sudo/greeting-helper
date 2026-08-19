@@ -1,88 +1,139 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import "qrc:/qt/qml/DungeonEditor/qml/components"
 
 /**
- * Native Tool Rail
+ * DCC Style Tool Rail
  */
 
-Rectangle {
+DccPanel {
     id: root
-    width: 60
+    width: 48
     color: "#1e1e1e"
-    border.color: "#333333"
+
     
     property var canvas: null
     
     ColumnLayout {
         anchors.fill: parent
         anchors.topMargin: 15
-        spacing: 15
+        spacing: 12
         
         ButtonGroup { id: toolGroup }
 
-        ToolButton {
+        Button {
             id: selectBtn
-            text: "Select"
-            icon.source: "qrc:/qt/qml/DungeonEditor/assets/icons/tools/select.svg"
+            Layout.preferredWidth: 32
+            Layout.preferredHeight: 32
+            Layout.alignment: Qt.AlignHCenter
             checkable: true
             checked: canvas.activeTool === "select"
             onClicked: canvas.activeTool = "select"
             ButtonGroup.group: toolGroup
-            display: AbstractButton.IconOnly
-            Layout.fillWidth: true
-            ToolTip.visible: hovered; ToolTip.text: "Select Tool (V)"
+            
+            background: Rectangle {
+                color: selectBtn.checked ? "#3d3d3d" : (selectBtn.hovered ? "#333" : "transparent")
+                border.color: selectBtn.checked ? "#f59e0b" : "transparent"
+                border.width: 1
+                radius: 2
+            }
+            contentItem: AppIcon {
+                icon: "tools/select"
+                size: 18
+                active: selectBtn.checked
+            }
+            ToolTip.visible: hovered; ToolTip.text: "Select (Q)"
         }
         
-        ToolButton {
-            id: drawBtn
-            text: "Draw"
-            icon.source: "qrc:/qt/qml/DungeonEditor/assets/icons/tools/draw_room.svg"
+        Button {
+            id: moveBtn
+            Layout.preferredWidth: 32
+            Layout.preferredHeight: 32
+            Layout.alignment: Qt.AlignHCenter
             checkable: true
-            checked: canvas.activeTool === "draw"
+            checked: canvas.activeTool === "move"
+            onClicked: canvas.activeTool = "move"
+            ButtonGroup.group: toolGroup
+            
+            background: Rectangle {
+                color: moveBtn.checked ? "#3d3d3d" : (moveBtn.hovered ? "#333" : "transparent")
+                border.color: moveBtn.checked ? "#f59e0b" : "transparent"
+                border.width: 1
+                radius: 2
+            }
+            contentItem: AppIcon {
+                icon: "tools/move"
+                size: 18
+                active: moveBtn.checked
+            }
+            ToolTip.visible: hovered; ToolTip.text: "Move (W)"
+        }
+
+        Button {
+            id: drawBtn
+            Layout.preferredWidth: 32
+            Layout.preferredHeight: 32
+            Layout.alignment: Qt.AlignHCenter
+            checkable: true
+            checked: canvas.activeTool === "draw" || canvas.activeTool === "room"
             onClicked: canvas.activeTool = "draw"
             ButtonGroup.group: toolGroup
-            display: AbstractButton.IconOnly
-            Layout.fillWidth: true
+            
+            background: Rectangle {
+                color: drawBtn.checked ? "#3d3d3d" : (drawBtn.hovered ? "#333" : "transparent")
+                border.color: drawBtn.checked ? "#f59e0b" : "transparent"
+                border.width: 1
+                radius: 2
+            }
+            contentItem: AppIcon {
+                icon: "tools/draw_room"
+                size: 18
+                active: drawBtn.checked
+            }
             ToolTip.visible: hovered; ToolTip.text: "Draw Room (R)"
         }
-        
-        ToolButton {
-            id: moveBtn
-            text: "Pan"
-            icon.source: "qrc:/qt/qml/DungeonEditor/assets/icons/tools/move.svg"
-            checkable: true
-            checked: canvas.activeTool === "pan"
-            onClicked: canvas.activeTool = "pan"
-            ButtonGroup.group: toolGroup
-            display: AbstractButton.IconOnly
-            Layout.fillWidth: true
-            ToolTip.visible: hovered; ToolTip.text: "Pan View (H or Middle Click)"
-        }
 
-        ToolSeparator { Layout.fillWidth: true; orientation: Qt.Horizontal; padding: 5 }
+        Rectangle { Layout.fillWidth: true; height: 1; color: "#333"; Layout.leftMargin: 4; Layout.rightMargin: 4 }
 
-        ToolButton {
-            text: "Delete"
-            icon.source: "qrc:/qt/qml/DungeonEditor/assets/icons/tools/eraser.svg"
+        Button {
+            id: deleteBtn
+            Layout.preferredWidth: 32
+            Layout.preferredHeight: 32
+            Layout.alignment: Qt.AlignHCenter
             onClicked: {
                 if (canvas.selectedId !== "") {
                     canvas.document.removeObject(canvas.selectedId);
                 }
             }
-            display: AbstractButton.IconOnly
-            Layout.fillWidth: true
-            ToolTip.visible: hovered; ToolTip.text: "Delete Selected (Del)"
+            background: Rectangle {
+                color: deleteBtn.pressed ? "#444" : (deleteBtn.hovered ? "#333" : "transparent")
+                radius: 2
+            }
+            contentItem: AppIcon {
+                icon: "tools/eraser"
+                size: 18
+                color: deleteBtn.hovered ? "#ff4444" : "#aaa"
+            }
+            ToolTip.visible: hovered; ToolTip.text: "Delete (Del)"
         }
 
         Item { Layout.fillHeight: true }
         
-        ToolButton {
-            text: "Help"
-            icon.source: "qrc:/qt/qml/DungeonEditor/assets/icons/status/help.svg"
-            display: AbstractButton.IconOnly
-            Layout.fillWidth: true
+        Button {
+            id: helpBtn
+            Layout.preferredWidth: 32
+            Layout.preferredHeight: 32
+            Layout.alignment: Qt.AlignHCenter
             onClicked: helpWindow.show()
+            background: Rectangle {
+                color: helpBtn.hovered ? "#333" : "transparent"
+                radius: 2
+            }
+            contentItem: AppIcon {
+                icon: "status/help"
+                size: 18
+            }
         }
     }
 }

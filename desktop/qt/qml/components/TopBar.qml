@@ -26,7 +26,7 @@ Rectangle {
         anchors.leftMargin: 4
         spacing: 0
         
-        ZBrushButton {
+        DccButton {
             text: ""
             Layout.preferredWidth: 32
             Layout.preferredHeight: 28
@@ -39,7 +39,7 @@ Rectangle {
             
             delegate: MenuBarItem {
                 id: barItem
-                contentItem: ZBrushLabel {
+                contentItem: DccLabel {
                     text: barItem.text
                     font.pixelSize: 10
                     font.bold: true
@@ -59,7 +59,7 @@ Rectangle {
                 MenuItem { text: qsTr("OPEN..."); onTriggered: openDialog.open() }
                 MenuSeparator {}
                 MenuItem { text: qsTr("SAVE"); onTriggered: {
-                    if (document.dirty && document.undoStack->index() > 0) saveDialog.open() 
+                    if (document.dirty) saveDialog.open() 
                     else saveDialog.open()
                 } }
                 MenuItem { text: qsTr("SAVE AS..."); onTriggered: saveDialog.open() }
@@ -73,7 +73,7 @@ Rectangle {
                 MenuItem { text: qsTr("REDO"); onTriggered: document.redo() }
             }
             Menu {
-                title: qsTr("ZBRUSH")
+                title: qsTr("CORE")
                 MenuItem { text: qsTr("LOAD TOOL") }
                 MenuItem { text: qsTr("IMPORT") }
                 MenuItem { text: qsTr("EXPORT") }
@@ -83,7 +83,13 @@ Rectangle {
                 MenuItem { text: qsTr("OUTLINER") }
                 MenuItem { text: qsTr("ASSETS") }
                 MenuItem { text: qsTr("AI CONSOLE") }
+                MenuSeparator {}
+                MenuItem { text: qsTr("WELCOME SCREEN"); onTriggered: welcomeWindow.show() }
+                MenuItem { text: qsTr("ABOUT"); onTriggered: aboutWindow.show() }
+                MenuItem { text: qsTr("LICENSE"); onTriggered: licenseWindow.show() }
+                MenuItem { text: qsTr("DOCUMENTATION"); onTriggered: helpWindow.show() }
             }
+
         }
 
         Item { Layout.fillWidth: true }
@@ -92,14 +98,14 @@ Rectangle {
             Layout.rightMargin: 8
             spacing: 8
             
-            ZBrushLabel { text: "WORKSPACE:"; color: "#666"; font.pixelSize: 9; font.bold: true }
+            DccLabel { text: "WORKSPACE:"; color: "#666"; font.pixelSize: 9; font.bold: true }
             
             ComboBox {
                 model: ["CORE", "SCULPT", "PAINT", "AI"]
                 flat: true
                 Layout.preferredHeight: 22
                 font.pixelSize: 10
-                contentItem: ZBrushLabel {
+                contentItem: DccLabel {
                     text: parent.displayText
                     verticalAlignment: Text.AlignVCenter
                     leftPadding: 8
