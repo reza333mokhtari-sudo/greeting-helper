@@ -9,19 +9,22 @@
 
 class BaseCommand : public QUndoCommand {
 public:
-    BaseCommand(const QString &text, std::function<void()> redoFn, std::function<void()> undoFn) 
-        : QUndoCommand(text), m_redo(redoFn), m_undo(undoFn) {}
+    BaseCommand(const QString &text, std::function<void()> redoFn, std::function<void()> undoFn, const QString &mergeKey = QString()) 
+        : QUndoCommand(text), m_redo(redoFn), m_undo(undoFn), m_mergeKey(mergeKey) {}
     void redo() override { m_redo(); }
     void undo() override { m_undo(); }
-    int id() const override { return 1; } // Base ID for merging
+    int id() const override { return 1; }
     bool mergeWith(const QUndoCommand *other) override {
-        // Only merge consecutive updates to the same object property to keep stack clean
-        if (other->id() != id() || other->text() != text()) return false;
+        const BaseCommand *o = static_cast<const BaseCommand*>(other);
+        if (o->id() != id() || m_mergeKey.isEmpty() || o->m_mergeKey != m_mergeKey) return false;
+        m_redo = o->m_redo; // Update redo to the latest state
         return true; 
     }
 private:
     std::function<void()> m_redo, m_undo;
+    QString m_mergeKey;
 };
+
 
 // --- Document ---
 
@@ -92,6 +95,11 @@ void Document::updateObject(const QString& id, QJsonObject props) {
     }
     if(idx == -1) return;
 
+    QString mergeKey = QString("update_%1").arg(id);
+    // If updating X/Y, we want to allow merging
+    bool isTransform = props.contains("x") || props.contains("y");
+    if (!isTransform) mergeKey = QString();
+
     auto redo = [this, id, props]() {
         for(int i=0; i<m_objects.size(); ++i) {
             QJsonObject o = m_objects[i].toObject();
@@ -113,8 +121,9 @@ void Document::updateObject(const QString& id, QJsonObject props) {
         }
         refresh();
     };
-    m_undoStack->push(new BaseCommand(tr("Update Object"), redo, undo));
+    m_undoStack->push(new BaseCommand(tr("Update Object"), redo, undo, mergeKey));
 }
+
 
 void Document::removeObject(const QString& id) {
     QJsonObject removed;
