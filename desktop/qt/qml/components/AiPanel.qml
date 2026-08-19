@@ -7,44 +7,48 @@ import "qrc:/qt/qml/DungeonEditor/qml/components"
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  */
 
-Rectangle {
-    color: "#252526"
-    border.color: "#3e3e42"
+ZBrushPanel {
+    title: qsTr("AI ASSISTANT")
     
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 10
-        spacing: 10
-        
-        Label {
-            text: qsTr("AI Assistant")
-            color: "white"
-            font.bold: true
-        }
+        spacing: 8
         
         ListView {
             id: chatView
             Layout.fillWidth: true
             Layout.fillHeight: true
             clip: true
-            spacing: 8
+            spacing: 6
             model: ListModel { id: chatModel }
             
             delegate: Rectangle {
                 width: chatView.width
-                height: textLabel.height + 20
-                color: isAi ? "#2d2d2d" : "#007acc"
-                radius: 6
+                height: Math.max(40, textLabel.height + 32)
+                color: isAi ? "#323232" : "#3b4a5a"
+                border.color: isAi ? "#3d3d3d" : "#4a5a6a"
+                border.width: 1
+                radius: 1
                 
                 ColumnLayout {
                     anchors.fill: parent
                     anchors.margins: 10
-                    Label {
+                    spacing: 4
+
+                    ZBrushLabel {
+                        text: isAi ? "AI" : "USER"
+                        color: isAi ? "#f59e0b" : "#3b82f6"
+                        font.pixelSize: 9
+                        font.bold: true
+                    }
+
+                    ZBrushLabel {
                         id: textLabel
                         text: content
-                        color: "white"
+                        color: "#dddddd"
                         wrapMode: Text.Wrap
                         Layout.fillWidth: true
+                        font.pixelSize: 11
                     }
                 }
             }
@@ -57,20 +61,27 @@ Rectangle {
             Layout.fillWidth: true
             visible: typeof aiClient !== 'undefined' && aiClient.isLoading
             indeterminate: true
+            background: Rectangle { color: "#1a1a1a"; height: 2; radius: 1 }
+            contentItem: Item {
+                Rectangle {
+                    width: parent.visualPosition * parent.width
+                    height: 2
+                    color: "#f59e0b"
+                }
+            }
         }
         
         RowLayout {
-            TextField {
+            ZBrushTextField {
                 id: aiInput
-                placeholderText: qsTr("Describe your dungeon...")
+                placeholderText: qsTr("Describe dungeon...")
                 Layout.fillWidth: true
-                color: "white"
-
                 onAccepted: sendBtn.clicked()
             }
-            Button {
+            ZBrushButton {
                 id: sendBtn
-                text: qsTr("Send")
+                text: qsTr("SEND")
+                Layout.preferredWidth: 60
                 enabled: typeof aiClient !== 'undefined' && !aiClient.isLoading && aiInput.text !== ""
                 onClicked: {
                     chatModel.append({content: aiInput.text, isAi: false})

@@ -1,42 +1,37 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import QtQuick.Dialogs
-import DungeonEditor.Core 1.0
+import "qrc:/qt/qml/DungeonEditor/qml/components"
 
-/**
- * Native Top Bar - Professional Dungeon Scrawl Aesthetic
- */
 Rectangle {
     id: root
     height: 36
-    color: "#2b2b2b" // Consistent ZBrush grey-charcoal
-    border.color: "#383838"
+    color: "#2b2b2b"
+    border.color: "#1a1a1a"
     border.width: 1
     
     property var document: null
     property var canvas: null
     
+    // Top highlight bevel
     Rectangle {
-        anchors.bottom: parent.bottom
+        anchors.top: parent.top
         width: parent.width
         height: 1
-        color: "#383838"
+        color: "#3d3d3d"
     }
 
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: 8
+        anchors.leftMargin: 4
         spacing: 0
         
-        Image {
-            source: "qrc:/qt/qml/DungeonEditor/assets/icons/general/settings.svg"
-            sourceSize.width: 16
-            sourceSize.height: 16
-            Layout.alignment: Qt.AlignVCenter
-            Layout.rightMargin: 8
+        ZBrushButton {
+            text: ""
+            Layout.preferredWidth: 32
+            Layout.preferredHeight: 28
+            contentItem: AppIcon { icon: "general/settings"; size: 14; anchors.centerIn: parent }
         }
-
 
         MenuBar {
             id: menuBar
@@ -44,61 +39,46 @@ Rectangle {
             
             delegate: MenuBarItem {
                 id: barItem
-                contentItem: Label {
+                contentItem: ZBrushLabel {
                     text: barItem.text
-                    font.pixelSize: 11
-                    color: barItem.highlighted ? "white" : "#ccc"
+                    font.pixelSize: 10
+                    font.bold: true
+                    color: barItem.highlighted ? "#f59e0b" : "#aaa"
                     verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                }
+                background: Rectangle {
+                    color: barItem.highlighted ? "#3d3d3d" : "transparent"
+                    radius: 1
                 }
             }
 
-
             Menu {
-                title: qsTr("File")
-                MenuItem { text: qsTr("New"); icon.source: "qrc:/qt/qml/DungeonEditor/assets/icons/menu/new.svg"; onTriggered: document.clear() }
-                MenuItem { text: qsTr("Open..."); icon.source: "qrc:/qt/qml/DungeonEditor/assets/icons/menu/open.svg"; onTriggered: openDialog.open() }
-
+                title: qsTr("FILE")
+                MenuItem { text: qsTr("NEW"); onTriggered: document.clear() }
+                MenuItem { text: qsTr("OPEN..."); onTriggered: openDialog.open() }
                 MenuSeparator {}
-                MenuItem { text: qsTr("Save"); icon.source: "qrc:/qt/qml/DungeonEditor/assets/icons/menu/save.svg"; onTriggered: document.save() }
-                MenuItem { text: qsTr("Preferences..."); onTriggered: preferencesDialog.open() }
+                MenuItem { text: qsTr("SAVE"); onTriggered: document.save() }
+                MenuItem { text: qsTr("PREFERENCES"); onTriggered: preferencesDialog.open() }
                 MenuSeparator {}
-                MenuItem { text: qsTr("Quit"); onTriggered: Qt.quit() }
+                MenuItem { text: qsTr("QUIT"); onTriggered: Qt.quit() }
             }
             Menu {
-                title: qsTr("Edit")
-                MenuItem { 
-                    text: qsTr("Undo")
-                    shortcut: StandardKey.Undo
-                    onTriggered: document.undo() 
-                }
-                MenuItem { 
-                    text: qsTr("Redo")
-                    shortcut: StandardKey.Redo
-                    onTriggered: document.redo() 
-                }
+                title: qsTr("EDIT")
+                MenuItem { text: qsTr("UNDO"); onTriggered: document.undo() }
+                MenuItem { text: qsTr("REDO"); onTriggered: document.redo() }
             }
             Menu {
-                title: qsTr("Modify")
-                MenuItem { text: qsTr("Reset Transformations") }
+                title: qsTr("ZBRUSH")
+                MenuItem { text: qsTr("LOAD TOOL") }
+                MenuItem { text: qsTr("IMPORT") }
+                MenuItem { text: qsTr("EXPORT") }
             }
             Menu {
-                title: qsTr("Create")
-                MenuItem { text: qsTr("Polygon Primitive") }
-            }
-            Menu {
-                title: qsTr("Windows")
-                MenuItem { text: qsTr("Outliner") }
-                MenuItem { text: qsTr("Asset Browser") }
-                MenuItem { text: qsTr("Attributes Editor") }
-            }
-            Menu {
-                title: qsTr("Help")
-                MenuItem { text: qsTr("Welcome Screen"); onTriggered: welcomeWindow.show() }
-                MenuItem { text: qsTr("Documentation"); onTriggered: helpWindow.show() }
-                MenuItem { text: qsTr("License Management..."); onTriggered: licenseWindow.show() }
-                MenuSeparator {}
-                MenuItem { text: qsTr("Check for Updates...") }
-                MenuItem { text: qsTr("About Dungeon Scrawl"); onTriggered: aboutWindow.show() }
+                title: qsTr("WINDOW")
+                MenuItem { text: qsTr("OUTLINER") }
+                MenuItem { text: qsTr("ASSETS") }
+                MenuItem { text: qsTr("AI CONSOLE") }
             }
         }
 
@@ -106,15 +86,22 @@ Rectangle {
         
         RowLayout {
             Layout.rightMargin: 8
-            spacing: 12
+            spacing: 8
+            
+            ZBrushLabel { text: "WORKSPACE:"; color: "#666"; font.pixelSize: 9; font.bold: true }
             
             ComboBox {
-                model: ["Default Workspace", "Maya Classic", "Expert"]
+                model: ["CORE", "SCULPT", "PAINT", "AI"]
                 flat: true
-                Layout.preferredHeight: 24
+                Layout.preferredHeight: 22
+                font.pixelSize: 10
+                contentItem: ZBrushLabel {
+                    text: parent.displayText
+                    verticalAlignment: Text.AlignVCenter
+                    leftPadding: 8
+                }
+                background: Rectangle { color: "#1a1a1a"; border.color: "#383838" }
             }
-            
-            AppIcon { icon: "status/help"; size: 16; color: "#888" }
         }
     }
 }

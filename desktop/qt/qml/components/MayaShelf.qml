@@ -3,12 +3,10 @@ import QtQuick.Layouts
 import QtQuick.Controls
 import "qrc:/qt/qml/DungeonEditor/qml/components"
 
-Rectangle {
+ZBrushPanel {
     id: root
-    height: 120
-    color: "#2b2b2b" // ZBrush Dark UI Slate
-    border.color: "#383838"
-    border.width: 1
+    height: 100
+    title: "SHELF"
     
     property var document: null
     property var canvas: null
@@ -17,157 +15,59 @@ Rectangle {
         anchors.fill: parent
         spacing: 0
 
-        // Status Line (Quick Actions)
-        RowLayout {
-            Layout.fillWidth: true
-            Layout.preferredHeight: 32
-            Layout.leftMargin: 10
-            spacing: 8
-
-            Button {
-                flat: true
-                contentItem: RowLayout {
-                    AppIcon { icon: "menu/new"; size: 14; color: "#aaa" }
-                    Label { text: "New"; font.pixelSize: 11; color: "#aaa" }
-                }
-                onClicked: document.clear()
-            }
-            Button {
-                flat: true
-                contentItem: RowLayout {
-                    AppIcon { icon: "menu/open"; size: 14; color: "#aaa" }
-                    Label { text: "Open"; font.pixelSize: 11; color: "#aaa" }
-                }
-            }
-            Button {
-                flat: true
-                contentItem: RowLayout {
-                    AppIcon { icon: "menu/save"; size: 14; color: "#aaa" }
-                    Label { text: "Save"; font.pixelSize: 11; color: "#aaa" }
-                }
-            }
-
-
-            Rectangle { width: 1; height: 16; color: "#3e3e42" }
-
-            // Selection Modes
-            RowLayout {
-                spacing: 4
-                ToolButton { text: "Obj"; checkable: true; checked: true }
-                ToolButton { text: "Comp"; checkable: true }
-            }
-
-            Rectangle { width: 1; height: 16; color: "#3e3e42" }
-
-            RowLayout {
-                spacing: 4
-                ToolButton { 
-                    contentItem: AppIcon { icon: "tools/grid"; size: 16; active: document ? document.snapEnabled : true }
-                    checkable: true
-                    checked: document ? document.snapEnabled : true
-                    onToggled: if (document) document.snapEnabled = checked
-                }
-            }
-
-
-            Item { Layout.fillWidth: true }
-        }
-
-        // Shelf
         TabBar {
             id: shelfTabs
             Layout.fillWidth: true
-            background: Rectangle { color: "#252526" }
+            height: 24
+            background: Rectangle { color: "#1a1a1a" }
             
-            TabButton { text: qsTr("General") }
-            TabButton { text: qsTr("Draw") }
-            TabButton { text: qsTr("Props") }
-            TabButton { text: qsTr("Procedural") }
-            TabButton { text: qsTr("Fog") }
-            TabButton { text: qsTr("Camera") }
-            TabButton { text: qsTr("Help") }
+            delegate: TabButton {
+                id: tabBtn
+                contentItem: ZBrushLabel {
+                    text: tabBtn.text
+                    font.pixelSize: 9
+                    font.bold: true
+                    color: tabBtn.checked ? "#f59e0b" : "#666"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+                background: Rectangle {
+                    color: tabBtn.checked ? "#2b2b2b" : "transparent"
+                    border.color: tabBtn.checked ? "#383838" : "transparent"
+                    border.width: 1
+                }
+            }
+
+            TabButton { text: "GEOMETRY" }
+            TabButton { text: "SCULPT" }
+            TabButton { text: "PROPS" }
+            TabButton { text: "AI DYNAMICS" }
+            TabButton { text: "RENDER" }
         }
 
-        StackLayout {
-            currentIndex: shelfTabs.currentIndex
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-
-            // General Shelf
-            RowLayout {
-                Layout.leftMargin: 10
-                spacing: 12
-                ToolButton { 
-                    contentItem: RowLayout {
-                        AppIcon { icon: "status/history"; size: 20 }
-                        Label { text: "History"; color: "#aaa"; font.pixelSize: 11 }
-                    }
-                }
-                ToolButton { 
-                    contentItem: RowLayout {
-                        AppIcon { icon: "panels/layers"; size: 20 }
-                        Label { text: "Outliner"; color: "#aaa"; font.pixelSize: 11 }
-                    }
-                }
-
-                ToolButton { text: "CMS"; display: AbstractButton.TextUnderIcon }
-            }
-
-            // Draw Shelf
-            RowLayout {
-                Layout.leftMargin: 10
-                spacing: 12
-                ToolButton { text: "Room"; display: AbstractButton.TextUnderIcon }
-                ToolButton { text: "Corridor"; display: AbstractButton.TextUnderIcon }
-                ToolButton { text: "Wall"; display: AbstractButton.TextUnderIcon }
-            }
-
-            // Props Shelf
-            RowLayout {
-                Layout.leftMargin: 10
-                spacing: 12
-                ToolButton { text: "Place Prop"; onClicked: canvas.activeTool = "place_prop" }
-                ToolButton { text: "Texture Brush"; onClicked: canvas.activeTool = "texture_brush" }
-            }
-
-            // Procedural Shelf
-            RowLayout {
-                Layout.leftMargin: 10
-                spacing: 12
-                ToolButton { text: "Generate All"; onClicked: shelfTabs.currentIndex = 3 }
-            }
-
-            // Fog Shelf
-            RowLayout {
-                Layout.leftMargin: 10
-                spacing: 12
-                ToolButton { text: "Fog Brush"; onClicked: canvas.activeTool = "fog_add" }
-                ToolButton { text: "Clear Fog"; onClicked: canvas.activeTool = "fog_remove" }
-            }
-
-            // Camera Shelf
-            RowLayout {
-                Layout.leftMargin: 10
-                spacing: 12
-                ToolButton { text: "Orbit"; onClicked: canvas.activeTool = "camera_orbit" }
-                ToolButton { text: "Measure"; onClicked: canvas.activeTool = "measure" }
-            }
-
-            // Help Shelf
-            RowLayout {
-                Layout.leftMargin: 10
-                spacing: 12
-                ToolButton { text: "Shortcuts" }
-                ToolButton { text: "Docs" }
-            }
-
-        }
-
-        // Bottom border
         Rectangle {
             Layout.fillWidth: true
-            height: 1
-            color: "#3e3e42"
+            Layout.fillHeight: true
+            color: "#2b2b2b"
+            
+            RowLayout {
+                anchors.fill: parent
+                anchors.margins: 8
+                spacing: 12
+
+                Repeater {
+                    model: shelfTabs.currentIndex === 0 ? ["Room", "Corridor", "Wall", "Block"] : 
+                           shelfTabs.currentIndex === 2 ? ["Tree", "Crate", "Barrel", "Chest"] : []
+                    
+                    ZBrushButton {
+                        text: modelData.toUpperCase()
+                        Layout.preferredHeight: 40
+                        Layout.preferredWidth: 80
+                    }
+                }
+                
+                Item { Layout.fillWidth: true }
+            }
         }
     }
 }

@@ -76,47 +76,27 @@ ApplicationWindow {
             canvas: canvas
         }
 
-        // 2. Status Line (History/Undo/Redo & Engine Status)
+        // 2. Performance Status Line
         Rectangle {
             Layout.fillWidth: true
-            height: 32
-            color: "#2b2b2b"
-            border.color: "#383838"
-            border.width: 1
+            height: 22
+            color: "#1a1a1a"
             
             RowLayout {
                 anchors.fill: parent
                 anchors.leftMargin: 8
-                anchors.rightMargin: 8
-                spacing: 4
+                spacing: 12
                 
-                ToolButton {
-                    icon.source: "qrc:/qt/qml/DungeonEditor/assets/icons/general/undo.svg"
-                    display: AbstractButton.IconOnly
-                    enabled: mapDoc.canUndo
-                    onClicked: mapDoc.undo()
-                }
-                ToolButton {
-                    icon.source: "qrc:/qt/qml/DungeonEditor/assets/icons/general/redo.svg"
-                    display: AbstractButton.IconOnly
-                    enabled: mapDoc.canRedo
-                    onClicked: mapDoc.redo()
-                }
+                ZBrushLabel { text: "RENDER FPS: 60"; color: "#10b981"; font.pixelSize: 9; font.bold: true }
+                ZBrushLabel { text: "|"; color: "#333" }
+                ZBrushLabel { text: "MEMORY: 242MB"; color: "#aaa"; font.pixelSize: 9 }
+                ZBrushLabel { text: "|"; color: "#333" }
+                ZBrushLabel { text: mapDoc.dirty ? "MODIFIED" : "SAVED"; color: mapDoc.dirty ? "#f59e0b" : "#666"; font.pixelSize: 9 }
                 
-                Rectangle { width: 1; height: 16; color: "#333"; Layout.leftMargin: 4; Layout.rightMargin: 4 }
-
-                Label {
-                    text: mapDoc.dirty ? "Modified" : "Ready"
-                    font.pixelSize: 11
-                    color: mapDoc.dirty ? "#f59e0b" : "#666"
-                }
-
                 Item { Layout.fillWidth: true }
-                
-                AppIcon { icon: "status/engine_ready"; size: 14; color: "#10b981" }
-                Label { text: "Renderer: Vulkan"; font.pixelSize: 10; color: "#888" }
             }
         }
+
 
         // 3. Shelf
         MayaShelf {
