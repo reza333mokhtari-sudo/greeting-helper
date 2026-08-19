@@ -20,19 +20,39 @@
  * Prefer minimal safe diffs over rewrites.
  * 
  * ==================================================
- * MISSION (THIS PASS ONLY)
+ * REQUIRED IMPLEMENTATION
  * ==================================================
- * Make the desktop editor actually usable for basic map creation.
  * 
- * Priority order (strict):
- * 1. Draw room (visible rectangle on canvas)
- * 2. Select + Move + Delete
- * 3. Undo / Redo working with QUndoStack
- * 4. Open / Save / New with real FileDialogs
- * 5. Asset place on canvas (even with placeholder image)
- * 6. Basic Inspector two-way binding (x, y at minimum)
+ * A) MapCanvasItem (engine)
+ * - Complete mousePressEvent / mouseMoveEvent / mouseReleaseEvent
+ * - activeTool states that must work:
+ *   - "select" → hit-test and select
+ *   - "move"   → drag selected object
+ *   - "draw" or "room" → draw rectangle room, commit on mouse release
+ *   - "pan"    → middle mouse or dedicated tool
+ * - Delete selected object
+ * - Emit selectionChanged properly
+ * - Snap support if grid/snap flags exist
  * 
- * Do NOT work on Fog, Procedural, Vulkan/OpenGL preferences, or visual polish in this pass.eTool but perform no real action
+ * B) Document (core)
+ * - Ensure addObject / removeObject / updateObject go through QUndoStack
+ * - Expose clean invokable undo() and redo() methods that call undoStack
+ * - dirty flag must update correctly
+ * - save(url) and load(url) must work with JSON
+ * 
+ * C) TopBar
+ * - Fix Undo / Redo to call the correct methods
+ * - Add and wire FileDialog for Open and Save
+ * - New Map must call document.clear()
+ * 
+ * D) Assets
+ * - loadManifest from the correct qrc path
+ * - Clicking or dragging an asset must add an object to the document and show it on canvas
+ * - If image is missing, show a clean placeholder
+ * 
+ * E) Inspector
+ * - When an object is selected, show at least x, y
+ * - Editing x/y must update the object live
  * 
  * ==================================================
  * A) DESKTOP — MUST COMPLETE (P0)
