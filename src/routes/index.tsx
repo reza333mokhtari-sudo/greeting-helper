@@ -112,7 +112,7 @@ function LandingPage() {
             </Button>
           )}
           <Button asChild size="sm" className="shadow-lg shadow-primary/20 font-bold uppercase tracking-wider text-[10px] h-9 px-4">
-            <Link to="/editor">Launch Editor</Link>
+            <Link to="/editor">Open Editor</Link>
           </Button>
         </nav>
       </header>
