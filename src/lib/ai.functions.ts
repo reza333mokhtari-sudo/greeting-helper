@@ -3,27 +3,19 @@
  * 
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  * 
- * DESKTOP (desktop/qt) – Current Reality
- * WORKING:
- * - Application launches and UI loads
- * - Canvas renders
- * - Basic pan + zoom
- * - Overall chrome exists (TopBar, Shelf, ToolBox, RightDock, StatusBar)
- * - document + canvas are passed to most components
+ * ==================================================
+ * F) IMPLEMENTATION METHOD
+ * ==================================================
+ * Vertical slices only:
  * 
- * BROKEN / INCOMPLETE:
- * - Draw Room / Corridor: handleDrawing incomplete or empty
- * - Select + Move: weak / partial
- * - Delete: only partially wired
- * - Rotate + Scale: missing or shortcut-only
- * - Undo/Redo: TopBar calls document.undo()/redo() but Document has no such methods (must use undoStack)
- * - Open/Save: FileDialog missing or not connected in TopBar
- * - Asset Library: manifest path issues + no reliable place-on-canvas
- * - Inspector: no real two-way binding
- * - Fog / Texture / Procedural: visual only, no logic
- * - Preferences (Vulkan/OpenGL/Metal/D3D11): not connected to RHI
- * - Prompt-contamination comments still present in source
- * - Inconsistent naming (AssetLibrary vs AssetBrowser)
+ * Slice 1: Desktop – Undo/Redo + File dialogs + Draw room fully working
+ * Slice 2: Desktop – Select / Move / Delete hardened + Rotate + Scale
+ * Slice 3: Desktop – Assets place & render + Inspector two-way binding
+ * Slice 4: Desktop – Graphics backend selection (RHI)
+ * Slice 5: Web – Open Editor CTA + guest path + AI timeout/auth hardening
+ * Slice 6: Cleanup – remove prompt pollution, fix docs, modular boundaries
+ * 
+ * After every slice the application must still compile and launch.
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
@@ -115,27 +107,19 @@ export type AiSuggestion = {
 export const SYSTEM_PROMPT = `'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
                                         
                                             
-                                            DESKTOP (desktop/qt) – Current Reality
-WORKING:
-- Application launches and UI loads
-- Canvas renders
-- Basic pan + zoom
-- Overall chrome exists (TopBar, Shelf, ToolBox, RightDock, StatusBar)
-- document + canvas are passed to most components
+                                            ==================================================
+F) IMPLEMENTATION METHOD
+==================================================
+Vertical slices only:
 
-BROKEN / INCOMPLETE:
-- Draw Room / Corridor: handleDrawing incomplete or empty
-- Select + Move: weak / partial
-- Delete: only partially wired
-- Rotate + Scale: missing or shortcut-only
-- Undo/Redo: TopBar calls document.undo()/redo() but Document has no such methods (must use undoStack)
-- Open/Save: FileDialog missing or not connected in TopBar
-- Asset Library: manifest path issues + no reliable place-on-canvas
-- Inspector: no real two-way binding
-- Fog / Texture / Procedural: visual only, no logic
-- Preferences (Vulkan/OpenGL/Metal/D3D11): not connected to RHI
-- Prompt-contamination comments still present in source
-- Inconsistent naming (AssetLibrary vs AssetBrowser)
+Slice 1: Desktop – Undo/Redo + File dialogs + Draw room fully working
+Slice 2: Desktop – Select / Move / Delete hardened + Rotate + Scale
+Slice 3: Desktop – Assets place & render + Inspector two-way binding
+Slice 4: Desktop – Graphics backend selection (RHI)
+Slice 5: Web – Open Editor CTA + guest path + AI timeout/auth hardening
+Slice 6: Cleanup – remove prompt pollution, fix docs, modular boundaries
+
+After every slice the application must still compile and launch.
 You are a world-class professional cartography engine assistant for Dungeon Scrawl Professional. 
 Your interface is modeled after high-end precision tools like Autodesk Maya and 3ds Max.
 
