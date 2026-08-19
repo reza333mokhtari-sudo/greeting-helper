@@ -53,6 +53,15 @@
  * 9. Cleanup
  *    - Remove all meta-prompt / instruction comments from source and README
  *    - Make CMake + qrc paths consistent with main.cpp loading
+ * 
+ * ==================================================
+ * B) WEB — EDITOR ACCESS + STABILITY
+ * ==================================================
+ * 1. Landing page must have a primary CTA: “Open Editor” / “Start Mapping”
+ * 2. Prefer guest local editing; require auth only for cloud features
+ * 3. AI Assist: AbortController + timeout + precise errors, never write prompts onto canvas
+ * 4. Auth: clear error messages for missing env, redirect failures, rate limits
+ * 5. Keep existing draw / pan / zoom / undo working
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
