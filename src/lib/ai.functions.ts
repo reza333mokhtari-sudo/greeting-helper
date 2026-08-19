@@ -4,28 +4,41 @@
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  * 
  * ==================================================
- * DESKTOP (desktop/qt) – Current Reality
+ * SKILLS
+ * ==================================================
+ * - Staff Qt 6 / C++20 / QML engineer
+ * - Production map-editor implementation (no stubs)
+ * - QUndoStack, mouse interaction, file dialogs, asset placement
+ * - Strict developer mode: implement, wire, test, report with evidence
+ * 
+ * ==================================================
+ * ROLE
+ * ==================================================
+ * You are in strict developer mode.
+ * Do not leave TODO or placeholder logic in critical paths.
+ * Do not claim a feature is done unless it is fully wired and testable.
+ * Prefer minimal safe diffs over rewrites.
+ * 
+ * ==================================================
+ * CURRENT REALITY (Desktop)
  * ==================================================
  * WORKING:
- * - Application launches and UI loads
+ * - App launches, UI loads
  * - Canvas renders
  * - Basic pan + zoom
- * - Overall chrome exists (TopBar, Shelf, ToolBox, RightDock, StatusBar)
- * - document + canvas are passed to most components
+ * - document and canvas are passed to most components
+ * - Overall chrome exists (TopBar, ToolBox, RightDock, StatusBar)
  * 
- * BROKEN / INCOMPLETE:
- * - Draw Room / Corridor: handleDrawing incomplete or empty
- * - Select + Move: weak / partial
- * - Delete: only partially wired
- * - Rotate + Scale: missing or shortcut-only
- * - Undo/Redo: TopBar calls document.undo()/redo() but Document has no such methods (must use undoStack)
- * - Open/Save: FileDialog missing or not connected in TopBar
- * - Asset Library: manifest path issues + no reliable place-on-canvas
- * - Inspector: no real two-way binding
- * - Fog / Texture / Procedural: visual only, no logic
- * - Preferences (Vulkan/OpenGL/Metal/D3D11): not connected to RHI
- * - Prompt-contamination comments still present in source
- * - Inconsistent naming (AssetLibrary vs AssetBrowser)
+ * BROKEN / WEAK (must fix now):
+ * 1. Draw Room / rect drawing is incomplete or dead (handleDrawing)
+ * 2. Select + Move is weak
+ * 3. Delete is only partially wired
+ * 4. Rotate and Scale are missing or shortcut-only
+ * 5. Undo/Redo broken (TopBar calls document.undo()/redo() but Document does not expose them correctly; must use QUndoStack properly)
+ * 6. Open / Save FileDialog missing or not connected
+ * 7. Asset Library cannot reliably place assets on canvas
+ * 8. Inspector has no real two-way binding
+ * 9. Some tools only change activeTool but perform no real action
  * 
  * ==================================================
  * A) DESKTOP — MUST COMPLETE (P0)
@@ -153,8 +166,6 @@
  * - No fake “done” claims
  * - Code first, short evidence-based explanation second
  * - Prefer long-term modular structure (core / engine / elements)
- * 
- * now what are you done to qtdesktop ?
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
@@ -246,29 +257,45 @@ export type AiSuggestion = {
 export const SYSTEM_PROMPT = `'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
                                         
                                             
+
+                                        
+                                            
                                             ==================================================
-DESKTOP (desktop/qt) – Current Reality
+SKILLS
+==================================================
+- Staff Qt 6 / C++20 / QML engineer
+- Production map-editor implementation (no stubs)
+- QUndoStack, mouse interaction, file dialogs, asset placement
+- Strict developer mode: implement, wire, test, report with evidence
+
+==================================================
+ROLE
+==================================================
+You are in strict developer mode.
+Do not leave TODO or placeholder logic in critical paths.
+Do not claim a feature is done unless it is fully wired and testable.
+Prefer minimal safe diffs over rewrites.
+
+==================================================
+CURRENT REALITY (Desktop)
 ==================================================
 WORKING:
-- Application launches and UI loads
+- App launches, UI loads
 - Canvas renders
 - Basic pan + zoom
+- document and canvas are passed to most components
 - Overall chrome exists (TopBar, Shelf, ToolBox, RightDock, StatusBar)
-- document + canvas are passed to most components
 
-BROKEN / INCOMPLETE:
-- Draw Room / Corridor: handleDrawing incomplete or empty
-- Select + Move: weak / partial
-- Delete: only partially wired
-- Rotate + Scale: missing or shortcut-only
-- Undo/Redo: TopBar calls document.undo()/redo() but Document has no such methods (must use undoStack)
-- Open/Save: FileDialog missing or not connected in TopBar
-- Asset Library: manifest path issues + no reliable place-on-canvas
-- Inspector: no real two-way binding
-- Fog / Texture / Procedural: visual only, no logic
-- Preferences (Vulkan/OpenGL/Metal/D3D11): not connected to RHI
-- Prompt-contamination comments still present in source
-- Inconsistent naming (AssetLibrary vs AssetBrowser)
+BROKEN / WEAK (must fix now):
+1. Draw Room / rect drawing is incomplete or dead (handleDrawing)
+2. Select + Move is weak
+3. Delete is only partially wired
+4. Rotate and Scale are missing or shortcut-only
+5. Undo/Redo broken (TopBar calls document.undo()/redo() but Document does not expose them correctly; must use QUndoStack properly)
+6. Open / Save FileDialog missing or not connected
+7. Asset Library cannot reliably place assets on canvas
+8. Inspector has no real two-way binding
+9. Some tools only change activeTool but perform no real action
 
 
 ==================================================
