@@ -7,13 +7,14 @@ import "qrc:/qt/qml/DungeonEditor/qml/components"
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  */
 
-ZBrushPanel {
-    title: qsTr("AI ASSISTANT")
-    
+DccPanel {
     ColumnLayout {
         anchors.fill: parent
+        anchors.margins: 4
         spacing: 8
         
+        DccLabel { text: "AI ASSISTANT"; font.bold: true; color: "#f59e0b" }
+
         ListView {
             id: chatView
             Layout.fillWidth: true
@@ -22,27 +23,25 @@ ZBrushPanel {
             spacing: 6
             model: ListModel { id: chatModel }
             
-            delegate: Rectangle {
+            delegate: DccPanel {
                 width: chatView.width
                 height: Math.max(40, textLabel.height + 32)
                 color: isAi ? "#323232" : "#3b4a5a"
                 border.color: isAi ? "#3d3d3d" : "#4a5a6a"
-                border.width: 1
-                radius: 1
                 
                 ColumnLayout {
                     anchors.fill: parent
                     anchors.margins: 10
                     spacing: 4
 
-                    ZBrushLabel {
+                    DccLabel {
                         text: isAi ? "AI" : "USER"
                         color: isAi ? "#f59e0b" : "#3b82f6"
                         font.pixelSize: 9
                         font.bold: true
                     }
 
-                    ZBrushLabel {
+                    DccLabel {
                         id: textLabel
                         text: content
                         color: "#dddddd"
@@ -72,13 +71,13 @@ ZBrushPanel {
         }
         
         RowLayout {
-            ZBrushTextField {
+            DccTextField {
                 id: aiInput
                 placeholderText: qsTr("Describe dungeon...")
                 Layout.fillWidth: true
                 onAccepted: sendBtn.clicked()
             }
-            ZBrushButton {
+            DccButton {
                 id: sendBtn
                 text: qsTr("SEND")
                 Layout.preferredWidth: 60
