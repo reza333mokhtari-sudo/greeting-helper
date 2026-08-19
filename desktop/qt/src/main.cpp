@@ -180,6 +180,10 @@ int main(int argc, char *argv[])
     
     StyleManager styleManager(&engine);
     engine.rootContext()->setContextProperty("styleManager", &styleManager);
+    
+    // Support absolute qrc paths for components
+    engine.addImportPath("qrc:/qt/qml/DungeonEditor");
+    engine.addImportPath("qrc:/qt/qml/DungeonEditor/qml");
 
     // Register "qml" root correctly for internal imports
     engine.addImportPath("qrc:/qt/qml/DungeonEditor");
