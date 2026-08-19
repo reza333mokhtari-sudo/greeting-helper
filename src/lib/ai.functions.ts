@@ -285,22 +285,27 @@ export const suggestMap = createServerFn({ method: "POST" })
       const { streamText } = await import("ai");
       const { model, isCustom, providerOptions } = await getAiModel(engineKey);
 
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout
+
       let streamError: unknown;
       const result = streamText({
         model,
         maxRetries: isCustom ? 0 : 1,
         ...(providerOptions ? { providerOptions } : {}),
         system: data.customSystem || (extra ? `${SYSTEM_PROMPT}\n\n${extra}` : SYSTEM_PROMPT),
-        abort: new AbortController().signal, // Basic abort support
         messages: (extra ? [...messages, { role: "user" as const, content: extra }] : messages) as {
           role: "user" | "assistant";
           content: string;
         }[],
+        abortSignal: controller.signal,
         onError: ({ error }) => {
           streamError = error;
           console.error(`[ai.suggestMap] error with ${engineKey}`, error);
         },
       });
+
+      result.text.finally(() => clearTimeout(timeoutId));
 
       const toError = (e: unknown) =>
         e instanceof Error
