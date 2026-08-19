@@ -20,25 +20,19 @@
  * Prefer minimal safe diffs over rewrites.
  * 
  * ==================================================
- * CURRENT REALITY (Desktop)
+ * MISSION (THIS PASS ONLY)
  * ==================================================
- * WORKING:
- * - App launches, UI loads
- * - Canvas renders
- * - Basic pan + zoom
- * - document and canvas are passed to most components
- * - Overall chrome exists (TopBar, ToolBox, RightDock, StatusBar)
+ * Make the desktop editor actually usable for basic map creation.
  * 
- * BROKEN / WEAK (must fix now):
- * 1. Draw Room / rect drawing is incomplete or dead (handleDrawing)
- * 2. Select + Move is weak
- * 3. Delete is only partially wired
- * 4. Rotate and Scale are missing or shortcut-only
- * 5. Undo/Redo broken (TopBar calls document.undo()/redo() but Document does not expose them correctly; must use QUndoStack properly)
- * 6. Open / Save FileDialog missing or not connected
- * 7. Asset Library cannot reliably place assets on canvas
- * 8. Inspector has no real two-way binding
- * 9. Some tools only change activeTool but perform no real action
+ * Priority order (strict):
+ * 1. Draw room (visible rectangle on canvas)
+ * 2. Select + Move + Delete
+ * 3. Undo / Redo working with QUndoStack
+ * 4. Open / Save / New with real FileDialogs
+ * 5. Asset place on canvas (even with placeholder image)
+ * 6. Basic Inspector two-way binding (x, y at minimum)
+ * 
+ * Do NOT work on Fog, Procedural, Vulkan/OpenGL preferences, or visual polish in this pass.eTool but perform no real action
  * 
  * ==================================================
  * A) DESKTOP — MUST COMPLETE (P0)
