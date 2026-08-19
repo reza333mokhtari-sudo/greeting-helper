@@ -3,9 +3,10 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import "qrc:/qt/qml/DungeonEditor/qml/components"
 
-
-Rectangle {
+ZBrushPanel {
+    title: qsTr("INSPECTOR")
     color: "#252526"
+    
     property var document
     property string selectedId: ""
     property var selectedObject: null
@@ -30,15 +31,8 @@ Rectangle {
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 10
-        spacing: 12
+        spacing: 8
         visible: selectedObject !== null
-
-        Label {
-            text: qsTr("Inspector")
-            color: "white"
-            font.bold: true
-        }
 
         ScrollView {
             Layout.fillWidth: true
@@ -46,105 +40,89 @@ Rectangle {
             clip: true
 
             ColumnLayout {
-                width: parent.width - 20
-                spacing: 10
+                width: parent.width - 16
+                spacing: 12
 
-                Label { text: qsTr("ID: " + selectedId); color: "#666666"; font.pixelSize: 10 }
-
-                TextField {
-                    placeholderText: qsTr("Object Name")
-                    text: selectedObject ? selectedObject.name : ""
+                ZBrushPanel {
                     Layout.fillWidth: true
-                    background: Rectangle { color: "#3c3c3c"; radius: 4 }
-                    color: "white"
-                    onAccepted: document.updateObject(selectedId, { name: text })
-                }
-
-                Label { text: qsTr("Transform"); color: "white"; font.bold: true }
-
-                GridLayout {
-                    columns: 2
-                    Layout.fillWidth: true
-                    Label { text: "X"; color: "#aaa" }
-                    SpinBox {
-                        value: selectedObject ? selectedObject.x : 0
-                        from: -5000; to: 5000; editable: true
-                        onValueModified: document.updateObject(selectedId, { x: value })
-                    }
-                    Label { text: "Y"; color: "#aaa" }
-                    SpinBox {
-                        value: selectedObject ? selectedObject.y : 0
-                        from: -5000; to: 5000; editable: true
-                        onValueModified: document.updateObject(selectedId, { y: value })
-                    }
-                    Label { text: "W"; color: "#aaa"; visible: selectedObject && selectedObject.kind === "rect" }
-                    SpinBox {
-                        visible: selectedObject && selectedObject.kind === "rect"
-                        value: selectedObject ? selectedObject.w : 0
-                        from: 0; to: 5000; editable: true
-                        onValueModified: document.updateObject(selectedId, { w: value })
-                    }
-                    Label { text: "H"; color: "#aaa"; visible: selectedObject && selectedObject.kind === "rect" }
-                    SpinBox {
-                        visible: selectedObject && selectedObject.kind === "rect"
-                        value: selectedObject ? selectedObject.h : 0
-                        from: 0; to: 5000; editable: true
-                        onValueModified: document.updateObject(selectedId, { h: value })
-                    }
-                    Label { text: "Rotate"; color: "#aaa" }
-                    Slider {
-                        value: selectedObject ? selectedObject.rotation : 0
-                        from: 0; to: 360
-                        onMoved: document.updateObject(selectedId, { rotation: value })
+                    Layout.preferredHeight: 60
+                    title: "IDENTIFICATION"
+                    ColumnLayout {
+                        anchors.fill: parent
+                        ZBrushLabel { text: qsTr("UUID: " + selectedId); color: "#555"; font.pixelSize: 9 }
+                        ZBrushTextField {
+                            text: selectedObject ? selectedObject.name : ""
+                            Layout.fillWidth: true
+                            onAccepted: document.updateObject(selectedId, { name: text })
+                        }
                     }
                 }
 
-                Label { text: qsTr("Style"); color: "white"; font.bold: true }
-                
-                GridLayout {
-                    columns: 2
+                ZBrushPanel {
                     Layout.fillWidth: true
-                    
-                    Label { text: "Global Radius"; color: "#aaa" }
-                    Slider {
-                        value: selectedObject ? (selectedObject.cornerRadius || 0) : 0
-                        from: 0; to: 100
-                        onMoved: document.updateObject(selectedId, { cornerRadius: value })
-                    }
-                    
-                    Label { text: "TL Radius"; color: "#888" }
-                    Slider {
-                        value: selectedObject ? (selectedObject.radiusTL || selectedObject.cornerRadius || 0) : 0
-                        from: 0; to: 100
-                        onMoved: document.updateObject(selectedId, { radiusTL: value })
-                    }
-                    
-                    Label { text: "TR Radius"; color: "#888" }
-                    Slider {
-                        value: selectedObject ? (selectedObject.radiusTR || selectedObject.cornerRadius || 0) : 0
-                        from: 0; to: 100
-                        onMoved: document.updateObject(selectedId, { radiusTR: value })
-                    }
-                    
-                    Label { text: "BL Radius"; color: "#888" }
-                    Slider {
-                        value: selectedObject ? (selectedObject.radiusBL || selectedObject.cornerRadius || 0) : 0
-                        from: 0; to: 100
-                        onMoved: document.updateObject(selectedId, { radiusBL: value })
-                    }
-                    
-                    Label { text: "BR Radius"; color: "#888" }
-                    Slider {
-                        value: selectedObject ? (selectedObject.radiusBR || selectedObject.cornerRadius || 0) : 0
-                        from: 0; to: 100
-                        onMoved: document.updateObject(selectedId, { radiusBR: value })
+                    title: "TRANSFORM"
+                    GridLayout {
+                        anchors.fill: parent
+                        columns: 2
+                        rowSpacing: 8
+                        
+                        ZBrushLabel { text: "POS X"; Layout.preferredWidth: 40 }
+                        SpinBox {
+                            value: selectedObject ? selectedObject.x : 0
+                            from: -5000; to: 5000; editable: true
+                            Layout.fillWidth: true
+                            onValueModified: document.updateObject(selectedId, { x: value })
+                        }
+                        
+                        ZBrushLabel { text: "POS Y" }
+                        SpinBox {
+                            value: selectedObject ? selectedObject.y : 0
+                            from: -5000; to: 5000; editable: true
+                            Layout.fillWidth: true
+                            onValueModified: document.updateObject(selectedId, { y: value })
+                        }
+
+                        ZBrushLabel { text: "ROT" }
+                        Slider {
+                            value: selectedObject ? selectedObject.rotation : 0
+                            from: 0; to: 360
+                            Layout.fillWidth: true
+                            onMoved: document.updateObject(selectedId, { rotation: value })
+                        }
                     }
                 }
 
-                Button {
-                    text: qsTr("Delete")
+                ZBrushPanel {
                     Layout.fillWidth: true
-                    palette.button: "#5c1d1d"
+                    title: "GEOMETRY"
+                    visible: selectedObject && selectedObject.kind === "rect"
+                    GridLayout {
+                        anchors.fill: parent
+                        columns: 2
+                        rowSpacing: 8
+                        
+                        ZBrushLabel { text: "WIDTH"; Layout.preferredWidth: 40 }
+                        SpinBox {
+                            value: selectedObject ? selectedObject.w : 0
+                            from: 0; to: 5000; editable: true
+                            Layout.fillWidth: true
+                            onValueModified: document.updateObject(selectedId, { w: value })
+                        }
+                        
+                        ZBrushLabel { text: "HEIGHT" }
+                        SpinBox {
+                            value: selectedObject ? selectedObject.h : 0
+                            from: 0; to: 5000; editable: true
+                            Layout.fillWidth: true
+                            onValueModified: document.updateObject(selectedId, { h: value })
+                        }
+                    }
+                }
+
+                ZBrushButton {
+                    text: qsTr("DELETE OBJECT")
+                    Layout.fillWidth: true
+                    palette.buttonText: "#ff4444"
                     onClicked: {
                         document.removeObject(selectedId)
                         updateSelection("")
@@ -154,10 +132,11 @@ Rectangle {
         }
     }
 
-    Label {
+    ZBrushLabel {
         anchors.centerIn: parent
-        text: qsTr("No selection")
+        text: qsTr("SELECT AN OBJECT TO INSPECT")
         color: "#444"
+        font.pixelSize: 10
         visible: selectedObject === null
     }
 }
