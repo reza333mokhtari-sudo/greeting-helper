@@ -75,6 +75,10 @@ qt_add_resources(core "qml_resources"
         qml/components/AppIcon.qml
         qml/components/MayaShelf.qml
         qml/components/MayaToolBox.qml
+        qml/components/ZBrushButton.qml
+        qml/components/ZBrushLabel.qml
+        qml/components/ZBrushPanel.qml
+        qml/components/ZBrushTextField.qml
         qml/panels/AssetBrowser.qml
         qml/dialogs/BaseFloatingWindow.qml
         qml/dialogs/WelcomeWindow.qml

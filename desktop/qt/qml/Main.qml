@@ -34,13 +34,33 @@ ApplicationWindow {
         id: preferencesDialog
     }
 
+    import QtQuick.Dialogs
+    FileDialog {
+        id: openDialog
+        title: "Open Map"
+        nameFilters: ["Map files (*.json)", "All files (*)"]
+        onAccepted: {
+            mapDoc.load(selectedFile)
+        }
+    }
+
+    FileDialog {
+        id: saveDialog
+        title: "Save Map"
+        fileMode: FileDialog.SaveFile
+        nameFilters: ["Map files (*.json)", "All files (*)"]
+        onAccepted: {
+            mapDoc.save(selectedFile)
+        }
+    }
+
     Component.onCompleted: {
         console.log("Dungeon Scrawl Desktop Shell Initialized");
         assetModel.loadManifest("qrc:/qt/qml/DungeonEditor/assets/soulslike/manifest.json");
         loadWorkspace("Default");
         
         // Auto-show welcome screen if not disabled
-        let showWelcome = workspaceService.loadLayout("Settings").showWelcome !== false;
+        let showWelcome = (typeof workspaceService !== "undefined") ? workspaceService.loadLayout("Settings").showWelcome !== false : true;
         if (showWelcome) {
             welcomeWindow.show();
         }
@@ -52,10 +72,11 @@ ApplicationWindow {
             "rightDockWidth": rightDock.width,
             "aiPanelHeight": rightDock.aiPanelHeight
         };
-        workspaceService.saveLayout(name, layout);
+        if (typeof workspaceService !== "undefined") workspaceService.saveLayout(name, layout);
     }
 
     function loadWorkspace(name) {
+        if (typeof workspaceService === "undefined") return;
         let layout = workspaceService.loadLayout(name);
         if (Object.keys(layout).length > 0) {
             toolBox.width = layout.toolBoxWidth || 50;
@@ -75,24 +96,6 @@ ApplicationWindow {
             document: mapDoc
             canvas: canvas
             
-            FileDialog {
-                id: openDialog
-                title: "Open Map"
-                nameFilters: ["Map files (*.json)", "All files (*)"]
-                onAccepted: {
-                    mapDoc.load(selectedFile)
-                }
-            }
-            
-            FileDialog {
-                id: saveDialog
-                title: "Save Map"
-                fileMode: FileDialog.SaveFile
-                nameFilters: ["Map files (*.json)", "All files (*)"]
-                onAccepted: {
-                    mapDoc.save(selectedFile)
-                }
-            }
         }
 
         // 2. Performance Status Line
