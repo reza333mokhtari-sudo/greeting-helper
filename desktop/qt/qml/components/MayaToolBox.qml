@@ -20,7 +20,10 @@ ZBrushPanel {
             model: [
                 { id: "select", icon: "tools/select" },
                 { id: "move", icon: "tools/move" },
+                { id: "rotate", icon: "tools/rotate" },
+                { id: "scale", icon: "tools/scale" },
                 { id: "room", icon: "tools/draw_room" },
+                { id: "corridor", icon: "tools/draw_room" }, // Reusing room icon for now or a generic one
                 { id: "prop", icon: "tools/place_prop" },
                 { id: "texture", icon: "tools/texture_brush" },
                 { id: "fog", icon: "tools/fog_brush" }

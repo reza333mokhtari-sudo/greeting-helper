@@ -59,7 +59,7 @@ Rectangle {
                 MenuItem { text: qsTr("OPEN..."); onTriggered: openDialog.open() }
                 MenuSeparator {}
                 MenuItem { text: qsTr("SAVE"); onTriggered: {
-                    if (document.currentPath) document.save(document.currentPath)
+                    if (document.dirty && document.undoStack->index() > 0) saveDialog.open() 
                     else saveDialog.open()
                 } }
                 MenuItem { text: qsTr("SAVE AS..."); onTriggered: saveDialog.open() }
