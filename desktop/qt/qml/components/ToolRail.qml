@@ -24,12 +24,12 @@ Rectangle {
         ToolButton {
             id: selectBtn
             text: "Select"
-            icon.name: "cursor-arrow"
+            icon.source: "qrc:/qt/qml/DungeonEditor/assets/icons/tools/select.svg"
             checkable: true
             checked: canvas.activeTool === "select"
             onClicked: canvas.activeTool = "select"
             ButtonGroup.group: toolGroup
-            display: AbstractButton.TextUnderIcon
+            display: AbstractButton.IconOnly
             Layout.fillWidth: true
             ToolTip.visible: hovered; ToolTip.text: "Select Tool (V)"
         }
@@ -37,12 +37,12 @@ Rectangle {
         ToolButton {
             id: drawBtn
             text: "Draw"
-            icon.name: "draw-rectangle"
+            icon.source: "qrc:/qt/qml/DungeonEditor/assets/icons/tools/draw_room.svg"
             checkable: true
             checked: canvas.activeTool === "draw"
             onClicked: canvas.activeTool = "draw"
             ButtonGroup.group: toolGroup
-            display: AbstractButton.TextUnderIcon
+            display: AbstractButton.IconOnly
             Layout.fillWidth: true
             ToolTip.visible: hovered; ToolTip.text: "Draw Room (R)"
         }
@@ -50,12 +50,12 @@ Rectangle {
         ToolButton {
             id: moveBtn
             text: "Pan"
-            icon.name: "input-mouse"
+            icon.source: "qrc:/qt/qml/DungeonEditor/assets/icons/tools/move.svg"
             checkable: true
             checked: canvas.activeTool === "pan"
             onClicked: canvas.activeTool = "pan"
             ButtonGroup.group: toolGroup
-            display: AbstractButton.TextUnderIcon
+            display: AbstractButton.IconOnly
             Layout.fillWidth: true
             ToolTip.visible: hovered; ToolTip.text: "Pan View (H or Middle Click)"
         }
@@ -64,13 +64,13 @@ Rectangle {
 
         ToolButton {
             text: "Delete"
-            icon.name: "edit-delete"
+            icon.source: "qrc:/qt/qml/DungeonEditor/assets/icons/tools/eraser.svg"
             onClicked: {
                 if (canvas.selectedId !== "") {
                     canvas.document.removeObject(canvas.selectedId);
                 }
             }
-            display: AbstractButton.TextUnderIcon
+            display: AbstractButton.IconOnly
             Layout.fillWidth: true
             ToolTip.visible: hovered; ToolTip.text: "Delete Selected (Del)"
         }
@@ -79,9 +79,10 @@ Rectangle {
         
         ToolButton {
             text: "Help"
-            icon.name: "help-about"
-            display: AbstractButton.TextUnderIcon
+            icon.source: "qrc:/qt/qml/DungeonEditor/assets/icons/status/help.svg"
+            display: AbstractButton.IconOnly
             Layout.fillWidth: true
+            onClicked: helpWindow.show()
         }
     }
 }
