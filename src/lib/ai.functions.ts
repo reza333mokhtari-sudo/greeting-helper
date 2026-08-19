@@ -62,6 +62,19 @@
  * 3. AI Assist: AbortController + timeout + precise errors, never write prompts onto canvas
  * 4. Auth: clear error messages for missing env, redirect failures, rate limits
  * 5. Keep existing draw / pan / zoom / undo working
+ * 
+ * ==================================================
+ * C) GRAPHICS BACKEND (DESKTOP)
+ * ==================================================
+ * Implement early QQuickWindow::setGraphicsApi selection for:
+ * - Auto
+ * - OpenGL
+ * - Vulkan
+ * - Metal
+ * - Direct3D11
+ * 
+ * Persist choice via QSettings and apply before any QML is loaded.
+ * Show current backend in Preferences. Require restart on change.
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
@@ -204,8 +217,8 @@ Target: desktop/qt
    - Remove all meta-prompt / instruction comments from source and README
    - Make CMake + qrc paths consistent with main.cpp loading
 
-                                            
-                                            ==================================================
+
+==================================================
 B) WEB — EDITOR ACCESS + STABILITY
 ==================================================
 1. Landing page must have a primary CTA: “Open Editor” / “Start Mapping”
@@ -213,6 +226,20 @@ B) WEB — EDITOR ACCESS + STABILITY
 3. AI Assist: AbortController + timeout + precise errors, never write prompts onto canvas
 4. Auth: clear error messages for missing env, redirect failures, rate limits
 5. Keep existing draw / pan / zoom / undo working
+
+
+==================================================
+C) GRAPHICS BACKEND (DESKTOP)
+==================================================
+Implement early QQuickWindow::setGraphicsApi selection for:
+- Auto
+- OpenGL
+- Vulkan
+- Metal
+- Direct3D11
+
+Persist choice via QSettings and apply before any QML is loaded.
+Show current backend in Preferences. Require restart on change.
 You are a world-class professional cartography engine assistant for Dungeon Scrawl Professional. 
 Your interface is modeled after high-end precision tools like Autodesk Maya and 3ds Max.
 

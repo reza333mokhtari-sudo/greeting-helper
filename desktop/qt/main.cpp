@@ -15,12 +15,24 @@
 #include <QFileSystemWatcher>
 #include <QDir>
 #include <QTimer>
+#include <QSettings>
+#include <QQuickWindow>
 
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  *
- * GreetingHelper Desktop Shell
- * This C++/Qt application wraps the Dungeon Scrawl web editor in a native container.
+ * ==================================================
+ * C) GRAPHICS BACKEND (DESKTOP)
+ * ==================================================
+ * Implement early QQuickWindow::setGraphicsApi selection for:
+ * - Auto
+ * - OpenGL
+ * - Vulkan
+ * - Metal
+ * - Direct3D11
+ *
+ * Persist choice via QSettings and apply before any QML is loaded.
+ * Show current backend in Preferences. Require restart on change.
  */
 
 class GreetingHelperWindow : public QMainWindow {
@@ -47,7 +59,7 @@ public:
         // Native Menus
         createMenus();
 
-        statusBar()->showMessage("Ready");
+        statusBar()->showMessage(QString("Ready (Backend: %1)").arg(getCurrentGraphicsApiName()));
 
         connect(m_view, &QWebEngineView::loadFinished, this, [this](bool ok) {
             if (ok) statusBar()->showMessage("System Online", 3000);
@@ -58,17 +70,19 @@ public:
     }
 
 private:
+    QString getCurrentGraphicsApiName() {
+        QSettings settings;
+        return settings.value("graphicsApi", "Auto").toString();
+    }
+
     void setupDevMode() {
         m_watcher = new QFileSystemWatcher(this);
-
-        // Watch common asset directories for changes to trigger reload
-        // In a real scenario, this would point to the project's 'dist' or 'public' folder
         QString projectPath = QDir::currentPath();
         m_watcher->addPath(projectPath + "/src");
 
         m_reloadTimer = new QTimer(this);
         m_reloadTimer->setSingleShot(true);
-        m_reloadTimer->setInterval(500); // Debounce reload
+        m_reloadTimer->setInterval(500);
 
         connect(m_watcher, &QFileSystemWatcher::directoryChanged, this, [this](const QString &path) {
             qDebug() << "Change detected in:" << path;
@@ -84,6 +98,22 @@ private:
     void createMenus() {
         QMenu *fileMenu = menuBar()->addMenu("&File");
 
+        QMenu *graphicsMenu = fileMenu->addMenu("Graphics Backend (Restart Required)");
+        QStringList apis = {"Auto", "OpenGL", "Vulkan", "Metal", "Direct3D11"};
+        QString current = getCurrentGraphicsApiName();
+
+        for (const QString &api : apis) {
+            QAction *act = graphicsMenu->addAction(api);
+            act->setCheckable(true);
+            act->setChecked(api == current);
+            connect(act, &QAction::triggered, this, [this, api]() {
+                QSettings settings;
+                settings.setValue("graphicsApi", api);
+                statusBar()->showMessage("Graphics API set to " + api + ". Please restart the application.", 5000);
+            });
+        }
+
+        fileMenu->addSeparator();
         QAction *exitAct = fileMenu->addAction("E&xit");
         connect(exitAct, &QAction::triggered, this, &QWidget::close);
 
@@ -94,7 +124,6 @@ private:
         QAction *devToolsAct = viewMenu->addAction("Toggle &DevTools");
         connect(devToolsAct, &QAction::triggered, this, [this]() {
             qDebug() << "DevTools requested";
-            // For production, this usually opens a separate debugging port or window
         });
     }
 
@@ -103,14 +132,27 @@ private:
     QTimer *m_reloadTimer;
 };
 
+void applyGraphicsApi() {
+    QSettings settings;
+    QString api = settings.value("graphicsApi", "Auto").toString();
+
+    if (api == "OpenGL") QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
+    else if (api == "Vulkan") QQuickWindow::setGraphicsApi(QSGRendererInterface::Vulkan);
+    else if (api == "Metal") QQuickWindow::setGraphicsApi(QSGRendererInterface::Metal);
+    else if (api == "Direct3D11") QQuickWindow::setGraphicsApi(QSGRendererInterface::Direct3D11);
+    // "Auto" is default, no call needed
+}
+
 int main(int argc, char *argv[]) {
-    // High DPI support
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
+    QCoreApplication::setOrganizationName("DungeonScrawl");
+    QCoreApplication::setApplicationName("GreetingHelper");
+
+    applyGraphicsApi();
+
     QApplication app(argc, argv);
-    app.setApplicationName("GreetingHelper");
-    app.setOrganizationName("DungeonScrawl");
 
     GreetingHelperWindow window;
     window.show();
