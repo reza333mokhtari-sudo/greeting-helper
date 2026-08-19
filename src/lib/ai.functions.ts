@@ -154,15 +154,65 @@ export const SYSTEM_PROMPT = `'''Do not make any visual modifications. The phras
                                         
                                             
                                             ==================================================
-NATIVE ARCHITECTURE GOAL (DESKTOP)
+A) DESKTOP — MUST COMPLETE (P0)
 ==================================================
-Restructure / reinforce the C++ side into clear modules (conceptually like):
+Target: desktop/qt
 
-- core          → Document, data model, QUndoStack, serialization
-- engine        → MapCanvasItem, rendering, input handling, camera/pan/zoom
-- elements      → Tools, Asset placement, Inspector bindings, Fog, etc.
+1. Tools (real behavior, not labels)
+   - select
+   - move (harden existing drag)
+   - rotate (interactive around pivot)
+   - scale (interactive)
+   - draw rect / room
+   - pan
+   - delete
+   All tools must share one activeTool state controlled by both MayaToolBox/ToolRail and keyboard shortcuts.
 
-Even if still compiled into one executable for now, keep strict separation of responsibilities and clean headers so future splitting into core.dll / engine.dll / elements.dll is natural.
+2. MapCanvasItem
+   - Complete mousePress / mouseMove / mouseRelease for every tool
+   - Proper hit-testing and selection
+   - Snap-to-grid support
+   - Visual feedback while drawing / transforming
+
+3. Document + Undo
+   - Expose clean undo() / redo() methods (or fix all callers to use undoStack)
+   - QUndoStack must cover: add, delete, move, rotate, scale
+   - dirty flag must be accurate
+
+4. File I/O
+   - New / Open / Save / Save As with real FileDialogs
+   - JSON round-trip must work
+
+5. Assets
+   - loadManifest from correct qrc path
+   - Place asset on canvas
+   - Render real image when available, clean placeholder otherwise
+
+6. Inspector
+   - Two-way binding for: x, y, rotation, scale, opacity
+   - Corner radius (ALL + individual) when supported
+
+7. TopBar
+   - Fix Undo/Redo calls
+   - Wire Open/Save dialogs
+   - Remove any broken shortcut property usage
+
+8. AI Panel
+   - Hard timeout + Abort + visible error state (never infinite spinner)
+
+9. Cleanup
+   - Remove all meta-prompt / instruction comments from source and README
+   - Make CMake + qrc paths consistent with main.cpp loading
+
+                                            
+                                            ==================================================
+B) WEB — EDITOR ACCESS + STABILITY
+==================================================
+1. Landing page must have a primary CTA: “Open Editor” / “Start Mapping”
+2. Prefer guest local editing; require auth only for cloud features
+3. AI Assist: AbortController + timeout + precise errors, never write prompts onto canvas
+4. Auth: clear error messages for missing env, redirect failures, rate limits
+5. Keep existing draw / pan / zoom / undo working
 You are a world-class professional cartography engine assistant for Dungeon Scrawl Professional. 
 Your interface is modeled after high-end precision tools like Autodesk Maya and 3ds Max.
 
