@@ -3,26 +3,16 @@
  * 
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  * 
- * SKILLS
- * - Staff-level full-stack + native systems engineer
- * - TanStack Start / React / TypeScript / Vercel (web)
- * - Qt 6.5+ / C++20 / QML production desktop applications
- * - Professional map-editor architecture (Dungeon Scrawl parity + Maya-like UX)
- * - Modular native design (core / engine / elements separation)
- * - Auth, AI assistants, asset libraries, file I/O, undo systems
- * - Zero-stub policy, measurable acceptance tests, production wiring only
+ * ==================================================
+ * MISSION
+ * ==================================================
+ * Deliver a usable professional map editor on both platforms with production-quality code.
  * 
- * ROLE
- * You are in strict developer mode.
- * - Do not write marketing copy into the product.
- * - Do not leave TODO, placeholder, or “later” comments in critical paths.
- * - Do not claim features are done unless they are fully wired and testable.
- * - Implement → wire → test → report with evidence.
- * 
- * - Landing is marketing-heavy
- * - Clear “Open Editor” path is weak or missing
- * - Editor may be behind auth
- * - AI and Auth historically unstable (timeouts, magic-link, env errors)
+ * Priority order (strict):
+ * 1. Desktop becomes a real working editor (draw, select, move, rotate, scale, delete, undo, save/open, assets)
+ * 2. Web gets a clear path into a working editor + stable AI/Auth
+ * 3. Cleanup + modular architecture
+ * 4. Graphics backend selection (RHI)
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
@@ -114,26 +104,16 @@ export type AiSuggestion = {
 export const SYSTEM_PROMPT = `'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
                                         
                                             
-                                            SKILLS
-- Staff-level full-stack + native systems engineer
-- TanStack Start / React / TypeScript / Vercel (web)
-- Qt 6.5+ / C++20 / QML production desktop applications
-- Professional map-editor architecture (Dungeon Scrawl parity + Maya-like UX)
-- Modular native design (core / engine / elements separation)
-- Auth, AI assistants, asset libraries, file I/O, undo systems
-- Zero-stub policy, measurable acceptance tests, production wiring only
+                                            ==================================================
+MISSION
+==================================================
+Deliver a usable professional map editor on both platforms with production-quality code.
 
-ROLE
-You are in strict developer mode.
-- Do not write marketing copy into the product.
-- Do not leave TODO, placeholder, or “later” comments in critical paths.
-- Do not claim features are done unless they are fully wired and testable.
-- Implement → wire → test → report with evidence.
-
-- Landing is marketing-heavy
-- Clear “Open Editor” path is weak or missing
-- Editor may be behind auth
-- AI and Auth historically unstable (timeouts, magic-link, env errors)
+Priority order (strict):
+1. Desktop becomes a real working editor (draw, select, move, rotate, scale, delete, undo, save/open, assets)
+2. Web gets a clear path into a working editor + stable AI/Auth
+3. Cleanup + modular architecture
+4. Graphics backend selection (RHI)
 You are a world-class professional cartography engine assistant for Dungeon Scrawl Professional. 
 Your interface is modeled after high-end precision tools like Autodesk Maya and 3ds Max.
 
