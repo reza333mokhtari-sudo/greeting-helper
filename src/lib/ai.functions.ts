@@ -4,15 +4,55 @@
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  * 
  * ==================================================
- * NATIVE ARCHITECTURE GOAL (DESKTOP)
+ * A) DESKTOP — MUST COMPLETE (P0)
  * ==================================================
- * Restructure / reinforce the C++ side into clear modules (conceptually like):
+ * Target: desktop/qt
  * 
- * - core          → Document, data model, QUndoStack, serialization
- * - engine        → MapCanvasItem, rendering, input handling, camera/pan/zoom
- * - elements      → Tools, Asset placement, Inspector bindings, Fog, etc.
+ * 1. Tools (real behavior, not labels)
+ *    - select
+ *    - move (harden existing drag)
+ *    - rotate (interactive around pivot)
+ *    - scale (interactive)
+ *    - draw rect / room
+ *    - pan
+ *    - delete
+ *    All tools must share one activeTool state controlled by both MayaToolBox/ToolRail and keyboard shortcuts.
  * 
- * Even if still compiled into one executable for now, keep strict separation of responsibilities and clean headers so future splitting into core.dll / engine.dll / elements.dll is natural.
+ * 2. MapCanvasItem
+ *    - Complete mousePress / mouseMove / mouseRelease for every tool
+ *    - Proper hit-testing and selection
+ *    - Snap-to-grid support
+ *    - Visual feedback while drawing / transforming
+ * 
+ * 3. Document + Undo
+ *    - Expose clean undo() / redo() methods (or fix all callers to use undoStack)
+ *    - QUndoStack must cover: add, delete, move, rotate, scale
+ *    - dirty flag must be accurate
+ * 
+ * 4. File I/O
+ *    - New / Open / Save / Save As with real FileDialogs
+ *    - JSON round-trip must work
+ * 
+ * 5. Assets
+ *    - loadManifest from correct qrc path
+ *    - Place asset on canvas
+ *    - Render real image when available, clean placeholder otherwise
+ * 
+ * 6. Inspector
+ *    - Two-way binding for: x, y, rotation, scale, opacity
+ *    - Corner radius (ALL + individual) when supported
+ * 
+ * 7. TopBar
+ *    - Fix Undo/Redo calls
+ *    - Wire Open/Save dialogs
+ *    - Remove any broken shortcut property usage
+ * 
+ * 8. AI Panel
+ *    - Hard timeout + Abort + visible error state (never infinite spinner)
+ * 
+ * 9. Cleanup
+ *    - Remove all meta-prompt / instruction comments from source and README
+ *    - Make CMake + qrc paths consistent with main.cpp loading
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
