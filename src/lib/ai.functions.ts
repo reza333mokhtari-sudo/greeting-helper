@@ -3,8 +3,7 @@
  * 
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  * 
- * can you design ui looks like zbrush in desktop app 
- * all of has like best button and text border everything
+ * I have approved the plan
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
