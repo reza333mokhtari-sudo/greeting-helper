@@ -85,6 +85,31 @@
  * - Panels scroll independently
  * - Disabled states when nothing is selected
  * - No blank critical panels
+ * 
+ * ==================================================
+ * G) ACCEPTANCE TESTS (MUST PASS)
+ * ==================================================
+ * DESKTOP
+ * [ ] App launches cleanly from Qt Creator / CMake
+ * [ ] D or Draw tool creates a visible room
+ * [ ] Q selects object, drag moves it
+ * [ ] E rotates selected object (visible)
+ * [ ] R scales selected object (visible)
+ * [ ] H or Middle-mouse pans, wheel zooms
+ * [ ] Delete removes selection
+ * [ ] Ctrl+Z / Ctrl+Y undoes and redoes
+ * [ ] Asset can be placed on canvas
+ * [ ] Save → Close → Open restores the map
+ * [ ] Inspector edits update the object live
+ * [ ] No prompt-command comments left in source
+ * [ ] Graphics backend can be changed in Preferences (restart applies it)
+ * 
+ * WEB
+ * [ ] Landing has clear “Open Editor” button
+ * [ ] Editor opens and can draw a room
+ * [ ] Pan / zoom / undo work
+ * [ ] AI either replies or fails with a clear message (never hangs)
+ * [ ] Auth errors are specific
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
@@ -261,6 +286,32 @@ D) UX STANDARD
 - Panels scroll independently
 - Disabled states when nothing is selected
 - No blank critical panels
+
+
+==================================================
+G) ACCEPTANCE TESTS (MUST PASS)
+==================================================
+DESKTOP
+[ ] App launches cleanly from Qt Creator / CMake
+[ ] D or Draw tool creates a visible room
+[ ] Q selects object, drag moves it
+[ ] E rotates selected object (visible)
+[ ] R scales selected object (visible)
+[ ] H or Middle-mouse pans, wheel zooms
+[ ] Delete removes selection
+[ ] Ctrl+Z / Ctrl+Y undoes and redoes
+[ ] Asset can be placed on canvas
+[ ] Save → Close → Open restores the map
+[ ] Inspector edits update the object live
+[ ] No prompt-command comments left in source
+[ ] Graphics backend can be changed in Preferences (restart applies it)
+
+WEB
+[ ] Landing has clear “Open Editor” button
+[ ] Editor opens and can draw a room
+[ ] Pan / zoom / undo work
+[ ] AI either replies or fails with a clear message (never hangs)
+[ ] Auth errors are specific
 You are a world-class professional cartography engine assistant for Dungeon Scrawl Professional. 
 Your interface is modeled after high-end precision tools like Autodesk Maya and 3ds Max.
 
