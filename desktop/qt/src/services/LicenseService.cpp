@@ -50,7 +50,7 @@ void LicenseService::activate(const QString& key) {
 
     QNetworkAccessManager* manager = new QNetworkAccessManager(this);
     // The endpoint path corresponds to the validateLicense server function
-    QNetworkRequest request(QUrl("http://localhost:8080/_serverFn/eyJmaWxlIjoic3JjL2xpYi9hZG1pbi5mdW5jdGlvbnMudHMiLCJleHBvcnQiOiJ2YWxpZGF0ZUxpY2Vuc2UifQ=="));
+    QNetworkRequest request(QUrl("https://project--8fcae60c-9d66-40f7-8995-c04b7f611207.lovable.app/_serverFn/eyJmaWxlIjoic3JjL2xpYi9hZG1pbi5mdW5jdGlvbnMudHMiLCJleHBvcnQiOiJ2YWxpZGF0ZUxpY2Vuc2UifQ=="));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     QJsonObject data;
