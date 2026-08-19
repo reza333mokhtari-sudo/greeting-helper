@@ -1,38 +1,64 @@
-# Dungeon Editor Desktop (Qt)
+# Desktop Engine: DLL Architecture & Local Setup
 
-Native C++/Qt port of the Dungeon Scrawl editor.
+This project uses a **Bundled Binary Architecture** for the desktop application. The core engine, UI resources, and business logic are packaged into a shared library (`core.dll` or `libcore.so`), while the main executable acts as a thin wrapper.
 
-## Requirements
+## Architecture Overview
 
-- Qt 6.5+ (Core, Gui, Qml, Quick, WebEngineQuick)
-- CMake 3.16+
-- C++17 Compiler
+- **Core Library (`core`)**: 
+  - Located in `desktop/qt/src/`.
+  - Contains all C++ models, services, and the QML rendering engine.
+  - Bundles all QML files and assets using `qt_add_resources`.
+- **Thin Wrapper (`appDungeonEditor`)**:
+  - Located in `desktop/qt/main.cpp`.
+  - Initializes the Qt application, sets the graphics API, and links to the core library.
 
-## Build Instructions
+## Prerequisites
 
-1. Open `desktop/qt/CMakeLists.txt` in **Qt Creator**.
-2. Select a Desktop kit (e.g., Qt 6.5.x for MSVC/GCC/Clang).
-3. Build and Run.
+- **Qt 6.7+** (with QML, Quick, and WebEngine components)
+- **CMake 3.21+**
+- **C++20 Compiler** (MSVC 2022, GCC 11+, or Clang 14+)
 
-## Project Structure
+## Building the Desktop Engine
 
-- `src/core/Document.h/cpp`: C++ map model and serialization.
-- `src/canvas/MapCanvasItem.h/cpp`: Hardware-accelerated 2D canvas with drawing/panning/zooming.
-- `src/models/AssetLibraryModel.h/cpp`: List model for prop management.
-- `src/services/`: AI network client and File I/O.
-- `qml/`: Modern UI layout using Qt Quick Controls 2.
+1.  **Navigate to the Qt directory**:
+    ```bash
+    cd desktop/qt
+    ```
 
-## Key Features
+2.  **Configure the project**:
+    ```bash
+    mkdir build && cd build
+    cmake .. -DCMAKE_BUILD_TYPE=Release
+    ```
 
-- **Native Canvas**: Fast rendering of room geometry and props.
-- **Asset Library**: Integrated Soulslike starter pack.
-- **AI Assistant**: Desktop-native interface for map generation advice.
-- **Cross-Platform**: Compiles for Windows, macOS, and Linux.
+3.  **Build the core and executable**:
+    ```bash
+    cmake --build . --parallel
+    ```
 
-## Known Gaps
+## Running Locally
 
-- Fog of War rendering (planned for Phase 9).
-- Full Undo/Redo history (QUndoStack integration in progress).
-- Web GL viewport integration (requires local proxy for Vite dev assets).
+### Development Mode (Vite Bridge)
+By default, the desktop app attempts to connect to a running Vite dev server at `http://localhost:8080`.
 
-'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
+1.  **Start the web dev server**:
+    ```bash
+    bun run dev
+    ```
+2.  **Launch the desktop executable**:
+    - **Windows**: `./appDungeonEditor.exe` (Ensure `core.dll` is in the same folder or system PATH)
+    - **Linux**: `./appDungeonEditor`
+
+### Production Mode (Bundled)
+For standalone distribution, the app uses the bundled QML resources indexed at `qrc:/qt/qml/DungeonEditor/qml/Main.qml`.
+
+## Graphics Backend Selection
+The application supports manual selection of graphics APIs to ensure compatibility across different hardware. This can be configured via the "Graphics Backend" menu in the application (requires restart) or via `QSettings`.
+
+- **Windows**: Defaults to D3D11 or OpenGL.
+- **macOS**: Defaults to Metal.
+- **Linux**: Defaults to OpenGL or Vulkan.
+
+## Troubleshooting
+- **Missing DLLs**: If the app fails to start on Windows, run `windeployqt appDungeonEditor.exe` to gather required Qt dependencies.
+- **Resource Loading**: Ensure `resources.qrc` is updated if adding new SVG icons or QML components.
