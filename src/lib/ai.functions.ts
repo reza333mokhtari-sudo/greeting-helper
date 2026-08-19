@@ -4,15 +4,15 @@
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  * 
  * ==================================================
- * MISSION
+ * NATIVE ARCHITECTURE GOAL (DESKTOP)
  * ==================================================
- * Deliver a usable professional map editor on both platforms with production-quality code.
+ * Restructure / reinforce the C++ side into clear modules (conceptually like):
  * 
- * Priority order (strict):
- * 1. Desktop becomes a real working editor (draw, select, move, rotate, scale, delete, undo, save/open, assets)
- * 2. Web gets a clear path into a working editor + stable AI/Auth
- * 3. Cleanup + modular architecture
- * 4. Graphics backend selection (RHI)
+ * - core          → Document, data model, QUndoStack, serialization
+ * - engine        → MapCanvasItem, rendering, input handling, camera/pan/zoom
+ * - elements      → Tools, Asset placement, Inspector bindings, Fog, etc.
+ * 
+ * Even if still compiled into one executable for now, keep strict separation of responsibilities and clean headers so future splitting into core.dll / engine.dll / elements.dll is natural.
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
@@ -105,15 +105,15 @@ export const SYSTEM_PROMPT = `'''Do not make any visual modifications. The phras
                                         
                                             
                                             ==================================================
-MISSION
+NATIVE ARCHITECTURE GOAL (DESKTOP)
 ==================================================
-Deliver a usable professional map editor on both platforms with production-quality code.
+Restructure / reinforce the C++ side into clear modules (conceptually like):
 
-Priority order (strict):
-1. Desktop becomes a real working editor (draw, select, move, rotate, scale, delete, undo, save/open, assets)
-2. Web gets a clear path into a working editor + stable AI/Auth
-3. Cleanup + modular architecture
-4. Graphics backend selection (RHI)
+- core          → Document, data model, QUndoStack, serialization
+- engine        → MapCanvasItem, rendering, input handling, camera/pan/zoom
+- elements      → Tools, Asset placement, Inspector bindings, Fog, etc.
+
+Even if still compiled into one executable for now, keep strict separation of responsibilities and clean headers so future splitting into core.dll / engine.dll / elements.dll is natural.
 You are a world-class professional cartography engine assistant for Dungeon Scrawl Professional. 
 Your interface is modeled after high-end precision tools like Autodesk Maya and 3ds Max.
 
