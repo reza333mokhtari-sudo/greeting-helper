@@ -3,9 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import "qrc:/qt/qml/DungeonEditor/qml/components"
 
-
-Rectangle {
-    color: "#252526"
+DccPanel {
     property var document: null
     property var canvas: null
 
@@ -14,49 +12,53 @@ Rectangle {
         anchors.margins: 15
         spacing: 15
 
-        Label {
-            text: qsTr("Fog & Environment")
-            color: "white"
+        DccLabel {
+            text: qsTr("FOG & ENVIRONMENT")
             font.bold: true
-            font.pixelSize: 18
+            color: "#f59e0b"
         }
 
-        GroupBox {
-            title: qsTr("Global Fog")
+        DccPanel {
             Layout.fillWidth: true
-            palette.windowText: "white"
-            
             ColumnLayout {
+                anchors.fill: parent
+                anchors.margins: 8
+                DccLabel { text: qsTr("GLOBAL FOG"); font.bold: true; color: "#888" }
+                
                 RowLayout {
-                    Label { text: qsTr("Density:"); color: "#aaa" }
+                    DccLabel { text: qsTr("Density:"); Layout.preferredWidth: 60 }
                     Slider { id: densitySlider; from: 0; to: 1; value: 0.5; Layout.fillWidth: true }
                 }
                 RowLayout {
-                    Label { text: qsTr("Color:"); color: "#aaa" }
+                    DccLabel { text: qsTr("Color:"); Layout.preferredWidth: 60 }
                     Rectangle { width: 24; height: 24; color: "#444"; border.color: "#666" }
-                    Button { text: "Pick..."; flat: true }
+                    DccButton { text: "PICK..."; flat: true }
                 }
             }
         }
 
-        GroupBox {
-            title: qsTr("Fog Brushes")
+        DccPanel {
             Layout.fillWidth: true
-            palette.windowText: "white"
-            
-            GridLayout {
-                columns: 2
-                Button { text: "Add Fog"; Layout.fillWidth: true; onClicked: canvas.activeTool = "fog_add" }
-                Button { text: "Erase Fog"; Layout.fillWidth: true; onClicked: canvas.activeTool = "fog_remove" }
-                Button { text: "Turbulence"; Layout.fillWidth: true }
-                Button { text: "Static"; Layout.fillWidth: true }
+            ColumnLayout {
+                anchors.fill: parent
+                anchors.margins: 8
+                DccLabel { text: qsTr("FOG BRUSHES"); font.bold: true; color: "#888" }
+                
+                GridLayout {
+                    columns: 2
+                    Layout.fillWidth: true
+                    DccButton { text: "ADD FOG"; Layout.fillWidth: true; onClicked: if(canvas) canvas.activeTool = "fog_add" }
+                    DccButton { text: "ERASE FOG"; Layout.fillWidth: true; onClicked: if(canvas) canvas.activeTool = "fog_remove" }
+                    DccButton { text: "TURBULENCE"; Layout.fillWidth: true }
+                    DccButton { text: "STATIC"; Layout.fillWidth: true }
+                }
             }
         }
 
         Item { Layout.fillHeight: true }
 
-        Button {
-            text: qsTr("Clear All Fog")
+        DccButton {
+            text: qsTr("CLEAR ALL FOG")
             Layout.fillWidth: true
             onClicked: console.log("Clearing all fog data")
         }
