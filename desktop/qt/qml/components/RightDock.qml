@@ -3,7 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import "qrc:/qt/qml/DungeonEditor/qml/components"
 
-Rectangle {
+DccPanel {
     color: "#252526"
     border.color: "#383838"
     border.width: 1
@@ -12,7 +12,6 @@ Rectangle {
     property var canvas: null
     property var assetModel: null
     property alias aiPanelHeight: aiPanel.Layout.preferredHeight
-
 
     function updateInspector(id) {
         inspectorPanel.updateSelection(id)
@@ -52,8 +51,6 @@ Rectangle {
             }
         }
 
-
-
         StackLayout {
             currentIndex: dockTabs.currentIndex
             Layout.fillWidth: true
@@ -91,7 +88,6 @@ Rectangle {
                 document: document
                 canvas: canvas
             }
-
         }
 
         AiPanel {
@@ -100,6 +96,5 @@ Rectangle {
             Layout.preferredHeight: 250
             SplitView.minimumHeight: 150
         }
-
     }
 }
