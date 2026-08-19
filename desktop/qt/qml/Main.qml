@@ -80,8 +80,9 @@ ApplicationWindow {
         Rectangle {
             Layout.fillWidth: true
             height: 32
-            color: "#1e1e1e"
-            border.color: "#2d2d2d"
+            color: "#2b2b2b"
+            border.color: "#383838"
+            border.width: 1
             
             RowLayout {
                 anchors.fill: parent

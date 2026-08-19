@@ -36,9 +36,10 @@ BaseFloatingWindow {
             Rectangle {
                 Layout.fillWidth: true
                 height: 80
-                color: "#161616"
-                border.color: "#2d2d2d"
-                radius: 4
+                color: "#1a1a1a" // ZBrush deep charcoal
+                border.color: "#383838"
+                border.width: 1
+                radius: 1 // Sharp, blocky ZBrush corners
                 
                 RowLayout {
                     anchors.fill: parent
@@ -101,9 +102,10 @@ BaseFloatingWindow {
                     color: "#eee"
                     font.family: "JetBrains Mono"
                     background: Rectangle {
-                        color: "#161616"
-                        border.color: keyInput.activeFocus ? "#3b82f6" : "#2d2d2d"
-                        radius: 4
+                        color: "#1a1a1a"
+                        border.color: keyInput.activeFocus ? "#f59e0b" : "#383838"
+                        border.width: 1
+                        radius: 1
                     }
                 }
                 Button {

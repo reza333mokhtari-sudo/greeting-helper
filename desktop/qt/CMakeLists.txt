@@ -50,6 +50,7 @@ qt_add_resources(appDungeonEditor "qml_resources"
         qml/components/CmsPanel.qml
         qml/components/FogTools.qml
         qml/components/RightDock.qml
+        qml/components/ZBrushButton.qml
 
         qml/components/AdvancedStatusBar.qml
         qml/components/AppIcon.qml
