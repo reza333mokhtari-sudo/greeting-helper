@@ -133,6 +133,9 @@ void Document::removeObject(const QString& id) {
     m_undoStack->push(new BaseCommand(tr("Remove Object"), redo, undo));
 }
 
+void Document::undo() { if (m_undoStack->canUndo()) m_undoStack->undo(); }
+void Document::redo() { if (m_undoStack->canRedo()) m_undoStack->redo(); }
+
 void Document::clear() {
     m_objects = QJsonArray();
     m_undoStack->clear();

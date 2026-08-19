@@ -291,6 +291,7 @@ export const suggestMap = createServerFn({ method: "POST" })
         maxRetries: isCustom ? 0 : 1,
         ...(providerOptions ? { providerOptions } : {}),
         system: data.customSystem || (extra ? `${SYSTEM_PROMPT}\n\n${extra}` : SYSTEM_PROMPT),
+        abort: new AbortController().signal, // Basic abort support
         messages: (extra ? [...messages, { role: "user" as const, content: extra }] : messages) as {
           role: "user" | "assistant";
           content: string;

@@ -74,6 +74,25 @@ ApplicationWindow {
             Layout.fillWidth: true
             document: mapDoc
             canvas: canvas
+            
+            FileDialog {
+                id: openDialog
+                title: "Open Map"
+                nameFilters: ["Map files (*.json)", "All files (*)"]
+                onAccepted: {
+                    mapDoc.load(selectedFile)
+                }
+            }
+            
+            FileDialog {
+                id: saveDialog
+                title: "Save Map"
+                fileMode: FileDialog.SaveFile
+                nameFilters: ["Map files (*.json)", "All files (*)"]
+                onAccepted: {
+                    mapDoc.save(selectedFile)
+                }
+            }
         }
 
         // 2. Performance Status Line

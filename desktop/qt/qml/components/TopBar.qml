@@ -58,7 +58,11 @@ Rectangle {
                 MenuItem { text: qsTr("NEW"); onTriggered: document.clear() }
                 MenuItem { text: qsTr("OPEN..."); onTriggered: openDialog.open() }
                 MenuSeparator {}
-                MenuItem { text: qsTr("SAVE"); onTriggered: document.save() }
+                MenuItem { text: qsTr("SAVE"); onTriggered: {
+                    if (document.currentPath) document.save(document.currentPath)
+                    else saveDialog.open()
+                } }
+                MenuItem { text: qsTr("SAVE AS..."); onTriggered: saveDialog.open() }
                 MenuItem { text: qsTr("PREFERENCES"); onTriggered: preferencesDialog.open() }
                 MenuSeparator {}
                 MenuItem { text: qsTr("QUIT"); onTriggered: Qt.quit() }
