@@ -86,6 +86,8 @@
  * - No secrets
  * - No fake “done”
  * - Code first, short evidence second
+ * 
+ * now what you done to on DESKTOP APPLICATION?
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
