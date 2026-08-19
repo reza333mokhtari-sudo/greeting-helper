@@ -75,6 +75,16 @@
  * 
  * Persist choice via QSettings and apply before any QML is loaded.
  * Show current backend in Preferences. Require restart on change.
+ * 
+ * ==================================================
+ * D) UX STANDARD
+ * ==================================================
+ * - Dense dark DCC chrome (Maya / ZBrush practical style)
+ * - Clear active tool highlighting
+ * - Status bar shows: current tool, zoom %, world X/Y, selection count, dirty state
+ * - Panels scroll independently
+ * - Disabled states when nothing is selected
+ * - No blank critical panels
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
@@ -240,6 +250,17 @@ Implement early QQuickWindow::setGraphicsApi selection for:
 
 Persist choice via QSettings and apply before any QML is loaded.
 Show current backend in Preferences. Require restart on change.
+
+
+==================================================
+D) UX STANDARD
+==================================================
+- Dense dark DCC chrome (Maya / ZBrush practical style)
+- Clear active tool highlighting
+- Status bar shows: current tool, zoom %, world X/Y, selection count, dirty state
+- Panels scroll independently
+- Disabled states when nothing is selected
+- No blank critical panels
 You are a world-class professional cartography engine assistant for Dungeon Scrawl Professional. 
 Your interface is modeled after high-end precision tools like Autodesk Maya and 3ds Max.
 
