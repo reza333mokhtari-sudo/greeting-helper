@@ -105,7 +105,7 @@ void MapCanvasItem::paint(QPainter *painter) {
     }
 
     // Drawing Preview
-    if (m_isDrawing && m_activeTool == "draw") {
+    if (m_isDrawing && (m_activeTool == "draw" || m_activeTool == "room" || m_activeTool == "corridor")) {
         painter->setPen(QPen(Qt::cyan, 2 / m_zoom, Qt::DashLine));
         painter->setBrush(QColor(0, 255, 255, 20));
         double x1 = snap(m_drawStart.x());
@@ -123,7 +123,7 @@ void MapCanvasItem::mousePressEvent(QMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
         if (m_activeTool == "select") {
             handleSelection(worldPos);
-        } else if (m_activeTool == "draw") {
+        } else if (m_activeTool == "draw" || m_activeTool == "room" || m_activeTool == "corridor") {
             m_isDrawing = true;
             m_drawStart = worldPos;
         } else if (m_activeTool == "pan") {
@@ -214,11 +214,12 @@ void MapCanvasItem::mouseReleaseEvent(QMouseEvent *event) {
         if (rect.width() >= 10 && rect.height() >= 10) {
             QJsonObject obj;
             obj["kind"] = "rect";
-            obj["name"] = "Room";
+            obj["name"] = m_activeTool == "corridor" ? "Corridor" : "Room";
             obj["x"] = rect.center().x();
             obj["y"] = rect.center().y();
             obj["w"] = rect.width();
             obj["h"] = rect.height();
+            obj["rotation"] = 0;
             m_document->addObject(obj);
         }
     }
