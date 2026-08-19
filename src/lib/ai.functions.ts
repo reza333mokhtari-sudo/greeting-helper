@@ -305,7 +305,7 @@ export const suggestMap = createServerFn({ method: "POST" })
         },
       });
 
-      result.text.finally(() => clearTimeout(timeoutId));
+      result.text.then(() => clearTimeout(timeoutId)).catch(() => clearTimeout(timeoutId));
 
       const toError = (e: unknown) =>
         e instanceof Error
