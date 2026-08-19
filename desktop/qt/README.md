@@ -49,8 +49,33 @@ By default, the desktop app attempts to connect to a running Vite dev server at 
     - **Windows**: `./appDungeonEditor.exe` (Ensure `core.dll` is in the same folder or system PATH)
     - **Linux**: `./appDungeonEditor`
 
-### Production Mode (Bundled)
-For standalone distribution, the app uses the bundled QML resources indexed at `qrc:/qt/qml/DungeonEditor/qml/Main.qml`.
+## Release Packaging Guide
+
+To create a distributable build that includes the core DLL and all required Qt/QML runtime dependencies:
+
+### Windows (windeployqt)
+1. Ensure your `build` folder contains `appDungeonEditor.exe` and `core.dll`.
+2. Run the Qt deployment tool:
+   ```powershell
+   windeployqt --qmldir ../qml appDungeonEditor.exe
+   ```
+3. This will copy all necessary Qt DLLs, plugins, and QML modules into your build directory.
+
+### Linux (linuxdeployqt / AppImage)
+1. Build in Release mode.
+2. Use `linuxdeployqt`:
+   ```bash
+   linuxdeployqt appDungeonEditor -show-logging -appimage -qmldir=../qml
+   ```
+3. This produces a standalone `.AppImage` containing the executable, `libcore.so`, and the Qt runtime.
+
+### macOS (macdeployqt)
+1. Build in Release mode.
+2. Run the deployment tool:
+   ```bash
+   macdeployqt appDungeonEditor.app -qmldir=../qml -dmg
+   ```
+3. This creates a `.dmg` with the core library bundled inside the app framework.
 
 ## Graphics Backend Selection
 The application supports manual selection of graphics APIs to ensure compatibility across different hardware. This can be configured via the "Graphics Backend" menu in the application (requires restart) or via `QSettings`.
