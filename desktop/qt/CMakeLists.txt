@@ -5,6 +5,9 @@ project(DungeonEditor VERSION 1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Optimization: Static linking where possible, but core logic goes to core.dll
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
 find_package(Qt6 REQUIRED COMPONENTS 
     Core 
     Gui 
@@ -18,9 +21,10 @@ find_package(Qt6 REQUIRED COMPONENTS
 
 qt_standard_project_setup()
 
-# Define the executable
-qt_add_executable(appDungeonEditor
-    src/main.cpp
+# 1. THE CORE ENGINE (core.dll / libcore.so)
+# This library contains ALL application logic, models, and services.
+# Following the user's request, we package everything into this core binary.
+add_library(core SHARED
     src/core/Document.h src/core/Document.cpp
     src/canvas/MapCanvasItem.h src/canvas/MapCanvasItem.cpp
     src/models/AssetLibraryModel.h src/models/AssetLibraryModel.cpp
@@ -30,12 +34,25 @@ qt_add_executable(appDungeonEditor
     src/services/LicenseService.h src/services/LicenseService.cpp
 )
 
+target_link_libraries(core PUBLIC 
+    Qt6::Core
+    Qt6::Gui 
+    Qt6::Qml 
+    Qt6::Quick 
+    Qt6::Network
+    Qt6::QuickControls2
+    Qt6::Concurrent
+    Qt6::Widgets
+)
 
+target_include_directories(core PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
 
-# Manual resource handling instead of qt_add_qml_module to avoid broken type registration
-qt_add_resources(appDungeonEditor "qml_resources"
+# 2. BUNDLED RESOURCES
+# Embed ALL QML, assets, and icons directly into the binary to avoid external files.
+qt_add_resources(core "qml_resources"
     PREFIX "/qt/qml/DungeonEditor"
-
     FILES
         qml/Main.qml
         qml/components/TopBar.qml
@@ -54,8 +71,6 @@ qt_add_resources(appDungeonEditor "qml_resources"
         qml/components/ZBrushLabel.qml
         qml/components/ZBrushPanel.qml
         qml/components/ZBrushTextField.qml
-
-
         qml/components/AdvancedStatusBar.qml
         qml/components/AppIcon.qml
         qml/components/MayaShelf.qml
@@ -97,27 +112,25 @@ qt_add_resources(appDungeonEditor "qml_resources"
         assets/icons/general/fit_to_screen.svg
         assets/icons/general/redo.svg
         assets/icons/general/undo.svg
-
-
 )
 
-target_include_directories(appDungeonEditor PRIVATE 
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
+# 3. THE EXECUTABLE (Thin wrapper)
+# The executable now only contains the entry point and links to core.dll.
+qt_add_executable(appDungeonEditor
+    src/main.cpp
 )
 
-target_link_libraries(appDungeonEditor PRIVATE 
-    Qt6::Core
-    Qt6::Gui 
-    Qt6::Qml 
-    Qt6::Quick 
-    Qt6::Network
-    Qt6::QuickControls2
-    Qt6::Concurrent
-    Qt6::Widgets
-)
+target_link_libraries(appDungeonEditor PRIVATE core)
+
+# Final packaging optimizations
+if(WIN32)
+    set_target_properties(core PROPERTIES OUTPUT_NAME "core")
+    set_target_properties(appDungeonEditor PROPERTIES WIN32_EXECUTABLE ON)
+endif()
 
 # Install rules
-install(TARGETS appDungeonEditor
+install(TARGETS appDungeonEditor core
     BUNDLE DESTINATION .
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
