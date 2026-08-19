@@ -153,6 +153,8 @@
  * - No fake “done” claims
  * - Code first, short evidence-based explanation second
  * - Prefer long-term modular structure (core / engine / elements)
+ * 
+ * now what are you done to qtdesktop ?
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
