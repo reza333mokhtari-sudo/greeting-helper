@@ -41,6 +41,8 @@ public:
     Q_INVOKABLE void addObject(QJsonObject obj);
     Q_INVOKABLE void updateObject(const QString& id, QJsonObject props);
     Q_INVOKABLE void removeObject(const QString& id);
+    Q_INVOKABLE void undo();
+    Q_INVOKABLE void redo();
     Q_INVOKABLE void clear();
     
     Q_INVOKABLE void save(const QString& url);

@@ -151,6 +151,7 @@ void MapCanvasItem::mouseMoveEvent(QMouseEvent *event) {
             QPointF delta = (event->position() - m_lastMousePos) / m_zoom;
             // Prevent dragging if shift is held (e.g. for zoom/pan shortcuts)
             if (event->modifiers() & Qt::ShiftModifier) return;
+            
             QJsonObject obj;
             int idx = -1;
             for (int i = 0; i < m_document->objects().size(); ++i) {
@@ -161,19 +162,37 @@ void MapCanvasItem::mouseMoveEvent(QMouseEvent *event) {
                 }
             }
             if (idx != -1) {
-                double newX = obj["x"].toDouble() + delta.x();
-                double newY = obj["y"].toDouble() + delta.y();
-                
-                // Only snap if enabled
-                if (m_document->snapEnabled()) {
-                    newX = snap(newX);
-                    newY = snap(newY);
-                }
+                if (m_activeTool == "move" || m_activeTool == "select") {
+                    QPointF delta = (event->position() - m_lastMousePos) / m_zoom;
+                    double newX = obj["x"].toDouble() + delta.x();
+                    double newY = obj["y"].toDouble() + delta.y();
+                    
+                    if (m_document->snapEnabled()) {
+                        newX = snap(newX);
+                        newY = snap(newY);
+                    }
 
-                // Threshold check to avoid tiny updates
-                if (std::abs(newX - obj["x"].toDouble()) > 0.1 || std::abs(newY - obj["y"].toDouble()) > 0.1) {
-                    obj["x"] = newX;
-                    obj["y"] = newY;
+                    if (std::abs(newX - obj["x"].toDouble()) > 0.1 || std::abs(newY - obj["y"].toDouble()) > 0.1) {
+                        obj["x"] = newX;
+                        obj["y"] = newY;
+                        m_document->updateObject(m_selectedId, obj);
+                    }
+                } else if (m_activeTool == "rotate") {
+                    double deltaX = event->position().x() - m_lastMousePos.x();
+                    double newRotation = obj["rotation"].toDouble() + deltaX * 0.5;
+                    obj["rotation"] = newRotation;
+                    m_document->updateObject(m_selectedId, obj);
+                } else if (m_activeTool == "scale") {
+                    double deltaY = m_lastMousePos.y() - event->position().y();
+                    double scaleFactor = 1.0 + (deltaY * 0.01);
+                    if (obj["kind"].toString() == "rect") {
+                        obj["w"] = std::max(10.0, obj["w"].toDouble() * scaleFactor);
+                        obj["h"] = std::max(10.0, obj["h"].toDouble() * scaleFactor);
+                    } else {
+                        // For non-rects, use a general scale factor if available, or just scale w/h
+                        obj["w"] = std::max(10.0, obj["w"].toDouble() * scaleFactor);
+                        obj["h"] = std::max(10.0, obj["h"].toDouble() * scaleFactor);
+                    }
                     m_document->updateObject(m_selectedId, obj);
                 }
             }
