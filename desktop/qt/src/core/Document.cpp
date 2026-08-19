@@ -13,6 +13,12 @@ public:
         : QUndoCommand(text), m_redo(redoFn), m_undo(undoFn) {}
     void redo() override { m_redo(); }
     void undo() override { m_undo(); }
+    int id() const override { return 1; } // Base ID for merging
+    bool mergeWith(const QUndoCommand *other) override {
+        // Only merge consecutive updates to the same object property to keep stack clean
+        if (other->id() != id() || other->text() != text()) return false;
+        return true; 
+    }
 private:
     std::function<void()> m_redo, m_undo;
 };
