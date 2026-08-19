@@ -8,7 +8,9 @@ import QtQuick.Controls
 
 DccPanel {
     id: root
-    height: 28
+    height: 24
+    color: "#161616"
+
     
     property var canvas: null
     property var document: null

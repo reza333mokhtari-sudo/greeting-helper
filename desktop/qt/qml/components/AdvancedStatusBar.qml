@@ -5,7 +5,9 @@ import "qrc:/qt/qml/DungeonEditor/qml/components"
 
 DccPanel {
     id: root
-    height: 24
+    height: 22
+    color: "#0f0f0f"
+
     
     property var canvas: null
     property var document: null
