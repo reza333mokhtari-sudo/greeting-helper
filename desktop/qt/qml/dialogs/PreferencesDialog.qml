@@ -4,17 +4,14 @@ import QtQuick.Layouts
 import Qt.labs.settings
 import "qrc:/qt/qml/DungeonEditor/qml/components"
 
-
-
 Dialog {
     id: root
-    title: qsTr("Preferences")
+    title: qsTr("PREFERENCES")
     width: 800
     height: 600
     modal: true
     standardButtons: Dialog.Ok | Dialog.Cancel | Dialog.Apply
 
-    // Persistence logic
     Settings {
         id: settings
         category: "Graphics"
@@ -22,20 +19,17 @@ Dialog {
         property string rhiBackend: "Auto"
     }
 
-    background: Rectangle {
-        color: "#1e1e1e"
-        border.color: "#3e3e42"
-        radius: 4
+    background: DccPanel {
+        anchors.fill: parent
     }
 
-    header: Rectangle {
-        color: "#252526"
+    header: DccPanel {
         height: 40
-        Label {
+        DccLabel {
             anchors.centerIn: parent
             text: root.title
-            color: "white"
             font.bold: true
+            color: "#f59e0b"
         }
     }
 
@@ -43,7 +37,7 @@ Dialog {
         anchors.fill: parent
         spacing: 0
 
-        Rectangle {
+        DccPanel {
             Layout.preferredWidth: 180
             Layout.fillHeight: true
             color: "#161616"
@@ -52,11 +46,11 @@ Dialog {
                 id: prefList
                 anchors.fill: parent
                 model: [
-                    { name: qsTr("General"), icon: "general/settings" },
-                    { name: qsTr("Interface"), icon: "panels/attributes" },
-                    { name: qsTr("Graphics"), icon: "menu/vulkan" },
-                    { name: qsTr("Performance"), icon: "status/performance" },
-                    { name: qsTr("Shortcuts"), icon: "menu/save" }
+                    { name: qsTr("GENERAL"), icon: "general/settings" },
+                    { name: qsTr("INTERFACE"), icon: "panels/attributes" },
+                    { name: qsTr("GRAPHICS"), icon: "menu/vulkan" },
+                    { name: qsTr("PERFORMANCE"), icon: "status/performance" },
+                    { name: qsTr("SHORTCUTS"), icon: "menu/save" }
                 ]
                 delegate: ItemDelegate {
                     width: parent.width
@@ -69,12 +63,14 @@ Dialog {
                             size: 16
                             active: highlighted
                         }
-                        Label {
+                        DccLabel {
                             text: modelData.name
-                            color: highlighted ? "white" : "#aaa"
+                            color: highlighted ? "#f59e0b" : "#aaa"
+                            font.bold: highlighted
                         }
                     }
                     onClicked: prefList.currentIndex = index
+                    background: Rectangle { color: highlighted ? "#2b2b2b" : "transparent" }
                 }
             }
         }
@@ -88,7 +84,7 @@ Dialog {
             Pane {
                 background: null
                 ColumnLayout {
-                    Label { text: qsTr("General Settings"); color: "white"; font.bold: true; font.pixelSize: 16 }
+                    DccLabel { text: qsTr("GENERAL SETTINGS"); font.bold: true; color: "#f59e0b" }
                     CheckBox { text: qsTr("Auto-save every 5 minutes"); checked: true }
                     CheckBox { text: qsTr("Show splash screen at startup"); checked: true }
                 }
@@ -98,32 +94,30 @@ Dialog {
             Pane {
                 background: null
                 ColumnLayout {
-                    Label { text: qsTr("Interface Settings"); color: "white"; font.bold: true; font.pixelSize: 16 }
+                    DccLabel { text: qsTr("INTERFACE SETTINGS"); font.bold: true; color: "#f59e0b" }
                     
                     RowLayout {
-                        Label { text: qsTr("Visual Style: "); color: "#aaa" }
+                        DccLabel { text: qsTr("Visual Style: ") }
                         ComboBox {
                             id: styleCombo
                             model: ["DungeonScrawl", "Fusion (Pro/Admin)"]
                             Layout.fillWidth: true
                             currentIndex: (styleManager && styleManager.currentStyle === "Fusion") ? 1 : 0
                             
-                            // Visual constraint: Option 2 requires Admin
                             delegate: ItemDelegate {
                                 width: parent.width
                                 text: modelData
                                 enabled: index === 0 || (styleManager && styleManager.isAdmin)
                                 highlighted: ListView.isCurrentItem
-                                contentItem: Text {
+                                contentItem: DccLabel {
                                     text: modelData
-                                    color: enabled ? "white" : "#666"
+                                    color: enabled ? "#eee" : "#666"
                                     verticalAlignment: Text.AlignVCenter
                                 }
                             }
                             
                             onActivated: {
                                 if (index === 1 && styleManager && !styleManager.isAdmin) {
-                                    // Should not be reachable due to delegate, but safety check
                                     currentIndex = 0;
                                     return;
                                 }
@@ -133,13 +127,14 @@ Dialog {
                         }
                     }
 
-                    GroupBox {
-                        title: qsTr("Debug / Dev Tools")
+                    DccPanel {
+                        title: qsTr("DEBUG / DEV TOOLS")
                         visible: styleManager && styleManager.isAdmin
                         Layout.fillWidth: true
-                        palette.windowText: "#f39c12"
                         
                         ColumnLayout {
+                            anchors.fill: parent
+                            anchors.margins: 8
                             CheckBox {
                                 id: forceFusionToggle
                                 text: qsTr("Force Fusion Engine")
@@ -151,25 +146,23 @@ Dialog {
                                     }
                                 }
                             }
-                            Button {
-                                text: qsTr("Hot Reload Styling")
+                            DccButton {
+                                text: qsTr("HOT RELOAD STYLING")
                                 Layout.fillWidth: true
                                 onClicked: if (styleManager) styleManager.reloadStyling()
                             }
-                            Button {
-                                text: qsTr("Restart Application")
+                            DccButton {
+                                text: qsTr("RESTART APPLICATION")
                                 Layout.fillWidth: true
                                 onClicked: if (styleManager) styleManager.restartApplication()
                             }
                         }
                     }
 
-
                     RowLayout {
-                        Label { text: qsTr("UI Scale: "); color: "#aaa" }
+                        DccLabel { text: qsTr("UI Scale: ") }
                         Slider { from: 0.5; to: 2.0; value: 1.0 }
                     }
-
                 }
             }
 
@@ -177,9 +170,9 @@ Dialog {
             Pane {
                 background: null
                 ColumnLayout {
-                    Label { text: qsTr("Graphics / Viewport"); color: "white"; font.bold: true; font.pixelSize: 16 }
-                    Label { text: qsTr("Current Active API: ") + (styleManager ? styleManager.activeGraphicsApi() : "Unknown"); color: "#f39c12"; font.pixelSize: 11 }
-                    Label { text: qsTr("Rendering Backend:"); color: "#aaa" }
+                    DccLabel { text: qsTr("GRAPHICS / VIEWPORT"); font.bold: true; color: "#f59e0b" }
+                    DccLabel { text: qsTr("Current Active API: ") + (styleManager ? styleManager.activeGraphicsApi() : "Unknown"); color: "#f59e0b"; font.pixelSize: 11 }
+                    DccLabel { text: qsTr("Rendering Backend:"); color: "#888" }
                     ComboBox {
                         id: backendCombo
                         model: ["Auto", "OpenGL", "Vulkan", "Metal", "Direct3D 11", "Software"]
@@ -187,16 +180,15 @@ Dialog {
                         Layout.fillWidth: true
                         onActivated: settings.rhiBackend = currentText
                     }
-                    Label { 
+                    DccLabel { 
                         text: qsTr("Requires application restart to take effect."); 
                         color: "#ef4444"; 
                         font.pixelSize: 11 
                     }
-                    Button {
-                        text: qsTr("Restart Now to Apply Graphics Changes")
-                        visible: settings.rhiBackend !== "Auto" // Simplification for UI
+                    DccButton {
+                        text: qsTr("RESTART NOW TO APPLY GRAPHICS CHANGES")
+                        visible: settings.rhiBackend !== "Auto"
                         onClicked: if (styleManager) styleManager.restartApplication()
-                        palette.buttonText: "#ef4444"
                         Layout.fillWidth: true
                     }
                     CheckBox { text: qsTr("Enable Anti-aliasing (MSAA)"); checked: true }
@@ -208,7 +200,7 @@ Dialog {
             Pane {
                 background: null
                 ColumnLayout {
-                    Label { text: qsTr("Performance"); color: "white"; font.bold: true; font.pixelSize: 16 }
+                    DccLabel { text: qsTr("PERFORMANCE"); font.bold: true; color: "#f59e0b" }
                     CheckBox { text: qsTr("Hardware Acceleration"); checked: true }
                     CheckBox { text: qsTr("Low Latency Input"); checked: true }
                 }
@@ -218,14 +210,13 @@ Dialog {
             Pane {
                 background: null
                 ColumnLayout {
-                    Label { text: qsTr("Keyboard Shortcuts"); color: "white"; font.bold: true; font.pixelSize: 16 }
-                    Label { text: qsTr("Q - Select Tool"); color: "#aaa" }
-                    Label { text: qsTr("W - Move Tool"); color: "#aaa" }
-                    Label { text: qsTr("E - Rotate Tool"); color: "#aaa" }
-                    Label { text: qsTr("R - Scale Tool"); color: "#aaa" }
+                    DccLabel { text: qsTr("KEYBOARD SHORTCUTS"); font.bold: true; color: "#f59e0b" }
+                    DccLabel { text: qsTr("Q - Select Tool"); color: "#aaa" }
+                    DccLabel { text: qsTr("W - Move Tool"); color: "#aaa" }
+                    DccLabel { text: qsTr("E - Rotate Tool"); color: "#aaa" }
+                    DccLabel { text: qsTr("R - Scale Tool"); color: "#aaa" }
                 }
             }
         }
     }
 }
-
