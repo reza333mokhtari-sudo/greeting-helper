@@ -7,9 +7,7 @@ import "qrc:/qt/qml/DungeonEditor/qml/components"
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  */
 
-Rectangle {
-    color: "#252526"
-    border.color: "#3e3e42"
+DccPanel {
     property var document: null
 
     ColumnLayout {
@@ -17,10 +15,10 @@ Rectangle {
         anchors.margins: 10
         spacing: 10
         
-        Label {
-            text: qsTr("Floors")
-            color: "white"
+        DccLabel {
+            text: qsTr("FLOORS")
             font.bold: true
+            color: "#f59e0b"
         }
 
         ListView {
@@ -31,32 +29,34 @@ Rectangle {
             model: document ? document.floors : null
             delegate: ItemDelegate {
                 width: floorList.width
-                text: modelData.name
-                highlighted: modelData.active
-                onClicked: {
-                    // Logic to switch floor in document if needed
+                background: Rectangle {
+                    color: highlighted ? "#3e3e3e" : "transparent"
                 }
+                contentItem: DccLabel {
+                    text: modelData.name
+                    color: highlighted ? "#f59e0b" : "#ccc"
+                    verticalAlignment: Text.AlignVCenter
+                }
+                highlighted: modelData.active
             }
         }
         
-        Button {
-            text: qsTr("Add Floor")
+        DccButton {
+            text: qsTr("ADD FLOOR")
             Layout.fillWidth: true
             onClicked: {
                 if (document && typeof document.addFloor === "function") {
                     document.addFloor("New Floor");
-                } else {
-                    console.error("Document or addFloor method not available");
                 }
             }
         }
 
-        ToolSeparator { Layout.fillWidth: true; orientation: Qt.Horizontal }
+        Rectangle { Layout.fillWidth: true; height: 1; color: "#333" }
 
-        Label {
-            text: qsTr("Layers")
-            color: "white"
+        DccLabel {
+            text: qsTr("LAYERS")
             font.bold: true
+            color: "#f59e0b"
         }
 
         ListView {
@@ -68,12 +68,12 @@ Rectangle {
             delegate: RowLayout {
                 width: layerList.width
                 CheckBox {
+                    id: layerCb
                     checked: modelData.isVisible
                     onToggled: document.toggleLayer(modelData.name, checked)
                 }
-                Label {
+                DccLabel {
                     text: modelData.name
-                    color: "white"
                     Layout.fillWidth: true
                 }
             }
