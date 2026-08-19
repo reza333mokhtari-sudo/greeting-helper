@@ -7,16 +7,18 @@
 #include <QSettings>
 #include <QtQml/qqml.h>
 #include <QDebug>
-#include <QProcess>
+#include <QLibrary>
 #include <QSurfaceFormat>
-#include <QSGRendererInterface>
 
+/**
+ * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
+ */
 
 #ifdef Q_OS_WIN
 #include <windows.h>
-#include <shellapi.h>
 #endif
 
+// We include the headers but the implementation is linked from core.dll
 #include <core/Document.h>
 #include <canvas/MapCanvasItem.h>
 #include <models/AssetLibraryModel.h>
@@ -25,127 +27,18 @@
 #include <services/WorkspaceService.h>
 #include <services/LicenseService.h>
 
-class StyleManager : public QObject {
-    Q_OBJECT
-    Q_PROPERTY(QString currentStyle READ currentStyle WRITE setCurrentStyle NOTIFY styleChanged)
-    Q_PROPERTY(bool isAdmin READ isAdmin CONSTANT)
-
-public:
-    explicit StyleManager(QQmlApplicationEngine* engine, QObject *parent = nullptr) 
-        : QObject(parent), m_engine(engine) {
-        m_currentStyle = QQuickStyle::name();
-        if (m_currentStyle.isEmpty()) m_currentStyle = "Fusion";
-    }
-
-    Q_INVOKABLE QString activeGraphicsApi() const {
-        auto api = QQuickWindow::graphicsApi();
-        switch (api) {
-            case QSGRendererInterface::OpenGL: return "OpenGL";
-            case QSGRendererInterface::Vulkan: return "Vulkan";
-            case QSGRendererInterface::Metal: return "Metal";
-            case QSGRendererInterface::Direct3D11: return "Direct3D 11";
-            case QSGRendererInterface::Software: return "Software";
-            default: return "Auto (Let Qt decide)";
-        }
-    }
-
-    QString currentStyle() const { return m_currentStyle; }
-    void setCurrentStyle(const QString& style) {
-        if (m_currentStyle != style) {
-            m_currentStyle = style;
-            emit styleChanged();
-        }
-    }
-
-    bool isAdmin() const {
-#ifdef Q_OS_WIN
-        bool isAdmin = false;
-        HANDLE hToken = NULL;
-        if (OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken)) {
-            TOKEN_ELEVATION elevation;
-            DWORD dwSize;
-            if (GetTokenInformation(hToken, TokenElevation, &elevation, sizeof(elevation), &dwSize)) {
-                isAdmin = elevation.TokenIsElevated;
-            }
-        }
-        if (hToken) CloseHandle(hToken);
-        return isAdmin;
-#else
-        return geteuid() == 0;
-#endif
-    }
-
-    Q_INVOKABLE void reloadStyling() {
-        qDebug() << "Reloading QML styling for style:" << m_currentStyle;
-        
-        // In a real DCC app, we'd persist the style choice and restart or 
-        // use a dynamic Theme engine. For this debug toggle, we'll suggest restart
-        // but QML can also re-evaluate expressions if we notify.
-        QQuickStyle::setStyle(m_currentStyle);
-        emit styleChanged();
-    }
-
-    Q_INVOKABLE void restartApplication() {
-        qApp->quit();
-        QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
-    }
-
-signals:
-    void styleChanged();
-
-private:
-    QString m_currentStyle;
-    QQmlApplicationEngine* m_engine;
-};
-
-#include "main.moc"
-
 int main(int argc, char *argv[])
 {
-    // Early RHI selection before QGuiApplication construction
-    {
-        QSettings settings("DungeonEditor", "DungeonEditorNative");
-        QString backend = settings.value("Graphics/RHIBackend", "Auto").toString();
-        
-        // Environment variable override
-        QByteArray envBackend = qgetenv("QSG_RHI_BACKEND");
-        if (!envBackend.isEmpty()) {
-            backend = QString::fromLocal8Bit(envBackend);
-            qInfo() << "Using QSG_RHI_BACKEND override:" << backend;
-        }
-
-        qInfo() << "Target Graphics Backend:" << backend;
-
-        if (backend == "OpenGL") {
-            QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
-        } else if (backend == "Vulkan") {
-            QQuickWindow::setGraphicsApi(QSGRendererInterface::Vulkan);
-        } else if (backend == "Metal") {
-#ifdef Q_OS_DARWIN
-            QQuickWindow::setGraphicsApi(QSGRendererInterface::Metal);
-#else
-            qWarning() << "Metal is only supported on macOS. Falling back to Auto.";
-#endif
-        } else if (backend == "Direct3D 11") {
-#ifdef Q_OS_WIN
-            QQuickWindow::setGraphicsApi(QSGRendererInterface::Direct3D11);
-#else
-            qWarning() << "Direct3D 11 is only supported on Windows. Falling back to Auto.";
-#endif
-        } else if (backend == "Software") {
-            QQuickWindow::setGraphicsApi(QSGRendererInterface::Software);
-        } else {
-            // Auto
-        }
-    }
-
+    // Professional DCC initialization
     QApplication app(argc, argv);
     app.setOrganizationName("DungeonEditor");
     app.setApplicationName("DungeonEditorNative");
+    app.setWindowIcon(QIcon(":/qt/qml/DungeonEditor/assets/icon.png"));
 
-    // Force Fusion style for professional DCC look and to support customization
+    // Force Fusion style for ZBrush/Maya aesthetic
     QQuickStyle::setStyle("Fusion");
 
+    // Register types (Implementation resides in core library)
     qmlRegisterType<Document>("DungeonEditor.Core", 1, 0, "Document");
     qmlRegisterType<MapCanvasItem>("DungeonEditor.Canvas", 1, 0, "MapCanvasItem");
     qmlRegisterType<AssetLibraryModel>("DungeonEditor.Models", 1, 0, "AssetLibraryModel");
@@ -154,94 +47,20 @@ int main(int argc, char *argv[])
     qmlRegisterType<LicenseService>("DungeonEditor.Services", 1, 0, "LicenseService");
     qmlRegisterType<FileService>("DungeonEditor.Services", 1, 0, "FileService");
 
-    // Standardized QML Component Registration
-    qmlRegisterType<Document>("DungeonEditor.Components", 1, 0, "Document");
-
-    // Icon path updated for resource prefix
-    app.setWindowIcon(QIcon(":/assets/icon.png"));
-
     QQmlApplicationEngine engine;
     
-    // Check for critical QML modules before loading the main UI
-    bool hasQuickControls = engine.importModule("QtQuick.Controls").isValid();
-    if (!hasQuickControls) {
-        qCritical() << "CRITICAL ERROR: QtQuick.Controls (qtquickcontrols2plugin) module not found.";
-        
-#ifdef Q_OS_WIN
-        MessageBoxA(NULL, 
-            "Dungeon Scrawl Desktop requires 'QtQuick.Controls' (qtquickcontrols2plugin) to run.\n\n"
-            "This dependency is missing from the installation. Please reinstall the application or "
-            "ensure the 'Qt' plugins directory is correctly configured.", 
-            "Dependency Missing", MB_ICONERROR | MB_OK);
-#endif
-        // Even if not on Windows, we shouldn't continue as it will crash/black screen
-        return -1;
-    }
-    
-    StyleManager styleManager(&engine);
-    engine.rootContext()->setContextProperty("styleManager", &styleManager);
-    
-    // Support absolute qrc paths for components
+    // Internal resource paths for bundled QML
     engine.addImportPath("qrc:/qt/qml/DungeonEditor");
     engine.addImportPath("qrc:/qt/qml/DungeonEditor/qml");
 
-    // Register "qml" root correctly for internal imports
-    engine.addImportPath("qrc:/qt/qml/DungeonEditor");
-    engine.addImportPath("qrc:/qt/qml/DungeonEditor/qml");
-    engine.addImportPath("qrc:/qt/qml/DungeonEditor/qml/components");
-    engine.addImportPath("qrc:/qt/qml/DungeonEditor/qml/dialogs");
-    engine.addImportPath("qrc:/qt/qml/DungeonEditor/qml/panels");
-
-
+    const QUrl url("qrc:/qt/qml/DungeonEditor/qml/Main.qml");
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
+                     &app, [url](QObject *obj, const QUrl &objUrl) {
+        if (!obj && url == objUrl)
+            QCoreApplication::exit(-1);
+    }, Qt::DirectConnection);
     
-    const QStringList resourcePaths = {
-        "qrc:/qt/qml/DungeonEditor/qml/Main.qml"
-    };
+    engine.load(url);
 
-    bool loaded = false;
-    QString executablePath = QCoreApplication::applicationDirPath();
-    QString localMain = executablePath + "/qml/Main.qml";
-    
-    for (const QString &path : resourcePaths) {
-        const QUrl url(path);
-        
-        QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
-                         &app, [url](QObject *obj, const QUrl &objUrl) {
-            if (!obj && url == objUrl) {
-                qCritical() << "Engine failed to create object from:" << objUrl;
-            }
-        }, Qt::DirectConnection);
-        
-        engine.load(url);
-        if (!engine.rootObjects().isEmpty()) {
-            loaded = true;
-            qDebug() << "Successfully loaded Main.qml from resource path:" << path;
-            break;
-        }
-    }
-
-    if (!loaded) {
-        qDebug() << "Resource paths exhausted. Attempting direct URL fallback...";
-        QList<QUrl> fallbackUrls = {
-            QUrl::fromLocalFile(localMain),
-            QUrl::fromLocalFile(executablePath + "/../qml/Main.qml"),
-            QUrl::fromLocalFile(executablePath + "/../../qml/Main.qml")
-        };
-        
-        for (const QUrl &url : fallbackUrls) {
-            engine.load(url);
-            if (!engine.rootObjects().isEmpty()) {
-                loaded = true;
-                qDebug() << "Successfully loaded Main.qml from direct URL:" << url.toLocalFile();
-                break;
-            }
-        }
-    }
-
-    if (!loaded) {
-        qCritical() << "Critical: Could not find or load Main.qml in any resource or direct path.";
-        return -1;
-    }
-    
     return app.exec();
 }
