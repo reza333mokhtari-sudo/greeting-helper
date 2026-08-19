@@ -1,9 +1,10 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import "qrc:/qt/qml/DungeonEditor/qml/components"
 
 BaseFloatingWindow {
-    title: "About Dungeon Scrawl"
+    title: "ABOUT"
     width: 450
     height: 380
     
@@ -22,22 +23,22 @@ BaseFloatingWindow {
         ColumnLayout {
             Layout.alignment: Qt.AlignHCenter
             spacing: 4
-            Label {
-                text: "Dungeon Scrawl Professional"
+            DccLabel {
+                text: "DUNGEON SCRAWL PROFESSIONAL"
                 font.pixelSize: 18
                 font.bold: true
-                color: "#3b82f6"
+                color: "#f59e0b"
                 Layout.alignment: Qt.AlignHCenter
             }
-            Label {
-                text: "Version 1.0.4 (Build 20260817)"
-                font.pixelSize: 11
-                color: "#888"
+            DccLabel {
+                text: "CORE ENGINE V1.0.4 (BUILD 20260817)"
+                font.pixelSize: 10
+                color: "#666"
                 Layout.alignment: Qt.AlignHCenter
             }
         }
         
-        Label {
+        DccLabel {
             text: "A professional-grade dungeon mapping and procedural generation tool designed for game masters and level designers."
             wrapMode: Text.WordWrap
             horizontalAlignment: Text.AlignHCenter
@@ -49,21 +50,21 @@ BaseFloatingWindow {
         Rectangle {
             Layout.fillWidth: true
             height: 1
-            color: "#2d2d2d"
+            color: "#383838"
         }
         
         ColumnLayout {
             spacing: 5
-            Label { text: "Powered by Qt 6.7 and Vulkan Engine"; color: "#666"; font.pixelSize: 10; Layout.alignment: Qt.AlignHCenter }
-            Label { text: "© 2026 DungeonEditor Team. All rights reserved."; color: "#666"; font.pixelSize: 10; Layout.alignment: Qt.AlignHCenter }
+            DccLabel { text: "Powered by Qt 6.7 and Vulkan Engine"; color: "#444"; font.pixelSize: 9; Layout.alignment: Qt.AlignHCenter }
+            DccLabel { text: "© 2026 Core Engine Team. All rights reserved."; color: "#444"; font.pixelSize: 9; Layout.alignment: Qt.AlignHCenter }
         }
         
         RowLayout {
             Layout.alignment: Qt.AlignHCenter
-            spacing: 20
-            Button { text: "Website"; flat: true }
-            Button { text: "GitHub"; flat: true }
-            Button { text: "Discord"; flat: true }
+            spacing: 12
+            DccButton { text: "WEBSITE"; flat: true }
+            DccButton { text: "GITHUB"; flat: true }
+            DccButton { text: "DISCORD"; flat: true }
         }
     }
 }
