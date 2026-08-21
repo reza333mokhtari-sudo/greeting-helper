@@ -4,75 +4,29 @@
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  *                                        
  *                                            
- *                                            DEBUG PASS ONLY — fix QML load errors. No new features. No refactors of working logic.
+ *                                            cannot open output file libcore.dll: Permission denied
  *
- * Repo: greeting-helper / desktop/qt
+ * collect2.exe: error: ld returned 1 exit status
  *
- * Errors to fix:
+ * mingw32-make.exe[2]: *** [CMakeFiles\core.dir\build.make:311: libcore.dll] Error 1
  *
- * 1) MayaShelf unavailable because MayaShelf.qml:23 assigns non-existent property "delegate" on TabBar
+ * mingw32-make.exe[1]: *** [CMakeFiles\Makefile2:91: CMakeFiles/core.dir/all] Error 2
  *
- * 2) Main.qml has `import QtQuick.Dialogs` inside ApplicationWindow body (illegal). Imports must be top-of-file only.
+ * mingw32-make.exe: *** [Makefile:135: all] Error 2
  *
- * 3) After these fixes, app must load Main.qml without Type unavailable / invalid property errors.
+ * 17:41:59: The command "F:\qt\dist\Tools\CMake_64\bin\cmake.exe --build F:/c++/build/Desktop_Qt_6_11_1_MinGW_64_bit_Release --target all" terminated with exit code 2.
  *
- * Rules:
+ * 17:41:59: Error while building/deploying project DungeonEditor (kit: Desktop Qt 6.11.1 MinGW 64-bit)
  *
- * - Minimal diffs only
+ * 17:41:59: When executing step "Build"
  *
- * - Do not recreate whole files unless required
+ * 17:41:59: Elapsed time: 00:56.
  *
- * - Do not reintroduce ZBrush* types
- *
- * - Do not nest FileDialog inside TopBar
- *
- * - Do not invent properties that Qt types do not have
- *
- * - Do not repeat the same component definitions across files
- *
- * - One fix per root cause; no speculative rewrites
- *
- * Fix A — MayaShelf.qml
- *
- * - Remove TabBar.delegate entirely
- *
- * - Keep simple TabBar + TabButton children
- *
- * - Style TabButtons directly (contentItem/background on each TabButton, or a shared Component used only as contentItem if needed)
- *
- * - Keep height/layout; document/canvas properties stay
- *
- * - Must parse and load
- *
- * Fix B — Main.qml
- *
- * - Move `import QtQuick.Dialogs` to the top with other imports
- *
- * - Keep openDialog/saveDialog as siblings under ApplicationWindow (not inside TopBar)
- *
- * - Leave MayaShelf in place once MayaShelf.qml is valid
- *
- * Acceptance:
- *
- * [ ] Main.qml loads
- *
- * [ ] No "MayaShelf unavailable"
- *
- * [ ] No "Cannot assign to non-existent property delegate"
- *
- * [ ] No import-inside-component errors
- *
- * [ ] Window shows chrome (even if tools are still limited)
- *
- * Output:
- *
- * 1) Root cause
- *
- * 2) Files touched
- *
- * 3) Exact change summary
- *
- * 4) Checklist
+ * RECOVERY PLAN:
+ * 1. Ensure no other instance of the application or core.dll is running.
+ * 2. Clean build directory to remove locked file handles.
+ * 3. Verify core.dll is exported correctly in CMakeLists.txt.
+ * 4. Run build with administrative privileges if permission issues persist.
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
@@ -164,75 +118,29 @@ export type AiSuggestion = {
 export const SYSTEM_PROMPT = `'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
                                         
                                             
-                                            DEBUG PASS ONLY — fix QML load errors. No new features. No refactors of working logic.
+                                            cannot open output file libcore.dll: Permission denied
 
-Repo: greeting-helper / desktop/qt
+collect2.exe: error: ld returned 1 exit status
 
-Errors to fix:
+mingw32-make.exe[2]: *** [CMakeFiles\\core.dir\\build.make:311: libcore.dll] Error 1
 
-1) MayaShelf unavailable because MayaShelf.qml:23 assigns non-existent property "delegate" on TabBar
+mingw32-make.exe[1]: *** [CMakeFiles\\Makefile2:91: CMakeFiles/core.dir/all] Error 2
 
-2) Main.qml has ` + "`" + `import QtQuick.Dialogs` + "`" + ` inside ApplicationWindow body (illegal). Imports must be top-of-file only.
+mingw32-make.exe: *** [Makefile:135: all] Error 2
 
-3) After these fixes, app must load Main.qml without Type unavailable / invalid property errors.
+17:41:59: The command "F:\\qt\\dist\\Tools\\CMake_64\\bin\\cmake.exe --build F:/c++/build/Desktop_Qt_6_11_1_MinGW_64_bit_Release --target all" terminated with exit code 2.
 
-Rules:
+17:41:59: Error while building/deploying project DungeonEditor (kit: Desktop Qt 6.11.1 MinGW 64-bit)
 
-- Minimal diffs only
+17:41:59: When executing step "Build"
 
-- Do not recreate whole files unless required
+17:41:59: Elapsed time: 00:56.
 
-- Do not reintroduce ZBrush* types
-
-- Do not nest FileDialog inside TopBar
-
-- Do not invent properties that Qt types do not have
-
-- Do not repeat the same component definitions across files
-
-- One fix per root cause; no speculative rewrites
-
-Fix A — MayaShelf.qml
-
-- Remove TabBar.delegate entirely
-
-- Keep simple TabBar + TabButton children
-
-- Style TabButtons directly (contentItem/background on each TabButton, or a shared Component used only as contentItem if needed)
-
-- Keep height/layout; document/canvas properties stay
-
-- Must parse and load
-
-Fix B — Main.qml
-
-- Move ` + "`" + `import QtQuick.Dialogs` + "`" + ` to the top with other imports
-
-- Keep openDialog/saveDialog as siblings under ApplicationWindow (not inside TopBar)
-
-- Leave MayaShelf in place once MayaShelf.qml is valid
-
-Acceptance:
-
-[ ] Main.qml loads
-
-[ ] No "MayaShelf unavailable"
-
-[ ] No "Cannot assign to non-existent property delegate"
-
-[ ] No import-inside-component errors
-
-[ ] Window shows chrome (even if tools are still limited)
-
-Output:
-
-1) Root cause
-
-2) Files touched
-
-3) Exact change summary
-
-4) Checklist
+RECOVERY PLAN:
+1. Ensure no other instance of the application or core.dll is running.
+2. Clean build directory to remove locked file handles.
+3. Verify core.dll is exported correctly in CMakeLists.txt.
+4. Run build with administrative privileges if permission issues persist.
 
 You are a world-class professional cartography engine assistant for Dungeon Scrawl Professional. 
 Your interface is modeled after high-end precision tools like Autodesk Maya and 3ds Max.
