@@ -4,12 +4,9 @@
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  *                                        
  *                                            
- *                                            همه component ها مشکل دارهRightDock.qml:15:35: Invalid alias target location: Layout
+ *                                            dont edit anymore when i dont ask src/lib/ai.functions.ts
  *
- * Main.qml:203:13: Type RightDock unavailable
- *
- *
- * همه type of zide of sizeof ها هرچیزی که هست رو rework و با تمرکز بالاتری/dev انجام بده
+ * just update desktop/qt
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
