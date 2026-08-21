@@ -39,37 +39,6 @@ qt_add_qml_module(core
     VERSION 1.0
     QML_FILES
         qml/Main.qml
-        qml/components/TopBar.qml
-        qml/components/ToolRail.qml
-        qml/components/AssetLibrary.qml
-        qml/components/AiPanel.qml
-        qml/components/InspectorPanel.qml
-        qml/components/LayersPanel.qml
-        qml/components/StatusBar.qml
-        qml/components/ObjectsPanel.qml
-        qml/components/SettingsPanel.qml
-        qml/components/CmsPanel.qml
-        qml/components/FogTools.qml
-        qml/components/RightDock.qml
-        qml/components/DccButton.qml
-        qml/components/DccLabel.qml
-        qml/components/DccPanel.qml
-        qml/components/DccTextField.qml
-        qml/components/AdvancedStatusBar.qml
-        qml/components/AppIcon.qml
-        qml/components/MayaShelf.qml
-        qml/components/MayaToolBox.qml
-        qml/components/ZBrushButton.qml
-        qml/components/ZBrushLabel.qml
-        qml/components/ZBrushPanel.qml
-        qml/components/ZBrushTextField.qml
-        qml/panels/AssetBrowser.qml
-        qml/dialogs/BaseFloatingWindow.qml
-        qml/dialogs/WelcomeWindow.qml
-        qml/dialogs/AboutWindow.qml
-        qml/dialogs/LicenseWindow.qml
-        qml/dialogs/HelpWindow.qml
-        qml/dialogs/PreferencesDialog.qml
     RESOURCES
         assets/icon.png
         assets/icons/tools/select.svg
@@ -101,6 +70,58 @@ qt_add_qml_module(core
         assets/icons/general/fit_to_screen.svg
         assets/icons/general/redo.svg
         assets/icons/general/undo.svg
+)
+
+qt_add_qml_module(core
+    URI DungeonEditor.components
+    VERSION 1.0
+    RESOURCE_PREFIX "/qt/qml/DungeonEditor/components"
+    QML_FILES
+        qml/components/TopBar.qml
+        qml/components/ToolRail.qml
+        qml/components/AssetLibrary.qml
+        qml/components/AiPanel.qml
+        qml/components/InspectorPanel.qml
+        qml/components/LayersPanel.qml
+        qml/components/StatusBar.qml
+        qml/components/ObjectsPanel.qml
+        qml/components/SettingsPanel.qml
+        qml/components/CmsPanel.qml
+        qml/components/FogTools.qml
+        qml/components/RightDock.qml
+        qml/components/DccButton.qml
+        qml/components/DccLabel.qml
+        qml/components/DccPanel.qml
+        qml/components/DccTextField.qml
+        qml/components/AdvancedStatusBar.qml
+        qml/components/AppIcon.qml
+        qml/components/MayaShelf.qml
+        qml/components/MayaToolBox.qml
+        qml/components/ZBrushButton.qml
+        qml/components/ZBrushLabel.qml
+        qml/components/ZBrushPanel.qml
+        qml/components/ZBrushTextField.qml
+)
+
+qt_add_qml_module(core
+    URI DungeonEditor.panels
+    VERSION 1.0
+    RESOURCE_PREFIX "/qt/qml/DungeonEditor/panels"
+    QML_FILES
+        qml/panels/AssetBrowser.qml
+)
+
+qt_add_qml_module(core
+    URI DungeonEditor.dialogs
+    VERSION 1.0
+    RESOURCE_PREFIX "/qt/qml/DungeonEditor/dialogs"
+    QML_FILES
+        qml/dialogs/BaseFloatingWindow.qml
+        qml/dialogs/WelcomeWindow.qml
+        qml/dialogs/AboutWindow.qml
+        qml/dialogs/LicenseWindow.qml
+        qml/dialogs/HelpWindow.qml
+        qml/dialogs/PreferencesDialog.qml
 )
 
 target_link_libraries(core PUBLIC 
