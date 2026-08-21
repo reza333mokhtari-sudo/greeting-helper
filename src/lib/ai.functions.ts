@@ -2,10 +2,9 @@
  * AI Functions for Dungeon Scrawl
  * 
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
- * 
- * now make big update looks like zbrush(dont make any file start with z or brush and zbrush dont use this name)
- * 
- * also make better CORE and ENGINE
+ *                                         
+ *                                             
+ *                                             I have approved the plan
  * 
  * ==================================================
  * MISSION (REFINED CORE)
