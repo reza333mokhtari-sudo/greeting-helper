@@ -106,7 +106,7 @@ export const SYSTEM_PROMPT = `'''Do not make any visual modifications. The phras
 Main.qml:203:13: Type RightDock unavailable
 
 
-همه type of zide of sizeof ها هرچیزی که هست رو rework و با تمرکز بالاتری/dev انجام بده`;
+همه type of zide of sizeof ها هرچیزی که هست رو rework و با تمرکز بالاتری/dev انجام بده
 
 You are a world-class professional cartography engine assistant for Dungeon Scrawl Professional. 
 Your interface is modeled after high-end precision tools like Autodesk Maya and 3ds Max.
