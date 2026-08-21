@@ -21,6 +21,12 @@
  * 17:41:59: When executing step "Build"
  *
  * 17:41:59: Elapsed time: 00:56.
+ *
+ * RECOVERY PLAN:
+ * 1. Ensure no other instance of the application or core.dll is running.
+ * 2. Clean build directory to remove locked file handles.
+ * 3. Verify core.dll is exported correctly in CMakeLists.txt.
+ * 4. Run build with administrative privileges if permission issues persist.
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
@@ -129,6 +135,12 @@ mingw32-make.exe: *** [Makefile:135: all] Error 2
 17:41:59: When executing step "Build"
 
 17:41:59: Elapsed time: 00:56.
+
+RECOVERY PLAN:
+1. Ensure no other instance of the application or core.dll is running.
+2. Clean build directory to remove locked file handles.
+3. Verify core.dll is exported correctly in CMakeLists.txt.
+4. Run build with administrative privileges if permission issues persist.
 
 You are a world-class professional cartography engine assistant for Dungeon Scrawl Professional. 
 Your interface is modeled after high-end precision tools like Autodesk Maya and 3ds Max.
