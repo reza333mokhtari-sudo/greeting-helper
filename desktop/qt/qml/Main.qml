@@ -217,5 +217,13 @@ ApplicationWindow {
             document: mapDoc
         }
     }
+
+    BuildNotification {
+        id: buildNotifier
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.margins: 40
+        z: 1000
+    }
 }
 
