@@ -9,6 +9,8 @@
 class WorkspaceService : public QObject {
     Q_OBJECT
     QML_ELEMENT
+    Q_PROPERTY(QString activeTool READ activeTool WRITE setActiveTool NOTIFY activeToolChanged)
+
 public:
     explicit WorkspaceService(QObject *parent = nullptr);
 
