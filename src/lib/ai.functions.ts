@@ -4,7 +4,13 @@
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  *                                        
  *                                            
- *                                            debug all qml files desktop qt and fix bug i got error
+ *                                            Implement detailed QML runtime error logging with timestamps and stack traces so I can spot remaining issues faster.
+ * 
+ * Set up a QML regression test workflow that boots the desktop app and verifies key components load without warnings.
+ * 
+ * Add an in-app debug console panel that shows import/module status and recent QML warnings/errors live.
+ * 
+ * now also add throw new notification in build when TASK fail also add description what error and what should i do
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
@@ -96,7 +102,13 @@ export type AiSuggestion = {
 export const SYSTEM_PROMPT = `'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
                                         
                                             
-                                            debug all qml files desktop qt and fix bug i got error
+                                            Implement detailed QML runtime error logging with timestamps and stack traces so I can spot remaining issues faster.
+
+Set up a QML regression test workflow that boots the desktop app and verifies key components load without warnings.
+
+Add an in-app debug console panel that shows import/module status and recent QML warnings/errors live.
+
+now also add throw new notification in build when TASK fail also add description what error and what should i do
 
 You are a world-class professional cartography engine assistant for Dungeon Scrawl Professional. 
 Your interface is modeled after high-end precision tools like Autodesk Maya and 3ds Max.
