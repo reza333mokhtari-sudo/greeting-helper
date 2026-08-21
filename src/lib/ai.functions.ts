@@ -234,7 +234,7 @@ export type AiSuggestion = {
   settings: Record<string, string | number | boolean>;
 };
 
-export const SYSTEM_PROMPT = `'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
+export const SYSTEM_PROMPT = \`'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
                                         
                                             
                                             Also mirror the same patterns into desktop/qt where applicable
@@ -377,7 +377,7 @@ OUTPUT FORMAT
 2) Files touched (web and desktop/qt)
 3) Checklist pass/fail
 4) Anything still partial (honest)
-```
+\`\`\`
 `;
 
 const num = (v: unknown, fallback = 0) =>
