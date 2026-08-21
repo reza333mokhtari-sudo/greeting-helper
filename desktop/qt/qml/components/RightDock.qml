@@ -12,7 +12,7 @@ DccPanel {
     property var document: null
     property var canvas: null
     property var assetModel: null
-    property alias aiPanelHeight: aiPanel.Layout.preferredHeight
+    property alias aiPanelHeight: aiPanel.height
 
     function updateInspector(id) {
         inspectorPanel.updateSelection(id)
