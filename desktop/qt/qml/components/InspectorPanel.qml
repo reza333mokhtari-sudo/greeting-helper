@@ -6,8 +6,11 @@ import DungeonEditor.components
 DccPanel {
     id: root
     property var document
-    property string selectedId: ""
+    property string selectedId: document ? document.selectedId : ""
     property var selectedObject: null
+
+    onSelectedIdChanged: updateSelection(selectedId)
+
 
     function updateSelection(id) {
         selectedId = id;

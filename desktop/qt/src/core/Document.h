@@ -18,6 +18,8 @@ class Document : public QObject {
     Q_PROPERTY(bool snapEnabled READ snapEnabled WRITE setSnapEnabled NOTIFY snapEnabledChanged)
     Q_PROPERTY(QJsonArray floors READ floors NOTIFY floorsChanged)
     Q_PROPERTY(QJsonArray layers READ layers NOTIFY layersChanged)
+    Q_PROPERTY(QString selectedId READ selectedId WRITE setSelectedId NOTIFY selectionChanged)
+
 
 public:
     explicit Document(QObject *parent = nullptr);
@@ -34,8 +36,11 @@ public:
 
     QJsonArray floors() const { return m_floors; }
     QJsonArray layers() const { return m_layers; }
+    QString selectedId() const { return m_selectedId; }
+    void setSelectedId(const QString& id);
 
     Q_INVOKABLE void addFloor(const QString& name);
+    Q_INVOKABLE void removeFloor(const QString& id);
     Q_INVOKABLE void toggleLayer(const QString& name, bool visible);
 
     Q_INVOKABLE void addObject(QJsonObject obj);
@@ -48,6 +53,7 @@ public:
     Q_INVOKABLE void save(const QString& url);
     Q_INVOKABLE void load(const QString& url);
 
+
 signals:
     void objectsChanged();
     void canUndoChanged();
@@ -57,6 +63,7 @@ signals:
     void snapEnabledChanged();
     void floorsChanged();
     void layersChanged();
+    void selectionChanged();
 
 private:
     void setDirty(bool d);
@@ -69,4 +76,6 @@ private:
     bool m_snapEnabled = true;
     QJsonArray m_floors;
     QJsonArray m_layers;
+    QString m_selectedId;
 };
+

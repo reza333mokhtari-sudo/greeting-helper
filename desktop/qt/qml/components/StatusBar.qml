@@ -14,7 +14,9 @@ DccPanel {
     
     property var canvas: null
     property var document: null
-    property int selectionCount: canvas && canvas.selectedId !== "" ? 1 : 0
+    property var workspace: null
+
+    property int selectionCount: document && document.selectedId !== "" ? 1 : 0
 
     RowLayout {
         anchors.fill: parent
@@ -23,11 +25,12 @@ DccPanel {
         spacing: 15
         
         DccLabel {
-            text: (canvas ? canvas.activeTool.toUpperCase() : "NONE")
+            text: (workspace ? workspace.activeTool.toUpperCase() : (canvas ? canvas.activeTool.toUpperCase() : "NONE"))
             color: "#f59e0b"
             font.pixelSize: 10
             font.bold: true
         }
+
         
         Rectangle { width: 1; height: 14; color: "#333" }
 

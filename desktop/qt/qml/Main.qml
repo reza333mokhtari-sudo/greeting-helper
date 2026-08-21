@@ -148,7 +148,9 @@ ApplicationWindow {
                 SplitView.minimumWidth: 48
                 SplitView.preferredWidth: 48
                 canvas: canvas
+                workspace: workspaceService
             }
+
             
             Item {
                 SplitView.fillWidth: true
@@ -195,7 +197,9 @@ ApplicationWindow {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     document: mapDoc
-                    onSelectionChanged: (id) => rightDock.updateInspector(id)
+                    workspace: workspaceService
+
+                    onSelectionChanged: () => rightDock.updateInspector(mapDoc.selectedId)
                 }
             }
             
@@ -215,7 +219,9 @@ ApplicationWindow {
             Layout.fillWidth: true
             canvas: canvas
             document: mapDoc
+            workspace: workspaceService
         }
+
     }
 
     BuildNotification {

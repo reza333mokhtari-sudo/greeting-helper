@@ -9,6 +9,8 @@
 class WorkspaceService : public QObject {
     Q_OBJECT
     QML_ELEMENT
+    Q_PROPERTY(QString activeTool READ activeTool WRITE setActiveTool NOTIFY activeToolChanged)
+
 public:
     explicit WorkspaceService(QObject *parent = nullptr);
 
@@ -21,14 +23,19 @@ public:
     Q_PROPERTY(QStringList logs READ logs NOTIFY logsChanged)
     QStringList logs() const { return m_logs; }
 
+    QString activeTool() const { return m_activeTool; }
+    void setActiveTool(const QString& tool);
+
 signals:
     void logsChanged();
+    void activeToolChanged();
     void newLogEntry(const QString& msg, const QString& level, const QString& timestamp);
     void taskFailed(const QString& command, const QString& error, const QString& suggestion);
 
-
 private:
     QStringList m_logs;
+    QString m_activeTool = "select";
 };
+
 
 #endif // WORKSPACESERVICE_H

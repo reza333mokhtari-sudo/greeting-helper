@@ -71,7 +71,7 @@ void MapCanvasItem::paint(QPainter *painter) {
         QJsonObject obj = v.toObject();
         painter->save();
         
-        bool isSelected = obj["id"].toString() == m_selectedId;
+        bool isSelected = m_document->selectedId() != "" && obj["id"].toString() == m_document->selectedId();
         double x = obj["x"].toDouble();
         double y = obj["y"].toDouble();
         double rotation = obj["rotation"].toDouble();
@@ -131,13 +131,14 @@ void MapCanvasItem::mousePressEvent(QMouseEvent *event) {
     m_lastMousePos = event->position().toPoint();
     QPointF worldPos = screenToWorld(event->position());
 
+    // Pattern E: Interaction ownership
     if (event->button() == Qt::LeftButton) {
         if (m_activeTool == "select") {
             handleSelection(worldPos);
         } else if (m_activeTool == "draw" || m_activeTool == "room" || m_activeTool == "corridor") {
             m_isDrawing = true;
             m_drawStart = worldPos;
-        } else if (m_activeTool == "pan") {
+        } else if (m_activeTool == "pan" || (event->modifiers() & Qt::AltModifier)) {
             m_isPanning = true;
             setCursor(QCursor(Qt::ClosedHandCursor));
         }
@@ -148,6 +149,7 @@ void MapCanvasItem::mousePressEvent(QMouseEvent *event) {
     update();
 }
 
+
 void MapCanvasItem::mouseMoveEvent(QMouseEvent *event) {
     QPointF worldPos = screenToWorld(event->position());
     m_currentWorldPos = worldPos;
@@ -157,7 +159,7 @@ void MapCanvasItem::mouseMoveEvent(QMouseEvent *event) {
         m_pan += (event->position().toPoint() - m_lastMousePos);
         emit panChanged();
     } else if (event->buttons() & Qt::LeftButton) {
-        if (m_activeTool == "select" && !m_selectedId.isEmpty()) {
+        if (m_activeTool == "select" && !m_document->selectedId().isEmpty()) {
             // Drag move
             QPointF delta = (event->position() - m_lastMousePos) / m_zoom;
             // Prevent dragging if shift is held (e.g. for zoom/pan shortcuts)
@@ -166,8 +168,9 @@ void MapCanvasItem::mouseMoveEvent(QMouseEvent *event) {
             QJsonObject obj;
             int idx = -1;
             for (int i = 0; i < m_document->objects().size(); ++i) {
-                if (m_document->objects()[i].toObject()["id"].toString() == m_selectedId) {
+                if (m_document->objects()[i].toObject()["id"].toString() == m_document->selectedId()) {
                     obj = m_document->objects()[i].toObject();
+
                     idx = i;
                     break;
                 }
@@ -191,13 +194,15 @@ void MapCanvasItem::mouseMoveEvent(QMouseEvent *event) {
                     if (std::abs(newX - obj["x"].toDouble()) > 0.1 || std::abs(newY - obj["y"].toDouble()) > 0.1) {
                         obj["x"] = newX;
                         obj["y"] = newY;
-                        m_document->updateObject(m_selectedId, obj);
+                        m_document->updateObject(m_document->selectedId(), obj);
+
                     }
                 } else if (m_activeTool == "rotate") {
                     double deltaX = event->position().x() - m_lastMousePos.x();
                     double newRotation = obj["rotation"].toDouble() + deltaX * 0.5;
                     obj["rotation"] = newRotation;
-                    m_document->updateObject(m_selectedId, obj);
+                    m_document->updateObject(m_document->selectedId(), obj);
+
                 } else if (m_activeTool == "scale") {
                     double deltaY = m_lastMousePos.y() - event->position().y();
                     double scaleFactor = 1.0 + (deltaY * 0.01);
@@ -209,7 +214,7 @@ void MapCanvasItem::mouseMoveEvent(QMouseEvent *event) {
                         obj["w"] = std::max(10.0, obj["w"].toDouble() * scaleFactor);
                         obj["h"] = std::max(10.0, obj["h"].toDouble() * scaleFactor);
                     }
-                    m_document->updateObject(m_selectedId, obj);
+                    m_document->updateObject(m_document->selectedId(), obj);
                 }
             }
         }
@@ -264,18 +269,21 @@ void MapCanvasItem::handleSelection(const QPointF& worldPos) {
             break;
         }
     }
-    if (hitId != m_selectedId) {
-        m_selectedId = hitId;
-        emit selectionChanged(m_selectedId);
+    if (hitId != m_document->selectedId()) {
+        m_document->setSelectedId(hitId);
     }
 }
+
 
 void MapCanvasItem::wheelEvent(QWheelEvent *event) {
     double factor = event->angleDelta().y() > 0 ? 1.1 : 0.9;
     double oldZoom = m_zoom;
+    
+    // Smooth zoom range
     m_zoom *= factor;
     m_zoom = std::max(0.01, std::min(m_zoom, 50.0));
     
+    // Pattern E: Zoom-to-cursor interaction
     QPointF mousePos = event->position();
     m_pan = mousePos - (mousePos - m_pan) * (m_zoom / oldZoom);
     
@@ -284,9 +292,10 @@ void MapCanvasItem::wheelEvent(QWheelEvent *event) {
     update();
 }
 
+
 void MapCanvasItem::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace) {
-        if (!m_selectedId.isEmpty()) m_document->removeObject(m_selectedId);
+        if (!m_document->selectedId().isEmpty()) m_document->removeObject(m_document->selectedId());
     } 
     // Maya Style Shortcuts
     else if (event->key() == Qt::Key_Q) {
@@ -301,7 +310,10 @@ void MapCanvasItem::keyPressEvent(QKeyEvent *event) {
         setActiveTool("draw");
     } else if (event->key() == Qt::Key_H) {
         setActiveTool("pan");
-    } 
+    } else if (event->key() == Qt::Key_B) {
+        setActiveTool("room");
+    }
+
     // Legacy mapping support
     else if (event->key() == Qt::Key_V) {
         setActiveTool("select");
@@ -315,10 +327,32 @@ void MapCanvasItem::keyPressEvent(QKeyEvent *event) {
 
 
 void MapCanvasItem::setActiveTool(const QString& tool) {
+    if (m_workspace) {
+        m_workspace->setActiveTool(tool);
+        return;
+    }
     if (m_activeTool == tool) return;
     m_activeTool = tool;
     emit activeToolChanged();
 }
+
+void MapCanvasItem::setWorkspace(WorkspaceService *ws) {
+    if (m_workspace == ws) return;
+    if (m_workspace) {
+        disconnect(m_workspace, &WorkspaceService::activeToolChanged, this, nullptr);
+    }
+    m_workspace = ws;
+    if (m_workspace) {
+        connect(m_workspace, &WorkspaceService::activeToolChanged, this, [this](){
+            m_activeTool = m_workspace->activeTool();
+            emit activeToolChanged();
+            update();
+        });
+        m_activeTool = m_workspace->activeTool();
+    }
+    emit workspaceChanged();
+}
+
 
 void MapCanvasItem::setDocument(Document *doc) {
     if (m_document == doc) return;
@@ -326,5 +360,7 @@ void MapCanvasItem::setDocument(Document *doc) {
     connect(m_document, &Document::objectsChanged, this, [this](){ update(); });
     connect(m_document, &Document::gridVisibleChanged, this, [this](){ update(); });
     connect(m_document, &Document::snapEnabledChanged, this, [this](){ update(); });
+    connect(m_document, &Document::selectionChanged, this, [this](){ update(); });
+
     emit documentChanged();
 }

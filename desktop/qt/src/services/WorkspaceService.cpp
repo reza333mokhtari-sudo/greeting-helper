@@ -52,3 +52,10 @@ void WorkspaceService::logMessage(const QString& msg, const QString& level) {
         emit taskFailed("Desktop App Runtime", msg, suggestion);
     }
 }
+
+void WorkspaceService::setActiveTool(const QString& tool) {
+    if (m_activeTool == tool) return;
+    m_activeTool = tool;
+    emit activeToolChanged();
+}
+

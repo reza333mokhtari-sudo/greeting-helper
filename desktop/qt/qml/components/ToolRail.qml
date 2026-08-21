@@ -102,8 +102,8 @@ DccPanel {
             Layout.preferredHeight: 32
             Layout.alignment: Qt.AlignHCenter
             onClicked: {
-                if (canvas.selectedId !== "") {
-                    canvas.document.removeObject(canvas.selectedId);
+                if (canvas.document.selectedId !== "") {
+                    canvas.document.removeObject(canvas.document.selectedId);
                 }
             }
             background: Rectangle {

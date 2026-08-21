@@ -34,7 +34,10 @@ Document::Document(QObject *parent) : QObject(parent) {
     connect(m_undoStack, &QUndoStack::canRedoChanged, this, &Document::canRedoChanged);
     
     // Default data
-    QJsonObject f1; f1["id"] = "f1"; f1["name"] = "Ground Floor"; f1["active"] = true;
+    QJsonObject f1; 
+    f1["id"] = "f1"; 
+    f1["name"] = "Ground Floor"; 
+    f1["active"] = true;
     m_floors.append(f1);
 
     QJsonObject l1; l1["name"] = "Props"; l1["isVisible"] = true;
@@ -42,6 +45,13 @@ Document::Document(QObject *parent) : QObject(parent) {
     m_layers.append(l1);
     m_layers.append(l2);
 }
+
+void Document::setSelectedId(const QString& id) {
+    if (m_selectedId == id) return;
+    m_selectedId = id;
+    emit selectionChanged();
+}
+
 
 void Document::addFloor(const QString& name) {
     QJsonObject f;
@@ -51,6 +61,17 @@ void Document::addFloor(const QString& name) {
     m_floors.append(f);
     emit floorsChanged();
 }
+
+void Document::removeFloor(const QString& id) {
+    for (int i = 0; i < m_floors.size(); ++i) {
+        if (m_floors[i].toObject()["id"].toString() == id) {
+            m_floors.removeAt(i);
+            break;
+        }
+    }
+    emit floorsChanged();
+}
+
 
 void Document::toggleLayer(const QString& name, bool visible) {
     for(int i=0; i<m_layers.size(); ++i) {

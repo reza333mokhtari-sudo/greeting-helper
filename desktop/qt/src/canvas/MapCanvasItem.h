@@ -14,11 +14,13 @@ class MapCanvasItem : public QQuickPaintedItem {
     Q_OBJECT
     QML_ELEMENT
     Q_PROPERTY(Document* document READ document WRITE setDocument NOTIFY documentChanged)
+    Q_PROPERTY(WorkspaceService* workspace READ workspace WRITE setWorkspace NOTIFY workspaceChanged)
+
     Q_PROPERTY(QString activeTool READ activeTool WRITE setActiveTool NOTIFY activeToolChanged)
-    Q_PROPERTY(QString selectedId READ selectedId NOTIFY selectionChanged)
     Q_PROPERTY(double zoom READ zoom NOTIFY zoomChanged)
     Q_PROPERTY(QPointF pan READ pan NOTIFY panChanged)
     Q_PROPERTY(QPointF cursorWorldPos READ cursorWorldPos NOTIFY cursorWorldChanged)
+
 
 public:
     explicit MapCanvasItem(QQuickItem *parent = nullptr);
@@ -28,18 +30,24 @@ public:
     Document* document() const { return m_document; }
     void setDocument(Document *doc);
 
+    WorkspaceService* workspace() const { return m_workspace; }
+    void setWorkspace(WorkspaceService *ws);
+
+
     QString activeTool() const { return m_activeTool; }
     void setActiveTool(const QString& tool);
 
-    QString selectedId() const { return m_selectedId; }
+    
     double zoom() const { return m_zoom; }
     QPointF pan() const { return m_pan; }
     QPointF cursorWorldPos() const { return m_currentWorldPos; }
 
 signals:
     void documentChanged();
+    void workspaceChanged();
+
     void activeToolChanged();
-    void selectionChanged(const QString& id);
+    
     void zoomChanged();
     void panChanged();
     void cursorWorldChanged(const QPointF& pos);
@@ -58,8 +66,10 @@ private:
     double snap(double val) const;
 
     Document *m_document = nullptr;
+    WorkspaceService *m_workspace = nullptr;
     QString m_activeTool = "select";
-    QString m_selectedId;
+
+
     
     double m_zoom = 1.0;
     QPointF m_pan = QPointF(0,0);
