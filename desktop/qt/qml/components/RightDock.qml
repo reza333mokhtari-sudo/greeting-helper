@@ -12,7 +12,7 @@ DccPanel {
     property var document: null
     property var canvas: null
     property var assetModel: null
-    property alias aiPanelHeight: aiPanel.height
+    property real aiPanelHeight: 250
 
     function updateInspector(id) {
         inspectorPanel.updateSelection(id)
@@ -94,7 +94,7 @@ DccPanel {
         AiPanel {
             id: aiPanel
             Layout.fillWidth: true
-            Layout.preferredHeight: 250
+            Layout.preferredHeight: aiPanelHeight
             SplitView.minimumHeight: 150
         }
     }
