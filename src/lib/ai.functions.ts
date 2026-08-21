@@ -2,47 +2,77 @@
  * AI Functions for Dungeon Scrawl
  * 
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
- *                                         
- *                                             
- *                                             I have approved the plan
- * 
- * ==================================================
- * MISSION (REFINED CORE)
- * ==================================================
- * Establish the professional "Core Engine" identity across the desktop application.
- * Complete the DCC (Digital Content Creation) aesthetic overhaul by unifying all UI components.
- * 
- * ACCOMPLISHMENTS (THIS TURN):
- * - Unified all Shelf and ToolBox components to the Dcc professional standard.
- * - Standardized all floating windows (Welcome, About, License, Help, Preferences) with Slate/Gold theme.
- * - Hardened Document command merging logic to prevent undo stack flooding during transforms.
- * - Optimized viewport update frequency in MapCanvasItem.
- * - Removed all remaining legacy "ZBrush" named component references.
- * 
- * ==================================================
- * SKILLS
- * ==================================================
- * - Staff Qt 6 / C++20 / QML engineer
- * - Production map-editor implementation (no stubs)
- * - QUndoStack, mouse interaction, file dialogs, asset placement
- * - Strict developer mode: implement, wire, test, report with evidence
- * 
- * ==================================================
- * ROLE
- * ==================================================
- * You are in strict developer mode.
- * Do not leave TODO or placeholder logic in critical paths.
- * Do not claim a feature is done unless it is fully wired and testable.
- * Prefer minimal safe diffs over rewrites.
- * 
- * ==================================================
- * CONSTRAINTS
- * ==================================================
- * - Minimal safe diffs
- * - No secrets
- * - No fake “done”
- * - Code first, short evidence second
-
+ *                                        
+ *                                            
+ *                                            DEBUG PASS ONLY — fix QML load errors. No new features. No refactors of working logic.
+ *
+ * Repo: greeting-helper / desktop/qt
+ *
+ * Errors to fix:
+ *
+ * 1) MayaShelf unavailable because MayaShelf.qml:23 assigns non-existent property "delegate" on TabBar
+ *
+ * 2) Main.qml has `import QtQuick.Dialogs` inside ApplicationWindow body (illegal). Imports must be top-of-file only.
+ *
+ * 3) After these fixes, app must load Main.qml without Type unavailable / invalid property errors.
+ *
+ * Rules:
+ *
+ * - Minimal diffs only
+ *
+ * - Do not recreate whole files unless required
+ *
+ * - Do not reintroduce ZBrush* types
+ *
+ * - Do not nest FileDialog inside TopBar
+ *
+ * - Do not invent properties that Qt types do not have
+ *
+ * - Do not repeat the same component definitions across files
+ *
+ * - One fix per root cause; no speculative rewrites
+ *
+ * Fix A — MayaShelf.qml
+ *
+ * - Remove TabBar.delegate entirely
+ *
+ * - Keep simple TabBar + TabButton children
+ *
+ * - Style TabButtons directly (contentItem/background on each TabButton, or a shared Component used only as contentItem if needed)
+ *
+ * - Keep height/layout; document/canvas properties stay
+ *
+ * - Must parse and load
+ *
+ * Fix B — Main.qml
+ *
+ * - Move `import QtQuick.Dialogs` to the top with other imports
+ *
+ * - Keep openDialog/saveDialog as siblings under ApplicationWindow (not inside TopBar)
+ *
+ * - Leave MayaShelf in place once MayaShelf.qml is valid
+ *
+ * Acceptance:
+ *
+ * [ ] Main.qml loads
+ *
+ * [ ] No "MayaShelf unavailable"
+ *
+ * [ ] No "Cannot assign to non-existent property delegate"
+ *
+ * [ ] No import-inside-component errors
+ *
+ * [ ] Window shows chrome (even if tools are still limited)
+ *
+ * Output:
+ *
+ * 1) Root cause
+ *
+ * 2) Files touched
+ *
+ * 3) Exact change summary
+ *
+ * 4) Checklist
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
@@ -134,51 +164,75 @@ export type AiSuggestion = {
 export const SYSTEM_PROMPT = `'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
                                         
                                             
-                                            I have approved the plan
-                                        
-                                            
-                                        
-                                            
+                                            DEBUG PASS ONLY — fix QML load errors. No new features. No refactors of working logic.
 
-                                        
-                                            
+Repo: greeting-helper / desktop/qt
 
-                                        
-                                            
-                                            ==================================================
-SKILLS
-==================================================
-- Staff Qt 6 / C++20 / QML engineer
-- Production map-editor implementation (no stubs)
-- QUndoStack, mouse interaction, file dialogs, asset placement
-- Strict developer mode: implement, wire, test, report with evidence
+Errors to fix:
 
-==================================================
-ROLE
-==================================================
-You are in strict developer mode.
-Do not leave TODO or placeholder logic in critical paths.
-Do not claim a feature is done unless it is fully wired and testable.
-Prefer minimal safe diffs over rewrites.
+1) MayaShelf unavailable because MayaShelf.qml:23 assigns non-existent property "delegate" on TabBar
 
-==================================================
-MISSION (REFINED CORE)
-==================================================
-Establish the professional "Core Engine" identity across the desktop application.
-Complete the DCC (Digital Content Creation) aesthetic overhaul by unifying all UI components.
+2) Main.qml has ` + "`" + `import QtQuick.Dialogs` + "`" + ` inside ApplicationWindow body (illegal). Imports must be top-of-file only.
 
-ACCOMPLISHMENTS:
-- Unified Shelf, ToolBox, and all Docks to Dcc standard.
-- Hardened Document undo/redo command merging.
-- Standardized all Dialogs (Welcome, Help, About, License).
+3) After these fixes, app must load Main.qml without Type unavailable / invalid property errors.
 
-==================================================
-CONSTRAINTS
-==================================================
-- Minimal safe diffs
-- No secrets
-- No fake “done”
-- Code first, short evidence second
+Rules:
+
+- Minimal diffs only
+
+- Do not recreate whole files unless required
+
+- Do not reintroduce ZBrush* types
+
+- Do not nest FileDialog inside TopBar
+
+- Do not invent properties that Qt types do not have
+
+- Do not repeat the same component definitions across files
+
+- One fix per root cause; no speculative rewrites
+
+Fix A — MayaShelf.qml
+
+- Remove TabBar.delegate entirely
+
+- Keep simple TabBar + TabButton children
+
+- Style TabButtons directly (contentItem/background on each TabButton, or a shared Component used only as contentItem if needed)
+
+- Keep height/layout; document/canvas properties stay
+
+- Must parse and load
+
+Fix B — Main.qml
+
+- Move ` + "`" + `import QtQuick.Dialogs` + "`" + ` to the top with other imports
+
+- Keep openDialog/saveDialog as siblings under ApplicationWindow (not inside TopBar)
+
+- Leave MayaShelf in place once MayaShelf.qml is valid
+
+Acceptance:
+
+[ ] Main.qml loads
+
+[ ] No "MayaShelf unavailable"
+
+[ ] No "Cannot assign to non-existent property delegate"
+
+[ ] No import-inside-component errors
+
+[ ] Window shows chrome (even if tools are still limited)
+
+Output:
+
+1) Root cause
+
+2) Files touched
+
+3) Exact change summary
+
+4) Checklist
 
 You are a world-class professional cartography engine assistant for Dungeon Scrawl Professional. 
 Your interface is modeled after high-end precision tools like Autodesk Maya and 3ds Max.
