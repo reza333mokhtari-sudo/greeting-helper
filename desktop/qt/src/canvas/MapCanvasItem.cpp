@@ -276,9 +276,12 @@ void MapCanvasItem::handleSelection(const QPointF& worldPos) {
 void MapCanvasItem::wheelEvent(QWheelEvent *event) {
     double factor = event->angleDelta().y() > 0 ? 1.1 : 0.9;
     double oldZoom = m_zoom;
+    
+    // Smooth zoom range
     m_zoom *= factor;
     m_zoom = std::max(0.01, std::min(m_zoom, 50.0));
     
+    // Pattern E: Zoom-to-cursor interaction
     QPointF mousePos = event->position();
     m_pan = mousePos - (mousePos - m_pan) * (m_zoom / oldZoom);
     
@@ -286,6 +289,7 @@ void MapCanvasItem::wheelEvent(QWheelEvent *event) {
     emit panChanged();
     update();
 }
+
 
 void MapCanvasItem::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace) {
