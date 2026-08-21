@@ -20,28 +20,86 @@ DccPanel {
             height: 24
             background: Rectangle { color: "#1a1a1a" }
             
-            delegate: TabButton {
-                id: tabBtn
+            TabButton { 
+                text: "GEOMETRY"
                 contentItem: DccLabel {
-                    text: tabBtn.text
+                    text: parent.text
                     font.pixelSize: 9
                     font.bold: true
-                    color: tabBtn.checked ? "#f59e0b" : "#666"
+                    color: parent.checked ? "#f59e0b" : "#666"
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }
                 background: Rectangle {
-                    color: tabBtn.checked ? "#2b2b2b" : "transparent"
-                    border.color: tabBtn.checked ? "#383838" : "transparent"
+                    color: parent.checked ? "#2b2b2b" : "transparent"
+                    border.color: parent.checked ? "#383838" : "transparent"
                     border.width: 1
                 }
             }
-
-            TabButton { text: "GEOMETRY" }
-            TabButton { text: "SCULPT" }
-            TabButton { text: "PROPS" }
-            TabButton { text: "AI DYNAMICS" }
-            TabButton { text: "RENDER" }
+            TabButton { 
+                text: "SCULPT"
+                contentItem: DccLabel {
+                    text: parent.text
+                    font.pixelSize: 9
+                    font.bold: true
+                    color: parent.checked ? "#f59e0b" : "#666"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+                background: Rectangle {
+                    color: parent.checked ? "#2b2b2b" : "transparent"
+                    border.color: parent.checked ? "#383838" : "transparent"
+                    border.width: 1
+                }
+            }
+            TabButton { 
+                text: "PROPS"
+                contentItem: DccLabel {
+                    text: parent.text
+                    font.pixelSize: 9
+                    font.bold: true
+                    color: parent.checked ? "#f59e0b" : "#666"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+                background: Rectangle {
+                    color: parent.checked ? "#2b2b2b" : "transparent"
+                    border.color: parent.checked ? "#383838" : "transparent"
+                    border.width: 1
+                }
+            }
+            TabButton { 
+                text: "AI DYNAMICS"
+                contentItem: DccLabel {
+                    text: parent.text
+                    font.pixelSize: 9
+                    font.bold: true
+                    color: parent.checked ? "#f59e0b" : "#666"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+                background: Rectangle {
+                    color: parent.checked ? "#2b2b2b" : "transparent"
+                    border.color: parent.checked ? "#383838" : "transparent"
+                    border.width: 1
+                }
+            }
+            TabButton { 
+                text: "RENDER"
+                contentItem: DccLabel {
+                    text: parent.text
+                    font.pixelSize: 9
+                    font.bold: true
+                    color: parent.checked ? "#f59e0b" : "#666"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+                background: Rectangle {
+                    color: parent.checked ? "#2b2b2b" : "transparent"
+                    border.color: parent.checked ? "#383838" : "transparent"
+                    border.width: 1
+                }
+            }
         }
 
         DccPanel {
