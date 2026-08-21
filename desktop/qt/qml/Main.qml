@@ -35,7 +35,7 @@ ApplicationWindow {
         id: preferencesDialog
     }
 
-    import QtQuick.Dialogs
+    
     FileDialog {
         id: openDialog
         title: "Open Map"
