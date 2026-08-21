@@ -22,6 +22,14 @@ DccPanel {
         anchors.fill: parent
         spacing: 0
 
+        DebugConsole {
+            id: debugConsole
+            Layout.fillWidth: true
+            Layout.preferredHeight: 120
+            visible: true // Toggleable via settings in future
+        }
+
+
         TabBar {
             id: dockTabs
             Layout.fillWidth: true
