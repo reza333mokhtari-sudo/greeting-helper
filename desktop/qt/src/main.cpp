@@ -12,6 +12,27 @@
 
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
+ *                                        
+ *                                            
+ *                                            Also mirror the same patterns into desktop/qt where applicable
+ *
+ * ## PROMPT بازنویسی‌شده (ضد گیر کردن + Tiled-first + Desktop mirror)
+ *
+ * این نسخه برای Lovable کوتاه‌تر از مقاله، ولی دقیق است؛ کار را **تکه‌تکه** می‌کند تا fail/hang ندهد.
+ *
+ * /developerMode
+ *
+ * SKILLS
+ * - Map editor architect (Tiled patterns)
+ * - React/TypeScript editor implementer
+ * - Qt/QML pattern mirror for desktop/qt
+ * - Debugger: small fixes, no rewrites
+ * - UI/UX for dense DCC tools
+ *
+ * Also mirror the same patterns into desktop/qt where applicable.
+ *
+ * GOAL
+ * Unstick the product and make the editor reliable using Tiled-style architecture.
  */
 
 #ifdef Q_OS_WIN

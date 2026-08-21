@@ -20,19 +20,17 @@
 
 /**
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
+ *                                        
+ *                                            
+ *                                            Also mirror the same patterns into desktop/qt where applicable
  *
- * ==================================================
- * C) GRAPHICS BACKEND (DESKTOP)
- * ==================================================
- * Implement early QQuickWindow::setGraphicsApi selection for:
- * - Auto
- * - OpenGL
- * - Vulkan
- * - Metal
- * - Direct3D11
+ * ## PROMPT بازنویسی‌شده (ضد گیر کردن + Tiled-first + Desktop mirror)
  *
- * Persist choice via QSettings and apply before any QML is loaded.
- * Show current backend in Preferences. Require restart on change.
+ * این نسخه برای Lovable کوتاه‌تر از مقاله، ولی دقیق است؛ کار را **تکه‌تکه** می‌کند تا fail/hang ندهد.
+ *
+ * /developerMode
+ *
+ * Also mirror the same patterns into desktop/qt where applicable.
  */
 
 class GreetingHelperWindow : public QMainWindow {
