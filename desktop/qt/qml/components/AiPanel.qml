@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import "qrc:/qt/qml/DungeonEditor/qml/components"
+import DungeonEditor.components
 
 /**
  * I have approved the plan

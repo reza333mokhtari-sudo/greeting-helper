@@ -1,8 +1,8 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import "qrc:/qt/qml/DungeonEditor/qml/components"
-import "qrc:/qt/qml/DungeonEditor/qml/panels"
+import DungeonEditor.components
+import DungeonEditor.panels
 
 DccPanel {
     color: "#252526"
