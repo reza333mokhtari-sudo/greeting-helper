@@ -131,13 +131,14 @@ void MapCanvasItem::mousePressEvent(QMouseEvent *event) {
     m_lastMousePos = event->position().toPoint();
     QPointF worldPos = screenToWorld(event->position());
 
+    // Pattern E: Interaction ownership
     if (event->button() == Qt::LeftButton) {
         if (m_activeTool == "select") {
             handleSelection(worldPos);
         } else if (m_activeTool == "draw" || m_activeTool == "room" || m_activeTool == "corridor") {
             m_isDrawing = true;
             m_drawStart = worldPos;
-        } else if (m_activeTool == "pan") {
+        } else if (m_activeTool == "pan" || (event->modifiers() & Qt::AltModifier)) {
             m_isPanning = true;
             setCursor(QCursor(Qt::ClosedHandCursor));
         }
@@ -147,6 +148,7 @@ void MapCanvasItem::mousePressEvent(QMouseEvent *event) {
     }
     update();
 }
+
 
 void MapCanvasItem::mouseMoveEvent(QMouseEvent *event) {
     QPointF worldPos = screenToWorld(event->position());
@@ -308,7 +310,10 @@ void MapCanvasItem::keyPressEvent(QKeyEvent *event) {
         setActiveTool("draw");
     } else if (event->key() == Qt::Key_H) {
         setActiveTool("pan");
-    } 
+    } else if (event->key() == Qt::Key_B) {
+        setActiveTool("room");
+    }
+
     // Legacy mapping support
     else if (event->key() == Qt::Key_V) {
         setActiveTool("select");

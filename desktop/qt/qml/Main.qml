@@ -219,7 +219,9 @@ ApplicationWindow {
             Layout.fillWidth: true
             canvas: canvas
             document: mapDoc
+            workspace: workspaceService
         }
+
     }
 
     BuildNotification {
