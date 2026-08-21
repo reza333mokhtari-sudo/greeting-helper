@@ -1,4 +1,6 @@
 #include <canvas/MapCanvasItem.h>
+#include <services/WorkspaceService.h>
+#include <QQmlEngine>
 #include <QPainter>
 #include <QMouseEvent>
 #include <QWheelEvent>
@@ -20,7 +22,16 @@ double MapCanvasItem::snap(double val) const {
 }
 
 void MapCanvasItem::paint(QPainter *painter) {
-    if (!m_document) return;
+    if (!m_document) {
+        QQmlEngine *engine = qmlEngine(this);
+        if (engine) {
+            QObject *ws = engine->rootContext()->contextProperty("workspaceService").value<QObject*>();
+            if (ws) {
+                QMetaObject::invokeMethod(ws, "logMessage", Q_ARG(QString, "MapCanvasItem: Painting skipped - Document is NULL"), Q_ARG(QString, "critical"));
+            }
+        }
+        return;
+    }
 
     painter->setRenderHint(QPainter::Antialiasing);
     painter->translate(m_pan);
