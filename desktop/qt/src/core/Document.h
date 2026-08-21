@@ -36,8 +36,11 @@ public:
 
     QJsonArray floors() const { return m_floors; }
     QJsonArray layers() const { return m_layers; }
+    QString selectedId() const { return m_selectedId; }
+    void setSelectedId(const QString& id);
 
     Q_INVOKABLE void addFloor(const QString& name);
+    Q_INVOKABLE void removeFloor(const QString& id);
     Q_INVOKABLE void toggleLayer(const QString& name, bool visible);
 
     Q_INVOKABLE void addObject(QJsonObject obj);
@@ -49,6 +52,7 @@ public:
     
     Q_INVOKABLE void save(const QString& url);
     Q_INVOKABLE void load(const QString& url);
+
 
 signals:
     void objectsChanged();
