@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import QtQuick.Dialogs
 import DungeonEditor.Core 1.0
 import DungeonEditor.Canvas 1.0
 import DungeonEditor.Models 1.0
