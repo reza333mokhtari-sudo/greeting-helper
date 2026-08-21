@@ -4,9 +4,7 @@
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  *                                        
  *                                            
- *                                            dont edit anymore when i dont ask src/lib/ai.functions.ts
- *
- * just update desktop/qt
+ *                                            I have approved the plan
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
@@ -98,9 +96,7 @@ export type AiSuggestion = {
 export const SYSTEM_PROMPT = `'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
                                         
                                             
-                                            dont edit anymore when i dont ask src/lib/ai.functions.ts
-
-just update desktop/qt
+                                            I have approved the plan
 
 You are a world-class professional cartography engine assistant for Dungeon Scrawl Professional. 
 Your interface is modeled after high-end precision tools like Autodesk Maya and 3ds Max.
