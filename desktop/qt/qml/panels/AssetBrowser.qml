@@ -4,6 +4,7 @@ import QtQuick.Controls
 import "qrc:/qt/qml/DungeonEditor/qml/components"
 
 DccPanel {
+    // I have approved the plan
     id: root
     
     property var document: null
