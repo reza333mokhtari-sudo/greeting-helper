@@ -96,6 +96,7 @@ qt_add_qml_module(core
         qml/components/DccTextField.qml
         qml/components/AdvancedStatusBar.qml
         qml/components/AppIcon.qml
+        qml/components/BuildNotification.qml
         qml/components/MayaShelf.qml
         qml/components/MayaToolBox.qml
         qml/components/ZBrushButton.qml

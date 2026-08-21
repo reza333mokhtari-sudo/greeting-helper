@@ -24,6 +24,8 @@ public:
 signals:
     void logsChanged();
     void newLogEntry(const QString& msg, const QString& level, const QString& timestamp);
+    void taskFailed(const QString& command, const QString& error, const QString& suggestion);
+
 
 private:
     QStringList m_logs;

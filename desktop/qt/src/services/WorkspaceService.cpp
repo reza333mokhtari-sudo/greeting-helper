@@ -42,4 +42,13 @@ void WorkspaceService::logMessage(const QString& msg, const QString& level) {
     if (m_logs.size() > 200) m_logs.removeLast();
     emit logsChanged();
     emit newLogEntry(msg, level, timestamp);
+
+    // Detect task failures for build-time notification integration
+    if (level.toLower() == "critical" || level.toLower() == "fatal" || msg.contains("TASK FAILED", Qt::CaseInsensitive)) {
+        QString suggestion = "Check logs and verify component dependencies.";
+        if (msg.contains("Type unavailable")) suggestion = "Ensure QML module is correctly registered in CMakeLists.txt and imports match.";
+        if (msg.contains("Permission denied")) suggestion = "Check if libcore.dll is locked by another process.";
+        
+        emit taskFailed("Desktop App Runtime", msg, suggestion);
+    }
 }
