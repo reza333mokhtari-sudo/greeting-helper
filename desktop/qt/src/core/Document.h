@@ -18,6 +18,8 @@ class Document : public QObject {
     Q_PROPERTY(bool snapEnabled READ snapEnabled WRITE setSnapEnabled NOTIFY snapEnabledChanged)
     Q_PROPERTY(QJsonArray floors READ floors NOTIFY floorsChanged)
     Q_PROPERTY(QJsonArray layers READ layers NOTIFY layersChanged)
+    Q_PROPERTY(QString selectedId READ selectedId WRITE setSelectedId NOTIFY selectionChanged)
+
 
 public:
     explicit Document(QObject *parent = nullptr);
