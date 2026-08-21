@@ -1,4 +1,5 @@
 #include "WorkspaceService.h"
+#include <QDateTime>
 #include <QStandardPaths>
 #include <QDir>
 #include <QFile>
@@ -32,4 +33,13 @@ QVariantMap WorkspaceService::loadLayout(const QString& name) {
 QStringList WorkspaceService::listLayouts() const {
     QString path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/workspaces";
     return QDir(path).entryList(QStringList() << "*.json", QDir::Files);
+}
+
+void WorkspaceService::logMessage(const QString& msg, const QString& level) {
+    QString timestamp = QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
+    QString entry = QString("[%1] [%2] %3").arg(timestamp).arg(level.toUpper()).arg(msg);
+    m_logs.prepend(entry);
+    if (m_logs.size() > 200) m_logs.removeLast();
+    emit logsChanged();
+    emit newLogEntry(msg, level, timestamp);
 }

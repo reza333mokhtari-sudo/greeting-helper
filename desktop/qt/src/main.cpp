@@ -27,6 +27,29 @@
 #include <services/WorkspaceService.h>
 #include <services/LicenseService.h>
 
+static WorkspaceService* globalWorkspaceService = nullptr;
+
+void myMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    if (!globalWorkspaceService) return;
+    
+    QString level = "info";
+    switch (type) {
+    case QtDebugMsg: level = "debug"; break;
+    case QtWarningMsg: level = "warning"; break;
+    case QtCriticalMsg: level = "critical"; break;
+    case QtFatalMsg: level = "fatal"; break;
+    case QtInfoMsg: level = "info"; break;
+    }
+    
+    QString logMsg = msg;
+    if (context.file) {
+        logMsg += QString(" (%1:%2)").arg(context.file).arg(context.line);
+    }
+    
+    globalWorkspaceService->logMessage(logMsg, level);
+}
+
 int main(int argc, char *argv[])
 {
     // Professional DCC initialization
@@ -38,16 +61,26 @@ int main(int argc, char *argv[])
     // Force Fusion style for ZBrush/Maya aesthetic
     QQuickStyle::setStyle("Fusion");
 
-    // Register types (Implementation resides in core library)
+    // Initialize global workspace service for logging
+    globalWorkspaceService = new WorkspaceService();
+    qInstallMessageHandler(myMessageHandler);
+
+    // Register types
     qmlRegisterType<Document>("DungeonEditor.Core", 1, 0, "Document");
     qmlRegisterType<MapCanvasItem>("DungeonEditor.Canvas", 1, 0, "MapCanvasItem");
     qmlRegisterType<AssetLibraryModel>("DungeonEditor.Models", 1, 0, "AssetLibraryModel");
+    
+    // Provide the existing instance for the singleton-like service if needed, 
+    // but here we just register the type and can also set it as a context property.
     qmlRegisterType<WorkspaceService>("DungeonEditor.Services", 1, 0, "WorkspaceService");
+    
     qmlRegisterType<AiClient>("DungeonEditor.Services", 1, 0, "AiClient");
     qmlRegisterType<LicenseService>("DungeonEditor.Services", 1, 0, "LicenseService");
     qmlRegisterType<FileService>("DungeonEditor.Services", 1, 0, "FileService");
 
     QQmlApplicationEngine engine;
+    engine.rootContext()->setContextProperty("workspaceService", globalWorkspaceService);
+    
     
     // Internal resource paths for bundled QML
     engine.addImportPath("qrc:/qt/qml");
