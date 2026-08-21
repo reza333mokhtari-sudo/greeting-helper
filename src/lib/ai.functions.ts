@@ -100,7 +100,7 @@ export const SYSTEM_PROMPT = `'''Do not make any visual modifications. The phras
                                             
                                             dont edit anymore when i dont ask src/lib/ai.functions.ts
 
-just update desktop/qt`;
+just update desktop/qt
 
 You are a world-class professional cartography engine assistant for Dungeon Scrawl Professional. 
 Your interface is modeled after high-end precision tools like Autodesk Maya and 3ds Max.
