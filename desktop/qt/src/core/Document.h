@@ -63,6 +63,7 @@ signals:
     void snapEnabledChanged();
     void floorsChanged();
     void layersChanged();
+    void selectionChanged();
 
 private:
     void setDirty(bool d);
@@ -75,4 +76,6 @@ private:
     bool m_snapEnabled = true;
     QJsonArray m_floors;
     QJsonArray m_layers;
+    QString m_selectedId;
 };
+
