@@ -318,10 +318,32 @@ void MapCanvasItem::keyPressEvent(QKeyEvent *event) {
 
 
 void MapCanvasItem::setActiveTool(const QString& tool) {
+    if (m_workspace) {
+        m_workspace->setActiveTool(tool);
+        return;
+    }
     if (m_activeTool == tool) return;
     m_activeTool = tool;
     emit activeToolChanged();
 }
+
+void MapCanvasItem::setWorkspace(WorkspaceService *ws) {
+    if (m_workspace == ws) return;
+    if (m_workspace) {
+        disconnect(m_workspace, &WorkspaceService::activeToolChanged, this, nullptr);
+    }
+    m_workspace = ws;
+    if (m_workspace) {
+        connect(m_workspace, &WorkspaceService::activeToolChanged, this, [this](){
+            m_activeTool = m_workspace->activeTool();
+            emit activeToolChanged();
+            update();
+        });
+        m_activeTool = m_workspace->activeTool();
+    }
+    emit workspaceChanged();
+}
+
 
 void MapCanvasItem::setDocument(Document *doc) {
     if (m_document == doc) return;

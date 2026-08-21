@@ -14,6 +14,8 @@ class MapCanvasItem : public QQuickPaintedItem {
     Q_OBJECT
     QML_ELEMENT
     Q_PROPERTY(Document* document READ document WRITE setDocument NOTIFY documentChanged)
+    Q_PROPERTY(WorkspaceService* workspace READ workspace WRITE setWorkspace NOTIFY workspaceChanged)
+
     Q_PROPERTY(QString activeTool READ activeTool WRITE setActiveTool NOTIFY activeToolChanged)
     Q_PROPERTY(double zoom READ zoom NOTIFY zoomChanged)
     Q_PROPERTY(QPointF pan READ pan NOTIFY panChanged)
@@ -28,6 +30,10 @@ public:
     Document* document() const { return m_document; }
     void setDocument(Document *doc);
 
+    WorkspaceService* workspace() const { return m_workspace; }
+    void setWorkspace(WorkspaceService *ws);
+
+
     QString activeTool() const { return m_activeTool; }
     void setActiveTool(const QString& tool);
 
@@ -38,6 +44,8 @@ public:
 
 signals:
     void documentChanged();
+    void workspaceChanged();
+
     void activeToolChanged();
     
     void zoomChanged();
@@ -58,7 +66,9 @@ private:
     double snap(double val) const;
 
     Document *m_document = nullptr;
+    WorkspaceService *m_workspace = nullptr;
     QString m_activeTool = "select";
+
 
     
     double m_zoom = 1.0;

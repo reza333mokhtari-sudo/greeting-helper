@@ -8,7 +8,9 @@ DccPanel {
     width: 50
     
     property var canvas: null
-    property string activeTool: canvas ? canvas.activeTool : "select"
+    property var workspace: null
+    property string activeTool: workspace ? workspace.activeTool : (canvas ? canvas.activeTool : "select")
+
 
     ColumnLayout {
         anchors.fill: parent
@@ -46,8 +48,10 @@ DccPanel {
                 }
                 
                 onClicked: {
-                    if (canvas) canvas.activeTool = modelData.id
+                    if (workspace) workspace.activeTool = modelData.id
+                    else if (canvas) canvas.activeTool = modelData.id
                 }
+
             }
         }
 
