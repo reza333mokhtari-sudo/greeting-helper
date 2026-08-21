@@ -4,7 +4,7 @@
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  *                                        
  *                                            
- *                                            I have approved the plan
+ *                                            debug all qml files desktop qt and fix bug i got error
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
@@ -96,7 +96,7 @@ export type AiSuggestion = {
 export const SYSTEM_PROMPT = `'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
                                         
                                             
-                                            I have approved the plan
+                                            debug all qml files desktop qt and fix bug i got error
 
 You are a world-class professional cartography engine assistant for Dungeon Scrawl Professional. 
 Your interface is modeled after high-end precision tools like Autodesk Maya and 3ds Max.
