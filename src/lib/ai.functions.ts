@@ -2,32 +2,31 @@
  * AI Functions for Dungeon Scrawl
  * 
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
- *                                        
- *                                            
- *                                            Also mirror the same patterns into desktop/qt where applicable
- *
+ *                                         
+ *                                             
+ *                                             Also mirror the same patterns into desktop/qt where applicable
+ * 
  * ## PROMPT بازنویسی‌شده (ضد گیر کردن + Tiled-first + Desktop mirror)
- *
+ * 
  * این نسخه برای Lovable کوتاه‌تر از مقاله، ولی دقیق است؛ کار را **تکه‌تکه** می‌کند تا fail/hang ندهد.
- *
- * ```text
+ * 
  * /developerMode
- *
+ * 
  * SKILLS
  * - Map editor architect (Tiled patterns)
  * - React/TypeScript editor implementer
  * - Qt/QML pattern mirror for desktop/qt
  * - Debugger: small fixes, no rewrites
  * - UI/UX for dense DCC tools
- *
+ * 
  * PRIMARY REFERENCE (patterns only, DO NOT copy code):
  * https://github.com/mapeditor/tiled
- *
+ * 
  * SECONDARY REFERENCE (interaction/model ideas only):
  * https://github.com/mohsenD98/GraphFlow
- *
+ * 
  * Also mirror the same patterns into desktop/qt where applicable.
- *
+ * 
  * CRITICAL RULES (anti-fail)
  * 1) Do NOT rewrite the whole app.
  * 2) Do NOT migrate frameworks.
@@ -38,10 +37,10 @@
  * 7) Never write prompt/command text onto the canvas.
  * 8) No secrets in repo.
  * 9) Prefer fix existing tools over inventing new systems.
- *
+ * 
  * GOAL
  * Unstick the product and make the editor reliable using Tiled-style architecture.
- *
+ * 
  * TILED PATTERN MAPPING (apply in THIS project)
  * - Document core = single map document (floors/layers/objects/settings)
  * - Tool router = one activeTool; toolbar only switches tool; canvas handles input
@@ -49,23 +48,23 @@
  * - Dock shell = tools left, canvas center, panels right, status bottom
  * - Properties = inspector two-way on selection
  * - Save format = JSON map document + dirty state
- *
+ * 
  * ==================================================
  * DO THIS IN ORDER (STOP AND VERIFY EACH)
  * ==================================================
- *
+ * 
  * SLICE 1 — Editor reachable
  * - Ensure user can open the real editor in ≤2 clicks from home
  * - Local editing must work without forced login
  * - Auth only for cloud/AI if needed
  * Verify: editor canvas visible and interactive
- *
+ * 
  * SLICE 2 — Tool router hard-wire
  * - Single activeTool state shared by toolbar + shortcuts + canvas
  * - Tools required: select, drawRect, pan, delete (erase if already present)
  * - Clicking toolbar MUST change canvas behavior
  * Verify: each tool does a different thing
- *
+ * 
  * SLICE 3 — Core canvas ops
  * - draw room by drag
  * - select + drag move
@@ -73,24 +72,24 @@
  * - delete selected
  * - grid/snap if already in codebase
  * Verify: create, move, delete one room
- *
+ * 
  * SLICE 4 — Undo/redo
  * - Ctrl+Z / Ctrl+Y for add/delete/move at minimum
  * Verify: undo restores previous state
- *
+ * 
  * SLICE 5 — Inspector + Assets
  * - Inspector edits selected object live (x/y/rotation/opacity if available)
  * - Asset search filters list
  * - Place asset onto canvas
  * Verify: select object → inspector changes appear on canvas
- *
+ * 
  * SLICE 6 — AI hang fix
  * - timeout + abort
  * - visible error text
  * - no infinite “responding”
  * - AI output never painted as map text unless user explicitly applies a map action
  * Verify: failed AI shows error and UI recovers
- *
+ * 
  * SLICE 7 — Desktop mirror (desktop/qt, only where applicable)
  * Apply the SAME patterns, minimal safe parity:
  * - activeTool shared concept
@@ -99,7 +98,7 @@
  * - inspector binding if panel exists
  * - do not break CMake/qrc boot
  * Verify: desktop still builds conceptually; no empty critical stubs left in touched files
- *
+ * 
  * ==================================================
  * UI RULES
  * ==================================================
@@ -108,7 +107,7 @@
  * - Status bar shows tool + zoom if possible
  * - No dead buttons in the editor chrome
  * - Side panels scroll independently from canvas zoom
- *
+ * 
  * ==================================================
  * DEBUG IF STUCK
  * ==================================================
@@ -117,9 +116,9 @@
  * 2) Patch only that owner
  * 3) Re-verify previous slices still pass
  * 4) Continue to next slice
- *
+ * 
  * Do not cascade refactors.
- *
+ * 
  * ==================================================
  * ACCEPTANCE (must report)
  * ==================================================
@@ -134,18 +133,17 @@
  * [ ] Asset place works (or explicitly partial)
  * [ ] AI cannot hang forever
  * [ ] No prompt text on canvas
- *
+ * 
  * DESKTOP (mirrored where applicable)
  * [ ] Same tool patterns present in desktop/qt
  * [ ] No boot path broken
  * [ ] Touched files are not empty stubs
- *
+ * 
  * OUTPUT FORMAT
  * 1) Slice-by-slice what changed
  * 2) Files touched (web and desktop/qt)
  * 3) Checklist pass/fail
  * 4) Anything still partial (honest)
- * ```
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
@@ -234,7 +232,7 @@ export type AiSuggestion = {
   settings: Record<string, string | number | boolean>;
 };
 
-export const SYSTEM_PROMPT = \`'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
+export const SYSTEM_PROMPT = `'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
                                         
                                             
                                             Also mirror the same patterns into desktop/qt where applicable
@@ -377,7 +375,6 @@ OUTPUT FORMAT
 2) Files touched (web and desktop/qt)
 3) Checklist pass/fail
 4) Anything still partial (honest)
-\`\`\`
 `;
 
 const num = (v: unknown, fallback = 0) =>
