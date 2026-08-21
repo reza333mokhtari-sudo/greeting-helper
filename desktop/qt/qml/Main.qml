@@ -8,7 +8,7 @@ import DungeonEditor.Models 1.0
 import DungeonEditor.Services 1.0
 import DungeonEditor.components
 import DungeonEditor.panels
-import "qrc:/qt/qml/DungeonEditor/qml/dialogs"
+import DungeonEditor.dialogs
 
 ApplicationWindow {
     id: window

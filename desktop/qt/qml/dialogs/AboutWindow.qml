@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import "qrc:/qt/qml/DungeonEditor/qml/components"
+import DungeonEditor.components
 
 BaseFloatingWindow {
     title: "ABOUT"

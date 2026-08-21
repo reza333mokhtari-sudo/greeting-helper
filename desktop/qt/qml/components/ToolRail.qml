@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import "qrc:/qt/qml/DungeonEditor/qml/components"
+import DungeonEditor.components
 
 /**
  * DCC Style Tool Rail
