@@ -89,6 +89,7 @@ qt_add_qml_module(core
         qml/components/CmsPanel.qml
         qml/components/FogTools.qml
         qml/components/RightDock.qml
+        qml/components/DebugConsole.qml
         qml/components/DccButton.qml
         qml/components/DccLabel.qml
         qml/components/DccPanel.qml
