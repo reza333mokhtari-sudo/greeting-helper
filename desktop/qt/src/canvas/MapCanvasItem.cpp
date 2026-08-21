@@ -71,7 +71,7 @@ void MapCanvasItem::paint(QPainter *painter) {
         QJsonObject obj = v.toObject();
         painter->save();
         
-        bool isSelected = obj["id"].toString() == m_selectedId;
+        bool isSelected = m_document->selectedId() != "" && obj["id"].toString() == m_document->selectedId();
         double x = obj["x"].toDouble();
         double y = obj["y"].toDouble();
         double rotation = obj["rotation"].toDouble();
@@ -157,7 +157,7 @@ void MapCanvasItem::mouseMoveEvent(QMouseEvent *event) {
         m_pan += (event->position().toPoint() - m_lastMousePos);
         emit panChanged();
     } else if (event->buttons() & Qt::LeftButton) {
-        if (m_activeTool == "select" && !m_selectedId.isEmpty()) {
+        if (m_activeTool == "select" && !m_document->selectedId().isEmpty()) {
             // Drag move
             QPointF delta = (event->position() - m_lastMousePos) / m_zoom;
             // Prevent dragging if shift is held (e.g. for zoom/pan shortcuts)
@@ -166,8 +166,9 @@ void MapCanvasItem::mouseMoveEvent(QMouseEvent *event) {
             QJsonObject obj;
             int idx = -1;
             for (int i = 0; i < m_document->objects().size(); ++i) {
-                if (m_document->objects()[i].toObject()["id"].toString() == m_selectedId) {
+                if (m_document->objects()[i].toObject()["id"].toString() == m_document->selectedId()) {
                     obj = m_document->objects()[i].toObject();
+
                     idx = i;
                     break;
                 }
@@ -191,13 +192,15 @@ void MapCanvasItem::mouseMoveEvent(QMouseEvent *event) {
                     if (std::abs(newX - obj["x"].toDouble()) > 0.1 || std::abs(newY - obj["y"].toDouble()) > 0.1) {
                         obj["x"] = newX;
                         obj["y"] = newY;
-                        m_document->updateObject(m_selectedId, obj);
+                        m_document->updateObject(m_document->selectedId(), obj);
+
                     }
                 } else if (m_activeTool == "rotate") {
                     double deltaX = event->position().x() - m_lastMousePos.x();
                     double newRotation = obj["rotation"].toDouble() + deltaX * 0.5;
                     obj["rotation"] = newRotation;
-                    m_document->updateObject(m_selectedId, obj);
+                    m_document->updateObject(m_document->selectedId(), obj);
+
                 } else if (m_activeTool == "scale") {
                     double deltaY = m_lastMousePos.y() - event->position().y();
                     double scaleFactor = 1.0 + (deltaY * 0.01);
@@ -209,7 +212,7 @@ void MapCanvasItem::mouseMoveEvent(QMouseEvent *event) {
                         obj["w"] = std::max(10.0, obj["w"].toDouble() * scaleFactor);
                         obj["h"] = std::max(10.0, obj["h"].toDouble() * scaleFactor);
                     }
-                    m_document->updateObject(m_selectedId, obj);
+                    m_document->updateObject(m_document->selectedId(), obj);
                 }
             }
         }
@@ -264,11 +267,11 @@ void MapCanvasItem::handleSelection(const QPointF& worldPos) {
             break;
         }
     }
-    if (hitId != m_selectedId) {
-        m_selectedId = hitId;
-        emit selectionChanged(m_selectedId);
+    if (hitId != m_document->selectedId()) {
+        m_document->setSelectedId(hitId);
     }
 }
+
 
 void MapCanvasItem::wheelEvent(QWheelEvent *event) {
     double factor = event->angleDelta().y() > 0 ? 1.1 : 0.9;
@@ -286,7 +289,7 @@ void MapCanvasItem::wheelEvent(QWheelEvent *event) {
 
 void MapCanvasItem::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace) {
-        if (!m_selectedId.isEmpty()) m_document->removeObject(m_selectedId);
+        if (!m_document->selectedId().isEmpty()) m_document->removeObject(m_document->selectedId());
     } 
     // Maya Style Shortcuts
     else if (event->key() == Qt::Key_Q) {
@@ -326,5 +329,7 @@ void MapCanvasItem::setDocument(Document *doc) {
     connect(m_document, &Document::objectsChanged, this, [this](){ update(); });
     connect(m_document, &Document::gridVisibleChanged, this, [this](){ update(); });
     connect(m_document, &Document::snapEnabledChanged, this, [this](){ update(); });
+    connect(m_document, &Document::selectionChanged, this, [this](){ update(); });
+
     emit documentChanged();
 }

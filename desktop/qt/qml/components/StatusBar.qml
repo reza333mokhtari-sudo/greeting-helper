@@ -14,7 +14,7 @@ DccPanel {
     
     property var canvas: null
     property var document: null
-    property int selectionCount: canvas && canvas.selectedId !== "" ? 1 : 0
+    property int selectionCount: document && document.selectedId !== "" ? 1 : 0
 
     RowLayout {
         anchors.fill: parent

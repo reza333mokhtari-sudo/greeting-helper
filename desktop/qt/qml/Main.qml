@@ -195,7 +195,7 @@ ApplicationWindow {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     document: mapDoc
-                    onSelectionChanged: (id) => rightDock.updateInspector(id)
+                    onSelectionChanged: () => rightDock.updateInspector(mapDoc.selectedId)
                 }
             }
             

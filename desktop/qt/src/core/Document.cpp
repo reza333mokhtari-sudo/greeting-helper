@@ -62,6 +62,17 @@ void Document::addFloor(const QString& name) {
     emit floorsChanged();
 }
 
+void Document::removeFloor(const QString& id) {
+    for (int i = 0; i < m_floors.size(); ++i) {
+        if (m_floors[i].toObject()["id"].toString() == id) {
+            m_floors.removeAt(i);
+            break;
+        }
+    }
+    emit floorsChanged();
+}
+
+
 void Document::toggleLayer(const QString& name, bool visible) {
     for(int i=0; i<m_layers.size(); ++i) {
         QJsonObject l = m_layers[i].toObject();
