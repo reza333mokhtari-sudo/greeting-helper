@@ -6,9 +6,9 @@ import DungeonEditor.Core 1.0
 import DungeonEditor.Canvas 1.0
 import DungeonEditor.Models 1.0
 import DungeonEditor.Services 1.0
-import "qrc:/qt/qml/DungeonEditor/qml/components"
-import "qrc:/qt/qml/DungeonEditor/qml/panels"
-import "qrc:/qt/qml/DungeonEditor/qml/dialogs"
+import DungeonEditor.components
+import DungeonEditor.panels
+import DungeonEditor.dialogs
 
 ApplicationWindow {
     id: window

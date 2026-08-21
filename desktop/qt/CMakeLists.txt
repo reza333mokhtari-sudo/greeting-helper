@@ -34,58 +34,12 @@ add_library(core SHARED
     src/services/LicenseService.h src/services/LicenseService.cpp
 )
 
-target_link_libraries(core PUBLIC 
-    Qt6::Core
-    Qt6::Gui 
-    Qt6::Qml 
-    Qt6::Quick 
-    Qt6::Network
-    Qt6::QuickControls2
-    Qt6::Concurrent
-    Qt6::Widgets
-)
-
-target_include_directories(core PUBLIC 
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
-)
-
-# 2. BUNDLED RESOURCES
-# Embed ALL QML, assets, and icons directly into the binary to avoid external files.
-qt_add_resources(core "qml_resources"
-    PREFIX "/qt/qml/DungeonEditor"
-    FILES
+qt_add_qml_module(core
+    URI DungeonEditor
+    VERSION 1.0
+    QML_FILES
         qml/Main.qml
-        qml/components/TopBar.qml
-        qml/components/ToolRail.qml
-        qml/components/AssetLibrary.qml
-        qml/components/AiPanel.qml
-        qml/components/InspectorPanel.qml
-        qml/components/LayersPanel.qml
-        qml/components/StatusBar.qml
-        qml/components/ObjectsPanel.qml
-        qml/components/SettingsPanel.qml
-        qml/components/CmsPanel.qml
-        qml/components/FogTools.qml
-        qml/components/RightDock.qml
-        qml/components/DccButton.qml
-        qml/components/DccLabel.qml
-        qml/components/DccPanel.qml
-        qml/components/DccTextField.qml
-        qml/components/AdvancedStatusBar.qml
-        qml/components/AppIcon.qml
-        qml/components/MayaShelf.qml
-        qml/components/MayaToolBox.qml
-        qml/components/ZBrushButton.qml
-        qml/components/ZBrushLabel.qml
-        qml/components/ZBrushPanel.qml
-        qml/components/ZBrushTextField.qml
-        qml/panels/AssetBrowser.qml
-        qml/dialogs/BaseFloatingWindow.qml
-        qml/dialogs/WelcomeWindow.qml
-        qml/dialogs/AboutWindow.qml
-        qml/dialogs/LicenseWindow.qml
-        qml/dialogs/HelpWindow.qml
-        qml/dialogs/PreferencesDialog.qml
+    RESOURCES
         assets/icon.png
         assets/icons/tools/select.svg
         assets/icons/tools/move.svg
@@ -117,6 +71,74 @@ qt_add_resources(core "qml_resources"
         assets/icons/general/redo.svg
         assets/icons/general/undo.svg
 )
+
+qt_add_qml_module(core
+    URI DungeonEditor.components
+    VERSION 1.0
+    RESOURCE_PREFIX "/qt/qml/DungeonEditor/components"
+    QML_FILES
+        qml/components/TopBar.qml
+        qml/components/ToolRail.qml
+        qml/components/AssetLibrary.qml
+        qml/components/AiPanel.qml
+        qml/components/InspectorPanel.qml
+        qml/components/LayersPanel.qml
+        qml/components/StatusBar.qml
+        qml/components/ObjectsPanel.qml
+        qml/components/SettingsPanel.qml
+        qml/components/CmsPanel.qml
+        qml/components/FogTools.qml
+        qml/components/RightDock.qml
+        qml/components/DccButton.qml
+        qml/components/DccLabel.qml
+        qml/components/DccPanel.qml
+        qml/components/DccTextField.qml
+        qml/components/AdvancedStatusBar.qml
+        qml/components/AppIcon.qml
+        qml/components/MayaShelf.qml
+        qml/components/MayaToolBox.qml
+        qml/components/ZBrushButton.qml
+        qml/components/ZBrushLabel.qml
+        qml/components/ZBrushPanel.qml
+        qml/components/ZBrushTextField.qml
+)
+
+qt_add_qml_module(core
+    URI DungeonEditor.panels
+    VERSION 1.0
+    RESOURCE_PREFIX "/qt/qml/DungeonEditor/panels"
+    QML_FILES
+        qml/panels/AssetBrowser.qml
+)
+
+qt_add_qml_module(core
+    URI DungeonEditor.dialogs
+    VERSION 1.0
+    RESOURCE_PREFIX "/qt/qml/DungeonEditor/dialogs"
+    QML_FILES
+        qml/dialogs/BaseFloatingWindow.qml
+        qml/dialogs/WelcomeWindow.qml
+        qml/dialogs/AboutWindow.qml
+        qml/dialogs/LicenseWindow.qml
+        qml/dialogs/HelpWindow.qml
+        qml/dialogs/PreferencesDialog.qml
+)
+
+target_link_libraries(core PUBLIC 
+    Qt6::Core
+    Qt6::Gui 
+    Qt6::Qml 
+    Qt6::Quick 
+    Qt6::Network
+    Qt6::QuickControls2
+    Qt6::Concurrent
+    Qt6::Widgets
+)
+
+target_include_directories(core PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
 
 # 3. THE EXECUTABLE (Thin wrapper)
 # The executable now only contains the entry point and links to core.dll.

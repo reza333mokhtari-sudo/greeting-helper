@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Qt.labs.settings
-import "qrc:/qt/qml/DungeonEditor/qml/components"
+import DungeonEditor.components
 
 Dialog {
     id: root

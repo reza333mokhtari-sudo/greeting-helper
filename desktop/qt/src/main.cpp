@@ -50,8 +50,8 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     
     // Internal resource paths for bundled QML
-    engine.addImportPath("qrc:/qt/qml/DungeonEditor");
-    engine.addImportPath("qrc:/qt/qml/DungeonEditor/qml");
+    engine.addImportPath("qrc:/qt/qml");
+    engine.addImportPath("qrc:/");
 
     const QUrl url("qrc:/qt/qml/DungeonEditor/qml/Main.qml");
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

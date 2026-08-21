@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import DungeonEditor.Services 1.0
-import "qrc:/qt/qml/DungeonEditor/qml/components"
+import DungeonEditor.components
 
 BaseFloatingWindow {
     id: licenseWindow
