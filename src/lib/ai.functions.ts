@@ -4,29 +4,12 @@
  * '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
  *                                        
  *                                            
- *                                            cannot open output file libcore.dll: Permission denied
+ *                                            همه component ها مشکل دارهRightDock.qml:15:35: Invalid alias target location: Layout
  *
- * collect2.exe: error: ld returned 1 exit status
+ * Main.qml:203:13: Type RightDock unavailable
  *
- * mingw32-make.exe[2]: *** [CMakeFiles\core.dir\build.make:311: libcore.dll] Error 1
  *
- * mingw32-make.exe[1]: *** [CMakeFiles\Makefile2:91: CMakeFiles/core.dir/all] Error 2
- *
- * mingw32-make.exe: *** [Makefile:135: all] Error 2
- *
- * 17:41:59: The command "F:\qt\dist\Tools\CMake_64\bin\cmake.exe --build F:/c++/build/Desktop_Qt_6_11_1_MinGW_64_bit_Release --target all" terminated with exit code 2.
- *
- * 17:41:59: Error while building/deploying project DungeonEditor (kit: Desktop Qt 6.11.1 MinGW 64-bit)
- *
- * 17:41:59: When executing step "Build"
- *
- * 17:41:59: Elapsed time: 00:56.
- *
- * RECOVERY PLAN:
- * 1. Ensure no other instance of the application or core.dll is running.
- * 2. Clean build directory to remove locked file handles.
- * 3. Verify core.dll is exported correctly in CMakeLists.txt.
- * 4. Run build with administrative privileges if permission issues persist.
+ * همه type of zide of sizeof ها هرچیزی که هست رو rework و با تمرکز بالاتری/dev انجام بده
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
@@ -118,29 +101,12 @@ export type AiSuggestion = {
 export const SYSTEM_PROMPT = `'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
                                         
                                             
-                                            cannot open output file libcore.dll: Permission denied
+                                            همه component ها مشکل دارهRightDock.qml:15:35: Invalid alias target location: Layout
 
-collect2.exe: error: ld returned 1 exit status
+Main.qml:203:13: Type RightDock unavailable
 
-mingw32-make.exe[2]: *** [CMakeFiles\\core.dir\\build.make:311: libcore.dll] Error 1
 
-mingw32-make.exe[1]: *** [CMakeFiles\\Makefile2:91: CMakeFiles/core.dir/all] Error 2
-
-mingw32-make.exe: *** [Makefile:135: all] Error 2
-
-17:41:59: The command "F:\\qt\\dist\\Tools\\CMake_64\\bin\\cmake.exe --build F:/c++/build/Desktop_Qt_6_11_1_MinGW_64_bit_Release --target all" terminated with exit code 2.
-
-17:41:59: Error while building/deploying project DungeonEditor (kit: Desktop Qt 6.11.1 MinGW 64-bit)
-
-17:41:59: When executing step "Build"
-
-17:41:59: Elapsed time: 00:56.
-
-RECOVERY PLAN:
-1. Ensure no other instance of the application or core.dll is running.
-2. Clean build directory to remove locked file handles.
-3. Verify core.dll is exported correctly in CMakeLists.txt.
-4. Run build with administrative privileges if permission issues persist.
+همه type of zide of sizeof ها هرچیزی که هست رو rework و با تمرکز بالاتری/dev انجام بده
 
 You are a world-class professional cartography engine assistant for Dungeon Scrawl Professional. 
 Your interface is modeled after high-end precision tools like Autodesk Maya and 3ds Max.
