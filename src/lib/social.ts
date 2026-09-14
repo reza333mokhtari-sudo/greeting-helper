@@ -48,7 +48,7 @@ async function signMany(paths: string[]): Promise<Record<string, string>> {
 async function decorate(posts: Post[]): Promise<FeedPost[]> {
   if (posts.length === 0) return [];
   const ids = posts.map((p) => p.id);
-  const authorIds = [...new Set(posts.map((p) => p.user_id))];
+  const authorIds = [...new Set(posts.map((p: Post) => p.user_id))];
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -60,9 +60,11 @@ async function decorate(posts: Post[]): Promise<FeedPost[]> {
     supabase.from("comments").select("post_id").in("post_id", ids),
   ]);
 
-  const profiles = new Map((profilesRes.data ?? []).map((p) => [p.id, p as Profile]));
-  const likes = likesRes.data ?? [];
-  const comments = commentsRes.data ?? [];
+  const profiles = new Map<string, Profile>(
+    ((profilesRes.data ?? []) as Profile[]).map((p) => [p.id, p]),
+  );
+  const likes = (likesRes.data ?? []) as { post_id: string; user_id: string }[];
+  const comments = (commentsRes.data ?? []) as { post_id: string }[];
 
   return posts.map((p) => ({
     ...p,
@@ -203,13 +205,13 @@ export async function listComments(postId: string): Promise<CommentRow[]> {
     .eq("post_id", postId)
     .order("created_at", { ascending: true });
   if (error) throw error;
-  const rows = data ?? [];
+  const rows = (data ?? []) as { id: string; body: string; created_at: string; user_id: string }[];
   if (rows.length === 0) return [];
   const { data: profiles } = await supabase
     .from("profiles")
     .select("id,username,full_name,bio,avatar_url")
     .in("id", [...new Set(rows.map((r) => r.user_id))]);
-  const map = new Map((profiles ?? []).map((p) => [p.id, p as Profile]));
+  const map = new Map<string, Profile>(((profiles ?? []) as Profile[]).map((p) => [p.id, p]));
   return rows.map((r) => ({ ...r, author: map.get(r.user_id) ?? null }));
 }
 

@@ -36,12 +36,12 @@ function AuthPage() {
   const [sent, setSent] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
+    supabase.auth.getSession().then(({ data }: { data: { session: unknown } }) => {
       if (data.session) navigate({ to: "/", replace: true });
     });
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
+    } = supabase.auth.onAuthStateChange((event: string, session: unknown) => {
       if (event === "SIGNED_IN" && session) navigate({ to: "/", replace: true });
     });
     return () => subscription.unsubscribe();
