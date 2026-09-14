@@ -11,13 +11,13 @@ export const Route = createFileRoute("/auth/reset-password")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Reset password — Dungeon Scrawl Map Maker" },
+      { title: "Reset password — Snapgram" },
       {
         name: "description",
-        content: "Choose a new password for your Dungeon Scrawl map maker account.",
+        content: "Choose a new password for your Snapgram account.",
       },
-      { property: "og:title", content: "Reset password — Dungeon Scrawl Map Maker" },
-      { property: "og:description", content: "Choose a new password for your map maker account." },
+      { property: "og:title", content: "Reset password — Snapgram" },
+      { property: "og:description", content: "Choose a new password for your Snapgram account." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
