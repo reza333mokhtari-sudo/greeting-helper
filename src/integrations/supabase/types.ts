@@ -14,172 +14,110 @@ export type Database = {
   }
   public: {
     Tables: {
-      admin_audit_logs: {
+      comments: {
         Row: {
-          action: string
-          admin_id: string
-          created_at: string | null
-          id: string
-          payload: Json | null
-          row_id: string | null
-          table_name: string
-        }
-        Insert: {
-          action: string
-          admin_id: string
-          created_at?: string | null
-          id?: string
-          payload?: Json | null
-          row_id?: string | null
-          table_name: string
-        }
-        Update: {
-          action?: string
-          admin_id?: string
-          created_at?: string | null
-          id?: string
-          payload?: Json | null
-          row_id?: string | null
-          table_name?: string
-        }
-        Relationships: []
-      }
-      cms_pages: {
-        Row: {
-          author_id: string | null
           body: string
           created_at: string
           id: string
-          published: boolean
-          slug: string
-          title: string
-          updated_at: string
-        }
-        Insert: {
-          author_id?: string | null
-          body?: string
-          created_at?: string
-          id?: string
-          published?: boolean
-          slug: string
-          title: string
-          updated_at?: string
-        }
-        Update: {
-          author_id?: string | null
-          body?: string
-          created_at?: string
-          id?: string
-          published?: boolean
-          slug?: string
-          title?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      licenses: {
-        Row: {
-          created_at: string | null
-          expires_at: string
-          hardware_id: string | null
-          id: string
-          key: string
-          months_duration: number | null
-          redeemed_at: string | null
-          type: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string | null
-          expires_at: string
-          hardware_id?: string | null
-          id?: string
-          key: string
-          months_duration?: number | null
-          redeemed_at?: string | null
-          type: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string | null
-          expires_at?: string
-          hardware_id?: string | null
-          id?: string
-          key?: string
-          months_duration?: number | null
-          redeemed_at?: string | null
-          type?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
-      map_assets: {
-        Row: {
-          created_at: string
-          favorite: boolean
-          id: string
-          kind: string
-          license: string | null
-          name: string
-          tags: string[]
-          url: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          favorite?: boolean
-          id?: string
-          kind?: string
-          license?: string | null
-          name: string
-          tags?: string[]
-          url: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          favorite?: boolean
-          id?: string
-          kind?: string
-          license?: string | null
-          name?: string
-          tags?: string[]
-          url?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
-      maps: {
-        Row: {
-          created_at: string
-          doc: Json
-          id: string
-          is_public: boolean
-          name: string
-          share_slug: string
-          thumbnail_url: string | null
+          post_id: string
           updated_at: string
           user_id: string
         }
         Insert: {
+          body: string
           created_at?: string
-          doc: Json
           id?: string
-          is_public?: boolean
-          name?: string
-          share_slug?: string
-          thumbnail_url?: string | null
+          post_id: string
           updated_at?: string
           user_id: string
         }
         Update: {
+          body?: string
           created_at?: string
-          doc?: Json
           id?: string
-          is_public?: boolean
-          name?: string
-          share_slug?: string
-          thumbnail_url?: string | null
+          post_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      follows: {
+        Row: {
+          created_at: string
+          follower_id: string
+          following_id: string
+        }
+        Insert: {
+          created_at?: string
+          follower_id: string
+          following_id: string
+        }
+        Update: {
+          created_at?: string
+          follower_id?: string
+          following_id?: string
+        }
+        Relationships: []
+      }
+      likes: {
+        Row: {
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      posts: {
+        Row: {
+          caption: string | null
+          created_at: string
+          id: string
+          image_url: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          image_url: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string
           updated_at?: string
           user_id?: string
         }
@@ -188,60 +126,30 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          bio: string | null
           created_at: string
-          display_name: string | null
-          email: string | null
+          full_name: string | null
           id: string
-        }
-        Insert: {
-          avatar_url?: string | null
-          created_at?: string
-          display_name?: string | null
-          email?: string | null
-          id: string
-        }
-        Update: {
-          avatar_url?: string | null
-          created_at?: string
-          display_name?: string | null
-          email?: string | null
-          id?: string
-        }
-        Relationships: []
-      }
-      support_tickets: {
-        Row: {
-          assignee_id: string | null
-          created_at: string
-          id: string
-          message: string
-          priority: string
-          status: string
-          subject: string
           updated_at: string
-          user_id: string
+          username: string
         }
         Insert: {
-          assignee_id?: string | null
+          avatar_url?: string | null
+          bio?: string | null
           created_at?: string
-          id?: string
-          message: string
-          priority?: string
-          status?: string
-          subject: string
+          full_name?: string | null
+          id: string
           updated_at?: string
-          user_id: string
+          username: string
         }
         Update: {
-          assignee_id?: string | null
+          avatar_url?: string | null
+          bio?: string | null
           created_at?: string
+          full_name?: string | null
           id?: string
-          message?: string
-          priority?: string
-          status?: string
-          subject?: string
           updated_at?: string
-          user_id?: string
+          username?: string
         }
         Relationships: []
       }
