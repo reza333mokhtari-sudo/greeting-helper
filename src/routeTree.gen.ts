@@ -18,6 +18,9 @@ import { Route as AuthIndexRouteImport } from './routes/auth/index'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 import { Route as AuthResetPasswordRouteImport } from './routes/auth/reset-password'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
+import { Route as AuthenticatedAccountSettingsRouteImport } from './routes/_authenticated/account.settings'
+import { Route as AuthenticatedMessagesIndexRouteImport } from './routes/_authenticated/messages.index'
+import { Route as AuthenticatedMessagesUsernameRouteImport } from './routes/_authenticated/messages.$username'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -63,6 +66,24 @@ const UUsernameRoute = UUsernameRouteImport.update({
   path: '/u/$username',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAccountSettingsRoute =
+  AuthenticatedAccountSettingsRouteImport.update({
+    id: '/account/settings',
+    path: '/account/settings',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedMessagesIndexRoute =
+  AuthenticatedMessagesIndexRouteImport.update({
+    id: '/messages/',
+    path: '/messages/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedMessagesUsernameRoute =
+  AuthenticatedMessagesUsernameRouteImport.update({
+    id: '/messages/$username',
+    path: '/messages/$username',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -73,6 +94,9 @@ export interface FileRoutesByFullPath {
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/u/$username': typeof UUsernameRoute
   '/auth/': typeof AuthIndexRoute
+  '/account/settings': typeof AuthenticatedAccountSettingsRoute
+  '/messages/$username': typeof AuthenticatedMessagesUsernameRoute
+  '/messages/': typeof AuthenticatedMessagesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -83,6 +107,9 @@ export interface FileRoutesByTo {
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/u/$username': typeof UUsernameRoute
   '/auth': typeof AuthIndexRoute
+  '/account/settings': typeof AuthenticatedAccountSettingsRoute
+  '/messages/$username': typeof AuthenticatedMessagesUsernameRoute
+  '/messages': typeof AuthenticatedMessagesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -95,6 +122,9 @@ export interface FileRoutesById {
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/u/$username': typeof UUsernameRoute
   '/auth/': typeof AuthIndexRoute
+  '/_authenticated/account/settings': typeof AuthenticatedAccountSettingsRoute
+  '/_authenticated/messages/$username': typeof AuthenticatedMessagesUsernameRoute
+  '/_authenticated/messages/': typeof AuthenticatedMessagesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -107,6 +137,9 @@ export interface FileRouteTypes {
     | '/auth/reset-password'
     | '/u/$username'
     | '/auth/'
+    | '/account/settings'
+    | '/messages/$username'
+    | '/messages/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -117,6 +150,9 @@ export interface FileRouteTypes {
     | '/auth/reset-password'
     | '/u/$username'
     | '/auth'
+    | '/account/settings'
+    | '/messages/$username'
+    | '/messages'
   id:
     | '__root__'
     | '/'
@@ -128,6 +164,9 @@ export interface FileRouteTypes {
     | '/auth/reset-password'
     | '/u/$username'
     | '/auth/'
+    | '/_authenticated/account/settings'
+    | '/_authenticated/messages/$username'
+    | '/_authenticated/messages/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -205,17 +244,44 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UUsernameRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/account/settings': {
+      id: '/_authenticated/account/settings'
+      path: '/account/settings'
+      fullPath: '/account/settings'
+      preLoaderRoute: typeof AuthenticatedAccountSettingsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/messages/': {
+      id: '/_authenticated/messages/'
+      path: '/messages'
+      fullPath: '/messages/'
+      preLoaderRoute: typeof AuthenticatedMessagesIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/messages/$username': {
+      id: '/_authenticated/messages/$username'
+      path: '/messages/$username'
+      fullPath: '/messages/$username'
+      preLoaderRoute: typeof AuthenticatedMessagesUsernameRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
 interface AuthenticatedRouteChildren {
   AuthenticatedCreateRoute: typeof AuthenticatedCreateRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedAccountSettingsRoute: typeof AuthenticatedAccountSettingsRoute
+  AuthenticatedMessagesUsernameRoute: typeof AuthenticatedMessagesUsernameRoute
+  AuthenticatedMessagesIndexRoute: typeof AuthenticatedMessagesIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedCreateRoute: AuthenticatedCreateRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedAccountSettingsRoute: AuthenticatedAccountSettingsRoute,
+  AuthenticatedMessagesUsernameRoute: AuthenticatedMessagesUsernameRoute,
+  AuthenticatedMessagesIndexRoute: AuthenticatedMessagesIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
