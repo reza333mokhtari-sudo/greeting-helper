@@ -103,17 +103,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Dungeon Scrawl Map Maker - RPG Dungeon Editor" },
+      { title: "Snapgram — Share photos with friends" },
       {
         name: "description",
         content:
-          "A professional 2D dungeon map maker for RPGs. Design, generate, and export high-quality dungeon maps with AI assistance.",
+          "Snapgram is a simple photo sharing app. Post pictures, follow friends, like and comment.",
       },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Dungeon Scrawl Map Maker" },
+      { property: "og:title", content: "Snapgram" },
       {
         property: "og:description",
-        content: "Design and generate professional RPG dungeon maps with ease.",
+        content: "Post pictures, follow friends, like and comment on Snapgram.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -123,7 +122,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Pacifico&display=swap",
       },
       {
         rel: "stylesheet",
@@ -141,11 +140,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 function RootShell({ children }: { children: ReactNode }) {
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "light") {
-      document.documentElement.classList.remove("dark");
-    } else {
-      document.documentElement.classList.add("dark");
-    }
+    document.documentElement.classList.toggle("dark", savedTheme === "dark");
   }, []);
 
   return (

@@ -15,7 +15,7 @@ function AuthCallback() {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event: any, session: any) => {
       if (event === "SIGNED_IN" && session) {
-        const next = search.next || "/editor";
+        const next = search.next || "/";
         // Handle OAuth session recovery if needed
         navigate({ to: next, replace: true });
       }
@@ -24,7 +24,7 @@ function AuthCallback() {
     // Fallback: check session immediately if onAuthStateChange doesn't fire fast enough
     supabase.auth.getSession().then(({ data: { session } }: any) => {
       if (session) {
-        const next = search.next || "/editor";
+        const next = search.next || "/";
         navigate({ to: next, replace: true });
       }
     });

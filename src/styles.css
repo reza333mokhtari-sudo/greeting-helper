@@ -4,30 +4,14 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/*
- * Design System Tokens (Arcane Autodesk)
- */
-
 @theme inline {
-  /* Typography */
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
-  --font-mono: "JetBrains Mono", "SF Mono", "Fira Code", monospace;
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Pacifico", "Plus Jakarta Sans", cursive;
 
-  --text-xs: 0.7rem;
-  --text-sm: 0.825rem;
-  --text-base: 0.9375rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
 
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
-
-  /* Radii */
-  --radius-sm: 0.2rem;
-  --radius-md: 0.3rem;
-  --radius-lg: 0.375rem;
-
-  /* Colors - Functional mapping */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -47,10 +31,8 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-gold: var(--gold);
-  --color-gold-foreground: var(--gold-foreground);
+  --color-like: var(--like);
 
-  /* Sidebar context */
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -58,87 +40,81 @@
 }
 
 :root {
-  /* Light Theme - Autodesk "Modern" Grey */
-  --background: oklch(0.95 0.01 240);
-  --foreground: oklch(0.2 0.02 240);
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.15 0 0);
 
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.2 0.02 240);
+  --card-foreground: oklch(0.15 0 0);
 
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.2 0.02 240);
+  --popover-foreground: oklch(0.15 0 0);
 
-  --primary: oklch(0.55 0.15 220); /* Professional Cyber Blue */
+  --primary: oklch(0.6 0.19 261);
   --primary-foreground: oklch(1 0 0);
 
-  --secondary: oklch(0.9 0.01 240);
-  --secondary-foreground: oklch(0.3 0.02 240);
+  --secondary: oklch(0.96 0 0);
+  --secondary-foreground: oklch(0.2 0 0);
 
-  --muted: oklch(0.92 0.01 240);
-  --muted-foreground: oklch(0.45 0.02 240);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.55 0 0);
 
-  --accent: oklch(0.88 0.01 240);
-  --accent-foreground: oklch(0.2 0.02 240);
+  --accent: oklch(0.96 0 0);
+  --accent-foreground: oklch(0.2 0 0);
 
-  --destructive: oklch(0.6 0.18 25);
-  --destructive-foreground: oklch(0.98 0.02 45);
+  --destructive: oklch(0.58 0.2 25);
+  --destructive-foreground: oklch(0.99 0 0);
 
-  --border: oklch(0.85 0.01 240);
-  --input: oklch(0.85 0.01 240);
-  --ring: oklch(0.55 0.15 220);
+  --like: oklch(0.62 0.22 20);
 
-  --sidebar: oklch(0.93 0.01 240);
-  --sidebar-foreground: oklch(0.25 0.02 240);
-  --sidebar-primary: oklch(0.55 0.15 220);
-  --sidebar-border: oklch(0.88 0.01 240);
+  --border: oklch(0.92 0 0);
+  --input: oklch(0.92 0 0);
+  --ring: oklch(0.6 0.19 261);
 
-  --gold: oklch(0.7 0.12 88);
-  --gold-foreground: oklch(0.2 0.02 240);
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.15 0 0);
+  --sidebar-primary: oklch(0.6 0.19 261);
+  --sidebar-border: oklch(0.92 0 0);
 
-  --gradient-arcane: linear-gradient(135deg, var(--primary), var(--gold));
-  --shadow-arcane: 0 4px 12px -4px rgba(0, 0, 0, 0.1);
+  --gradient-story: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7);
 }
 
 .dark {
-  /* Dark Theme - Arcane Autodesk Slate */
-  --background: oklch(0.14 0.01 240);
-  --foreground: oklch(0.92 0.01 240);
+  --background: oklch(0.11 0 0);
+  --foreground: oklch(0.97 0 0);
 
-  --card: oklch(0.18 0.01 240);
-  --card-foreground: oklch(0.92 0.01 240);
+  --card: oklch(0.14 0 0);
+  --card-foreground: oklch(0.97 0 0);
 
-  --popover: oklch(0.2 0.01 240);
-  --popover-foreground: oklch(0.92 0.01 240);
+  --popover: oklch(0.16 0 0);
+  --popover-foreground: oklch(0.97 0 0);
 
-  --primary: oklch(0.6 0.15 220); /* Professional Cyber Blue */
-  --primary-foreground: oklch(0.98 0.01 240);
+  --primary: oklch(0.66 0.18 261);
+  --primary-foreground: oklch(1 0 0);
 
-  --secondary: oklch(0.22 0.01 240);
-  --secondary-foreground: oklch(0.85 0.02 240);
+  --secondary: oklch(0.2 0 0);
+  --secondary-foreground: oklch(0.95 0 0);
 
-  --muted: oklch(0.2 0.01 240);
-  --muted-foreground: oklch(0.6 0.02 240);
+  --muted: oklch(0.18 0 0);
+  --muted-foreground: oklch(0.62 0 0);
 
-  --accent: oklch(0.25 0.01 240);
-  --accent-foreground: oklch(0.95 0.02 240);
+  --accent: oklch(0.22 0 0);
+  --accent-foreground: oklch(0.97 0 0);
 
-  --destructive: oklch(0.55 0.18 25);
-  --destructive-foreground: oklch(0.98 0.02 45);
+  --destructive: oklch(0.55 0.2 25);
+  --destructive-foreground: oklch(0.99 0 0);
 
-  --border: oklch(0.22 0.01 240);
-  --input: oklch(0.22 0.01 240);
-  --ring: oklch(0.6 0.15 220);
+  --like: oklch(0.65 0.22 20);
 
-  --sidebar: oklch(0.12 0.01 240);
-  --sidebar-foreground: oklch(0.9 0.02 240);
-  --sidebar-primary: oklch(0.6 0.15 220);
-  --sidebar-border: oklch(0.18 0.01 240);
+  --border: oklch(0.24 0 0);
+  --input: oklch(0.24 0 0);
+  --ring: oklch(0.66 0.18 261);
 
-  --gold: oklch(0.78 0.12 88);
-  --gold-foreground: oklch(0.15 0.02 240);
+  --sidebar: oklch(0.11 0 0);
+  --sidebar-foreground: oklch(0.97 0 0);
+  --sidebar-primary: oklch(0.66 0.18 261);
+  --sidebar-border: oklch(0.24 0 0);
 
-  --gradient-arcane: linear-gradient(135deg, var(--primary), var(--gold));
-  --shadow-arcane: 0 4px 20px -8px color-mix(in oklab, var(--primary) 30%, transparent);
+  --gradient-story: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7);
 }
 
 @layer base {
@@ -150,130 +126,22 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
-    font-size: var(--text-base);
-    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
   }
 
   h1,
   h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-weight: var(--font-weight-semibold);
-    letter-spacing: -0.01em;
+  h3 {
+    font-weight: 600;
+    letter-spacing: -0.015em;
   }
 }
 
-@utility text-arcane {
-  background-image: var(--gradient-arcane);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+@utility brand-wordmark {
+  font-family: var(--font-display);
+  letter-spacing: 0;
 }
 
-/* 
- * Layout & Scaling 
- */
-.dungeon-editor-layout {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  grid-template-rows: 3.5rem 1fr 2rem;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-}
-
-.resize-handle {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 2px;
-  cursor: col-resize;
-  background: transparent;
-  transition: background 0.2s;
-  z-index: 50;
-}
-
-.resize-handle:hover,
-.resize-handle.is-resizing {
-  background: var(--primary);
-  width: 2px;
-}
-
-.panel-scroll {
-  scrollbar-width: thin;
-  scrollbar-color: color-mix(in oklab, var(--primary) 20%, transparent) transparent;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-/* 
- * Accessibility & Interaction 
- */
-:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
-
-.group:focus-within {
-  outline: none;
-}
-
-/* 
- * Animation System 
- */
-@keyframes icon-pulse {
-  0% {
-    transform: scale(1);
-    filter: drop-shadow(0 0 0px var(--primary));
-  }
-  50% {
-    transform: scale(1.05);
-    filter: drop-shadow(0 0 8px var(--primary));
-  }
-  100% {
-    transform: scale(1);
-    filter: drop-shadow(0 0 0px var(--primary));
-  }
-}
-
-@keyframes dash {
-  from {
-    stroke-dashoffset: 100;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-svg.animated-icon path,
-svg.animated-icon circle,
-svg.animated-icon rect {
-  transition: all 0.3s ease;
-  stroke: currentColor;
-  stroke-width: 1.5;
-}
-
-[data-animation="2"] .animate-icon-pulse {
-  animation: icon-pulse 2s infinite ease-in-out;
-}
-
-[data-animation="2"] .group:hover svg.animated-icon path {
-  stroke-dasharray: 100;
-  stroke-dashoffset: 0;
-  animation: dash 1.5s ease-in-out;
-}
-
-.group:hover svg.animated-icon,
-.group:focus-visible svg.animated-icon {
-  color: var(--primary);
-}
-
-.dark .group:hover svg.animated-icon,
-.dark .group:focus-visible svg.animated-icon {
-  color: var(--gold);
+@utility ring-story {
+  background: var(--gradient-story);
 }
