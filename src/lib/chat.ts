@@ -29,7 +29,9 @@ async function profilesByIds(ids: string[]): Promise<Map<string, Profile>> {
     .from("profiles")
     .select("id,username,full_name,bio,avatar_url")
     .in("id", ids);
-  return new Map(((data ?? []) as Profile[]).map((p) => [p.id, p]));
+  const rows = (data ?? []) as Profile[];
+  await signAvatars(rows);
+  return new Map(rows.map((p) => [p.id, p]));
 }
 
 export async function listConversations(): Promise<Conversation[]> {
@@ -120,5 +122,7 @@ export async function listPeople(limit = 30): Promise<Profile[]> {
     .limit(limit);
   if (me) query = query.neq("id", me);
   const { data } = await query;
-  return (data ?? []) as Profile[];
+  const rows = (data ?? []) as Profile[];
+  await signAvatars(rows);
+  return rows;
 }
