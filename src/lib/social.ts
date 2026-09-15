@@ -45,6 +45,68 @@ async function signMany(paths: string[]): Promise<Record<string, string>> {
   return map;
 }
 
+/** Replaces stored avatar paths with signed, viewable URLs (in place). */
+export async function signAvatars(profiles: (Profile | null | undefined)[]): Promise<void> {
+  const list = profiles.filter((p): p is Profile => !!p && !!p.avatar_url);
+  const paths = [...new Set(list.map((p) => p.avatar_url!).filter((p) => !p.startsWith("http")))];
+  if (paths.length === 0) return;
+  const { data } = await supabase.storage.from("avatars").createSignedUrls(paths, SIGNED_TTL);
+  const map = new Map<string, string>();
+  for (const item of data ?? []) {
+    if (item.path && item.signedUrl) map.set(item.path, item.signedUrl);
+  }
+  for (const p of list) {
+    const signed = map.get(p.avatar_url!);
+    if (signed) p.avatar_url = signed;
+  }
+}
+
+/** Uploads a new profile picture and stores its path on the profile. */
+export async function uploadAvatar(file: File): Promise<void> {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error("Sign in first");
+  const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+  const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
+  const { error: upErr } = await supabase.storage
+    .from("avatars")
+    .upload(path, file, { cacheControl: "3600", upsert: false });
+  if (upErr) throw upErr;
+  const { error } = await supabase.from("profiles").update({ avatar_url: path }).eq("id", user.id);
+  if (error) throw error;
+}
+
+export async function listFollowers(userId: string): Promise<Profile[]> {
+  const { data, error } = await supabase
+    .from("follows")
+    .select("follower_id")
+    .eq("following_id", userId);
+  if (error) throw error;
+  return profilesByIds((data ?? []).map((r: { follower_id: string }) => r.follower_id));
+}
+
+export async function listFollowing(userId: string): Promise<Profile[]> {
+  const { data, error } = await supabase
+    .from("follows")
+    .select("following_id")
+    .eq("follower_id", userId);
+  if (error) throw error;
+  return profilesByIds((data ?? []).map((r: { following_id: string }) => r.following_id));
+}
+
+async function profilesByIds(ids: string[]): Promise<Profile[]> {
+  const unique = [...new Set(ids)];
+  if (unique.length === 0) return [];
+  const { data } = await supabase
+    .from("profiles")
+    .select("id,username,full_name,bio,avatar_url")
+    .in("id", unique);
+  const rows = (data ?? []) as Profile[];
+  await signAvatars(rows);
+  return rows;
+}
+
 async function decorate(posts: Post[]): Promise<FeedPost[]> {
   if (posts.length === 0) return [];
   const ids = posts.map((p) => p.id);
