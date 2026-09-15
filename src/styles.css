@@ -145,3 +145,19 @@
 @utility ring-story {
   background: var(--gradient-story);
 }
+
+/* Instagram layout mode (toggled in /account/settings) */
+@utility ig-wordmark {
+  background: var(--gradient-story);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ig-mode {
+  --radius-lg: 0.5rem;
+}
+
+.ig-mode img[data-post-image] {
+  border-radius: 0.25rem;
+}
