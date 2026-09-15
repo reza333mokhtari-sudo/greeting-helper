@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 
 import { AppShell } from "@/components/AppShell";
 import { PostCard } from "@/components/PostCard";
+import { StoriesBar } from "@/components/StoriesBar";
+import { useInstagramMode } from "@/hooks/use-instagram-mode";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { listFeed } from "@/lib/social";
