@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 
 import { AppShell } from "@/components/AppShell";
 import { PostCard } from "@/components/PostCard";
+import { StoriesBar } from "@/components/StoriesBar";
+import { useInstagramMode } from "@/hooks/use-instagram-mode";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { listFeed } from "@/lib/social";
@@ -31,11 +33,17 @@ export const Route = createFileRoute("/")({
 
 function FeedPage() {
   const { data, isLoading } = useQuery({ queryKey: ["feed"], queryFn: () => listFeed() });
+  const { enabled: igMode } = useInstagramMode();
 
   return (
     <AppShell>
       <div className="mx-auto w-full max-w-[470px]">
         <h1 className="sr-only">Snapgram feed</h1>
+        {igMode && (
+          <div className="md:pt-6">
+            <StoriesBar />
+          </div>
+        )}
         {isLoading && (
           <div className="space-y-6 p-4">
             {[0, 1].map((i) => (
