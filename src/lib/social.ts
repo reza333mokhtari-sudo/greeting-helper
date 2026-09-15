@@ -122,9 +122,9 @@ async function decorate(posts: Post[]): Promise<FeedPost[]> {
     supabase.from("comments").select("post_id").in("post_id", ids),
   ]);
 
-  const profiles = new Map<string, Profile>(
-    ((profilesRes.data ?? []) as Profile[]).map((p) => [p.id, p]),
-  );
+  const profileRows = (profilesRes.data ?? []) as Profile[];
+  await signAvatars(profileRows);
+  const profiles = new Map<string, Profile>(profileRows.map((p) => [p.id, p]));
   const likes = (likesRes.data ?? []) as { post_id: string; user_id: string }[];
   const comments = (commentsRes.data ?? []) as { post_id: string }[];
 
@@ -155,7 +155,9 @@ export async function getProfileByUsername(username: string): Promise<Profile | 
     .eq("username", username)
     .maybeSingle();
   if (error) throw error;
-  return (data as Profile) ?? null;
+  const profile = (data as Profile) ?? null;
+  await signAvatars([profile]);
+  return profile;
 }
 
 export async function getMyProfile(): Promise<Profile | null> {
@@ -168,7 +170,9 @@ export async function getMyProfile(): Promise<Profile | null> {
     .select("id,username,full_name,bio,avatar_url")
     .eq("id", user.id)
     .maybeSingle();
-  return (data as Profile) ?? null;
+  const profile = (data as Profile) ?? null;
+  await signAvatars([profile]);
+  return profile;
 }
 
 export async function listUserPosts(userId: string): Promise<FeedPost[]> {
@@ -273,7 +277,9 @@ export async function listComments(postId: string): Promise<CommentRow[]> {
     .from("profiles")
     .select("id,username,full_name,bio,avatar_url")
     .in("id", [...new Set(rows.map((r) => r.user_id))]);
-  const map = new Map<string, Profile>(((profiles ?? []) as Profile[]).map((p) => [p.id, p]));
+  const commentAuthors = (profiles ?? []) as Profile[];
+  await signAvatars(commentAuthors);
+  const map = new Map<string, Profile>(commentAuthors.map((p) => [p.id, p]));
   return rows.map((r) => ({ ...r, author: map.get(r.user_id) ?? null }));
 }
 
