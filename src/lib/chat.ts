@@ -1,5 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
-import type { Profile } from "@/lib/social";
+import { signAvatars, type Profile } from "@/lib/social";
 
 export type Message = {
   id: string;
